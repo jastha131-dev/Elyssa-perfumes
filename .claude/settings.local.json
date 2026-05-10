@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v \"^--$\")",
+      "Bash(npm install *)",
+      "Bash(awk '/npm error/{found=1} found{print}')",
+      "Bash(awk '/added|warn WARN|npm error/{print}')",
+      "Bash(npx tsc *)",
+      "Bash(awk 'NR<=40')",
+      "Bash(awk 'NR<=50')",
+      "Bash(grep -v \"^$\")",
+      "Bash(npm run *)",
+      "Bash(npx tsx *)",
+      "Bash(cp /Users/californiamediadubai/Downloads/p1.jpeg /Users/californiamediadubai/Desktop/test/p1test/public/images/products/)",
+      "Bash(cp /Users/californiamediadubai/Downloads/p2.jpeg /Users/californiamediadubai/Desktop/test/p1test/public/images/products/)",
+      "Bash(cp /Users/californiamediadubai/Downloads/p3.jpeg /Users/californiamediadubai/Desktop/test/p1test/public/images/products/)",
+      "Bash(cp /Users/californiamediadubai/Downloads/p4.jpeg /Users/californiamediadubai/Desktop/test/p1test/public/images/products/)",
+      "Bash(cp /Users/californiamediadubai/Downloads/p5.jpeg /Users/californiamediadubai/Desktop/test/p1test/public/images/products/)",
+      "Bash(node_modules/.bin/tsc --noEmit)",
+      "Bash(git init *)",
+      "Bash(git add *)",
+      "Bash(git commit *)"
+    ]
+  }
+}
