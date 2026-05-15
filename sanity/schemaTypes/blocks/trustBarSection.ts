@@ -1,4 +1,5 @@
 import { defineField, defineType, defineArrayMember } from 'sanity'
+import { createSectionIcon, getSectionLabel } from '../../components/SectionMediaIcon'
 
 export const trustBarSection = defineType({
   name: 'trustBarSection',
@@ -24,7 +25,14 @@ export const trustBarSection = defineType({
     }),
   ],
   preview: {
-    select: {},
-    prepare: () => ({ title: 'Trust Bar', subtitle: 'trustBarSection' }),
+    select: {
+      isVisible: 'isVisible',
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    prepare: (val: any) => ({
+      title: getSectionLabel('trustBarSection'),
+      subtitle: val.isVisible === false ? '🔴 Hidden' : '🟢 Visible',
+      media: createSectionIcon('trustBarSection'),
+    }),
   },
 })

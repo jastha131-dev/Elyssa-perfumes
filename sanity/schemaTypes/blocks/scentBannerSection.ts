@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { createSectionIcon, getSectionLabel } from '../../components/SectionMediaIcon'
 
 export const scentBannerSection = defineType({
   name: 'scentBannerSection',
@@ -20,8 +21,16 @@ export const scentBannerSection = defineType({
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
   ],
   preview: {
-    select: { title: 'headline', media: 'bgImage' },
+    select: {
+      title: 'headline',
+      isVisible: 'isVisible',
+      image: 'bgImage',
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    prepare: (val: any) => ({ title: val.title ?? 'Scent Banner', subtitle: 'scentBannerSection', media: val.media }),
+    prepare: (val: any) => ({
+      title: val.title || getSectionLabel('scentBannerSection'),
+      subtitle: val.isVisible === false ? '🔴 Hidden' : '🟢 Visible',
+      media: val.image || createSectionIcon('scentBannerSection'),
+    }),
   },
 })

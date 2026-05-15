@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity'
+import { createSectionIcon, getSectionLabel } from '../../components/SectionMediaIcon'
 
 export const customBannerSection = defineType({
   name: 'customBannerSection',
@@ -52,12 +53,16 @@ export const customBannerSection = defineType({
     }),
   ],
   preview: {
-    select: { title: 'headline', media: 'image' },
+    select: {
+      title: 'headline',
+      isVisible: 'isVisible',
+      image: 'image',
+    },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     prepare: (val: any) => ({
-      title: val.title ?? 'Custom Banner',
-      subtitle: 'customBannerSection',
-      media: val.media,
+      title: val.title || getSectionLabel('customBannerSection'),
+      subtitle: val.isVisible === false ? '🔴 Hidden' : '🟢 Visible',
+      media: val.image || createSectionIcon('customBannerSection'),
     }),
   },
 })

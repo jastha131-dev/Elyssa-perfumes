@@ -1,4 +1,5 @@
 import { defineField, defineType, defineArrayMember } from 'sanity'
+import { createSectionIcon, getSectionLabel } from '../../components/SectionMediaIcon'
 
 export const categoriesSection = defineType({
   name: 'categoriesSection',
@@ -16,7 +17,15 @@ export const categoriesSection = defineType({
     }),
   ],
   preview: {
-    select: { title: 'title' },
-    prepare: (val: { title?: string }) => ({ title: val.title ?? 'Categories', subtitle: 'categoriesSection' }),
+    select: {
+      title: 'title',
+      isVisible: 'isVisible',
+    },
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    prepare: (val: any) => ({
+      title: val.title || getSectionLabel('categoriesSection'),
+      subtitle: val.isVisible === false ? '🔴 Hidden' : '🟢 Visible',
+      media: createSectionIcon('categoriesSection'),
+    }),
   },
 })
