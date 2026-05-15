@@ -55,7 +55,7 @@ Replaces current flat fields with a single `sections` array of polymorphic block
 
 | `_type` | Key Fields |
 |---|---|
-| `heroSection` | headline, subheadline, bgImage, bgVideo (optional), cta (ctaButton), textColor |
+| `heroSection` | headline, subheadline, bgImage, bgVideo (optional), cta (ctaButton), textColor (`light` \| `dark` preset — controls text/overlay color) |
 | `customBannerSection` | image, headline, subtext, overlayOpacity (0–100), cta (ctaButton), textAlign (left/center/right) |
 | `featuredProductsSection` | title, products[] (product refs), layout (grid/carousel) |
 | `bestSellersSection` | title, products[] (product refs, optional — auto-fetches if empty) |
@@ -204,6 +204,7 @@ NEXT_PUBLIC_SITE_URL=http://localhost:3000  # or production URL
 | Modified | `components/home/TrustBar.tsx` |
 | Modified | `app/page.tsx` |
 | Modified | `lib/sanity/queries.ts` |
+| Modified | `lib/sanity/client.ts` (add `draftModeClient` export) |
 | Modified | `lib/sanity/fetch.ts` |
 | Modified | `lib/types.ts` |
 | Created | `app/api/draft-mode/enable/route.ts` |
