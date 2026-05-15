@@ -53,7 +53,8 @@ export const customBannerSection = defineType({
   ],
   preview: {
     select: { title: 'headline', media: 'image' },
-    prepare: (val: { title?: string; media?: unknown }) => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    prepare: (val: any) => ({
       title: val.title ?? 'Custom Banner',
       subtitle: 'customBannerSection',
       media: val.media,

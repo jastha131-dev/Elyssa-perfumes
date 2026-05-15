@@ -21,6 +21,7 @@ export const scentBannerSection = defineType({
   ],
   preview: {
     select: { title: 'headline', media: 'bgImage' },
-    prepare: (val: { title?: string; media?: unknown }) => ({ title: val.title ?? 'Scent Banner', subtitle: 'scentBannerSection', media: val.media }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    prepare: (val: any) => ({ title: val.title ?? 'Scent Banner', subtitle: 'scentBannerSection', media: val.media }),
   },
 })

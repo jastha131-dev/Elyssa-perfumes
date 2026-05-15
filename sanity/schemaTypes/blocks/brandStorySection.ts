@@ -40,6 +40,7 @@ export const brandStorySection = defineType({
   ],
   preview: {
     select: { title: 'headline', media: 'image' },
-    prepare: (val: { title?: string; media?: unknown }) => ({ title: val.title ?? 'Brand Story', subtitle: 'brandStorySection', media: val.media }),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    prepare: (val: any) => ({ title: val.title ?? 'Brand Story', subtitle: 'brandStorySection', media: val.media }),
   },
 })
