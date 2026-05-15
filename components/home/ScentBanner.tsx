@@ -33,8 +33,8 @@ export default function ScentBanner({ data }: ScentBannerProps) {
   const bgImage    = data?.bgImageUrl    ?? '/images/products/default-product.jpeg'
 
   return (
-    <section className="relative overflow-hidden bg-charcoal-950 py-24 md:py-32">
-      {/* Background image */}
+    <section className="relative overflow-hidden bg-camel-500 py-24 md:py-32">
+      {/* Background image with warm tinted overlay */}
       <div className="absolute inset-0 z-0">
         <Image
           src={bgImage}
@@ -43,15 +43,14 @@ export default function ScentBanner({ data }: ScentBannerProps) {
           className="object-cover object-center"
           quality={90}
         />
-        <div className="absolute inset-0 bg-charcoal-950/88" />
-        <div className="absolute inset-0 bg-gradient-to-r from-charcoal-950 via-charcoal-950/70 to-charcoal-950/40" />
+        <div className="absolute inset-0 bg-camel-500/40" />
       </div>
 
       {/* Top fade */}
-      <div className="absolute top-0 left-1/2 z-10 h-px w-48 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />
+      <div className="absolute top-0 left-1/2 z-10 h-px w-48 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
 
       {/* Atmospheric glow */}
-      <div className="pointer-events-none absolute right-0 top-1/2 z-10 h-[600px] w-[600px] -translate-y-1/2 translate-x-1/3 rounded-full bg-gold-500/8 blur-[100px]" />
+      <div className="pointer-events-none absolute right-0 top-1/2 z-10 h-[600px] w-[600px] -translate-y-1/2 translate-x-1/3 rounded-full bg-white/8 blur-[100px]" />
 
       <div ref={ref} className="relative z-10 mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2">
@@ -64,8 +63,8 @@ export default function ScentBanner({ data }: ScentBannerProps) {
               transition={{ duration: 0.7 }}
               className="mb-4 flex items-center gap-4"
             >
-              <div className="h-px w-8 bg-gold-500" />
-              <p className="font-body text-[10px] uppercase tracking-[0.4em] text-gold-500">
+              <div className="h-px w-8 bg-white/70" />
+              <p className="font-body text-white/70 uppercase tracking-widest text-xs">
                 {eyebrow}
               </p>
             </motion.div>
@@ -74,26 +73,26 @@ export default function ScentBanner({ data }: ScentBannerProps) {
               initial={{ opacity: 0, y: 20 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.75, delay: 0.1 }}
-              className="font-display text-4xl font-light leading-tight text-cream-100 md:text-6xl"
+              className="font-headline font-bold uppercase text-white leading-tight text-4xl md:text-5xl lg:text-6xl"
             >
               {titleMain.split('\n').map((line, i) => (
                 <span key={i}>{line}{i < titleMain.split('\n').length - 1 && <br />}</span>
               ))}{' '}
-              <span className="italic text-gold-400">{titleGold}</span>
+              <span className="italic text-stone-100">{titleGold}</span>
             </motion.h2>
 
             <motion.div
               initial={{ scaleX: 0 }}
               animate={isInView ? { scaleX: 1 } : {}}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="my-8 h-px w-16 origin-left bg-gold-500/50"
+              className="my-8 h-px w-16 origin-left bg-white/40"
             />
 
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.65, delay: 0.35 }}
-              className="mb-10 max-w-sm font-body text-sm font-light leading-relaxed text-charcoal-400"
+              className="mb-10 max-w-sm font-body text-sm font-light leading-relaxed text-white/80"
             >
               {bodyText}
             </motion.p>
@@ -105,7 +104,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
             >
               <Link
                 href={data?.cta?.link ?? '/products'}
-                className="group inline-flex items-center gap-3 border border-gold-500/40 bg-gold-500/10 px-8 py-3.5 font-body text-sm uppercase tracking-[0.2em] text-gold-400 transition-all duration-300 hover:bg-gold-500 hover:text-charcoal-950"
+                className="group inline-flex items-center gap-3 bg-ink-900 text-white px-8 py-3.5 font-body text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-ink-700"
               >
                 {data?.cta?.label ?? 'Browse All Fragrances'}
                 <ArrowRight size={13} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" />
@@ -133,7 +132,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
               >
                 <Link
                   href={`/products?note=${note.name.toLowerCase()}`}
-                  className={`font-display font-light italic leading-tight text-gold-400 transition-all duration-300 hover:opacity-100 hover:not-italic ${note.size} ${note.opacity} ${i % 2 === 0 ? 'ml-0' : 'ml-8'}`}
+                  className={`font-headline font-bold italic uppercase leading-tight text-white transition-all duration-300 hover:opacity-100 hover:not-italic ${note.size} ${note.opacity} ${i % 2 === 0 ? 'ml-0' : 'ml-8'}`}
                 >
                   {note.name}
                 </Link>
@@ -152,7 +151,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
               <Link
                 key={note.name}
                 href={`/products?note=${note.name.toLowerCase()}`}
-                className="border border-charcoal-700 px-4 py-1.5 font-body text-xs uppercase tracking-[0.2em] text-charcoal-400 transition-all duration-300 hover:border-gold-500/60 hover:text-gold-400"
+                className="border border-white/40 px-4 py-1.5 font-body text-xs uppercase tracking-[0.2em] text-white/80 transition-all duration-300 hover:border-white hover:text-white"
               >
                 {note.name}
               </Link>
@@ -162,7 +161,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
       </div>
 
       {/* Bottom fade */}
-      <div className="absolute bottom-0 left-1/2 z-10 h-px w-48 -translate-x-1/2 bg-gradient-to-r from-transparent via-gold-500/40 to-transparent" />
+      <div className="absolute bottom-0 left-1/2 z-10 h-px w-48 -translate-x-1/2 bg-gradient-to-r from-transparent via-white/30 to-transparent" />
     </section>
   )
 }

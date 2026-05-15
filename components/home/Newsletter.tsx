@@ -80,19 +80,24 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
 
   return (
     <section
-      className="relative overflow-hidden bg-charcoal-900"
+      className="relative overflow-hidden bg-stone-100"
       style={safeBgImageUrl ? { backgroundImage: `url(${safeBgImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
     >
+      {/* Light warm overlay when bg image is present */}
+      {safeBgImageUrl && (
+        <div className="absolute inset-0 bg-stone-100/60" />
+      )}
+
       {/* Left decorative panel */}
-      <div className="absolute inset-y-0 left-0 w-1/3 bg-charcoal-950 hidden lg:block" />
-      {/* Gold accent line */}
-      <div className="absolute inset-y-0 left-1/3 w-px bg-gradient-to-b from-transparent via-gold-500/30 to-transparent hidden lg:block" />
+      <div className="absolute inset-y-0 left-0 w-1/3 bg-stone-200/60 hidden lg:block" />
+      {/* Camel accent line */}
+      <div className="absolute inset-y-0 left-1/3 w-px bg-gradient-to-b from-transparent via-camel-400/30 to-transparent hidden lg:block" />
 
       {/* Dot pattern */}
       <div
-        className="pointer-events-none absolute inset-0 opacity-[0.025]"
+        className="pointer-events-none absolute inset-0 opacity-[0.04]"
         style={{
-          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(217,154,27,1) 1px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 1px 1px, rgba(180,140,100,1) 1px, transparent 0)`,
           backgroundSize: '40px 40px',
         }}
       />
@@ -107,17 +112,17 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             className="flex flex-col justify-center py-20 lg:py-28 lg:pr-16"
           >
-            <p className="mb-4 font-body text-xs uppercase tracking-[0.35em] text-gold-500">
+            <p className="mb-4 font-body text-xs uppercase tracking-[0.35em] text-camel-500">
               Exclusive Access
             </p>
-            <h2 className="font-display text-4xl font-light leading-tight text-cream-100 md:text-5xl">
+            <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight text-3xl md:text-4xl">
               {headline === 'Join The Inner Circle' ? (
-                <>Join The <span className="italic text-gold-400">Inner Circle</span></>
+                <>Join The <span className="italic text-camel-600">Inner Circle</span></>
               ) : (
                 headline
               )}
             </h2>
-            <div className="mt-8 h-px w-16 bg-gold-500/40" />
+            <div className="mt-8 h-px w-16 bg-camel-400/40" />
             <ul className="mt-8 space-y-4">
               {PERKS.map((perk, i) => (
                 <motion.li
@@ -126,9 +131,9 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.2 + i * 0.1, duration: 0.6 }}
-                  className="flex items-center gap-3 font-body text-sm font-light text-charcoal-300"
+                  className="flex items-center gap-3 font-body text-sm font-light text-ink-500"
                 >
-                  <span className="h-px w-5 flex-shrink-0 bg-gold-500/60" />
+                  <span className="h-px w-5 flex-shrink-0 bg-camel-400/60" />
                   {perk}
                 </motion.li>
               ))}
@@ -141,11 +146,11 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
             variants={containerVariants}
             initial="hidden"
             animate={isInView ? 'visible' : 'hidden'}
-            className="flex flex-col justify-center py-20 lg:py-28 lg:pl-16 border-t border-charcoal-800 lg:border-t-0 lg:border-l lg:border-charcoal-800"
+            className="flex flex-col justify-center py-20 lg:py-28 lg:pl-16 border-t border-stone-300 lg:border-t-0 lg:border-l lg:border-stone-300"
           >
             <motion.p
               variants={itemVariants}
-              className="mb-3 font-body text-sm font-light leading-relaxed text-charcoal-400"
+              className="mb-3 font-body text-sm font-light leading-relaxed text-ink-500"
             >
               {subtext}
             </motion.p>
@@ -159,12 +164,12 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
               {/* Input */}
               <div
                 className={cn(
-                  'relative border-b transition-colors duration-300',
+                  'relative flex items-center border transition-colors duration-300',
                   hasError
                     ? 'border-red-400'
                     : inputFocused
-                    ? 'border-gold-500'
-                    : 'border-charcoal-700'
+                    ? 'border-camel-400 focus-within:border-camel-400'
+                    : 'border-stone-300'
                 )}
               >
                 <input
@@ -181,17 +186,10 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
                   disabled={status === 'loading' || status === 'success'}
                   aria-label="Email address"
                   className={cn(
-                    'w-full bg-transparent py-3.5 pr-4 font-body text-sm text-cream-100 outline-none',
-                    'placeholder:text-charcoal-600',
+                    'w-full bg-white border-none py-3.5 px-4 font-body text-sm text-ink-800 outline-none',
+                    'placeholder:text-ink-300',
                     'disabled:opacity-50'
                   )}
-                />
-                <motion.div
-                  className="absolute bottom-0 left-0 h-px bg-gold-500"
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: inputFocused ? 1 : 0 }}
-                  transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                  style={{ originX: 0 }}
                 />
               </div>
 
@@ -219,8 +217,8 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
                   'font-body text-sm font-medium uppercase tracking-[0.18em]',
                   'transition-all duration-300',
                   status === 'success'
-                    ? 'bg-charcoal-800 text-gold-400 cursor-default'
-                    : 'bg-gold-500 text-charcoal-950 hover:bg-gold-400',
+                    ? 'border border-camel-400/30 bg-camel-500/8 text-camel-700 cursor-default'
+                    : 'bg-camel-500 text-white hover:bg-camel-600',
                   'disabled:cursor-not-allowed disabled:opacity-70'
                 )}
               >
@@ -246,10 +244,10 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
 
             <motion.p
               variants={itemVariants}
-              className="mt-5 font-body text-[11px] font-light leading-relaxed text-charcoal-600"
+              className="mt-5 font-body text-[11px] font-light leading-relaxed text-ink-400"
             >
               We respect your privacy. Unsubscribe at any time. By subscribing you agree to our{' '}
-              <a href="/privacy" className="text-charcoal-500 underline underline-offset-2 transition-colors hover:text-charcoal-300">
+              <a href="/privacy" className="text-ink-400 underline underline-offset-2 transition-colors hover:text-ink-600">
                 Privacy Policy
               </a>
               .

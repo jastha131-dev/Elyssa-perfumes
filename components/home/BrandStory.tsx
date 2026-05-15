@@ -84,7 +84,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
   return (
     <section
       ref={sectionRef}
-      className="overflow-hidden bg-charcoal-950 py-20 md:py-28"
+      className="overflow-hidden bg-white py-20 md:py-28"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-0">
@@ -96,16 +96,19 @@ export default function BrandStory({ data }: BrandStoryProps) {
             {textLines.map((line, i) => {
               if (line.type === 'eyebrow') {
                 return (
-                  <motion.p
+                  <motion.div
                     key={i}
                     custom={i}
                     variants={lineVariants}
                     initial="hidden"
                     animate={isTextInView ? 'visible' : 'hidden'}
-                    className="mb-4 font-body text-xs uppercase tracking-[0.35em] text-gold-500"
+                    className="mb-4 flex items-center gap-3"
                   >
-                    {line.content}
-                  </motion.p>
+                    <div className="h-px w-6 bg-camel-500" />
+                    <p className="font-body text-xs uppercase tracking-[0.35em] text-camel-500">
+                      {line.content}
+                    </p>
+                  </motion.div>
                 )
               }
               if (line.type === 'title') {
@@ -116,7 +119,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
                     variants={lineVariants}
                     initial="hidden"
                     animate={isTextInView ? 'visible' : 'hidden'}
-                    className="font-display text-4xl font-light leading-tight text-cream-100 md:text-5xl lg:text-6xl"
+                    className="font-headline font-bold uppercase text-ink-900 leading-tight text-3xl md:text-4xl lg:text-5xl"
                   >
                     {line.content}
                   </motion.h2>
@@ -130,7 +133,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
                     variants={lineVariants}
                     initial="hidden"
                     animate={isTextInView ? 'visible' : 'hidden'}
-                    className="my-8 h-px w-16 bg-gold-500/50"
+                    className="my-8 h-px w-16 bg-camel-500"
                   />
                 )
               }
@@ -142,7 +145,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
                     variants={lineVariants}
                     initial="hidden"
                     animate={isTextInView ? 'visible' : 'hidden'}
-                    className="mb-5 font-body text-base font-light leading-relaxed text-charcoal-300"
+                    className="mb-5 font-body text-base leading-relaxed text-ink-600"
                   >
                     {line.content}
                   </motion.p>
@@ -157,8 +160,8 @@ export default function BrandStory({ data }: BrandStoryProps) {
                     initial="hidden"
                     animate={isTextInView ? 'visible' : 'hidden'}
                     className={cn(
-                      'my-8 border-l-2 border-gold-500/50 pl-6',
-                      'font-display text-lg italic font-light leading-relaxed text-gold-400',
+                      'my-8 border-l-2 border-camel-500 pl-6',
+                      'font-body text-lg italic leading-relaxed text-ink-600',
                       'md:text-xl'
                     )}
                   >
@@ -180,9 +183,9 @@ export default function BrandStory({ data }: BrandStoryProps) {
                     <Link
                       href={ctaHref}
                       className={cn(
-                        'inline-flex items-center gap-3 border border-cream-100/30 px-8 py-3.5',
-                        'font-body text-sm uppercase tracking-[0.2em] text-cream-100',
-                        'transition-all duration-300 hover:border-gold-500 hover:text-gold-400'
+                        'inline-flex items-center gap-3 border border-ink-900 px-8 py-3.5',
+                        'font-body text-sm uppercase tracking-[0.2em] text-ink-900',
+                        'transition-colors duration-300 hover:bg-ink-900 hover:text-white'
                       )}
                     >
                       {ctaLabel}
@@ -212,28 +215,28 @@ export default function BrandStory({ data }: BrandStoryProps) {
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
               ) : (
-                <div className="h-full w-full bg-gradient-to-br from-charcoal-800 via-charcoal-900 to-charcoal-950">
+                <div className="h-full w-full bg-stone-200">
                   {/* Decorative texture pattern */}
                   <div className="absolute inset-0 opacity-10"
                     style={{
-                      backgroundImage: `radial-gradient(circle at 2px 2px, rgba(217,154,27,0.4) 1px, transparent 0)`,
+                      backgroundImage: `radial-gradient(circle at 2px 2px, rgba(180,140,100,0.4) 1px, transparent 0)`,
                       backgroundSize: '32px 32px',
                     }}
                   />
-                  {/* Golden atmospheric glow */}
+                  {/* Warm atmospheric glow */}
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="h-64 w-64 rounded-full bg-gold-500/5 blur-3xl" />
+                    <div className="h-64 w-64 rounded-full bg-camel-500/10 blur-3xl" />
                   </div>
                   {/* Decorative circles */}
-                  <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold-500/10" />
-                  <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold-500/10" />
-                  <div className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold-500/15" />
+                  <div className="absolute left-1/2 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full border border-stone-400/20" />
+                  <div className="absolute left-1/2 top-1/2 h-56 w-56 -translate-x-1/2 -translate-y-1/2 rounded-full border border-stone-400/20" />
+                  <div className="absolute left-1/2 top-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 rounded-full border border-stone-400/30" />
                   {/* Center label */}
                   <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-                    <p className="font-display text-4xl font-light text-gold-500/30">
+                    <p className="font-headline text-4xl font-bold text-ink-900/20">
                       Luxe
                     </p>
-                    <p className="font-display text-2xl font-light text-gold-500/20">
+                    <p className="font-headline text-2xl font-bold text-ink-900/15">
                       Parfum
                     </p>
                   </div>
@@ -241,8 +244,8 @@ export default function BrandStory({ data }: BrandStoryProps) {
               )}
             </motion.div>
 
-            {/* Subtle overlay for dark edge blend */}
-            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-charcoal-950/20 to-transparent" />
+            {/* Subtle warm overlay for edge blend */}
+            <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-stone-100/10 to-transparent" />
           </motion.div>
         </div>
       </div>
