@@ -25,12 +25,12 @@ export default function CustomBanner({ data }: CustomBannerProps) {
     left:   'items-start text-left',
     center: 'items-center text-center',
     right:  'items-end text-right',
-  }[textAlign]
+  }[textAlign] ?? 'items-center text-center'
 
   const overlayAlpha = Math.min(1, Math.max(0, overlayOpacity / 100))
 
   return (
-    <section className="relative w-full overflow-hidden" style={{ minHeight: '400px' }}>
+    <section className="relative w-full overflow-hidden">
       {/* ─── Background ──────────────────────────────────────── */}
       {imageUrl ? (
         <Image
@@ -90,11 +90,12 @@ export default function CustomBanner({ data }: CustomBannerProps) {
                 : 'bg-gold-500 text-charcoal-950 hover:bg-gold-400 hover:shadow-xl hover:shadow-gold-500/25'
             )}
           >
-            {cta.label ?? 'Shop Now'}
+            {cta.label || 'Shop Now'}
             <ArrowRight
               size={11}
               strokeWidth={2.5}
               className="transition-transform duration-300 group-hover:translate-x-1"
+              aria-hidden={true}
             />
           </Link>
         )}
