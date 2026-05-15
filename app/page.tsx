@@ -20,6 +20,7 @@ import type {
   FeaturedProductsSectionBlock,
   BestSellersSectionBlock,
   CategoriesSectionBlock,
+  TestimonialsSectionBlock,
 } from "@/lib/types";
 
 export default async function HomePage() {
@@ -54,6 +55,12 @@ export default async function HomePage() {
     categories,
   };
 
+  const testimonialsBlock: TestimonialsSectionBlock = {
+    _type: 'testimonialsSection',
+    _key: 'testimonials',
+    testimonials,
+  };
+
   return (
     <>
       <Hero data={heroBlock} />
@@ -63,7 +70,7 @@ export default async function HomePage() {
       <MarqueeStrip />
       <BestSellers data={bestSellersBlock} />
       <ScentBanner data={homePage} />
-      <Testimonials testimonials={testimonials} />
+      <Testimonials data={testimonialsBlock} />
       <BrandStory data={homePage} />
       <Newsletter />
     </>

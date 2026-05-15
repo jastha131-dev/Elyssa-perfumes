@@ -5,6 +5,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowRight, Loader2 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import type { NewsletterSectionBlock } from '@/lib/types'
 
 const containerVariants = {
   hidden: {},
@@ -24,7 +25,16 @@ const itemVariants = {
 
 const PERKS = ['Early access to new collections', 'Exclusive member-only offers', 'Rare fragrance stories & guides']
 
-export default function Newsletter() {
+interface NewsletterProps {
+  data?: NewsletterSectionBlock
+}
+
+export default function Newsletter({ data }: NewsletterProps = {}) {
+  const headline = data?.headline ?? 'Join The Inner Circle'
+  const subtext = data?.subtext ?? 'Be the first to discover new collections, exclusive launches, and the rare stories behind each fragrance.'
+  const buttonLabel = data?.buttonLabel ?? 'Subscribe'
+  const bgImageUrl = data?.bgImageUrl
+
   const contentRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -66,7 +76,10 @@ export default function Newsletter() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-charcoal-900">
+    <section
+      className="relative overflow-hidden bg-charcoal-900"
+      style={bgImageUrl ? { backgroundImage: `url(${bgImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+    >
       {/* Left decorative panel */}
       <div className="absolute inset-y-0 left-0 w-1/3 bg-charcoal-950 hidden lg:block" />
       {/* Gold accent line */}
@@ -95,8 +108,7 @@ export default function Newsletter() {
               Exclusive Access
             </p>
             <h2 className="font-display text-4xl font-light leading-tight text-cream-100 md:text-5xl">
-              Join The<br />
-              <span className="italic text-gold-400">Inner Circle</span>
+              {headline}
             </h2>
             <div className="mt-8 h-px w-16 bg-gold-500/40" />
             <ul className="mt-8 space-y-4">
@@ -128,8 +140,7 @@ export default function Newsletter() {
               variants={itemVariants}
               className="mb-3 font-body text-sm font-light leading-relaxed text-charcoal-400"
             >
-              Be the first to discover new collections, exclusive launches,
-              and the rare stories behind each fragrance.
+              {subtext}
             </motion.p>
 
             <motion.form
@@ -218,7 +229,7 @@ export default function Newsletter() {
                     </motion.span>
                   ) : (
                     <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
-                      Subscribe
+                      {buttonLabel}
                       <ArrowRight size={14} strokeWidth={1.5} />
                     </motion.span>
                   )}

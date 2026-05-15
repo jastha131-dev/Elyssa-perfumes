@@ -1,3 +1,5 @@
+import type { MarqueeSectionBlock } from '@/lib/types'
+
 const ITEMS_A = [
   'Luxury Fragrance',
   'Handcrafted Excellence',
@@ -33,7 +35,14 @@ const Strip = ({ items }: { items: string[] }) => (
   </>
 )
 
-export default function MarqueeStrip() {
+interface MarqueeStripProps {
+  data?: MarqueeSectionBlock
+}
+
+export default function MarqueeStrip({ data }: MarqueeStripProps = {}) {
+  const _text = data?.text
+  const _speed = data?.speed
+
   return (
     <div className="overflow-hidden border-y border-charcoal-200 bg-cream-50">
       {/* Row 1 — left to right */}

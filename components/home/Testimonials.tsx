@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import type { Testimonial } from '@/lib/types'
+import type { Testimonial, TestimonialsSectionBlock } from '@/lib/types'
 
 const FALLBACK: Testimonial[] = [
   {
@@ -33,7 +33,7 @@ const FALLBACK: Testimonial[] = [
 ]
 
 interface TestimonialsProps {
-  testimonials?: Testimonial[]
+  data?: TestimonialsSectionBlock
 }
 
 function Stars({ rating }: { rating: number }) {
@@ -63,7 +63,10 @@ function Avatar({ name }: { name: string }) {
   )
 }
 
-export default function Testimonials({ testimonials }: TestimonialsProps) {
+export default function Testimonials({ data }: TestimonialsProps = {}) {
+  const testimonials: Testimonial[] = (data?.testimonials ?? []) as Testimonial[]
+  const title = data?.title ?? 'Words From Our Clients'
+
   const headingRef = useRef<HTMLDivElement>(null)
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
   const [active, setActive] = useState(0)
@@ -99,7 +102,7 @@ export default function Testimonials({ testimonials }: TestimonialsProps) {
             <div className="h-px w-8 bg-gold-500/60" />
           </div>
           <h2 className="font-display text-4xl font-light text-charcoal-900 md:text-5xl">
-            Words From Our Clients
+            {title}
           </h2>
           <div className="mx-auto mt-5 h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
         </motion.div>
