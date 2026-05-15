@@ -9,17 +9,29 @@ export const testimonial = defineType({
   icon: StarIcon,
   fields: [
     defineField({
-      name: 'name',
-      title: 'Customer Name',
+      name: 'name_en',
+      title: 'Customer Name (English)',
       type: 'string',
       description: 'Full name or first name + last initial of the reviewer.',
       validation: (Rule) => Rule.required().min(2).max(80),
     }),
     defineField({
-      name: 'location',
-      title: 'Location',
+      name: 'name_ar',
+      title: 'اسم العميل (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(80),
+    }),
+    defineField({
+      name: 'location_en',
+      title: 'Location (English)',
       type: 'string',
       description: 'City, Country — e.g. "Dubai, UAE" or "New York, USA".',
+      validation: (Rule) => Rule.max(80),
+    }),
+    defineField({
+      name: 'location_ar',
+      title: 'الموقع (Arabic)',
+      type: 'string',
       validation: (Rule) => Rule.max(80),
     }),
     defineField({
@@ -41,12 +53,19 @@ export const testimonial = defineType({
       initialValue: 5,
     }),
     defineField({
-      name: 'review',
-      title: 'Review',
+      name: 'review_en',
+      title: 'Review (English)',
       type: 'text',
-      rows: 5,
+      rows: 4,
       description: "The customer's review text.",
       validation: (Rule) => Rule.required().min(20).max(1000),
+    }),
+    defineField({
+      name: 'review_ar',
+      title: 'التقييم (Arabic)',
+      type: 'text',
+      rows: 4,
+      validation: (Rule) => Rule.max(1000),
     }),
     defineField({
       name: 'product',
@@ -113,7 +132,7 @@ export const testimonial = defineType({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   preview: {
     select: {
-      name: 'name',
+      name: 'name_en',
       rating: 'rating',
       productName: 'product.name',
       featured: 'featured',

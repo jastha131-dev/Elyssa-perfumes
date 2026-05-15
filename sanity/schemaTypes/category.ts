@@ -7,18 +7,24 @@ export const category = defineType({
   type: 'document',
   fields: [
     defineField({
-      name: 'name',
-      title: 'Category Name',
+      name: 'name_en',
+      title: 'Category Name (English)',
       type: 'string',
       description: 'Display name shown to customers (e.g. "Men", "Women", "Unisex", "Gift Sets").',
       validation: (Rule) => Rule.required().min(2).max(80),
+    }),
+    defineField({
+      name: 'name_ar',
+      title: 'اسم التصنيف (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(80),
     }),
     defineField({
       name: 'slug',
       title: 'Slug',
       type: 'slug',
       options: {
-        source: 'name',
+        source: 'name_en',
         maxLength: 96,
         slugify: (input: string) =>
           input.toLowerCase().replace(/\s+/g, '-').slice(0, 96),
@@ -26,11 +32,18 @@ export const category = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'description',
-      title: 'Description',
+      name: 'description_en',
+      title: 'Description (English)',
       type: 'text',
-      rows: 4,
+      rows: 3,
       description: 'A short description of this category used on collection pages and SEO.',
+      validation: (Rule) => Rule.max(300),
+    }),
+    defineField({
+      name: 'description_ar',
+      title: 'الوصف (Arabic)',
+      type: 'text',
+      rows: 3,
       validation: (Rule) => Rule.max(300),
     }),
     defineField({
@@ -68,15 +81,15 @@ export const category = defineType({
     {
       title: 'Name A–Z',
       name: 'nameAsc',
-      by: [{ field: 'name', direction: 'asc' }],
+      by: [{ field: 'name_en', direction: 'asc' }],
     },
   ],
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   preview: {
     select: {
-      title: 'name',
-      subtitle: 'description',
+      title: 'name_en',
+      subtitle: 'description_en',
       media: 'image',
       order: 'order',
     },
