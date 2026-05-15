@@ -15,6 +15,7 @@ import {
   getAllCategories,
   getTestimonials,
 } from "@/lib/sanity/fetch";
+import type { HeroSectionBlock } from "@/lib/types";
 
 export default async function HomePage() {
   const [homePage, featuredProducts, bestSellers, categories, testimonials] =
@@ -26,9 +27,13 @@ export default async function HomePage() {
       getTestimonials(),
     ]);
 
+  const heroBlock = homePage?.sections?.find(
+    (s): s is HeroSectionBlock => s._type === 'heroSection'
+  ) ?? null;
+
   return (
     <>
-      <Hero data={homePage} />
+      <Hero data={heroBlock} />
       <TrustBar />
       <FeaturedProducts products={featuredProducts} />
       <Categories categories={categories} />

@@ -11,16 +11,10 @@ import {
 } from 'framer-motion'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
-
-interface HeroData {
-  heroTitle?: string
-  heroSubtitle?: string
-  heroImage?: string
-  heroVideo?: string
-}
+import type { HeroSectionBlock } from '@/lib/types'
 
 interface HeroProps {
-  data?: HeroData | null
+  data?: HeroSectionBlock | null
 }
 
 const containerVariants = {
@@ -59,13 +53,12 @@ export default function Hero({ data }: HeroProps) {
   const textY  = useTransform(scrollYProgress, [0, 1], ['0%', '12%'])
   const fadeOp = useTransform(scrollYProgress, [0, 0.65], [1, 0])
 
-  const title    = data?.heroTitle    ?? 'Discover Your Signature Scent'
-  const subtitle = data?.heroSubtitle ?? 'A curated collection of rare and extraordinary fragrances for the discerning soul'
-  const hasVideo = Boolean(data?.heroVideo)
+  const title    = data?.headline    ?? 'Discover Your Signature Scent'
+  const subtitle = data?.subheadline ?? 'A curated collection of rare and extraordinary fragrances for the discerning soul'
+  const hasVideo = Boolean(data?.bgVideo?.url)
+  const cta      = data?.cta
 
-  const heroImageSrc = (typeof data?.heroImage === 'string' && data.heroImage)
-    ? data.heroImage
-    : '/images/categories/I1.webp'
+  const heroImageSrc = data?.bgImageUrl || '/images/categories/I1.webp'
 
   return (
     <section
@@ -77,7 +70,7 @@ export default function Hero({ data }: HeroProps) {
       <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
         {hasVideo ? (
           <video
-            src={data!.heroVideo}
+            src={data?.bgVideo?.url ?? ''}
             autoPlay muted loop playsInline
             className="h-full w-full object-cover"
           />
@@ -165,23 +158,39 @@ export default function Hero({ data }: HeroProps) {
             variants={itemVariants}
             className="mb-11 flex flex-col gap-3 sm:flex-row sm:items-center"
           >
-            <Link
-              href="/products"
-              className="group inline-flex items-center justify-center gap-2.5 bg-gold-500 px-7 py-[11px] font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-charcoal-950 transition-all duration-300 hover:bg-gold-400 hover:shadow-xl hover:shadow-gold-500/25"
-            >
-              Shop Collection
-              <ArrowRight
-                size={11}
-                strokeWidth={2.5}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </Link>
-            <Link
-              href="/about"
-              className="inline-flex items-center justify-center gap-2.5 border border-cream-100/20 px-7 py-[11px] font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-cream-100/65 transition-all duration-300 hover:border-gold-400/50 hover:text-gold-400"
-            >
-              Our Story
-            </Link>
+            {cta?.link && (
+              <Link
+                href={cta.link}
+                className={cn(
+                  'group inline-flex items-center justify-center gap-2.5 px-7 py-[11px]',
+                  'font-body text-[12px] font-semibold uppercase tracking-[0.2em]',
+                  'transition-all duration-300',
+                  cta.style === 'secondary'
+                    ? 'border border-gold-500/50 bg-transparent text-gold-400 hover:bg-gold-500/10'
+                    : cta.style === 'ghost'
+                    ? 'text-cream-100/65 hover:text-cream-100'
+                    : cta.style === 'outline'
+                    ? 'border border-cream-100/20 text-cream-100/65 hover:border-gold-400/50 hover:text-gold-400'
+                    : 'bg-gold-500 text-charcoal-950 hover:bg-gold-400 hover:shadow-xl hover:shadow-gold-500/25'
+                )}
+              >
+                {cta.label ?? 'Shop Collection'}
+                <ArrowRight
+                  size={11}
+                  strokeWidth={2.5}
+                  className="transition-transform duration-300 group-hover:translate-x-1"
+                />
+              </Link>
+            )}
+            {!cta?.link && (
+              <Link
+                href="/products"
+                className="group inline-flex items-center justify-center gap-2.5 bg-gold-500 px-7 py-[11px] font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-charcoal-950 transition-all duration-300 hover:bg-gold-400 hover:shadow-xl hover:shadow-gold-500/25"
+              >
+                Shop Collection
+                <ArrowRight size={11} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+            )}
           </motion.div>
 
           {/* Stats / social proof */}
