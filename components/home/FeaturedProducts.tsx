@@ -258,7 +258,7 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
 
 export default function FeaturedProducts({ data }: FeaturedProductsProps) {
   const products: Product[] = (data?.products ?? []) as Product[]
-  const title = data?.title ?? 'Featured Products'
+  const title = data?.title ?? 'Featured Fragrances'
 
   const sectionRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)

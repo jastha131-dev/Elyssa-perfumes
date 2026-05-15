@@ -134,7 +134,7 @@ function CategoryCard({ name, slug, imageUrl, gradient, tagline }: CardData) {
 
 export default function Categories({ data }: CategoriesProps) {
   const categories: Category[] = (data?.categories ?? []) as Category[]
-  const title = data?.title ?? 'Shop by Collection'
+  const title = data?.title ?? 'Shop Categories'
 
   const headingRef = useRef<HTMLDivElement>(null)
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
