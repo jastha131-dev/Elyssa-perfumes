@@ -1,0 +1,29 @@
+import { defineField, defineType } from 'sanity'
+
+export const marqueeSection = defineType({
+  name: 'marqueeSection',
+  title: 'Marquee Strip',
+  type: 'object',
+  fields: [
+    defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
+    defineField({
+      name: 'text',
+      title: 'Marquee Text',
+      type: 'string',
+      description: 'Text that scrolls. Separate items with  •  (bullet).',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'speed',
+      title: 'Scroll Speed (seconds)',
+      type: 'number',
+      description: 'Duration of one full scroll. Lower = faster.',
+      initialValue: 30,
+      validation: (Rule) => Rule.min(5).max(120),
+    }),
+  ],
+  preview: {
+    select: { title: 'text' },
+    prepare: (val: { title?: string }) => ({ title: val.title ?? 'Marquee', subtitle: 'marqueeSection' }),
+  },
+})
