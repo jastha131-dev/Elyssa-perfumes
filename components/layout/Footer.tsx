@@ -5,32 +5,13 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Instagram, Twitter, Facebook, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { urlFor } from '@/lib/sanity/image'
 import type { Category } from '@/lib/types'
 
-const SHOP_LINKS = [
-  { label: 'All Fragrances', href: '/products' },
-  { label: 'Men', href: '/products?category=men' },
-  { label: 'Women', href: '/products?category=women' },
-  { label: 'Unisex', href: '/products?category=unisex' },
-  { label: 'New Arrivals', href: '/products?filter=new' },
-  { label: 'Best Sellers', href: '/products?filter=bestseller' },
-]
-
-const HELP_LINKS = [
-  { label: 'FAQ', href: '/faq' },
-  { label: 'Shipping', href: '/shipping' },
-  { label: 'Returns', href: '/returns' },
-  { label: 'Track Order', href: '/track-order' },
-]
-
-const ABOUT_LINKS = [
-  { label: 'Our Story', href: '/about' },
-  { label: 'Sustainability', href: '/sustainability' },
-  { label: 'Press', href: '/press' },
-  { label: 'Careers', href: '/careers' },
-]
+// These keys are used in FooterColumn component
+// Actual labels come from useTranslations('footer')
 
 const LOCAL_CAT_IMAGES = [
   '/images/categories/I1.webp',
@@ -61,24 +42,27 @@ const itemVariants = {
 }
 
 interface FooterColumnProps {
-  title: string
-  links: { label: string; href: string }[]
+  titleKey: string
+  links: { labelKey: string; href: string }[]
 }
 
-function FooterColumn({ title, links }: FooterColumnProps) {
+function FooterColumn({ titleKey, links }: FooterColumnProps) {
+  const t = useTranslations('footer')
+  const locale = useLocale()
+
   return (
     <motion.div variants={itemVariants}>
       <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-400">
-        {title}
+        {t(titleKey)}
       </h3>
       <ul className="flex flex-col gap-3">
         {links.map((link) => (
           <li key={link.href}>
             <Link
-              href={link.href}
+              href={`/${locale}${link.href}`}
               className="font-body text-sm text-charcoal-400 transition-colors duration-200 hover:text-stone-100"
             >
-              {link.label}
+              {t(link.labelKey)}
             </Link>
           </li>
         ))}
@@ -92,6 +76,9 @@ interface FooterProps {
 }
 
 export default function Footer({ categories = [] }: FooterProps) {
+  const t = useTranslations('footer')
+  const locale = useLocale()
+
   const [email, setEmail] = useState('')
   const [subscribed, setSubscribed] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -107,6 +94,30 @@ export default function Footer({ categories = [] }: FooterProps) {
   }
 
   const displayCategories = categories.slice(0, 3)
+
+  // Link definitions with translation keys
+  const SHOP_LINKS = [
+    { labelKey: 'allFragrances', href: '/products' },
+    { labelKey: 'men', href: '/products?category=men' },
+    { labelKey: 'women', href: '/products?category=women' },
+    { labelKey: 'unisex', href: '/products?category=unisex' },
+    { labelKey: 'newArrivals', href: '/products?filter=new' },
+    { labelKey: 'bestSellers', href: '/products?filter=bestseller' },
+  ]
+
+  const HELP_LINKS = [
+    { labelKey: 'faq', href: '/faq' },
+    { labelKey: 'shipping', href: '/shipping' },
+    { labelKey: 'returns', href: '/returns' },
+    { labelKey: 'trackOrder', href: '/track-order' },
+  ]
+
+  const ABOUT_LINKS = [
+    { labelKey: 'ourStory', href: '/about' },
+    { labelKey: 'sustainability', href: '/sustainability' },
+    { labelKey: 'press', href: '/press' },
+    { labelKey: 'careers', href: '/careers' },
+  ]
 
   return (
     <footer className="bg-charcoal-950 text-charcoal-100">
@@ -132,7 +143,7 @@ export default function Footer({ categories = [] }: FooterProps) {
             return (
               <Link
                 key={cat._id}
-                href={`/products?category=${cat.slug}`}
+                href={`/${locale}/products?category=${cat.slug}`}
                 className={cn(
                   'group relative aspect-[4/3] overflow-hidden bg-charcoal-800',
                   isThird && 'hidden md:block'
@@ -154,7 +165,7 @@ export default function Footer({ categories = [] }: FooterProps) {
                 <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7">
                   <div className="transform transition-transform duration-400 group-hover:-translate-y-1">
                     <p className="mb-1 font-body text-[10px] uppercase tracking-[0.3em] text-camel-400/70">
-                      Explore
+                      {t('explore')}
                     </p>
                     <h3 className="font-display text-2xl font-light text-cream-100 md:text-3xl">
                       {cat.name}
@@ -163,7 +174,7 @@ export default function Footer({ categories = [] }: FooterProps) {
 
                   <div className="mt-3 flex items-center gap-2 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                     <span className="font-body text-[10px] uppercase tracking-[0.2em] text-camel-400">
-                      Shop Now
+                      {t('shopNow')}
                     </span>
                     <ArrowRight size={12} className="text-camel-400" strokeWidth={1.5} />
                   </div>
@@ -195,7 +206,7 @@ export default function Footer({ categories = [] }: FooterProps) {
       >
         {/* Brand column */}
         <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-1">
-          <Link href="/" className="inline-flex flex-col leading-none" aria-label="Luxe Parfum">
+          <Link href={`/${locale}`} className="inline-flex flex-col leading-none" aria-label="Luxe Parfum">
             <span className="font-display text-xl font-bold uppercase tracking-[0.18em] text-cream-100">
               LUXE
             </span>
@@ -205,11 +216,11 @@ export default function Footer({ categories = [] }: FooterProps) {
           </Link>
 
           <p className="mt-4 font-body text-sm italic leading-relaxed text-charcoal-400">
-            The Art of Fragrance
+            {t('taglineShort')}
           </p>
 
           <p className="mt-3 max-w-xs font-body text-xs leading-relaxed text-charcoal-500">
-            Crafting extraordinary scents that tell stories, evoke memories, and define moments of timeless elegance.
+            {t('description')}
           </p>
 
           {/* Social — square, luxury */}
@@ -236,17 +247,17 @@ export default function Footer({ categories = [] }: FooterProps) {
         </motion.div>
 
         {/* Nav columns */}
-        <FooterColumn title="Shop" links={SHOP_LINKS} />
-        <FooterColumn title="Help" links={HELP_LINKS} />
-        <FooterColumn title="About" links={ABOUT_LINKS} />
+        <FooterColumn titleKey="shop" links={SHOP_LINKS} />
+        <FooterColumn titleKey="help" links={HELP_LINKS} />
+        <FooterColumn titleKey="about" links={ABOUT_LINKS} />
 
         {/* Newsletter */}
         <motion.div variants={itemVariants}>
           <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-400">
-            Stay Connected
+            {t('stayConnected')}
           </h3>
           <p className="mb-4 font-body text-xs leading-relaxed text-charcoal-400">
-            Be the first to discover new collections, exclusive offers, and fragrance stories.
+            {t('tagline')}
           </p>
 
           {subscribed ? (
@@ -256,7 +267,7 @@ export default function Footer({ categories = [] }: FooterProps) {
               className="border border-camel-500/30 bg-camel-500/8 px-4 py-3"
             >
               <p className="font-body text-xs text-camel-400">
-                Thank you for subscribing! We&apos;ll be in touch soon.
+                {t('thanksForSubscribing')}
               </p>
             </motion.div>
           ) : (
@@ -267,7 +278,7 @@ export default function Footer({ categories = [] }: FooterProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Your email address"
+                  placeholder={t('newsletter.placeholder')}
                   aria-label="Email address for newsletter"
                   required
                   className={cn(
@@ -294,7 +305,7 @@ export default function Footer({ categories = [] }: FooterProps) {
                 </motion.button>
               </div>
               <p className="font-body text-[10px] text-charcoal-600">
-                No spam, ever. Unsubscribe at any time.
+                {t('noSpam')}
               </p>
             </form>
           )}
@@ -313,14 +324,14 @@ export default function Footer({ categories = [] }: FooterProps) {
       >
         <p>&copy; {new Date().getFullYear()} Luxe Parfum. All rights reserved.</p>
         <div className="flex items-center gap-6">
-          <Link href="/privacy-policy" className="transition-colors hover:text-charcoal-300">
-            Privacy Policy
+          <Link href={`/${locale}/privacy-policy`} className="transition-colors hover:text-charcoal-300">
+            {t('privacyPolicy')}
           </Link>
-          <Link href="/terms" className="transition-colors hover:text-charcoal-300">
-            Terms of Service
+          <Link href={`/${locale}/terms`} className="transition-colors hover:text-charcoal-300">
+            {t('termsOfService')}
           </Link>
-          <Link href="/cookies" className="transition-colors hover:text-charcoal-300">
-            Cookie Policy
+          <Link href={`/${locale}/cookies`} className="transition-colors hover:text-charcoal-300">
+            {t('cookiePolicy')}
           </Link>
         </div>
       </motion.div>

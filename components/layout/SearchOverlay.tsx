@@ -6,6 +6,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Clock, ArrowRight, TrendingUp } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn, formatPrice } from '@/lib/utils'
 import type { Product } from '@/lib/types'
@@ -39,6 +40,8 @@ function clearRecentSearches() {
 export default function SearchOverlay() {
   const router = useRouter()
   const { isSearchOpen, closeSearch } = useUIStore()
+  const t = useTranslations('search')
+  const locale = useLocale()
 
   const [query, setQuery] = useState('')
   const [recentSearches, setRecentSearches] = useState<string[]>([])
@@ -105,9 +108,9 @@ export default function SearchOverlay() {
       if (!trimmed) return
       saveRecentSearch(trimmed)
       closeSearch()
-      router.push(`/search?q=${encodeURIComponent(trimmed)}`)
+      router.push(`/${locale}/search?q=${encodeURIComponent(trimmed)}`)
     },
-    [closeSearch, router]
+    [closeSearch, router, locale]
   )
 
   function handleSubmit(e: React.FormEvent) {
@@ -175,7 +178,7 @@ export default function SearchOverlay() {
                     type="search"
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}
-                    placeholder="Search fragrances, notes, collections…"
+                    placeholder={t('placeholder')}
                     autoComplete="off"
                     spellCheck={false}
                     className="flex-1 bg-transparent font-display text-lg text-cream-100 placeholder:text-charcoal-500 outline-none caret-gold-500"
@@ -232,7 +235,7 @@ export default function SearchOverlay() {
                               {results.slice(0, 6).map((product) => (
                                 <li key={product._id}>
                                   <Link
-                                    href={`/products/${product.slug}`}
+                                    href={`/${locale}/products/${product.slug}`}
                                     onClick={() => { saveRecentSearch(query); closeSearch() }}
                                     className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-charcoal-800 transition-colors group"
                                   >
@@ -284,7 +287,7 @@ export default function SearchOverlay() {
                           </>
                         ) : !isSearching ? (
                           <p className="px-3 py-6 text-center text-sm text-charcoal-500">
-                            No results for <span className="text-cream-300">&ldquo;{query}&rdquo;</span>
+                            {t('noResults')} <span className="text-cream-300">&ldquo;{query}&rdquo;</span>
                           </p>
                         ) : null}
                       </div>
@@ -296,13 +299,13 @@ export default function SearchOverlay() {
                         <div className="mb-3 flex items-center justify-between">
                           <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-widest text-charcoal-500">
                             <Clock className="h-3 w-3" />
-                            Recent
+                            {t('recent')}
                           </span>
                           <button
                             onClick={() => { clearRecentSearches(); setRecentSearches([]) }}
                             className="text-[11px] text-charcoal-500 transition-colors hover:text-cream-100"
                           >
-                            Clear all
+                            {t('clearAll')}
                           </button>
                         </div>
                         <ul className="flex flex-col gap-1">
@@ -333,7 +336,7 @@ export default function SearchOverlay() {
                       <div className="px-5 py-4">
                         <p className="mb-3 flex items-center gap-2 text-[11px] font-medium uppercase tracking-widest text-charcoal-500">
                           <TrendingUp className="h-3 w-3" />
-                          Trending
+                          {t('trending')}
                         </p>
                         <div className="flex flex-wrap gap-2">
                           {TRENDING_SEARCHES.map((term) => (
