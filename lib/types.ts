@@ -1,8 +1,10 @@
 export interface Category {
   _id: string
-  name: string
+  name_en: string
+  name_ar: string
   slug: string
-  description: string
+  description_en?: string
+  description_ar?: string
   image: SanityImageAsset
   order: number
 }
@@ -37,18 +39,24 @@ export interface PortableTextBlock {
 export interface Product {
   id: string
   _id: string
-  name: string
+  name_en: string
+  name_ar: string
   slug: string
   price: number
   compareAtPrice?: number
-  description: string
-  story: PortableTextBlock[]
+  description_en: string
+  description_ar: string
+  story_en: PortableTextBlock[]
+  story_ar: PortableTextBlock[]
   images: ProductImage[]
   category: Category
   fragranceFamily: string
-  topNotes: string[]
-  middleNotes: string[]
-  baseNotes: string[]
+  topNotes_en?: string[]
+  topNotes_ar?: string[]
+  middleNotes_en?: string[]
+  middleNotes_ar?: string[]
+  baseNotes_en?: string[]
+  baseNotes_ar?: string[]
   intensity: string
   sillage: string
   longevity: string
@@ -58,8 +66,10 @@ export interface Product {
   bestSeller: boolean
   new: boolean
   tags: string[]
-  seoTitle?: string
-  seoDescription?: string
+  seoTitle_en?: string
+  seoTitle_ar?: string
+  seoDescription_en?: string
+  seoDescription_ar?: string
 }
 
 export interface CartItem {
@@ -85,20 +95,25 @@ export interface SanityImageAsset {
 // ─── Page Builder Types ───────────────────────────────────────────────────────
 
 export interface CtaButton {
-  label?: string
+  label_en?: string
+  label_ar?: string
   link?: string
   style?: 'primary' | 'secondary' | 'ghost' | 'outline'
 }
 
 export interface Testimonial {
   _id: string
-  name: string
-  location: string
+  name_en: string
+  name_ar: string
+  location_en?: string
+  location_ar?: string
   rating: number
-  review: string
+  review_en: string
+  review_ar: string
   product?: {
     _id: string
-    name: string
+    name_en: string
+    name_ar: string
     slug: string
   }
 }
@@ -107,13 +122,16 @@ export interface HeroSectionBlock {
   _type: 'heroSection'
   _key: string
   isVisible?: boolean
-  headline?: string
-  subheadline?: string
+  headline_en?: string
+  headline_ar?: string
+  subheadline_en?: string
+  subheadline_ar?: string
   bgImageUrl?: string
   bgImageAlt?: string
   bgVideo?: { url?: string; muxPlaybackId?: string }
   cta?: CtaButton
   textColor?: 'light' | 'dark'
+  headlineSize?: 'sm' | 'md' | 'lg' | 'xl'
 }
 
 export interface CustomBannerSectionBlock {
@@ -122,8 +140,10 @@ export interface CustomBannerSectionBlock {
   isVisible?: boolean
   imageUrl?: string
   imageAlt?: string
-  headline?: string
-  subtext?: string
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
   overlayOpacity?: number
   cta?: CtaButton
   textAlign?: 'left' | 'center' | 'right'
@@ -133,8 +153,10 @@ export interface FeaturedProductsSectionBlock {
   _type: 'featuredProductsSection'
   _key: string
   isVisible?: boolean
-  title?: string
-  subtitle?: string
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
   products?: Product[]
   layout?: 'grid' | 'carousel'
 }
@@ -143,7 +165,8 @@ export interface BestSellersSectionBlock {
   _type: 'bestSellersSection'
   _key: string
   isVisible?: boolean
-  title?: string
+  title_en?: string
+  title_ar?: string
   products?: Product[]
 }
 
@@ -151,7 +174,8 @@ export interface CategoriesSectionBlock {
   _type: 'categoriesSection'
   _key: string
   isVisible?: boolean
-  title?: string
+  title_en?: string
+  title_ar?: string
   categories?: Category[]
 }
 
@@ -159,7 +183,8 @@ export interface MarqueeSectionBlock {
   _type: 'marqueeSection'
   _key: string
   isVisible?: boolean
-  text?: string
+  text_en?: string
+  text_ar?: string
   speed?: number
 }
 
@@ -167,10 +192,14 @@ export interface ScentBannerSectionBlock {
   _type: 'scentBannerSection'
   _key: string
   isVisible?: boolean
-  eyebrow?: string
-  headline?: string
-  highlightWord?: string
-  subtext?: string
+  eyebrow_en?: string
+  eyebrow_ar?: string
+  headline_en?: string
+  headline_ar?: string
+  highlightWord_en?: string
+  highlightWord_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
   bgImageUrl?: string
   cta?: CtaButton
 }
@@ -179,9 +208,12 @@ export interface BrandStorySectionBlock {
   _type: 'brandStorySection'
   _key: string
   isVisible?: boolean
-  eyebrow?: string
-  headline?: string
-  body?: string
+  eyebrow_en?: string
+  eyebrow_ar?: string
+  headline_en?: string
+  headline_ar?: string
+  body_en?: string
+  body_ar?: string
   imageUrl?: string
   imageAlt?: string
   imagePosition?: 'left' | 'right'
@@ -192,7 +224,8 @@ export interface TestimonialsSectionBlock {
   _type: 'testimonialsSection'
   _key: string
   isVisible?: boolean
-  title?: string
+  title_en?: string
+  title_ar?: string
   testimonials?: Testimonial[]
 }
 
@@ -200,9 +233,12 @@ export interface NewsletterSectionBlock {
   _type: 'newsletterSection'
   _key: string
   isVisible?: boolean
-  headline?: string
-  subtext?: string
-  buttonLabel?: string
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  buttonLabel_en?: string
+  buttonLabel_ar?: string
   bgImageUrl?: string
 }
 
@@ -210,7 +246,7 @@ export interface TrustBarSectionBlock {
   _type: 'trustBarSection'
   _key: string
   isVisible?: boolean
-  items?: Array<{ icon?: string; label?: string; value?: string }>
+  items?: Array<{ icon?: string; label_en?: string; label_ar?: string; value?: string }>
 }
 
 export type HomePageSection =
