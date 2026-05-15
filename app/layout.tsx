@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
+import { Cairo } from "next/font/google";
+import { getLocale } from "next-intl/server";
 import "./globals.css";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
-import Providers from "@/components/layout/Providers";
-import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
-import { getAllCategories } from "@/lib/sanity/fetch";
-import { draftMode } from "next/headers";
-import VisualEditingWrapper from "@/components/VisualEditingWrapper";
+
+const cairo = Cairo({
+  subsets: ["arabic", "latin"],
+  variable: "--font-cairo",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -68,11 +69,15 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const categories = await getAllCategories()
-  const { isEnabled: isDraftMode } = await draftMode()
+  const locale = await getLocale();
+  const isArabic = locale === "ar";
 
   return (
-    <html lang="en">
+    <html
+      lang={locale}
+      dir={isArabic ? "rtl" : "ltr"}
+      className={isArabic ? cairo.variable : ""}
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link
@@ -85,17 +90,7 @@ export default async function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="font-body antialiased">
-        <Providers>
-          <ConditionalLayout
-            header={<Header categories={categories} />}
-            footer={<Footer categories={categories} />}
-          >
-            {children}
-          </ConditionalLayout>
-          {isDraftMode && <VisualEditingWrapper />}
-        </Providers>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
