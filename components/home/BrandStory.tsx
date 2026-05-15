@@ -10,16 +10,10 @@ import {
   useInView,
 } from 'framer-motion'
 import { cn } from '@/lib/utils'
-
-interface BrandStoryData {
-  brandStoryEyebrow?: string
-  brandStoryTitle?: string
-  brandStoryText?: string
-  brandStoryImage?: string
-}
+import type { BrandStorySectionBlock } from '@/lib/types'
 
 interface BrandStoryProps {
-  data?: BrandStoryData | null
+  data?: BrandStorySectionBlock | null
 }
 
 const FALLBACK_PARAGRAPHS = [
@@ -68,16 +62,13 @@ export default function BrandStory({ data }: BrandStoryProps) {
   // Parallax: image moves slightly upward as we scroll past
   const imageY = useTransform(scrollYProgress, [0, 1], ['4%', '-4%'])
 
-  const eyebrow = data?.brandStoryEyebrow ?? 'Our Philosophy'
-  const title = data?.brandStoryTitle ?? 'The Art of Perfumery'
-  const brandImageSrc = (typeof data?.brandStoryImage === 'string' && data.brandStoryImage)
-    ? data.brandStoryImage
-    : '/images/categories/I1.webp'
+  const eyebrow = data?.eyebrow ?? 'Our Philosophy'
+  const title = data?.headline ?? 'The Art of Perfumery'
+  const brandImageSrc = data?.imageUrl ?? '/images/categories/I1.webp'
   const hasImage = true
 
-  // Split provided text into paragraphs or use fallback
-  const paragraphs = data?.brandStoryText
-    ? data.brandStoryText.split(/\n\n+/).filter(Boolean)
+  const paragraphs = data?.body
+    ? data.body.split(/\n\n+/).filter(Boolean)
     : FALLBACK_PARAGRAPHS
 
   // Lines for staggered reveal: title words + paragraphs + quote + CTA
@@ -176,6 +167,8 @@ export default function BrandStory({ data }: BrandStoryProps) {
                 )
               }
               if (line.type === 'cta') {
+                const ctaLabel = data?.cta?.label ?? 'Discover Our Story'
+                const ctaHref  = data?.cta?.link  ?? '/about'
                 return (
                   <motion.div
                     key={i}
@@ -185,14 +178,14 @@ export default function BrandStory({ data }: BrandStoryProps) {
                     animate={isTextInView ? 'visible' : 'hidden'}
                   >
                     <Link
-                      href="/about"
+                      href={ctaHref}
                       className={cn(
                         'inline-flex items-center gap-3 border border-cream-100/30 px-8 py-3.5',
                         'font-body text-sm uppercase tracking-[0.2em] text-cream-100',
                         'transition-all duration-300 hover:border-gold-500 hover:text-gold-400'
                       )}
                     >
-                      {line.content}
+                      {ctaLabel}
                     </Link>
                   </motion.div>
                 )
