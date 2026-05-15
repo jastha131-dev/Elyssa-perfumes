@@ -1,9 +1,11 @@
 // Reusable fragment for category fields
 const categoryFragment = `
   _id,
-  name,
+  name_en,
+  name_ar,
   "slug": slug.current,
-  description,
+  description_en,
+  description_ar,
   image,
   order
 `
@@ -12,12 +14,15 @@ const categoryFragment = `
 const productFragment = `
   _id,
   "id": _id,
-  name,
+  name_en,
+  name_ar,
   "slug": slug.current,
   price,
   compareAtPrice,
-  description,
-  story,
+  description_en,
+  description_ar,
+  story_en,
+  story_ar,
   "images": images[]{
     "url": asset->url,
     alt
@@ -26,9 +31,12 @@ const productFragment = `
     ${categoryFragment}
   },
   fragranceFamily,
-  topNotes,
-  middleNotes,
-  baseNotes,
+  topNotes_en,
+  topNotes_ar,
+  middleNotes_en,
+  middleNotes_ar,
+  baseNotes_en,
+  baseNotes_ar,
   intensity,
   sillage,
   longevity,
@@ -38,8 +46,10 @@ const productFragment = `
   bestSeller,
   "new": new,
   tags,
-  seoTitle,
-  seoDescription
+  seoTitle_en,
+  seoTitle_ar,
+  seoDescription_en,
+  seoDescription_ar
 `
 
 // ─── Product Queries ──────────────────────────────────────────────────────────
@@ -93,8 +103,10 @@ export const getRelatedProductsQuery = `
 export const searchProductsQuery = `
   *[
     _type == "product" && (
-      name match $searchTerm ||
-      description match $searchTerm ||
+      name_en match $searchTerm ||
+      name_ar match $searchTerm ||
+      description_en match $searchTerm ||
+      description_ar match $searchTerm ||
       fragranceFamily match $searchTerm ||
       $searchTerm in tags
     )
@@ -125,21 +137,26 @@ export const getHomePageQuery = `
       "products": products[]->{
         _id,
         "id": _id,
-        name,
+        name_en,
+        name_ar,
         "slug": slug.current,
         price,
         compareAtPrice,
-        description,
+        description_en,
+        description_ar,
         "images": images[]{"url": asset->url, alt},
-        "category": category->{ _id, name, "slug": slug.current },
+        "category": category->{ _id, name_en, name_ar, "slug": slug.current },
         stock,
         featured,
         bestSeller,
         "new": new,
         fragranceFamily,
-        topNotes,
-        middleNotes,
-        baseNotes,
+        topNotes_en,
+        topNotes_ar,
+        middleNotes_en,
+        middleNotes_ar,
+        baseNotes_en,
+        baseNotes_ar,
         intensity,
         sillage,
         longevity,
@@ -147,19 +164,24 @@ export const getHomePageQuery = `
       },
       "categories": categories[]->{
         _id,
-        name,
+        name_en,
+        name_ar,
         "slug": slug.current,
-        description,
+        description_en,
+        description_ar,
         image,
         order
       },
       "testimonials": testimonials[]->{
         _id,
-        name,
-        location,
+        name_en,
+        name_ar,
+        location_en,
+        location_ar,
         rating,
-        review,
-        "product": product->{ _id, name, "slug": slug.current }
+        review_en,
+        review_ar,
+        "product": product->{ _id, name_en, name_ar, "slug": slug.current }
       }
     }
   }
@@ -168,13 +190,17 @@ export const getHomePageQuery = `
 export const getTestimonialsQuery = `
   *[_type == "testimonial"] | order(_createdAt desc) {
     _id,
-    name,
-    location,
+    name_en,
+    name_ar,
+    location_en,
+    location_ar,
     rating,
-    review,
+    review_en,
+    review_ar,
     "product": product->{
       _id,
-      name,
+      name_en,
+      name_ar,
       "slug": slug.current
     }
   }
