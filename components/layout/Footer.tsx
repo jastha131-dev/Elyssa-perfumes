@@ -68,7 +68,7 @@ interface FooterColumnProps {
 function FooterColumn({ title, links }: FooterColumnProps) {
   return (
     <motion.div variants={itemVariants}>
-      <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-gold-500">
+      <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-400">
         {title}
       </h3>
       <ul className="flex flex-col gap-3">
@@ -76,7 +76,7 @@ function FooterColumn({ title, links }: FooterColumnProps) {
           <li key={link.href}>
             <Link
               href={link.href}
-              className="font-body text-sm text-charcoal-400 transition-colors duration-200 hover:text-cream-100"
+              className="font-body text-sm text-charcoal-400 transition-colors duration-200 hover:text-stone-100"
             >
               {link.label}
             </Link>
@@ -147,13 +147,13 @@ export default function Footer({ categories = [] }: FooterProps) {
                 />
 
                 {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-charcoal-950/90 via-charcoal-950/30 to-charcoal-950/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/90 via-charcoal-950/30 to-ink-950/10" />
                 <div className="absolute inset-0 bg-charcoal-950/0 transition-colors duration-500 group-hover:bg-charcoal-950/20" />
 
                 {/* Category info */}
                 <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7">
                   <div className="transform transition-transform duration-400 group-hover:-translate-y-1">
-                    <p className="mb-1 font-body text-[10px] uppercase tracking-[0.3em] text-gold-400/70">
+                    <p className="mb-1 font-body text-[10px] uppercase tracking-[0.3em] text-camel-400/70">
                       Explore
                     </p>
                     <h3 className="font-display text-2xl font-light text-cream-100 md:text-3xl">
@@ -162,15 +162,15 @@ export default function Footer({ categories = [] }: FooterProps) {
                   </div>
 
                   <div className="mt-3 flex items-center gap-2 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <span className="font-body text-[10px] uppercase tracking-[0.2em] text-gold-400">
+                    <span className="font-body text-[10px] uppercase tracking-[0.2em] text-camel-400">
                       Shop Now
                     </span>
-                    <ArrowRight size={12} className="text-gold-400" strokeWidth={1.5} />
+                    <ArrowRight size={12} className="text-camel-400" strokeWidth={1.5} />
                   </div>
                 </div>
 
-                {/* Gold border on hover */}
-                <div className="pointer-events-none absolute inset-0 border border-gold-500/0 transition-colors duration-500 group-hover:border-gold-500/25" />
+                {/* Camel border on hover */}
+                <div className="pointer-events-none absolute inset-0 border border-camel-500/0 transition-colors duration-500 group-hover:border-camel-500/25" />
 
                 {/* Divider between tiles */}
                 {i < displayCategories.length - 1 && (
@@ -182,8 +182,8 @@ export default function Footer({ categories = [] }: FooterProps) {
         </div>
       )}
 
-      {/* Gold gradient accent */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-500/35 to-transparent" />
+      {/* Camel gradient accent */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/35 to-transparent" />
 
       {/* ── Main footer grid ── */}
       <motion.div
@@ -224,7 +224,7 @@ export default function Footer({ categories = [] }: FooterProps) {
                 className={cn(
                   'flex h-8 w-8 items-center justify-center',
                   'border border-charcoal-700 text-charcoal-500',
-                  'transition-all duration-200 hover:border-gold-500 hover:text-gold-500'
+                  'transition-all duration-200 hover:border-camel-500 hover:text-camel-400'
                 )}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.93 }}
@@ -242,7 +242,7 @@ export default function Footer({ categories = [] }: FooterProps) {
 
         {/* Newsletter */}
         <motion.div variants={itemVariants}>
-          <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-gold-500">
+          <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-400">
             Stay Connected
           </h3>
           <p className="mb-4 font-body text-xs leading-relaxed text-charcoal-400">
@@ -253,16 +253,16 @@ export default function Footer({ categories = [] }: FooterProps) {
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="border border-gold-500/30 bg-gold-500/8 px-4 py-3"
+              className="border border-camel-500/30 bg-camel-500/8 px-4 py-3"
             >
-              <p className="font-body text-xs text-gold-400">
+              <p className="font-body text-xs text-camel-400">
                 Thank you for subscribing! We&apos;ll be in touch soon.
               </p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col gap-2" noValidate>
               {/* Sharp rectangle — matches brand aesthetic */}
-              <div className="flex border border-charcoal-700 transition-colors duration-200 focus-within:border-gold-500/70">
+              <div className="flex border border-charcoal-700 transition-colors duration-200 focus-within:border-camel-500/70">
                 <input
                   type="email"
                   value={email}
@@ -282,8 +282,8 @@ export default function Footer({ categories = [] }: FooterProps) {
                   aria-label="Subscribe to newsletter"
                   className={cn(
                     'flex items-center justify-center px-3.5',
-                    'bg-gold-500 text-charcoal-950 transition-all duration-200',
-                    'hover:bg-gold-400 disabled:cursor-not-allowed disabled:opacity-50'
+                    'bg-camel-500 text-white transition-all duration-200',
+                    'hover:bg-camel-400 disabled:cursor-not-allowed disabled:opacity-50'
                   )}
                 >
                   {loading ? (
@@ -302,7 +302,7 @@ export default function Footer({ categories = [] }: FooterProps) {
       </motion.div>
 
       {/* ── Bottom bar ── */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-500/20 to-transparent" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/20 to-transparent" />
 
       <motion.div
         initial={{ opacity: 0 }}
