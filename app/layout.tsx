@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer";
 import Providers from "@/components/layout/Providers";
 import { ConditionalLayout } from "@/components/layout/ConditionalLayout";
 import { getAllCategories } from "@/lib/sanity/fetch";
+import { draftMode } from "next/headers";
+import VisualEditingWrapper from "@/components/VisualEditingWrapper";
 
 export const metadata: Metadata = {
   title: {
@@ -67,6 +69,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const categories = await getAllCategories()
+  const { isEnabled: isDraftMode } = await draftMode()
 
   return (
     <html lang="en">
@@ -78,7 +81,7 @@ export default async function RootLayout({
           crossOrigin="anonymous"
         />
         <link
-          href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
           rel="stylesheet"
         />
       </head>
@@ -90,6 +93,7 @@ export default async function RootLayout({
           >
             {children}
           </ConditionalLayout>
+          {isDraftMode && <VisualEditingWrapper />}
         </Providers>
       </body>
     </html>

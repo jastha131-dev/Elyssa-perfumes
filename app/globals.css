@@ -4,10 +4,14 @@
 
 :root {
   --font-display: 'Playfair Display', Georgia, serif;
+  --font-headline: 'Oswald', 'Barlow', sans-serif;
   --font-body: 'Inter', system-ui, sans-serif;
   --gold: #d99a1b;
   --charcoal: #1a1a1a;
   --cream: #fdf9ec;
+  --stone: #F7F0E6;
+  --camel: #B08040;
+  --ink: #0D0D0D;
 }
 
 * {
