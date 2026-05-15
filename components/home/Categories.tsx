@@ -6,11 +6,11 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import type { Category } from '@/lib/types'
+import type { Category, CategoriesSectionBlock } from '@/lib/types'
 import { urlFor } from '@/lib/sanity/image'
 
 interface CategoriesProps {
-  categories?: Category[]
+  data: CategoriesSectionBlock
 }
 
 const FALLBACK = [
@@ -132,7 +132,10 @@ function CategoryCard({ name, slug, imageUrl, gradient, tagline }: CardData) {
   )
 }
 
-export default function Categories({ categories }: CategoriesProps) {
+export default function Categories({ data }: CategoriesProps) {
+  const categories: Category[] = (data?.categories ?? []) as Category[]
+  const title = data?.title ?? 'Shop by Collection'
+
   const headingRef = useRef<HTMLDivElement>(null)
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
 
@@ -188,7 +191,7 @@ export default function Categories({ categories }: CategoriesProps) {
             Explore By
           </p>
           <h2 className="font-display text-4xl font-light text-cream-100 md:text-5xl">
-            Shop Categories
+            {title}
           </h2>
           <div className="mx-auto mt-5 h-px w-16 bg-gold-500/50" />
         </motion.div>

@@ -7,7 +7,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, Check, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCartStore } from '@/lib/store/cart-store'
-import type { Product } from '@/lib/types'
+import type { Product, FeaturedProductsSectionBlock } from '@/lib/types'
 
 const LOCAL_PRODUCT_IMAGES = [
   '/images/products/default-product.jpeg',
@@ -27,7 +27,7 @@ const LOCAL_PRODUCT_IMAGES = [
 ]
 
 interface FeaturedProductsProps {
-  products: Product[]
+  data: FeaturedProductsSectionBlock
 }
 
 const sectionVariants = {
@@ -256,7 +256,10 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
   )
 }
 
-export default function FeaturedProducts({ products }: FeaturedProductsProps) {
+export default function FeaturedProducts({ data }: FeaturedProductsProps) {
+  const products: Product[] = (data?.products ?? []) as Product[]
+  const title = data?.title ?? 'Featured Products'
+
   const sectionRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
   const [justAddedId, setJustAddedId] = useState<string | null>(null)
@@ -301,7 +304,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
             <div className="h-px w-8 bg-gold-500/60" />
           </div>
           <h2 className="font-display text-4xl font-light text-charcoal-900 md:text-5xl">
-            Featured Fragrances
+            {title}
           </h2>
           <div className="mx-auto mt-5 h-px w-16 bg-gradient-to-r from-transparent via-gold-500/60 to-transparent" />
         </motion.div>

@@ -15,7 +15,12 @@ import {
   getAllCategories,
   getTestimonials,
 } from "@/lib/sanity/fetch";
-import type { HeroSectionBlock } from "@/lib/types";
+import type {
+  HeroSectionBlock,
+  FeaturedProductsSectionBlock,
+  BestSellersSectionBlock,
+  CategoriesSectionBlock,
+} from "@/lib/types";
 
 export default async function HomePage() {
   const [homePage, featuredProducts, bestSellers, categories, testimonials] =
@@ -31,14 +36,32 @@ export default async function HomePage() {
     (s): s is HeroSectionBlock => s._type === 'heroSection'
   ) ?? null;
 
+  const featuredBlock: FeaturedProductsSectionBlock = {
+    _type: 'featuredProductsSection',
+    _key: 'featured',
+    products: featuredProducts,
+  };
+
+  const bestSellersBlock: BestSellersSectionBlock = {
+    _type: 'bestSellersSection',
+    _key: 'bestSellers',
+    products: bestSellers,
+  };
+
+  const categoriesBlock: CategoriesSectionBlock = {
+    _type: 'categoriesSection',
+    _key: 'categories',
+    categories,
+  };
+
   return (
     <>
       <Hero data={heroBlock} />
       <TrustBar />
-      <FeaturedProducts products={featuredProducts} />
-      <Categories categories={categories} />
+      <FeaturedProducts data={featuredBlock} />
+      <Categories data={categoriesBlock} />
       <MarqueeStrip />
-      <BestSellers products={bestSellers} />
+      <BestSellers data={bestSellersBlock} />
       <ScentBanner data={homePage} />
       <Testimonials testimonials={testimonials} />
       <BrandStory data={homePage} />

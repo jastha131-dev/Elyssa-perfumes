@@ -8,7 +8,7 @@ import { ChevronLeft, ChevronRight, Heart } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
-import type { Product } from '@/lib/types'
+import type { Product, BestSellersSectionBlock } from '@/lib/types'
 
 const LOCAL_PRODUCT_IMAGES = [
   '/images/products/default-product.jpeg',
@@ -28,7 +28,7 @@ const LOCAL_PRODUCT_IMAGES = [
 ]
 
 interface BestSellersProps {
-  products: Product[]
+  data: BestSellersSectionBlock
 }
 
 const headingVariants = {
@@ -167,7 +167,10 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
   )
 }
 
-export default function BestSellers({ products }: BestSellersProps) {
+export default function BestSellers({ data }: BestSellersProps) {
+  const products: Product[] = (data?.products ?? []) as Product[]
+  const title = data?.title ?? 'Best Sellers'
+
   const headingRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -200,7 +203,7 @@ export default function BestSellers({ products }: BestSellersProps) {
               Top Picks
             </p>
             <h2 className="font-display text-4xl font-light text-charcoal-900 md:text-5xl">
-              Best Sellers
+              {title}
             </h2>
             <div className="mt-4 h-px w-16 bg-gold-500/50" />
           </motion.div>
