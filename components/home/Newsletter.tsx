@@ -34,6 +34,9 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
   const subtext = data?.subtext ?? 'Be the first to discover new collections, exclusive launches, and the rare stories behind each fragrance.'
   const buttonLabel = data?.buttonLabel ?? 'Subscribe'
   const bgImageUrl = data?.bgImageUrl
+  const safeBgImageUrl = bgImageUrl && (bgImageUrl.startsWith('http://') || bgImageUrl.startsWith('https://') || bgImageUrl.startsWith('/'))
+    ? bgImageUrl
+    : undefined
 
   const contentRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLInputElement>(null)
@@ -78,7 +81,7 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
   return (
     <section
       className="relative overflow-hidden bg-charcoal-900"
-      style={bgImageUrl ? { backgroundImage: `url(${bgImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      style={safeBgImageUrl ? { backgroundImage: `url(${safeBgImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
     >
       {/* Left decorative panel */}
       <div className="absolute inset-y-0 left-0 w-1/3 bg-charcoal-950 hidden lg:block" />
@@ -108,7 +111,11 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
               Exclusive Access
             </p>
             <h2 className="font-display text-4xl font-light leading-tight text-cream-100 md:text-5xl">
-              {headline}
+              {headline === 'Join The Inner Circle' ? (
+                <>Join The <span className="italic text-gold-400">Inner Circle</span></>
+              ) : (
+                headline
+              )}
             </h2>
             <div className="mt-8 h-px w-16 bg-gold-500/40" />
             <ul className="mt-8 space-y-4">

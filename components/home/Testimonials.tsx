@@ -64,7 +64,7 @@ function Avatar({ name }: { name: string }) {
 }
 
 export default function Testimonials({ data }: TestimonialsProps = {}) {
-  const testimonials: Testimonial[] = (data?.testimonials ?? []) as Testimonial[]
+  const testimonials: Testimonial[] = (data?.testimonials ?? FALLBACK) as Testimonial[]
   const title = data?.title ?? 'Words From Our Clients'
 
   const headingRef = useRef<HTMLDivElement>(null)
