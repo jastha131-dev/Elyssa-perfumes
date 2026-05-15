@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "الرئيسية",
+    "products": "المنتجات",
+    "about": "من نحن",
+    "journal": "المجلة",
+    "cart": "السلة",
+    "wishlist": "المفضلة",
+    "search": "بحث"
+  },
+  "product": {
+    "addToCart": "أضف إلى السلة",
+    "quickView": "عرض سريع",
+    "outOfStock": "نفد المخزون",
+    "viewDetails": "عرض التفاصيل",
+    "relatedProducts": "قد يعجبك أيضاً",
+    "fragranceNotes": "مكونات العطر",
+    "top": "رأسية",
+    "middle": "قلبية",
+    "base": "قاعدية",
+    "intensity": "الكثافة",
+    "sillage": "الأثر",
+    "longevity": "الثبات",
+    "addToWishlist": "أضف إلى المفضلة",
+    "removeFromWishlist": "حذف من المفضلة",
+    "inStock": "متوفر",
+    "selectSize": "اختر الحجم"
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "empty": "سلتك فارغة",
+    "checkout": "الدفع",
+    "continueShopping": "مواصلة التسوق",
+    "total": "الإجمالي",
+    "subtotal": "المجموع الجزئي",
+    "remove": "حذف",
+    "quantity": "الكمية",
+    "itemAdded": "تمت إضافة المنتج إلى السلة"
+  },
+  "checkout": {
+    "title": "الدفع",
+    "placeOrder": "تأكيد الطلب",
+    "orderSummary": "ملخص الطلب",
+    "paymentDetails": "تفاصيل الدفع",
+    "shippingDetails": "تفاصيل الشحن"
+  },
+  "search": {
+    "placeholder": "ابحث عن العطور...",
+    "noResults": "لا توجد نتائج لـ",
+    "resultsFor": "نتائج البحث عن"
+  },
+  "newsletter": {
+    "placeholder": "بريدك الإلكتروني",
+    "subscribe": "اشترك",
+    "success": "شكراً لاشتراكك!"
+  },
+  "wishlist": {
+    "title": "المفضلة",
+    "empty": "قائمة مفضلتك فارغة"
+  },
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "backToHome": "العودة للرئيسية",
+    "viewAll": "عرض الكل",
+    "learnMore": "اعرف أكثر",
+    "close": "إغلاق",
+    "open": "فتح",
+    "new": "جديد",
+    "sale": "تخفيض",
+    "featured": "مميز"
+  },
+  "language": {
+    "switchToArabic": "عربي",
+    "switchToEnglish": "English"
+  }
+}

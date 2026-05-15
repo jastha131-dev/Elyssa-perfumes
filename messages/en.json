@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "journal": "Journal",
+    "cart": "Cart",
+    "wishlist": "Wishlist",
+    "search": "Search"
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "quickView": "Quick View",
+    "outOfStock": "Out of Stock",
+    "viewDetails": "View Details",
+    "relatedProducts": "You May Also Like",
+    "fragranceNotes": "Fragrance Notes",
+    "top": "Top",
+    "middle": "Middle",
+    "base": "Base",
+    "intensity": "Intensity",
+    "sillage": "Sillage",
+    "longevity": "Longevity",
+    "addToWishlist": "Add to Wishlist",
+    "removeFromWishlist": "Remove from Wishlist",
+    "inStock": "In Stock",
+    "selectSize": "Select Size"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "checkout": "Checkout",
+    "continueShopping": "Continue Shopping",
+    "total": "Total",
+    "subtotal": "Subtotal",
+    "remove": "Remove",
+    "quantity": "Qty",
+    "itemAdded": "Item added to cart"
+  },
+  "checkout": {
+    "title": "Checkout",
+    "placeOrder": "Place Order",
+    "orderSummary": "Order Summary",
+    "paymentDetails": "Payment Details",
+    "shippingDetails": "Shipping Details"
+  },
+  "search": {
+    "placeholder": "Search fragrances...",
+    "noResults": "No results found for",
+    "resultsFor": "Results for"
+  },
+  "newsletter": {
+    "placeholder": "Your email address",
+    "subscribe": "Subscribe",
+    "success": "Thank you for subscribing!"
+  },
+  "wishlist": {
+    "title": "Wishlist",
+    "empty": "Your wishlist is empty"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Something went wrong",
+    "backToHome": "Back to Home",
+    "viewAll": "View All",
+    "learnMore": "Learn More",
+    "close": "Close",
+    "open": "Open",
+    "new": "New",
+    "sale": "Sale",
+    "featured": "Featured"
+  },
+  "language": {
+    "switchToArabic": "عربي",
+    "switchToEnglish": "English"
+  }
+}
