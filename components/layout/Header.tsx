@@ -26,29 +26,12 @@ const FALLBACK_CATEGORIES = [
   { _id: 'unisex', name: 'Unisex', slug: 'unisex' },
 ]
 
-function useScrollPosition(threshold = 20) {
-  const [scrolled, setScrolled] = useState(false)
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > threshold)
-    }
-
-    handleScroll()
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [threshold])
-
-  return scrolled
-}
-
 interface HeaderProps {
   categories: Category[]
 }
 
 export default function Header({ categories }: HeaderProps) {
   const pathname = usePathname()
-  const scrolled = useScrollPosition(20)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collectionsHovered, setCollectionsHovered] = useState(false)
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false)
@@ -58,9 +41,6 @@ export default function Header({ categories }: HeaderProps) {
   const { openCart, totalItems: cartTotal } = useCartStore()
   const { totalItems: wishlistTotal } = useWishlistStore()
   const { openSearch } = useUIStore()
-
-  // Only home page has a dark hero — all other routes need a solid header
-  const effectiveScrolled = scrolled || pathname !== '/'
 
   useEffect(() => {
     setMobileOpen(false)
@@ -105,27 +85,13 @@ export default function Header({ categories }: HeaderProps) {
 
   return (
     <>
-      <motion.header
-        animate={{
-          backgroundColor: effectiveScrolled ? 'rgba(255, 255, 255, 1)' : 'rgba(255, 255, 255, 0)',
-          boxShadow: effectiveScrolled
-            ? '0 1px 24px 0 rgba(26,26,26,0.08)'
-            : '0 0 0 0 rgba(26,26,26,0)',
-        }}
-        transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="fixed left-0 right-0 top-0 z-40"
-      >
-        {/* Announcement bar — fades out on scroll */}
-        <div
-          className={cn(
-            'overflow-hidden text-center transition-all duration-300',
-            effectiveScrolled ? 'max-h-0 opacity-0' : 'max-h-10 opacity-100 border-b border-white/10'
-          )}
-        >
-          <p className="py-2.5 font-body text-[10px] uppercase tracking-[0.3em] text-cream-100/50">
+      <header className="fixed left-0 right-0 top-0 z-40 bg-ink-950 shadow-none">
+        {/* Announcement bar — always visible, camel background */}
+        <div className="bg-camel-500 text-center py-2.5">
+          <p className="font-body text-[11px] text-white tracking-[0.2em]">
             Complimentary shipping on all orders over $100
-            <span className="mx-3 text-gold-500/50">·</span>
-            <Link href="/products" className="text-gold-400/80 transition-colors hover:text-gold-400">
+            <span className="mx-3 text-white/50">·</span>
+            <Link href="/products" className="text-white underline underline-offset-2 hover:text-stone-100 transition-colors">
               Explore Now
             </Link>
           </p>
@@ -138,19 +104,12 @@ export default function Header({ categories }: HeaderProps) {
             className="group flex flex-col leading-none"
             aria-label="Luxe Parfum — Home"
           >
-            <motion.span
-              animate={{ color: effectiveScrolled ? '#1a1a1a' : '#fdf9ec' }}
-              transition={{ duration: 0.3 }}
-              className="font-display text-xl font-bold tracking-[0.18em] uppercase"
-            >
+            <span className="font-display text-xl font-bold tracking-[0.18em] uppercase text-stone-50">
               LUXE
-            </motion.span>
-            <motion.span
-              animate={{ color: '#d99a1b' }}
-              className="font-display text-[10px] font-medium tracking-[0.35em] uppercase text-gold-500"
-            >
+            </span>
+            <span className="font-display text-[10px] font-medium tracking-[0.35em] uppercase text-camel-400">
               PARFUM
-            </motion.span>
+            </span>
           </Link>
 
           {/* Desktop nav */}
@@ -164,12 +123,10 @@ export default function Header({ categories }: HeaderProps) {
               <button
                 className={cn(
                   'flex items-center gap-1 text-sm font-medium tracking-wide transition-colors duration-200',
-                  'hover:text-gold-500',
+                  'hover:text-camel-300',
                   pathname.startsWith('/products') || pathname.startsWith('/collections')
-                    ? 'text-gold-500'
-                    : effectiveScrolled
-                    ? 'text-charcoal-700'
-                    : 'text-cream-100'
+                    ? 'text-camel-400'
+                    : 'text-stone-200'
                 )}
               >
                 Collections
@@ -194,14 +151,14 @@ export default function Header({ categories }: HeaderProps) {
                     onMouseLeave={handleCollectionsLeave}
                   >
                     {/* Luxury mega-menu */}
-                    <div className="w-[480px] overflow-hidden border border-gold-500/20 bg-[#0f0f0f] shadow-2xl shadow-black/60">
-                      {/* Gold gradient top accent */}
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+                    <div className="w-[480px] overflow-hidden border border-camel-500/20 bg-[#0D0D0D] shadow-2xl shadow-black/60">
+                      {/* Camel gradient top accent */}
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
 
                       <div className="grid grid-cols-2">
                         {/* Left: Shop by category */}
                         <div className="border-r border-white/8 px-6 py-6">
-                          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-gold-500/60">
+                          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
                             Shop
                           </p>
 
@@ -209,10 +166,10 @@ export default function Header({ categories }: HeaderProps) {
                             href="/products"
                             className="group/all mb-4 flex items-center justify-between transition-colors"
                           >
-                            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-400 transition-colors group-hover/all:text-gold-300">
+                            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-camel-400 transition-colors group-hover/all:text-camel-300">
                               All Fragrances
                             </span>
-                            <ArrowRight className="h-3 w-3 text-gold-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-gold-300" />
+                            <ArrowRight className="h-3 w-3 text-camel-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-300" />
                           </Link>
 
                           <div className="mb-4 h-px bg-white/8" />
@@ -226,7 +183,7 @@ export default function Header({ categories }: HeaderProps) {
                                 <li key={cat._id}>
                                   <Link
                                     href={`/products?category=${cat.slug}`}
-                                    className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-gold-500"
+                                    className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-camel-500"
                                   >
                                     <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden bg-charcoal-800">
                                       {imgUrl ? (
@@ -252,7 +209,7 @@ export default function Header({ categories }: HeaderProps) {
 
                         {/* Right: Discover */}
                         <div className="px-6 py-6">
-                          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-gold-500/60">
+                          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
                             Discover
                           </p>
 
@@ -268,7 +225,7 @@ export default function Header({ categories }: HeaderProps) {
                                   href={href}
                                   className="group/item flex items-center gap-3 rounded-sm py-2.5 transition-colors"
                                 >
-                                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gold-500 transition-colors duration-200 group-hover/item:border-gold-500/40 group-hover/item:bg-gold-500/10">
+                                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-camel-400 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-500/10">
                                     <Icon className="h-3.5 w-3.5" />
                                   </span>
                                   <div>
@@ -286,8 +243,8 @@ export default function Header({ categories }: HeaderProps) {
                         </div>
                       </div>
 
-                      {/* Bottom gold gradient */}
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+                      {/* Bottom camel gradient */}
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/30 to-transparent" />
                     </div>
                   </motion.div>
                 )}
@@ -304,10 +261,9 @@ export default function Header({ categories }: HeaderProps) {
                   className={cn(
                     'relative text-sm font-medium tracking-wide transition-colors duration-200',
                     'after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full',
-                    'after:origin-left after:scale-x-0 after:bg-gold-500 after:transition-transform after:duration-300',
-                    'hover:text-gold-500 hover:after:scale-x-100',
-                    isActive ? 'text-gold-500 after:scale-x-100' : '',
-                    effectiveScrolled ? 'text-charcoal-700' : 'text-cream-100'
+                    'after:origin-left after:scale-x-0 after:bg-camel-500 after:transition-transform after:duration-300',
+                    'hover:text-camel-300 hover:after:scale-x-100',
+                    isActive ? 'text-camel-400 after:scale-x-100' : 'text-stone-200'
                   )}
                 >
                   {link.label}
@@ -318,14 +274,13 @@ export default function Header({ categories }: HeaderProps) {
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
-            <IconButton onClick={openSearch} label="Open search" scrolled={effectiveScrolled}>
+            <IconButton onClick={openSearch} label="Open search">
               <Search className="h-5 w-5" />
             </IconButton>
 
             <IconButton
               href="/wishlist"
               label={`Wishlist (${wishlistCount} items)`}
-              scrolled={effectiveScrolled}
               badge={wishlistCount}
             >
               <Heart className="h-5 w-5" />
@@ -334,7 +289,6 @@ export default function Header({ categories }: HeaderProps) {
             <IconButton
               onClick={() => openCart()}
               label={`Open cart (${cartCount} items)`}
-              scrolled={effectiveScrolled}
               badge={cartCount}
             >
               <ShoppingBag className="h-5 w-5" />
@@ -345,12 +299,7 @@ export default function Header({ categories }: HeaderProps) {
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
-              className={cn(
-                'ml-1 rounded-full p-2 transition-colors duration-200 lg:hidden',
-                effectiveScrolled
-                  ? 'text-charcoal-700 hover:bg-charcoal-50 hover:text-charcoal-900'
-                  : 'text-cream-100 hover:bg-white/10 hover:text-white'
-              )}
+              className="ml-1 rounded-full p-2 transition-colors duration-200 lg:hidden text-stone-200 hover:bg-white/10"
               whileTap={{ scale: 0.9 }}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -368,7 +317,7 @@ export default function Header({ categories }: HeaderProps) {
             </motion.button>
           </div>
         </div>
-      </motion.header>
+      </header>
 
       {/* Mobile menu overlay */}
       <AnimatePresence>
@@ -394,10 +343,10 @@ export default function Header({ categories }: HeaderProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed left-0 right-0 top-[72px] z-40 bg-[#0f0f0f] shadow-2xl shadow-black/50 lg:hidden"
+            className="fixed left-0 right-0 top-[72px] z-40 bg-[#0D0D0D] shadow-2xl shadow-black/50 lg:hidden"
           >
-            {/* Gold gradient top accent */}
-            <div className="h-px w-full bg-gradient-to-r from-transparent via-gold-500 to-transparent" />
+            {/* Camel gradient top accent */}
+            <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
             <nav
               className="mx-auto max-w-7xl px-4 pb-8 pt-2 sm:px-6"
               aria-label="Mobile navigation"
@@ -407,7 +356,7 @@ export default function Header({ categories }: HeaderProps) {
                 <li>
                   <button
                     onClick={() => setMobileCollectionsOpen((v) => !v)}
-                    className="flex w-full items-center justify-between py-4 text-base font-medium tracking-wide text-cream-100 hover:text-gold-400 transition-colors"
+                    className="flex w-full items-center justify-between py-4 text-base font-medium tracking-wide text-cream-100 hover:text-camel-400 transition-colors"
                   >
                     Collections
                     <motion.span
@@ -429,7 +378,7 @@ export default function Header({ categories }: HeaderProps) {
                         className="overflow-hidden"
                       >
                         {/* Shop section */}
-                        <p className="mb-2 mt-1 px-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-gold-500/60">
+                        <p className="mb-2 mt-1 px-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
                           Shop
                         </p>
 
@@ -437,10 +386,10 @@ export default function Header({ categories }: HeaderProps) {
                           href="/products"
                           className="group/all mb-3 flex items-center justify-between px-4 py-2 transition-colors"
                         >
-                          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-gold-400 group-hover/all:text-gold-300 transition-colors">
+                          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-camel-400 group-hover/all:text-camel-300 transition-colors">
                             All Fragrances
                           </span>
-                          <ArrowRight className="h-3 w-3 text-gold-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-gold-300" />
+                          <ArrowRight className="h-3 w-3 text-camel-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-300" />
                         </Link>
 
                         <ul className="mb-4 space-y-1 px-4">
@@ -452,7 +401,7 @@ export default function Header({ categories }: HeaderProps) {
                               <li key={cat._id}>
                                 <Link
                                   href={`/products?category=${cat.slug}`}
-                                  className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-gold-500"
+                                  className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-camel-500"
                                 >
                                   <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden bg-charcoal-800">
                                     {imgUrl ? (
@@ -477,7 +426,7 @@ export default function Header({ categories }: HeaderProps) {
 
                         {/* Discover section */}
                         <div className="mx-4 mb-3 h-px bg-white/10" />
-                        <p className="mb-2 px-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-gold-500/60">
+                        <p className="mb-2 px-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
                           Discover
                         </p>
 
@@ -493,7 +442,7 @@ export default function Header({ categories }: HeaderProps) {
                                 href={href}
                                 className="group/item flex items-center gap-3 py-2 transition-colors"
                               >
-                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-gold-500 transition-colors duration-200 group-hover/item:border-gold-500/40 group-hover/item:bg-gold-500/10">
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-camel-400 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-500/10">
                                   <Icon className="h-3.5 w-3.5" />
                                 </span>
                                 <div>
@@ -525,8 +474,8 @@ export default function Header({ categories }: HeaderProps) {
                       href={link.href}
                       className={cn(
                         'block py-4 text-base font-medium tracking-wide transition-colors',
-                        'hover:text-gold-500',
-                        pathname === link.href ? 'text-gold-400' : 'text-cream-100'
+                        'hover:text-camel-300',
+                        pathname === link.href ? 'text-camel-400' : 'text-stone-200'
                       )}
                     >
                       {link.label}
@@ -544,12 +493,12 @@ export default function Header({ categories }: HeaderProps) {
               >
                 <Link
                   href="/wishlist"
-                  className="flex items-center gap-2 text-sm text-cream-300 hover:text-gold-400 transition-colors"
+                  className="flex items-center gap-2 text-sm text-cream-300 hover:text-camel-400 transition-colors"
                 >
                   <Heart className="h-4 w-4" />
                   Wishlist
                   {wishlistCount > 0 && (
-                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-gold-500 text-[10px] font-medium text-white">
+                    <span className="flex h-4 w-4 items-center justify-center rounded-full bg-camel-500 text-[10px] font-medium text-white">
                       {wishlistCount}
                     </span>
                   )}
@@ -568,18 +517,15 @@ export default function Header({ categories }: HeaderProps) {
 interface IconButtonProps {
   children: React.ReactNode
   label: string
-  scrolled: boolean
   badge?: number
   onClick?: () => void
   href?: string
 }
 
-function IconButton({ children, label, scrolled, badge, onClick, href }: IconButtonProps) {
+function IconButton({ children, label, badge, onClick, href }: IconButtonProps) {
   const baseClass = cn(
     'relative rounded-full p-2 transition-colors duration-200',
-    scrolled
-      ? 'text-charcoal-700 hover:bg-charcoal-50 hover:text-charcoal-900'
-      : 'text-cream-100 hover:bg-white/10 hover:text-white'
+    'text-stone-200 hover:bg-white/10 hover:text-white'
   )
 
   const badgeEl =
@@ -588,7 +534,7 @@ function IconButton({ children, label, scrolled, badge, onClick, href }: IconBut
         key={badge}
         initial={{ scale: 0.6, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-gold-500 text-[10px] font-semibold text-white"
+        className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-camel-500 text-[10px] font-semibold text-white"
       >
         {badge > 99 ? '99+' : badge}
       </motion.span>
