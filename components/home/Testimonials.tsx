@@ -3,7 +3,7 @@
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { cn } from '@/lib/utils'
-import type { Testimonial } from '@/lib/sanity/fetch'
+import type { Testimonial } from '@/lib/types'
 
 const FALLBACK: Testimonial[] = [
   {

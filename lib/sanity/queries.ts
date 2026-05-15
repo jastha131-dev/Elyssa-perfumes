@@ -116,25 +116,52 @@ export const getAllCategoriesQuery = `
 export const getHomePageQuery = `
   *[_type == "homePage"][0] {
     _id,
-    heroTitle,
-    heroSubtitle,
-    "heroImage": heroImage.asset->url,
-    heroCta,
-    "featuredProducts": featuredProducts[]->{
-      ${productFragment}
-    },
-    "scentBannerImage": scentBannerImage.asset->url,
-    scentBannerEyebrow,
-    scentBannerTitle,
-    scentBannerHighlight,
-    scentBannerText,
-    brandStoryEyebrow,
-    brandStoryTitle,
-    brandStoryText,
-    "brandStoryImage": brandStoryImage.asset->url,
-    brandStoryCta,
-    newsletterTitle,
-    newsletterSubtitle
+    "sections": sections[] {
+      ...,
+      "bgImageUrl": bgImage.asset->url,
+      "bgImageAlt": bgImage.alt,
+      "imageUrl": image.asset->url,
+      "imageAlt": image.alt,
+      "products": products[]->{
+        _id,
+        "id": _id,
+        name,
+        "slug": slug.current,
+        price,
+        compareAtPrice,
+        description,
+        "images": images[]{"url": asset->url, alt},
+        "category": category->{ _id, name, "slug": slug.current },
+        stock,
+        featured,
+        bestSeller,
+        "new": new,
+        fragranceFamily,
+        topNotes,
+        middleNotes,
+        baseNotes,
+        intensity,
+        sillage,
+        longevity,
+        volume
+      },
+      "categories": categories[]->{
+        _id,
+        name,
+        "slug": slug.current,
+        description,
+        image,
+        order
+      },
+      "testimonials": testimonials[]->{
+        _id,
+        name,
+        location,
+        rating,
+        review,
+        "product": product->{ _id, name, "slug": slug.current }
+      }
+    }
   }
 `
 

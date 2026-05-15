@@ -1,4 +1,5 @@
-import { client } from './client'
+import { client, draftModeClient } from './client'
+import { draftMode } from 'next/headers'
 
 const isSanityConfigured = Boolean(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID)
 
@@ -15,7 +16,7 @@ import {
   getHomePageQuery,
   getTestimonialsQuery,
 } from './queries'
-import type { Product, Category } from '../types'
+import type { Product, Category, HomePage, Testimonial } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -104,23 +105,21 @@ export async function getAllCategories(): Promise<Category[]> {
 
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export async function getHomePage(): Promise<any> {
+export async function getHomePage(): Promise<HomePage | null> {
   if (!isSanityConfigured) return null
-  return client.fetch(getHomePageQuery, {}, { next: { revalidate: 60 } })
-}
-
-export interface Testimonial {
-  _id: string
-  name: string
-  location: string
-  rating: number
-  review: string
-  product?: {
-    _id: string
-    name: string
-    slug: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  let fetchOptions: any = { next: { revalidate: 60 } }
+  let useClient = client
+  try {
+    const { isEnabled } = await draftMode()
+    if (isEnabled) {
+      useClient = draftModeClient
+      fetchOptions = { cache: 'no-store' }
+    }
+  } catch {
+    // draftMode() throws outside a request context (e.g. during static build)
   }
+  return useClient.fetch<HomePage>(getHomePageQuery, {}, fetchOptions)
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {
