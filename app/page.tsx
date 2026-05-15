@@ -3,19 +3,20 @@ import { getHomePage } from '@/lib/sanity/fetch'
 import { draftModeClient } from '@/lib/sanity/client'
 import { getHomePageQuery } from '@/lib/sanity/queries'
 import { draftMode } from 'next/headers'
+import type { HomePage } from '@/lib/types'
 
 export default async function HomePage() {
-  let homePage
+  let isDraftMode = false
   try {
     const { isEnabled } = await draftMode()
-    if (isEnabled) {
-      homePage = await draftModeClient.fetch(getHomePageQuery)
-    } else {
-      homePage = await getHomePage()
-    }
+    isDraftMode = isEnabled
   } catch {
-    homePage = await getHomePage()
+    // draftMode() throws outside request context (e.g. static generation)
   }
+
+  const homePage: HomePage | null = isDraftMode
+    ? await draftModeClient.fetch(getHomePageQuery)
+    : await getHomePage()
 
   return <PageBuilder sections={homePage?.sections} />
 }
