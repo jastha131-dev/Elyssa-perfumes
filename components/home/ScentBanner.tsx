@@ -5,17 +5,10 @@ import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
-
-interface ScentBannerData {
-  scentBannerEyebrow?: string
-  scentBannerTitle?: string
-  scentBannerHighlight?: string
-  scentBannerText?: string
-  scentBannerImage?: string
-}
+import type { ScentBannerSectionBlock } from '@/lib/types'
 
 interface ScentBannerProps {
-  data?: ScentBannerData | null
+  data?: ScentBannerSectionBlock | null
 }
 
 const NOTES = [
@@ -33,13 +26,11 @@ export default function ScentBanner({ data }: ScentBannerProps) {
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
-  const eyebrow    = data?.scentBannerEyebrow    ?? 'Explore by Note'
-  const titleMain  = data?.scentBannerTitle     ?? 'Every Scent\nTells'
-  const titleGold  = data?.scentBannerHighlight  ?? 'A Story'
-  const bodyText   = data?.scentBannerText       ?? 'Each note in our palette is a world unto itself — sourced from the finest gardens, distilled by master perfumers, composed to unfold on your skin.'
-  const bgImage    = (typeof data?.scentBannerImage === 'string' && data.scentBannerImage)
-    ? data.scentBannerImage
-    : '/images/products/default-product.jpeg'
+  const eyebrow    = data?.eyebrow       ?? 'Explore by Note'
+  const titleMain  = data?.headline      ?? 'Every Scent\nTells'
+  const titleGold  = data?.highlightWord ?? 'A Story'
+  const bodyText   = data?.subtext       ?? 'Each note in our palette is a world unto itself — sourced from the finest gardens, distilled by master perfumers, composed to unfold on your skin.'
+  const bgImage    = data?.bgImageUrl    ?? '/images/products/default-product.jpeg'
 
   return (
     <section className="relative overflow-hidden bg-charcoal-950 py-24 md:py-32">
@@ -113,15 +104,11 @@ export default function ScentBanner({ data }: ScentBannerProps) {
               transition={{ duration: 0.6, delay: 0.5 }}
             >
               <Link
-                href="/products"
+                href={data?.cta?.link ?? '/products'}
                 className="group inline-flex items-center gap-3 border border-gold-500/40 bg-gold-500/10 px-8 py-3.5 font-body text-sm uppercase tracking-[0.2em] text-gold-400 transition-all duration-300 hover:bg-gold-500 hover:text-charcoal-950"
               >
-                Browse All Fragrances
-                <ArrowRight
-                  size={13}
-                  strokeWidth={1.5}
-                  className="transition-transform duration-300 group-hover:translate-x-1"
-                />
+                {data?.cta?.label ?? 'Browse All Fragrances'}
+                <ArrowRight size={13} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </motion.div>
           </div>
