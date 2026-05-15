@@ -77,7 +77,7 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
         {/* Image */}
         <div
           className={cn(
-            'relative w-full overflow-hidden bg-charcoal-800',
+            'relative w-full overflow-hidden bg-stone-200',
             isHero ? 'aspect-[4/3] md:aspect-[16/10]' : 'aspect-[3/4]'
           )}
         >
@@ -96,12 +96,12 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
           {/* Badges */}
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
             {product.new && (
-              <span className="bg-gold-500 px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-widest text-charcoal-950">
+              <span className="bg-camel-500 px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-widest text-white">
                 New
               </span>
             )}
             {product.bestSeller && (
-              <span className="bg-charcoal-900/90 px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-widest text-gold-400">
+              <span className="bg-camel-500 px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-widest text-white">
                 Best Seller
               </span>
             )}
@@ -109,23 +109,23 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
 
           {/* Hero card — persistent bottom overlay with info */}
           {isHero && (
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-charcoal-950/85 via-charcoal-950/40 to-transparent p-6 md:p-8">
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-ink-950/85 via-ink-950/40 to-transparent p-6 md:p-8">
               <div className="flex items-end justify-between gap-4">
                 <div>
                   {product.category?.name && (
-                    <p className="mb-1 font-body text-[11px] uppercase tracking-[0.25em] text-gold-400/80">
+                    <p className="mb-1 font-body text-[11px] uppercase tracking-[0.25em] text-camel-400/80">
                       {product.category.name}
                     </p>
                   )}
-                  <h3 className="font-display text-2xl font-light text-cream-50 md:text-3xl">
+                  <h3 className="font-display text-2xl font-light text-stone-50 md:text-3xl">
                     {product.name}
                   </h3>
                   <div className="mt-2 flex items-center gap-2">
-                    <span className="font-body text-sm font-medium text-cream-100">
+                    <span className="font-body text-sm font-medium text-stone-100">
                       ${displayPrice.toFixed(2)}
                     </span>
                     {product.compareAtPrice && product.compareAtPrice > displayPrice && (
-                      <span className="font-body text-sm text-cream-100/40 line-through">
+                      <span className="font-body text-sm text-stone-100/40 line-through">
                         ${product.compareAtPrice.toFixed(2)}
                       </span>
                     )}
@@ -144,8 +144,8 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
                     'font-body text-[10px] font-semibold uppercase tracking-[0.22em]',
                     'transition-colors duration-200',
                     justAdded
-                      ? 'border-gold-400/60 text-gold-300'
-                      : 'border-gold-400/60 text-gold-300 hover:bg-gold-500/20'
+                      ? 'border-camel-400/60 text-camel-300'
+                      : 'border-camel-400/60 text-camel-300 hover:bg-camel-500/20'
                   )}
                 >
                   <AnimatePresence mode="wait" initial={false}>
@@ -180,7 +180,7 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
 
           {/* Standard card — hover overlay */}
           {!isHero && (
-            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-charcoal-950/70 via-charcoal-950/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+            <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-ink-950/70 via-ink-950/20 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100">
               <div className="p-4">
                 <motion.button
                   whileHover={{ scale: justAdded ? 1 : 1.02 }}
@@ -193,8 +193,8 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
                     'flex w-full items-center justify-center gap-2 py-2.5 font-body text-[10px] font-semibold uppercase tracking-[0.22em]',
                     'transition-colors duration-200',
                     justAdded
-                      ? 'border border-gold-400/60 text-gold-300'
-                      : 'border border-gold-400/60 text-gold-300 hover:bg-gold-500/20'
+                      ? 'border border-camel-400/60 text-camel-300'
+                      : 'border border-camel-400/60 text-camel-300 hover:bg-camel-500/20'
                   )}
                 >
                   <AnimatePresence mode="wait" initial={false}>
@@ -232,19 +232,19 @@ function FeaturedCard({ product, onQuickAdd, justAdded, isHero = false, index }:
         {!isHero && (
           <div className="mt-4 flex flex-col gap-1 px-1">
             {product.category?.name && (
-              <p className="font-body text-[11px] uppercase tracking-[0.25em] text-gold-500/80">
+              <p className="font-body text-[11px] uppercase tracking-[0.25em] text-camel-500/80">
                 {product.category.name}
               </p>
             )}
-            <h3 className="font-display text-lg font-light text-charcoal-900 transition-colors group-hover:text-gold-600">
+            <h3 className="font-display text-lg font-light text-ink-900 transition-colors group-hover:text-camel-600">
               {product.name}
             </h3>
             <div className="flex items-center gap-2">
-              <span className="font-body text-sm font-medium text-charcoal-900">
+              <span className="font-body text-sm font-medium text-ink-800">
                 ${displayPrice.toFixed(2)}
               </span>
               {product.compareAtPrice && product.compareAtPrice > displayPrice && (
-                <span className="font-body text-sm text-charcoal-400 line-through">
+                <span className="font-body text-sm text-ink-400 line-through">
                   ${product.compareAtPrice.toFixed(2)}
                 </span>
               )}
@@ -286,7 +286,7 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
   if (displayProducts.length === 0) return null
 
   return (
-    <section className="bg-cream-50 py-20 md:py-28">
+    <section className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Heading */}
         <motion.div
@@ -297,16 +297,16 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
           className="mb-14 flex flex-col items-center text-center"
         >
           <div className="mb-4 flex items-center gap-4">
-            <div className="h-px w-8 bg-gold-500/60" />
-            <p className="font-body text-xs uppercase tracking-[0.35em] text-gold-500">
+            <div className="h-px w-8 bg-camel-500/50" />
+            <p className="font-body text-xs uppercase tracking-widest text-camel-500">
               Curated Selection
             </p>
-            <div className="h-px w-8 bg-gold-500/60" />
+            <div className="h-px w-8 bg-camel-500/50" />
           </div>
-          <h2 className="font-display text-4xl font-light text-charcoal-900 md:text-5xl">
+          <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
             {title}
           </h2>
-          <div className="mx-auto mt-5 h-px w-16 bg-gradient-to-r from-transparent via-gold-500/60 to-transparent" />
+          <div className="mx-auto mt-5 h-px w-16 bg-gradient-to-r from-transparent via-camel-500/50 to-transparent" />
         </motion.div>
 
         {/* Grid — hero card + standard grid */}
@@ -339,9 +339,9 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
           <Link
             href="/products"
             className={cn(
-              'group inline-flex items-center gap-3 border border-charcoal-900 px-10 py-3.5',
-              'font-body text-sm uppercase tracking-[0.2em] text-charcoal-900',
-              'transition-all duration-300 hover:bg-charcoal-900 hover:text-cream-100'
+              'group inline-flex items-center gap-3 border border-ink-800 px-10 py-3.5',
+              'font-body text-sm uppercase tracking-[0.2em] text-ink-800',
+              'transition-all duration-300 hover:bg-ink-900 hover:text-white'
             )}
           >
             View All Fragrances

@@ -87,7 +87,7 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
       <Link href={`/products/${product.slug}`} className="block">
         {/* Image */}
         <div
-          className="relative w-full overflow-hidden bg-charcoal-800"
+          className="relative w-full overflow-hidden bg-stone-200"
           style={{ aspectRatio: '3/4' }}
         >
           <Image
@@ -100,7 +100,7 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
 
           {/* Badge */}
           <div className="absolute left-3 top-3">
-            <span className="bg-gold-500 px-2.5 py-1 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-charcoal-950">
+            <span className="bg-camel-500 px-2.5 py-1 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
               Best Seller
             </span>
           </div>
@@ -129,8 +129,8 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
                   className={cn(
                     'transition-colors',
                     isWishlisted
-                      ? 'fill-gold-500 text-gold-500'
-                      : 'fill-transparent text-charcoal-700'
+                      ? 'fill-camel-500 text-camel-500'
+                      : 'fill-transparent text-ink-700'
                   )}
                 />
               </motion.div>
@@ -138,25 +138,25 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
           </button>
 
           {/* Hover tint */}
-          <div className="absolute inset-0 bg-charcoal-950/0 transition-colors duration-300 group-hover:bg-charcoal-950/15" />
+          <div className="absolute inset-0 bg-ink-950/0 transition-colors duration-300 group-hover:bg-ink-950/10" />
         </div>
 
         {/* Info */}
         <div className="mt-3 px-0.5">
           {product.category?.name && (
-            <p className="font-body text-[10px] uppercase tracking-[0.25em] text-gold-500/80">
+            <p className="font-body text-[10px] uppercase tracking-[0.25em] text-camel-500/80">
               {product.category.name}
             </p>
           )}
-          <h3 className="mt-0.5 font-display text-base font-light text-charcoal-900 transition-colors group-hover:text-gold-600">
+          <h3 className="mt-0.5 font-display text-base font-light text-ink-900 transition-colors group-hover:text-camel-600">
             {product.name}
           </h3>
           <div className="mt-1 flex items-center gap-2">
-            <span className="font-body text-sm font-medium text-charcoal-900">
+            <span className="font-body text-sm font-medium text-ink-900">
               ${displayPrice.toFixed(2)}
             </span>
             {product.compareAtPrice && product.compareAtPrice > displayPrice && (
-              <span className="font-body text-xs text-charcoal-400 line-through">
+              <span className="font-body text-xs text-ink-400 line-through">
                 ${product.compareAtPrice.toFixed(2)}
               </span>
             )}
@@ -189,7 +189,7 @@ export default function BestSellers({ data }: BestSellersProps) {
   if (products.length === 0) return null
 
   return (
-    <section ref={sectionRef} className="overflow-hidden bg-cream-100 py-20 md:py-28">
+    <section ref={sectionRef} className="overflow-hidden bg-stone-50 py-20 md:py-28">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Heading + Arrows */}
         <div className="mb-12 flex items-end justify-between">
@@ -199,13 +199,13 @@ export default function BestSellers({ data }: BestSellersProps) {
             initial="hidden"
             animate={isHeadingInView ? 'visible' : 'hidden'}
           >
-            <p className="mb-2 font-body text-xs uppercase tracking-[0.35em] text-gold-500">
+            <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">
               Top Picks
             </p>
-            <h2 className="font-display text-4xl font-light text-charcoal-900 md:text-5xl">
+            <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
               {title}
             </h2>
-            <div className="mt-4 h-px w-16 bg-gold-500/50" />
+            <div className="mt-4 h-px w-16 bg-camel-500/50" />
           </motion.div>
 
           <motion.div
@@ -217,9 +217,9 @@ export default function BestSellers({ data }: BestSellersProps) {
             <button
               onClick={() => scroll('prev')}
               className={cn(
-                'flex h-11 w-11 items-center justify-center border border-charcoal-300',
-                'text-charcoal-700 transition-all duration-200',
-                'hover:border-gold-500 hover:bg-gold-500 hover:text-charcoal-950'
+                'flex h-11 w-11 items-center justify-center border border-stone-300',
+                'text-ink-700 transition-all duration-200',
+                'hover:border-camel-500 hover:bg-camel-500 hover:text-white'
               )}
               aria-label="Previous products"
             >
@@ -228,9 +228,9 @@ export default function BestSellers({ data }: BestSellersProps) {
             <button
               onClick={() => scroll('next')}
               className={cn(
-                'flex h-11 w-11 items-center justify-center border border-charcoal-300',
-                'text-charcoal-700 transition-all duration-200',
-                'hover:border-gold-500 hover:bg-gold-500 hover:text-charcoal-950'
+                'flex h-11 w-11 items-center justify-center border border-stone-300',
+                'text-ink-700 transition-all duration-200',
+                'hover:border-camel-500 hover:bg-camel-500 hover:text-white'
               )}
               aria-label="Next products"
             >
@@ -269,9 +269,9 @@ export default function BestSellers({ data }: BestSellersProps) {
           <Link
             href="/products?filter=bestseller"
             className={cn(
-              'font-body text-sm uppercase tracking-[0.2em] text-charcoal-600',
-              'border-b border-charcoal-300 pb-0.5 transition-colors duration-200',
-              'hover:border-gold-500 hover:text-gold-600'
+              'font-body text-sm uppercase tracking-[0.2em] text-ink-600',
+              'border-b border-stone-300 pb-0.5 transition-colors duration-200',
+              'hover:border-camel-500 hover:text-camel-600'
             )}
           >
             View All Best Sellers
