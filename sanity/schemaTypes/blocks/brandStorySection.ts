@@ -7,14 +7,23 @@ export const brandStorySection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'eyebrow', title: 'Eyebrow Label', type: 'string', description: 'e.g. "Our Philosophy"', validation: (Rule) => Rule.max(50) }),
-    defineField({ name: 'headline', title: 'Headline', type: 'string', validation: (Rule) => Rule.max(100) }),
+    defineField({ name: 'eyebrow_en', title: 'Eyebrow Label (English)', type: 'string', description: 'e.g. "Our Philosophy"', validation: (Rule) => Rule.max(50) }),
+    defineField({ name: 'eyebrow_ar', title: 'النص العلوي (Arabic)', type: 'string', validation: (Rule) => Rule.max(50) }),
+    defineField({ name: 'headline_en', title: 'Headline (English)', type: 'string', validation: (Rule) => Rule.max(100) }),
+    defineField({ name: 'headline_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(100) }),
     defineField({
-      name: 'body',
-      title: 'Body Text',
+      name: 'body_en',
+      title: 'Body Text (English)',
       type: 'text',
       rows: 6,
       description: 'Separate paragraphs with a blank line.',
+      validation: (Rule) => Rule.max(1000),
+    }),
+    defineField({
+      name: 'body_ar',
+      title: 'نص المحتوى (Arabic)',
+      type: 'text',
+      rows: 6,
       validation: (Rule) => Rule.max(1000),
     }),
     defineField({
@@ -41,7 +50,7 @@ export const brandStorySection = defineType({
   ],
   preview: {
     select: {
-      title: 'headline',
+      title: 'headline_en',
       isVisible: 'isVisible',
       image: 'image',
     },

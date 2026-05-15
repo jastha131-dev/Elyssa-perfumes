@@ -16,14 +16,27 @@ export const customBannerSection = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'headline',
-      title: 'Headline',
+      name: 'headline_en',
+      title: 'Headline (English)',
       type: 'string',
       validation: (Rule) => Rule.max(100),
     }),
     defineField({
-      name: 'subtext',
-      title: 'Subtext',
+      name: 'headline_ar',
+      title: 'العنوان (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(100),
+    }),
+    defineField({
+      name: 'subtext_en',
+      title: 'Subtext (English)',
+      type: 'text',
+      rows: 2,
+      validation: (Rule) => Rule.max(200),
+    }),
+    defineField({
+      name: 'subtext_ar',
+      title: 'النص التوضيحي (Arabic)',
       type: 'text',
       rows: 2,
       validation: (Rule) => Rule.max(200),
@@ -54,7 +67,7 @@ export const customBannerSection = defineType({
   ],
   preview: {
     select: {
-      title: 'headline',
+      title: 'headline_en',
       isVisible: 'isVisible',
       image: 'image',
     },

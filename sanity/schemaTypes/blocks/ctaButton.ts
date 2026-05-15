@@ -6,10 +6,16 @@ export const ctaButton = defineType({
   type: 'object',
   fields: [
     defineField({
-      name: 'label',
-      title: 'Button Label',
+      name: 'label_en',
+      title: 'Button Label (English)',
       type: 'string',
       validation: (Rule) => Rule.required().max(40),
+    }),
+    defineField({
+      name: 'label_ar',
+      title: 'التصنيف (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(40),
     }),
     defineField({
       name: 'link',
@@ -34,6 +40,6 @@ export const ctaButton = defineType({
     }),
   ],
   preview: {
-    select: { title: 'label', subtitle: 'style' },
+    select: { title: 'label_en', subtitle: 'style' },
   },
 })

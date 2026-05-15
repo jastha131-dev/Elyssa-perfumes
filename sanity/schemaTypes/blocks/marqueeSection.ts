@@ -8,11 +8,17 @@ export const marqueeSection = defineType({
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
     defineField({
-      name: 'text',
-      title: 'Marquee Text',
+      name: 'text_en',
+      title: 'Marquee Text (English)',
       type: 'string',
       description: 'Text that scrolls. Separate items with  •  (bullet).',
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'text_ar',
+      title: 'النص (Arabic)',
+      type: 'string',
+      description: 'Text that scrolls. Separate items with  •  (bullet).',
     }),
     defineField({
       name: 'speed',
@@ -25,7 +31,7 @@ export const marqueeSection = defineType({
   ],
   preview: {
     select: {
-      title: 'text',
+      title: 'text_en',
       isVisible: 'isVisible',
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

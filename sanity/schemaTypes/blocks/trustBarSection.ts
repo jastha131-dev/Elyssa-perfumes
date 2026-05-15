@@ -16,10 +16,11 @@ export const trustBarSection = defineType({
           type: 'object',
           fields: [
             defineField({ name: 'value', type: 'string', title: 'Value', description: 'e.g. "100%"' }),
-            defineField({ name: 'label', type: 'string', title: 'Label', description: 'e.g. "Authentic"' }),
+            defineField({ name: 'label_en', type: 'string', title: 'Label (English)', description: 'e.g. "Authentic"' }),
+            defineField({ name: 'label_ar', type: 'string', title: 'التصنيف (Arabic)' }),
             defineField({ name: 'icon', type: 'string', title: 'Icon', description: 'emoji or lucide icon name' }),
           ],
-          preview: { select: { title: 'value', subtitle: 'label' } },
+          preview: { select: { title: 'value', subtitle: 'label_en' } },
         }),
       ],
     }),

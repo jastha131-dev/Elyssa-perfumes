@@ -7,8 +7,10 @@ export const featuredProductsSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title', title: 'Section Title', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'subtitle', title: 'Section Subtitle', type: 'text', rows: 2, validation: (Rule) => Rule.max(200) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'subtitle_en', title: 'Section Subtitle (English)', type: 'text', rows: 2, validation: (Rule) => Rule.max(200) }),
+    defineField({ name: 'subtitle_ar', title: 'العنوان الفرعي (Arabic)', type: 'text', rows: 2, validation: (Rule) => Rule.max(200) }),
     defineField({
       name: 'products',
       title: 'Products',
@@ -32,7 +34,7 @@ export const featuredProductsSection = defineType({
   ],
   preview: {
     select: {
-      title: 'title',
+      title: 'title_en',
       isVisible: 'isVisible',
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

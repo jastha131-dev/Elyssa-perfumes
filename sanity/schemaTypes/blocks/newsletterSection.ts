@@ -7,9 +7,12 @@ export const newsletterSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'headline', title: 'Headline', type: 'string', validation: (Rule) => Rule.max(100) }),
-    defineField({ name: 'subtext', title: 'Subtext', type: 'text', rows: 2, validation: (Rule) => Rule.max(200) }),
-    defineField({ name: 'buttonLabel', title: 'Button Label', type: 'string', initialValue: 'Subscribe', validation: (Rule) => Rule.max(40) }),
+    defineField({ name: 'headline_en', title: 'Headline (English)', type: 'string', validation: (Rule) => Rule.max(100) }),
+    defineField({ name: 'headline_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(100) }),
+    defineField({ name: 'subtext_en', title: 'Subtext (English)', type: 'text', rows: 2, validation: (Rule) => Rule.max(200) }),
+    defineField({ name: 'subtext_ar', title: 'النص التوضيحي (Arabic)', type: 'text', rows: 2, validation: (Rule) => Rule.max(200) }),
+    defineField({ name: 'buttonLabel_en', title: 'Button Label (English)', type: 'string', initialValue: 'Subscribe', validation: (Rule) => Rule.max(40) }),
+    defineField({ name: 'buttonLabel_ar', title: 'نص الزر (Arabic)', type: 'string', validation: (Rule) => Rule.max(40) }),
     defineField({
       name: 'bgImage',
       title: 'Background Image (optional)',
@@ -20,7 +23,7 @@ export const newsletterSection = defineType({
   ],
   preview: {
     select: {
-      title: 'headline',
+      title: 'headline_en',
       isVisible: 'isVisible',
       image: 'bgImage',
     },

@@ -7,7 +7,8 @@ export const testimonialsSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title', title: 'Section Title', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
     defineField({
       name: 'testimonials',
       title: 'Testimonials',
@@ -18,7 +19,7 @@ export const testimonialsSection = defineType({
   ],
   preview: {
     select: {
-      title: 'title',
+      title: 'title_en',
       isVisible: 'isVisible',
     },
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -8,14 +8,27 @@ export const heroSection = defineType({
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
     defineField({
-      name: 'headline',
-      title: 'Headline',
+      name: 'headline_en',
+      title: 'Headline (English)',
       type: 'string',
       validation: (Rule) => Rule.required().max(100),
     }),
     defineField({
-      name: 'subheadline',
-      title: 'Subheadline',
+      name: 'headline_ar',
+      title: 'العنوان (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(100),
+    }),
+    defineField({
+      name: 'subheadline_en',
+      title: 'Subheadline (English)',
+      type: 'text',
+      rows: 3,
+      validation: (Rule) => Rule.max(250),
+    }),
+    defineField({
+      name: 'subheadline_ar',
+      title: 'العنوان الفرعي (Arabic)',
       type: 'text',
       rows: 3,
       validation: (Rule) => Rule.max(250),
@@ -39,6 +52,21 @@ export const heroSection = defineType({
     }),
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
     defineField({
+      name: 'headlineSize',
+      title: 'Headline Size',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Small', value: 'sm' },
+          { title: 'Medium', value: 'md' },
+          { title: 'Large (Default)', value: 'lg' },
+          { title: 'Extra Large', value: 'xl' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'lg',
+    }),
+    defineField({
       name: 'textColor',
       title: 'Text Color',
       type: 'string',
@@ -54,7 +82,7 @@ export const heroSection = defineType({
   ],
   preview: {
     select: {
-      title: 'headline',
+      title: 'headline_en',
       isVisible: 'isVisible',
       image: 'bgImage',
     },
