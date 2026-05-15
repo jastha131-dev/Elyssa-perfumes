@@ -19,14 +19,14 @@ const ITEMS_B = [
 ]
 
 const Diamond = () => (
-  <span className="mx-8 inline-block h-1 w-1 rotate-45 bg-gold-500 align-middle" />
+  <span className="mx-8 inline-block h-1 w-1 rotate-45 bg-camel-500 align-middle" />
 )
 
 const Strip = ({ items }: { items: string[] }) => (
   <>
     {items.map((text, i) => (
       <span key={i} className="inline-flex items-center">
-        <span className="font-body text-[10px] font-light uppercase tracking-[0.45em] text-charcoal-500">
+        <span className="font-body text-[10px] font-light uppercase tracking-[0.45em] text-ink-700">
           {text}
         </span>
         <Diamond />
@@ -44,9 +44,9 @@ export default function MarqueeStrip({ data }: MarqueeStripProps = {}) {
   const _speed = data?.speed
 
   return (
-    <div className="overflow-hidden border-y border-charcoal-200 bg-cream-50">
+    <div className="overflow-hidden border-y border-stone-200 bg-stone-200">
       {/* Row 1 — left to right */}
-      <div className="border-b border-charcoal-200/60 py-4">
+      <div className="border-b border-stone-200/60 py-4">
         <div className="flex animate-marquee whitespace-nowrap [will-change:transform]">
           <Strip items={ITEMS_A} />
           <Strip items={ITEMS_A} />

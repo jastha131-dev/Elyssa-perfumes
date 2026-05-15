@@ -40,7 +40,7 @@ function Stars({ rating }: { rating: number }) {
   return (
     <div className="flex items-center gap-1" aria-label={`${rating} out of 5 stars`}>
       {Array.from({ length: 5 }).map((_, i) => (
-        <svg key={i} viewBox="0 0 12 12" className="h-2.5 w-2.5 fill-gold-500">
+        <svg key={i} viewBox="0 0 12 12" className="h-2.5 w-2.5 fill-camel-500">
           <path d="M6 0l1.545 3.09L11 3.635l-2.5 2.427.59 3.438L6 7.91 2.91 9.5l.59-3.438L1 3.635l3.455-.545z" />
         </svg>
       ))}
@@ -57,8 +57,8 @@ function Avatar({ name }: { name: string }) {
     .toUpperCase()
 
   return (
-    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center border border-gold-500/30 bg-gold-500/8">
-      <span className="font-display text-sm font-light text-gold-600">{initials}</span>
+    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center border border-stone-200 bg-stone-50">
+      <span className="font-display text-sm font-light text-ink-600">{initials}</span>
     </div>
   )
 }
@@ -75,7 +75,7 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
   const display = items.slice(0, 3)
 
   return (
-    <section className="relative overflow-hidden bg-cream-50 py-24 md:py-32">
+    <section className="relative overflow-hidden bg-stone-50 py-24 md:py-32">
       {/* Subtle dot texture */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.025]"
@@ -95,16 +95,16 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
           className="mb-16 flex flex-col items-center text-center"
         >
           <div className="mb-4 flex items-center gap-4">
-            <div className="h-px w-8 bg-gold-500/60" />
-            <p className="font-body text-xs uppercase tracking-[0.35em] text-gold-500">
+            <div className="h-px w-8 bg-stone-200" />
+            <p className="font-body text-xs uppercase tracking-widest text-camel-500">
               Client Stories
             </p>
-            <div className="h-px w-8 bg-gold-500/60" />
+            <div className="h-px w-8 bg-stone-200" />
           </div>
-          <h2 className="font-display text-4xl font-light text-charcoal-900 md:text-5xl">
+          <h2 className="font-headline text-4xl uppercase text-ink-900 md:text-5xl">
             {title}
           </h2>
-          <div className="mx-auto mt-5 h-px w-16 bg-gradient-to-r from-transparent via-gold-500/50 to-transparent" />
+          <div className="mx-auto mt-5 h-px w-16 bg-stone-200" />
         </motion.div>
 
         {/* Large quote display */}
@@ -119,25 +119,25 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
               className="mx-auto max-w-3xl text-center"
             >
               {/* Decorative quote mark */}
-              <div className="mb-6 select-none font-display text-[100px] leading-none text-gold-500/15">
+              <div className="mb-6 select-none font-display text-[100px] leading-none text-stone-200">
                 &ldquo;
               </div>
 
               <Stars rating={display[active].rating} />
 
-              <blockquote className="mt-6 font-display text-xl font-light italic leading-relaxed text-charcoal-700 md:text-2xl lg:text-3xl">
+              <blockquote className="mt-6 font-display text-xl font-light italic leading-relaxed text-ink-800 md:text-2xl lg:text-3xl">
                 {display[active].review}
               </blockquote>
 
-              <div className="mx-auto mt-8 h-px w-12 bg-gold-500/40" />
+              <div className="mx-auto mt-8 h-px w-12 bg-stone-200" />
 
               <div className="mt-6 flex items-center justify-center gap-3">
                 <Avatar name={display[active].name} />
                 <div className="text-left">
-                  <p className="font-display text-base font-medium text-charcoal-900">
+                  <p className="font-display text-base font-medium text-ink-800">
                     {display[active].name}
                   </p>
-                  <p className="mt-0.5 font-body text-[11px] uppercase tracking-[0.2em] text-gold-500/70">
+                  <p className="mt-0.5 font-body text-[11px] uppercase tracking-[0.2em] text-ink-600">
                     {display[active].product?.name ?? display[active].location}
                   </p>
                 </div>
@@ -155,8 +155,8 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
                 className={cn(
                   'transition-all duration-300',
                   i === active
-                    ? 'h-2 w-8 bg-gold-500'
-                    : 'h-2 w-2 rounded-full bg-charcoal-300 hover:bg-charcoal-400'
+                    ? 'h-2 w-8 bg-camel-500'
+                    : 'h-2 w-2 rounded-full bg-stone-300 hover:bg-stone-400'
                 )}
               />
             ))}
@@ -175,25 +175,25 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
                 className={cn(
                   'group relative border p-6 text-left transition-all duration-300',
                   i === active
-                    ? 'border-gold-500/40 bg-white shadow-sm shadow-gold-500/10'
-                    : 'border-charcoal-200 bg-white/60 hover:border-charcoal-300 hover:bg-white'
+                    ? 'border-camel-500/40 bg-white shadow-sm'
+                    : 'border-stone-200 bg-white/60 hover:border-stone-300 hover:bg-white'
                 )}
               >
                 <Stars rating={t.rating} />
-                <p className="mt-3 line-clamp-2 font-body text-xs font-light leading-relaxed text-charcoal-500 transition-colors group-hover:text-charcoal-700">
+                <p className="mt-3 line-clamp-2 font-body text-xs font-light leading-relaxed text-ink-800 transition-colors group-hover:text-ink-800">
                   &ldquo;{t.review}&rdquo;
                 </p>
                 <div className="mt-4 flex items-center gap-2.5">
                   <Avatar name={t.name} />
                   <div>
-                    <p className="font-display text-sm text-charcoal-900">{t.name}</p>
-                    <p className="font-body text-[10px] uppercase tracking-widest text-gold-500/60">
+                    <p className="font-display text-sm text-ink-800">{t.name}</p>
+                    <p className="font-body text-[10px] uppercase tracking-widest text-ink-600">
                       {t.product?.name ?? t.location}
                     </p>
                   </div>
                 </div>
                 {i === active && (
-                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-gold-500/0 via-gold-500 to-gold-500/0" />
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-camel-500" />
                 )}
               </motion.button>
             ))}
