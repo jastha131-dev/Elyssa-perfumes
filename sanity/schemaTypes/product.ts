@@ -16,11 +16,18 @@ export const product = defineType({
   fields: [
     // ─── Basic Information ────────────────────────────────────────────────────
     defineField({
-      name: 'name',
-      title: 'Product Name',
+      name: 'name_en',
+      title: 'Product Name (English)',
       type: 'string',
       group: 'basic',
       validation: (Rule) => Rule.required().min(2).max(100),
+    }),
+    defineField({
+      name: 'name_ar',
+      title: 'اسم المنتج (Arabic)',
+      type: 'string',
+      group: 'basic',
+      validation: (Rule) => Rule.max(100),
     }),
     defineField({
       name: 'slug',
@@ -28,7 +35,7 @@ export const product = defineType({
       type: 'slug',
       group: 'basic',
       options: {
-        source: 'name',
+        source: 'name_en',
         maxLength: 96,
         slugify: (input: string) =>
           input.toLowerCase().replace(/\s+/g, '-').slice(0, 96),
@@ -36,8 +43,8 @@ export const product = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'description',
-      title: 'Short Description',
+      name: 'description_en',
+      title: 'Short Description (English)',
       type: 'text',
       group: 'basic',
       rows: 4,
@@ -45,8 +52,67 @@ export const product = defineType({
       validation: (Rule) => Rule.required().min(20).max(500),
     }),
     defineField({
-      name: 'story',
-      title: 'Brand Story / Long Description',
+      name: 'description_ar',
+      title: 'وصف قصير (Arabic)',
+      type: 'text',
+      group: 'basic',
+      rows: 4,
+      description: 'A brief description shown on product cards and meta tags.',
+      validation: (Rule) => Rule.max(500),
+    }),
+    defineField({
+      name: 'story_en',
+      title: 'Brand Story / Long Description (English)',
+      type: 'array',
+      group: 'basic',
+      of: [
+        defineArrayMember({
+          type: 'block',
+          styles: [
+            { title: 'Normal', value: 'normal' },
+            { title: 'H2', value: 'h2' },
+            { title: 'H3', value: 'h3' },
+            { title: 'Quote', value: 'blockquote' },
+          ],
+          lists: [
+            { title: 'Bullet', value: 'bullet' },
+            { title: 'Numbered', value: 'number' },
+          ],
+          marks: {
+            decorators: [
+              { title: 'Bold', value: 'strong' },
+              { title: 'Italic', value: 'em' },
+              { title: 'Underline', value: 'underline' },
+            ],
+            annotations: [
+              defineArrayMember({
+                name: 'link',
+                type: 'object',
+                title: 'Link',
+                fields: [
+                  defineField({
+                    name: 'href',
+                    type: 'url',
+                    title: 'URL',
+                    validation: (Rule) =>
+                      Rule.uri({ allowRelative: true, scheme: ['http', 'https', 'mailto', 'tel'] }),
+                  }),
+                  defineField({
+                    name: 'blank',
+                    type: 'boolean',
+                    title: 'Open in new tab',
+                    initialValue: false,
+                  }),
+                ],
+              }),
+            ],
+          },
+        }),
+      ],
+    }),
+    defineField({
+      name: 'story_ar',
+      title: 'قصة العلامة (Arabic)',
       type: 'array',
       group: 'basic',
       of: [
@@ -124,8 +190,8 @@ export const product = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'topNotes',
-      title: 'Top Notes',
+      name: 'topNotes_en',
+      title: 'Top Notes (English)',
       type: 'array',
       group: 'fragrance',
       description: 'The initial impression of the fragrance (first 15–30 minutes).',
@@ -137,8 +203,21 @@ export const product = defineType({
       validation: (Rule) => Rule.min(1).max(8),
     }),
     defineField({
-      name: 'middleNotes',
-      title: 'Middle / Heart Notes',
+      name: 'topNotes_ar',
+      title: 'النوتات الرأسية (Arabic)',
+      type: 'array',
+      group: 'fragrance',
+      description: 'The initial impression of the fragrance (first 15–30 minutes).',
+      of: [
+        defineArrayMember({
+          type: 'string',
+        }),
+      ],
+      validation: (Rule) => Rule.max(8),
+    }),
+    defineField({
+      name: 'middleNotes_en',
+      title: 'Middle / Heart Notes (English)',
       type: 'array',
       group: 'fragrance',
       description: 'The core character of the fragrance (30 minutes – 2 hours).',
@@ -150,8 +229,21 @@ export const product = defineType({
       validation: (Rule) => Rule.min(1).max(8),
     }),
     defineField({
-      name: 'baseNotes',
-      title: 'Base Notes',
+      name: 'middleNotes_ar',
+      title: 'النوتات القلبية (Arabic)',
+      type: 'array',
+      group: 'fragrance',
+      description: 'The core character of the fragrance (30 minutes – 2 hours).',
+      of: [
+        defineArrayMember({
+          type: 'string',
+        }),
+      ],
+      validation: (Rule) => Rule.max(8),
+    }),
+    defineField({
+      name: 'baseNotes_en',
+      title: 'Base Notes (English)',
       type: 'array',
       group: 'fragrance',
       description: 'The lingering finish of the fragrance (2+ hours).',
@@ -161,6 +253,19 @@ export const product = defineType({
         }),
       ],
       validation: (Rule) => Rule.min(1).max(8),
+    }),
+    defineField({
+      name: 'baseNotes_ar',
+      title: 'النوتات القاعدية (Arabic)',
+      type: 'array',
+      group: 'fragrance',
+      description: 'The lingering finish of the fragrance (2+ hours).',
+      of: [
+        defineArrayMember({
+          type: 'string',
+        }),
+      ],
+      validation: (Rule) => Rule.max(8),
     }),
     defineField({
       name: 'intensity',
@@ -359,16 +464,33 @@ export const product = defineType({
 
     // ─── SEO ──────────────────────────────────────────────────────────────────
     defineField({
-      name: 'seoTitle',
-      title: 'SEO Title',
+      name: 'seoTitle_en',
+      title: 'SEO Title (English)',
       type: 'string',
       group: 'seo',
       description: 'Overrides the page <title> tag. Recommended 50–60 characters.',
       validation: (Rule) => Rule.max(60),
     }),
     defineField({
-      name: 'seoDescription',
-      title: 'SEO Meta Description',
+      name: 'seoTitle_ar',
+      title: 'عنوان SEO (Arabic)',
+      type: 'string',
+      group: 'seo',
+      description: 'Overrides the page <title> tag. Recommended 50–60 characters.',
+      validation: (Rule) => Rule.max(60),
+    }),
+    defineField({
+      name: 'seoDescription_en',
+      title: 'SEO Meta Description (English)',
+      type: 'text',
+      group: 'seo',
+      rows: 3,
+      description: 'Shown in search engine results. Recommended 150–160 characters.',
+      validation: (Rule) => Rule.max(160),
+    }),
+    defineField({
+      name: 'seoDescription_ar',
+      title: 'وصف SEO (Arabic)',
       type: 'text',
       group: 'seo',
       rows: 3,
@@ -380,7 +502,7 @@ export const product = defineType({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   preview: {
     select: {
-      title: 'name',
+      title: 'name_en',
       subtitle: 'fragranceFamily',
       media: 'images.0',
     },
