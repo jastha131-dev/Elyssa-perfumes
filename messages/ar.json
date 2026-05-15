@@ -6,7 +6,17 @@
     "journal": "المجلة",
     "cart": "السلة",
     "wishlist": "المفضلة",
-    "search": "بحث"
+    "search": "بحث",
+    "collections": "المجموعات",
+    "newArrivals": "الوافدون الجدد",
+    "bestsellers": "الأكثر مبيعاً",
+    "allFragrances": "جميع العطور",
+    "giftSets": "مجموعات الهدايا",
+    "exploreNow": "استكشف الآن",
+    "latestReleases": "أحدث الإصدارات",
+    "mostLoved": "الأكثر حباً",
+    "forSomeoneSpecial": "لشخص مميز",
+    "storiesGuides": "قصص ودليل"
   },
   "product": {
     "addToCart": "أضف إلى السلة",

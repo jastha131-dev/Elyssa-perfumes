@@ -6,7 +6,17 @@
     "journal": "Journal",
     "cart": "Cart",
     "wishlist": "Wishlist",
-    "search": "Search"
+    "search": "Search",
+    "collections": "Collections",
+    "newArrivals": "New Arrivals",
+    "bestsellers": "Bestsellers",
+    "allFragrances": "All Fragrances",
+    "giftSets": "Gift Sets",
+    "exploreNow": "Explore Now",
+    "latestReleases": "Latest releases",
+    "mostLoved": "Most loved",
+    "forSomeoneSpecial": "For someone special",
+    "storiesGuides": "Stories & guides"
   },
   "product": {
     "addToCart": "Add to Cart",

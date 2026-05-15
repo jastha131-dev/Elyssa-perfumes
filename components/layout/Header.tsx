@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
+import { useTranslations, useLocale } from 'next-intl'
 import { urlFor } from '@/lib/sanity/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, TrendingUp, Gift, BookOpen, ArrowRight } from 'lucide-react'
@@ -12,13 +13,9 @@ import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
 import type { Category } from '@/lib/types'
+import LanguageSwitcher from './LanguageSwitcher'
 
-const STATIC_LINKS = [
-  { label: 'New Arrivals', href: '/products?sort=newest' },
-  { label: 'Bestsellers', href: '/products?sort=popular' },
-  { label: 'Journal', href: '/journal' },
-  { label: 'About', href: '/about' },
-]
+// STATIC_LINKS are now built inside the component using locale + translations
 
 const FALLBACK_CATEGORIES = [
   { _id: 'men', name: 'Men', slug: 'men' },
@@ -32,6 +29,16 @@ interface HeaderProps {
 
 export default function Header({ categories }: HeaderProps) {
   const pathname = usePathname()
+  const t = useTranslations('nav')
+  const locale = useLocale()
+
+  const STATIC_LINKS = [
+    { label: t('newArrivals'), href: `/${locale}/products?sort=newest` },
+    { label: t('bestsellers'), href: `/${locale}/products?sort=popular` },
+    { label: t('journal'), href: `/${locale}/journal` },
+    { label: t('about'), href: `/${locale}/about` },
+  ]
+
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collectionsHovered, setCollectionsHovered] = useState(false)
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false)
@@ -91,8 +98,8 @@ export default function Header({ categories }: HeaderProps) {
           <p className="font-body text-[11px] text-white tracking-[0.2em]">
             Complimentary shipping on all orders over $100
             <span className="mx-3 text-white/50">·</span>
-            <Link href="/products" className="text-white underline underline-offset-2 hover:text-stone-100 transition-colors">
-              Explore Now
+            <Link href={`/${locale}/products`} className="text-white underline underline-offset-2 hover:text-stone-100 transition-colors">
+              {t('exploreNow')}
             </Link>
           </p>
         </div>
@@ -100,7 +107,7 @@ export default function Header({ categories }: HeaderProps) {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <Link
-            href="/"
+            href={`/${locale}`}
             className="group flex flex-col leading-none"
             aria-label="Luxe Parfum — Home"
           >
@@ -124,12 +131,12 @@ export default function Header({ categories }: HeaderProps) {
                 className={cn(
                   'flex items-center gap-1 text-sm font-medium tracking-wide transition-colors duration-200',
                   'hover:text-camel-300',
-                  pathname.startsWith('/products') || pathname.startsWith('/collections')
+                  pathname.startsWith(`/${locale}/products`) || pathname.startsWith(`/${locale}/collections`)
                     ? 'text-camel-400'
                     : 'text-stone-200'
                 )}
               >
-                Collections
+                {t('collections')}
                 <motion.span
                   animate={{ rotate: collectionsHovered ? 180 : 0 }}
                   transition={{ duration: 0.2 }}
@@ -163,11 +170,11 @@ export default function Header({ categories }: HeaderProps) {
                           </p>
 
                           <Link
-                            href="/products"
+                            href={`/${locale}/products`}
                             className="group/all mb-4 flex items-center justify-between transition-colors"
                           >
                             <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-camel-400 transition-colors group-hover/all:text-camel-300">
-                              All Fragrances
+                              {t('allFragrances')}
                             </span>
                             <ArrowRight className="h-3 w-3 text-camel-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-300" />
                           </Link>
@@ -182,7 +189,7 @@ export default function Header({ categories }: HeaderProps) {
                               return (
                                 <li key={cat._id}>
                                   <Link
-                                    href={`/products?category=${cat.slug}`}
+                                    href={`/${locale}/products?category=${cat.slug}`}
                                     className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-camel-500"
                                   >
                                     <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden bg-charcoal-800">
@@ -215,10 +222,10 @@ export default function Header({ categories }: HeaderProps) {
 
                           <ul className="space-y-1">
                             {[
-                              { href: '/products?sort=newest', icon: Sparkles, label: 'New Arrivals', sub: 'Latest releases' },
-                              { href: '/products?sort=best_selling', icon: TrendingUp, label: 'Bestsellers', sub: 'Most loved' },
-                              { href: '/products?category=gift-sets', icon: Gift, label: 'Gift Sets', sub: 'For someone special' },
-                              { href: '/journal', icon: BookOpen, label: 'Journal', sub: 'Stories & guides' },
+                              { href: `/${locale}/products?sort=newest`, icon: Sparkles, label: t('newArrivals'), sub: t('latestReleases') },
+                              { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'), sub: t('mostLoved') },
+                              { href: `/${locale}/products?category=gift-sets`, icon: Gift, label: t('giftSets'), sub: t('forSomeoneSpecial') },
+                              { href: `/${locale}/journal`, icon: BookOpen, label: t('journal'), sub: t('storiesGuides') },
                             ].map(({ href, icon: Icon, label, sub }) => (
                               <li key={href}>
                                 <Link
@@ -274,12 +281,16 @@ export default function Header({ categories }: HeaderProps) {
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
+            <div className="hidden lg:flex">
+              <LanguageSwitcher />
+            </div>
+
             <IconButton onClick={openSearch} label="Open search">
               <Search className="h-5 w-5" />
             </IconButton>
 
             <IconButton
-              href="/wishlist"
+              href={`/${locale}/wishlist`}
               label={`Wishlist (${wishlistCount} items)`}
               badge={wishlistCount}
             >
@@ -358,7 +369,7 @@ export default function Header({ categories }: HeaderProps) {
                     onClick={() => setMobileCollectionsOpen((v) => !v)}
                     className="flex w-full items-center justify-between py-4 text-base font-medium tracking-wide text-cream-100 hover:text-camel-400 transition-colors"
                   >
-                    Collections
+                    {t('collections')}
                     <motion.span
                       animate={{ rotate: mobileCollectionsOpen ? 180 : 0 }}
                       transition={{ duration: 0.2 }}
@@ -383,11 +394,11 @@ export default function Header({ categories }: HeaderProps) {
                         </p>
 
                         <Link
-                          href="/products"
+                          href={`/${locale}/products`}
                           className="group/all mb-3 flex items-center justify-between px-4 py-2 transition-colors"
                         >
                           <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-camel-400 group-hover/all:text-camel-300 transition-colors">
-                            All Fragrances
+                            {t('allFragrances')}
                           </span>
                           <ArrowRight className="h-3 w-3 text-camel-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-300" />
                         </Link>
@@ -400,7 +411,7 @@ export default function Header({ categories }: HeaderProps) {
                             return (
                               <li key={cat._id}>
                                 <Link
-                                  href={`/products?category=${cat.slug}`}
+                                  href={`/${locale}/products?category=${cat.slug}`}
                                   className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-camel-500"
                                 >
                                   <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden bg-charcoal-800">
@@ -432,10 +443,10 @@ export default function Header({ categories }: HeaderProps) {
 
                         <ul className="mb-4 space-y-1 px-4">
                           {[
-                            { href: '/products?sort=newest', icon: Sparkles, label: 'New Arrivals', sub: 'Latest releases' },
-                            { href: '/products?sort=best_selling', icon: TrendingUp, label: 'Bestsellers', sub: 'Most loved' },
-                            { href: '/products?category=gift-sets', icon: Gift, label: 'Gift Sets', sub: 'For someone special' },
-                            { href: '/journal', icon: BookOpen, label: 'Journal', sub: 'Stories & guides' },
+                            { href: `/${locale}/products?sort=newest`, icon: Sparkles, label: t('newArrivals'), sub: t('latestReleases') },
+                            { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'), sub: t('mostLoved') },
+                            { href: `/${locale}/products?category=gift-sets`, icon: Gift, label: t('giftSets'), sub: t('forSomeoneSpecial') },
+                            { href: `/${locale}/journal`, icon: BookOpen, label: t('journal'), sub: t('storiesGuides') },
                           ].map(({ href, icon: Icon, label, sub }) => (
                             <li key={href}>
                               <Link
@@ -475,7 +486,7 @@ export default function Header({ categories }: HeaderProps) {
                       className={cn(
                         'block py-4 text-base font-medium tracking-wide transition-colors',
                         'hover:text-camel-300',
-                        pathname === link.href ? 'text-camel-400' : 'text-stone-200'
+                        pathname === link.href.split('?')[0] ? 'text-camel-400' : 'text-stone-200'
                       )}
                     >
                       {link.label}
@@ -492,17 +503,21 @@ export default function Header({ categories }: HeaderProps) {
                 className="mt-6 flex flex-col gap-3"
               >
                 <Link
-                  href="/wishlist"
+                  href={`/${locale}/wishlist`}
                   className="flex items-center gap-2 text-sm text-cream-300 hover:text-camel-400 transition-colors"
                 >
                   <Heart className="h-4 w-4" />
-                  Wishlist
+                  {t('wishlist')}
                   {wishlistCount > 0 && (
                     <span className="flex h-4 w-4 items-center justify-center rounded-full bg-camel-500 text-[10px] font-medium text-white">
                       {wishlistCount}
                     </span>
                   )}
                 </Link>
+
+                <div className="pt-2">
+                  <LanguageSwitcher />
+                </div>
               </motion.div>
             </nav>
           </motion.div>
