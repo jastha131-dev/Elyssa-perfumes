@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { X, Plus, Minus } from 'lucide-react'
 import { cn, formatPrice } from '@/lib/utils'
@@ -19,6 +20,7 @@ export default function CartItem({
   onUpdateQuantity,
   size = 'sm',
 }: CartItemProps) {
+  const t = useTranslations('cart')
   const { product, selectedVolume, quantity } = item
   const lineTotal = selectedVolume.price * quantity
   const primaryImage = product.images?.[0]
@@ -146,7 +148,7 @@ export default function CartItem({
             </p>
             {quantity > 1 && (
               <p className="text-xs text-charcoal-400">
-                {formatPrice(selectedVolume.price)} each
+                {formatPrice(selectedVolume.price)} {t('each')}
               </p>
             )}
           </div>

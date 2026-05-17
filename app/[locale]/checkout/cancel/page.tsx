@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import { motion } from 'framer-motion'
 import { ShoppingCart, ShoppingBag, ArrowLeft, HeartHandshake } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -26,6 +27,14 @@ const itemVariants = {
 }
 
 export default function CancelPage() {
+  const t = useTranslations('cancel')
+
+  const reassurancePoints = [
+    { text: t('point1') },
+    { text: t('point2') },
+    { text: t('point3') },
+  ]
+
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-cream-50 to-white px-4 py-16 sm:px-6">
       <motion.div
@@ -63,13 +72,13 @@ export default function CancelPage() {
         {/* Heading */}
         <motion.div variants={itemVariants} className="mb-6">
           <p className="mb-3 font-body text-xs uppercase tracking-[0.3em] text-charcoal-400">
-            No Worries
+            {t('noWorries')}
           </p>
           <h1 className="mb-3 font-display text-3xl font-semibold text-charcoal-900 sm:text-4xl">
-            Payment Cancelled
+            {t('title')}
           </h1>
           <p className="text-base leading-relaxed text-charcoal-500">
-            Your payment was not processed and you have not been charged. Your cart has been saved and is ready whenever you are.
+            {t('desc')}
           </p>
         </motion.div>
 
@@ -79,7 +88,7 @@ export default function CancelPage() {
           className="mb-8 rounded-2xl border border-charcoal-100 bg-white p-6 text-left shadow-sm"
         >
           <h2 className="mb-4 font-display text-base font-semibold text-charcoal-900">
-            Your items are still waiting
+            {t('itemsWaiting')}
           </h2>
           <ul className="space-y-3">
             {reassurancePoints.map((point) => (
@@ -98,13 +107,13 @@ export default function CancelPage() {
           <Link href="/cart" className="flex-1">
             <Button variant="primary" size="lg" className="w-full gap-2">
               <ShoppingCart className="h-4 w-4" />
-              Return to Cart
+              {t('returnToCart')}
             </Button>
           </Link>
           <Link href="/products" className="flex-1">
             <Button variant="outline" size="lg" className="w-full gap-2">
               <ShoppingBag className="h-4 w-4" />
-              Continue Shopping
+              {t('continueShopping')}
             </Button>
           </Link>
         </motion.div>
@@ -116,7 +125,7 @@ export default function CancelPage() {
             className="inline-flex items-center gap-1.5 text-sm text-charcoal-400 transition-colors hover:text-charcoal-700"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            Back to homepage
+            {t('backHome')}
           </Link>
         </motion.div>
 
@@ -125,12 +134,12 @@ export default function CancelPage() {
           variants={itemVariants}
           className="mt-6 text-xs leading-relaxed text-charcoal-400"
         >
-          Experiencing issues with your payment?{' '}
+          {t('helpText')}{' '}
           <a
             href="mailto:support@luxeparfum.com"
             className="text-gold-600 underline underline-offset-2 hover:text-gold-700"
           >
-            Contact our support team
+            {t('contactSupport')}
           </a>{' '}
           and we will be happy to help.
         </motion.p>
@@ -139,8 +148,3 @@ export default function CancelPage() {
   )
 }
 
-const reassurancePoints = [
-  { text: 'You have not been charged. No payment was taken.' },
-  { text: 'Your cart items have been saved and are still available.' },
-  { text: 'You can retry checkout at any time — we accept all major cards.' },
-]

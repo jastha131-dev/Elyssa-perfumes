@@ -1,6 +1,6 @@
 import { Suspense } from 'react'
 import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
-import { ProductsPageClient } from './_client'
+import { ProductsPageClient } from '@/app/products/_client'
 
 export const revalidate = 3600
 

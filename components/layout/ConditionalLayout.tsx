@@ -15,11 +15,15 @@ export function ConditionalLayout({
   const pathname = usePathname()
   const isStudio = pathname.startsWith('/studio')
 
+  if (isStudio) {
+    return <>{children}</>
+  }
+
   return (
     <>
-      {!isStudio && header}
+      {header}
       <main className="min-h-screen">{children}</main>
-      {!isStudio && footer}
+      {footer}
     </>
   )
 }

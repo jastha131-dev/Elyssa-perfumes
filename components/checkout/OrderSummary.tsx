@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Package, Truck, Tag } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn, formatPrice } from '@/lib/utils'
 import type { CartItem } from '@/lib/types'
 
@@ -32,15 +33,18 @@ export default function OrderSummary({
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0)
 
+  const t = useTranslations('checkout')
+  const tc = useTranslations('cart')
+
   return (
     <div className={cn('flex flex-col gap-0', className)}>
       {/* Header */}
       <div className="mb-4 flex items-center justify-between">
         <h3 className="font-display text-base font-semibold text-charcoal-900">
-          Order Summary
+          {t('orderSummary')}
         </h3>
         <span className="text-sm text-charcoal-400">
-          {itemCount} {itemCount === 1 ? 'item' : 'items'}
+          {t('itemCount', { count: itemCount })}
         </span>
       </div>
 
@@ -112,7 +116,7 @@ export default function OrderSummary({
       <div className="space-y-2.5 border-t border-charcoal-100 pt-5">
         {/* Subtotal */}
         <div className="flex items-center justify-between text-sm">
-          <span className="text-charcoal-500">Subtotal</span>
+          <span className="text-charcoal-500">{tc('subtotal')}</span>
           <span className="font-medium text-charcoal-900 tabular-nums">
             {formatPrice(subtotal)}
           </span>
@@ -122,10 +126,10 @@ export default function OrderSummary({
         <div className="flex items-center justify-between text-sm">
           <span className="flex items-center gap-1.5 text-charcoal-500">
             <Truck className="h-3.5 w-3.5" />
-            Estimated Shipping
+            {t('estimatedShipping')}
           </span>
           {shippingCost === 0 ? (
-            <span className="font-medium text-green-600">Free</span>
+            <span className="font-medium text-green-600">{tc('free')}</span>
           ) : (
             <span className="font-medium text-charcoal-900 tabular-nums">
               {formatPrice(shippingCost)}
@@ -139,10 +143,10 @@ export default function OrderSummary({
             <div className="mb-1.5 flex items-center justify-between">
               <span className="flex items-center gap-1 text-[11px] text-charcoal-500">
                 <Tag className="h-3 w-3" />
-                Free shipping at {formatPrice(FREE_SHIPPING_THRESHOLD)}
+                {t('freeShippingAt', { amount: formatPrice(FREE_SHIPPING_THRESHOLD) })}
               </span>
               <span className="text-[11px] font-medium text-gold-600">
-                {formatPrice(FREE_SHIPPING_THRESHOLD - subtotal)} away
+                {t('away', { amount: formatPrice(FREE_SHIPPING_THRESHOLD - subtotal) })}
               </span>
             </div>
             <div className="h-1 overflow-hidden rounded-full bg-charcoal-200">
@@ -158,7 +162,7 @@ export default function OrderSummary({
 
         {/* Tax */}
         <div className="flex items-center justify-between text-sm">
-          <span className="text-charcoal-500">Estimated Tax (8%)</span>
+          <span className="text-charcoal-500">{t('estimatedTax', { rate: TAX_RATE * 100 })}</span>
           <span className="font-medium text-charcoal-900 tabular-nums">
             {formatPrice(taxAmount)}
           </span>
@@ -168,14 +172,14 @@ export default function OrderSummary({
         <div className="border-t border-charcoal-100 pt-3">
           <div className="flex items-center justify-between">
             <span className="font-display text-base font-semibold text-charcoal-900">
-              Estimated Total
+              {t('estimatedTotal')}
             </span>
             <span className="font-display text-lg font-bold text-charcoal-900 tabular-nums">
               {formatPrice(total)}
             </span>
           </div>
           <p className="mt-1 text-right text-[11px] text-charcoal-400">
-            Final total calculated at checkout
+            {t('finalTotal')}
           </p>
         </div>
       </div>
@@ -184,8 +188,7 @@ export default function OrderSummary({
       <div className="mt-4 flex items-start gap-2 rounded-lg bg-cream-50 px-3 py-3">
         <Package className="mt-0.5 h-4 w-4 flex-shrink-0 text-gold-500" />
         <p className="text-[11px] leading-relaxed text-charcoal-500">
-          All orders are shipped with premium packaging, including a personalized card and complimentary samples.
-          Delivery typically within 5–10 business days.
+          {t('deliveryNote')}
         </p>
       </div>
     </div>

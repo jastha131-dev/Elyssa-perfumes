@@ -3,6 +3,7 @@
 import { useRef } from 'react'
 import { motion } from 'framer-motion'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { ProductCard } from '@/components/product/ProductCard'
 import type { Product } from '@/lib/types'
@@ -22,6 +23,7 @@ const containerVariants = {
 }
 
 export function RelatedProducts({ products }: RelatedProductsProps) {
+  const t = useTranslations('product')
   const scrollRef = useRef<HTMLDivElement>(null)
 
   if (!products || products.length === 0) return null
@@ -47,7 +49,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
       >
         <div>
           <h2 className="font-display text-2xl md:text-3xl text-charcoal-900">
-            You May Also Like
+            {t('relatedProducts')}
           </h2>
           <div className="h-px w-10 bg-gold-500 mt-2" aria-hidden="true" />
         </div>
@@ -64,7 +66,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
               'transition-colors duration-150',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500'
             )}
-            aria-label="Scroll left"
+            aria-label={t('scrollLeft')}
           >
             <ChevronLeft size={14} aria-hidden="true" />
           </button>
@@ -78,7 +80,7 @@ export function RelatedProducts({ products }: RelatedProductsProps) {
               'transition-colors duration-150',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500'
             )}
-            aria-label="Scroll right"
+            aria-label={t('scrollRight')}
           >
             <ChevronRight size={14} aria-hidden="true" />
           </button>

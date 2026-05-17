@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Lock, ShieldCheck, RefreshCw, AlertCircle } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart-store'
@@ -12,7 +13,14 @@ import type { CartItem } from '@/lib/types'
 type CheckoutState = 'loading' | 'redirecting' | 'error'
 
 export default function CheckoutPage() {
+  const t = useTranslations('checkout')
   const router = useRouter()
+
+  const trustItems = [
+    { emoji: '🔒', label: t('securePayment') },
+    { emoji: '↩️', label: t('easyReturns') },
+    { emoji: '📦', label: t('premiumPackaging') },
+  ]
   const { items, clearCart } = useCartStore()
   const [state, setState] = useState<CheckoutState>('loading')
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -103,10 +111,10 @@ export default function CheckoutPage() {
           className="mb-10 text-center"
         >
           <p className="mb-2 font-body text-xs uppercase tracking-[0.3em] text-gold-500">
-            Secure Checkout
+            {t('secureCheckout')}
           </p>
           <h1 className="font-display text-3xl font-semibold text-charcoal-900 sm:text-4xl">
-            Completing Your Order
+            {t('completingOrder')}
           </h1>
         </motion.div>
 
@@ -146,13 +154,13 @@ export default function CheckoutPage() {
 
                     <h2 className="mb-2 font-display text-xl font-semibold text-charcoal-900">
                       {state === 'redirecting'
-                        ? 'Redirecting to secure checkout...'
-                        : 'Preparing your checkout...'}
+                        ? t('redirecting')
+                        : t('preparing')}
                     </h2>
                     <p className="max-w-xs text-sm leading-relaxed text-charcoal-400">
                       {state === 'redirecting'
-                        ? 'You are being securely redirected to our payment processor. Please do not close this page.'
-                        : 'We are securely creating your order and connecting to our payment processor.'}
+                        ? t('redirectingDesc')
+                        : t('preparingDesc')}
                     </p>
 
                     {/* Progress dots */}
@@ -176,17 +184,17 @@ export default function CheckoutPage() {
                     <div className="mt-10 flex items-center justify-center gap-6">
                       <SecurityBadge
                         icon={<ShieldCheck className="h-4 w-4 text-green-600" />}
-                        label="SSL Secured"
+                        label={t('sslSecured')}
                       />
                       <div className="h-4 w-px bg-charcoal-200" />
                       <SecurityBadge
                         icon={<StripeLogo />}
-                        label="Powered by Stripe"
+                        label={t('poweredByStripe')}
                       />
                       <div className="h-4 w-px bg-charcoal-200" />
                       <SecurityBadge
                         icon={<Lock className="h-4 w-4 text-charcoal-400" />}
-                        label="256-bit Encryption"
+                        label={t('encryption')}
                       />
                     </div>
                   </motion.div>
@@ -205,10 +213,10 @@ export default function CheckoutPage() {
                       <AlertCircle className="h-8 w-8 text-red-500" />
                     </div>
                     <h2 className="mb-2 font-display text-xl font-semibold text-charcoal-900">
-                      Checkout Could Not Be Started
+                      {t('errorTitle')}
                     </h2>
                     <p className="mb-8 max-w-sm text-sm leading-relaxed text-charcoal-500">
-                      {errorMessage || 'An unexpected error occurred. Please try again.'}
+                      {errorMessage || t('errorFallback')}
                     </p>
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <Button
@@ -217,13 +225,13 @@ export default function CheckoutPage() {
                         className="gap-2"
                       >
                         <RefreshCw className="h-4 w-4" />
-                        Try Again
+                        {t('tryAgain')}
                       </Button>
                       <Button
                         variant="outline"
                         onClick={() => router.push('/cart')}
                       >
-                        Return to Cart
+                        {t('returnToCart')}
                       </Button>
                     </div>
 
@@ -231,12 +239,12 @@ export default function CheckoutPage() {
                     <div className="mt-10 flex items-center justify-center gap-6">
                       <SecurityBadge
                         icon={<ShieldCheck className="h-4 w-4 text-green-600" />}
-                        label="SSL Secured"
+                        label={t('sslSecured')}
                       />
                       <div className="h-4 w-px bg-charcoal-200" />
                       <SecurityBadge
                         icon={<StripeLogo />}
-                        label="Powered by Stripe"
+                        label={t('poweredByStripe')}
                       />
                     </div>
                   </motion.div>
@@ -328,8 +336,3 @@ function StripeLogo() {
   )
 }
 
-const trustItems = [
-  { emoji: '🔒', label: 'Secure Payment' },
-  { emoji: '↩️', label: 'Easy Returns' },
-  { emoji: '📦', label: 'Premium Packaging' },
-]

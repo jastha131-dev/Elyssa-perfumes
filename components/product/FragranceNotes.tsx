@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Wind, Leaf, Layers } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 interface FragranceNotesProps {
@@ -182,6 +183,7 @@ export function FragranceNotes({
   sillage,
   longevity,
 }: FragranceNotesProps) {
+  const t = useTranslations('product')
   const hasPerformance = intensity || sillage || longevity
 
   return (
@@ -194,10 +196,10 @@ export function FragranceNotes({
         transition={{ duration: 0.4 }}
       >
         <h3 className="font-display text-lg text-charcoal-900 leading-tight">
-          Fragrance Profile
+          {t('fragranceProfile')}
         </h3>
         <p className="text-xs text-charcoal-400 mt-1 tracking-wide">
-          A journey through scent — from the first impression to the lasting trail
+          {t('fragranceProfileDesc')}
         </p>
       </motion.div>
 
@@ -214,8 +216,8 @@ export function FragranceNotes({
         ))}
 
         <NotesRow
-          title="Top Notes"
-          subtitle="First impression · 0–30 min"
+          title={t('topNotes')}
+          subtitle={t('topNotesSubtitle')}
           notes={topNotes}
           icon={<Wind size={13} strokeWidth={1.75} />}
           baseDelay={0}
@@ -223,8 +225,8 @@ export function FragranceNotes({
         />
 
         <NotesRow
-          title="Heart Notes"
-          subtitle="Core character · 30 min–4 hrs"
+          title={t('heartNotes')}
+          subtitle={t('heartNotesSubtitle')}
           notes={middleNotes}
           icon={<Leaf size={13} strokeWidth={1.75} />}
           baseDelay={0.1}
@@ -232,8 +234,8 @@ export function FragranceNotes({
         />
 
         <NotesRow
-          title="Base Notes"
-          subtitle="Lasting trail · 4+ hrs"
+          title={t('baseNotes')}
+          subtitle={t('baseNotesSubtitle')}
           notes={baseNotes}
           icon={<Layers size={13} strokeWidth={1.75} />}
           baseDelay={0.2}
@@ -251,13 +253,13 @@ export function FragranceNotes({
           className="flex flex-col gap-4 pt-2 border-t border-charcoal-100"
         >
           <h4 className="text-[11px] font-bold tracking-[0.15em] uppercase text-charcoal-700">
-            Performance
+            {t('performance')}
           </h4>
 
           <div className="flex flex-col gap-4">
             {intensity && (
               <PerformanceBar
-                label="Intensity"
+                label={t('intensity')}
                 value={intensity}
                 icon={
                   <svg
@@ -280,7 +282,7 @@ export function FragranceNotes({
 
             {sillage && (
               <PerformanceBar
-                label="Sillage"
+                label={t('sillage')}
                 value={sillage}
                 icon={
                   <svg
@@ -304,7 +306,7 @@ export function FragranceNotes({
 
             {longevity && (
               <PerformanceBar
-                label="Longevity"
+                label={t('longevity')}
                 value={longevity}
                 icon={
                   <svg

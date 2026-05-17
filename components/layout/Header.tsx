@@ -12,22 +12,23 @@ import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
-import type { Category } from '@/lib/types'
+import type { Category, NavPage } from '@/lib/types'
 import LanguageSwitcher from './LanguageSwitcher'
 
 // STATIC_LINKS are now built inside the component using locale + translations
 
 const FALLBACK_CATEGORIES = [
-  { _id: 'men', name: 'Men', slug: 'men' },
-  { _id: 'women', name: 'Women', slug: 'women' },
-  { _id: 'unisex', name: 'Unisex', slug: 'unisex' },
+  { _id: 'men', name_en: 'Men', name_ar: 'رجالي', slug: 'men' },
+  { _id: 'women', name_en: 'Women', name_ar: 'نسائي', slug: 'women' },
+  { _id: 'unisex', name_en: 'Unisex', name_ar: 'جنسين', slug: 'unisex' },
 ]
 
 interface HeaderProps {
   categories: Category[]
+  navPages?: NavPage[]
 }
 
-export default function Header({ categories }: HeaderProps) {
+export default function Header({ categories, navPages = [] }: HeaderProps) {
   const pathname = usePathname()
   const t = useTranslations('nav')
   const locale = useLocale()
@@ -183,6 +184,7 @@ export default function Header({ categories }: HeaderProps) {
 
                           <ul className="space-y-1">
                             {(categories.length > 0 ? categories : FALLBACK_CATEGORIES).map((cat) => {
+                              const catName = locale === 'ar' ? (cat as any).name_ar : (cat as any).name_en
                               const imgUrl = (cat as Category).image?.asset?._ref
                                 ? urlFor((cat as Category).image).width(80).height(80).url()
                                 : null
@@ -196,7 +198,7 @@ export default function Header({ categories }: HeaderProps) {
                                       {imgUrl ? (
                                         <Image
                                           src={imgUrl}
-                                          alt={cat.name}
+                                          alt={catName}
                                           fill
                                           className="object-cover opacity-60 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-105"
                                         />
@@ -205,7 +207,7 @@ export default function Header({ categories }: HeaderProps) {
                                       )}
                                     </div>
                                     <span className="text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
-                                      {cat.name}
+                                      {catName}
                                     </span>
                                   </Link>
                                 </li>
@@ -274,6 +276,28 @@ export default function Header({ categories }: HeaderProps) {
                   )}
                 >
                   {link.label}
+                </Link>
+              )
+            })}
+
+            {/* Dynamic CMS pages */}
+            {navPages.map((p) => {
+              const label = locale === 'ar' ? (p.title_ar || p.title_en) : p.title_en
+              const href = `/${locale}/pages/${p.slug}`
+              const isActive = pathname === href
+              return (
+                <Link
+                  key={p._id}
+                  href={href}
+                  className={cn(
+                    'relative text-sm font-medium tracking-wide transition-colors duration-200',
+                    'after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full',
+                    'after:origin-left after:scale-x-0 after:bg-camel-500 after:transition-transform after:duration-300',
+                    'hover:text-camel-300 hover:after:scale-x-100',
+                    isActive ? 'text-camel-400 after:scale-x-100' : 'text-stone-200'
+                  )}
+                >
+                  {label}
                 </Link>
               )
             })}
@@ -405,6 +429,7 @@ export default function Header({ categories }: HeaderProps) {
 
                         <ul className="mb-4 space-y-1 px-4">
                           {(categories.length > 0 ? categories : FALLBACK_CATEGORIES).map((cat) => {
+                            const catName = locale === 'ar' ? (cat as any).name_ar : (cat as any).name_en
                             const imgUrl = (cat as Category).image?.asset?._ref
                               ? urlFor((cat as Category).image).width(64).height(64).url()
                               : null
@@ -418,7 +443,7 @@ export default function Header({ categories }: HeaderProps) {
                                     {imgUrl ? (
                                       <Image
                                         src={imgUrl}
-                                        alt={cat.name}
+                                        alt={catName}
                                         fill
                                         className="object-cover opacity-70 transition-all duration-300 group-hover/item:opacity-100"
                                       />
@@ -427,7 +452,7 @@ export default function Header({ categories }: HeaderProps) {
                                     )}
                                   </div>
                                   <span className="text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
-                                    {cat.name}
+                                    {catName}
                                   </span>
                                 </Link>
                               </li>
@@ -493,6 +518,31 @@ export default function Header({ categories }: HeaderProps) {
                     </Link>
                   </motion.li>
                 ))}
+
+                {/* Dynamic CMS pages */}
+                {navPages.map((p, i) => {
+                  const label = locale === 'ar' ? (p.title_ar || p.title_en) : p.title_en
+                  const href = `/${locale}/pages/${p.slug}`
+                  return (
+                    <motion.li
+                      key={p._id}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: (STATIC_LINKS.length + i) * 0.06 + 0.05, duration: 0.22 }}
+                    >
+                      <Link
+                        href={href}
+                        className={cn(
+                          'block py-4 text-base font-medium tracking-wide transition-colors',
+                          'hover:text-camel-300',
+                          pathname === href ? 'text-camel-400' : 'text-stone-200'
+                        )}
+                      >
+                        {label}
+                      </Link>
+                    </motion.li>
+                  )
+                })}
               </ul>
 
               {/* Mobile bottom actions */}

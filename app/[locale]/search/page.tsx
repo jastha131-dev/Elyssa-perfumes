@@ -3,23 +3,25 @@ import { searchProducts } from '@/lib/sanity/fetch'
 import { ProductGrid } from '@/components/product/ProductGrid'
 import Link from 'next/link'
 import type { Metadata } from 'next'
+import { getTranslations } from 'next-intl/server'
 
 export function generateMetadata({ searchParams }: { searchParams: Promise<{ q?: string }> }): Metadata {
   return { title: 'Search — Luxe Parfum' }
 }
 
 async function SearchResults({ q }: { q: string }) {
+  const t = await getTranslations('search')
   const results = await searchProducts(q)
 
   if (results.length === 0) {
     return (
       <div className="flex flex-col items-center gap-6 py-24 text-center">
-        <p className="font-display text-4xl font-light text-charcoal-900">No results</p>
+        <p className="font-display text-4xl font-light text-charcoal-900">{t('noResultsTitle')}</p>
         <p className="font-body text-sm text-charcoal-400">
-          No fragrances found for <span className="text-charcoal-700">&ldquo;{q}&rdquo;</span>
+          {t('noResultsDesc')} <span className="text-charcoal-700">&ldquo;{q}&rdquo;</span>
         </p>
         <div className="mt-2 flex flex-col items-center gap-3">
-          <p className="font-body text-xs uppercase tracking-[0.2em] text-charcoal-400">Try searching for</p>
+          <p className="font-body text-xs uppercase tracking-[0.2em] text-charcoal-400">{t('trySearachFor')}</p>
           <div className="flex flex-wrap justify-center gap-2">
             {['Oud', 'Rose', 'Amber', 'Citrus', 'Vetiver'].map((term) => (
               <Link
@@ -36,7 +38,7 @@ async function SearchResults({ q }: { q: string }) {
           href="/products"
           className="mt-4 bg-charcoal-900 px-8 py-3 font-body text-xs uppercase tracking-[0.18em] text-white hover:bg-gold-500 transition-colors"
         >
-          View All Fragrances
+          {t('viewAllFragrances')}
         </Link>
       </div>
     )
@@ -45,8 +47,7 @@ async function SearchResults({ q }: { q: string }) {
   return (
     <div>
       <p className="mb-8 font-body text-sm text-charcoal-500">
-        <span className="font-medium text-charcoal-900">{results.length}</span>{' '}
-        {results.length === 1 ? 'result' : 'results'} for{' '}
+        {t('resultCount', { count: results.length })}{' '}
         <span className="text-charcoal-700">&ldquo;{q}&rdquo;</span>
       </p>
       <ProductGrid products={results} />
@@ -59,6 +60,7 @@ export default async function SearchPage({
 }: {
   searchParams: Promise<{ q?: string }>
 }) {
+  const t = await getTranslations('search')
   const { q = '' } = await searchParams
   const query = q.trim()
 
@@ -68,12 +70,12 @@ export default async function SearchPage({
         {/* Header */}
         <div className="mb-10 border-b border-charcoal-100 pb-8">
           <nav className="mb-4 flex items-center gap-1.5 text-xs text-charcoal-400">
-            <Link href="/" className="hover:text-charcoal-700 transition-colors">Home</Link>
+            <Link href="/" className="hover:text-charcoal-700 transition-colors">{t('home')}</Link>
             <span>/</span>
-            <span className="text-charcoal-700">Search</span>
+            <span className="text-charcoal-700">{t('searchLabel')}</span>
           </nav>
           <h1 className="font-display text-4xl font-light text-charcoal-900">
-            {query ? `"${query}"` : 'Search'}
+            {query ? `"${query}"` : t('searchLabel')}
           </h1>
         </div>
 
@@ -96,13 +98,13 @@ export default async function SearchPage({
         ) : (
           <div className="flex flex-col items-center gap-4 py-20 text-center">
             <p className="font-display text-3xl font-light text-charcoal-400">
-              What are you looking for?
+              {t('whatLooking')}
             </p>
             <Link
               href="/products"
               className="mt-4 border border-charcoal-200 px-8 py-3 font-body text-xs uppercase tracking-[0.18em] text-charcoal-700 hover:border-gold-400 hover:text-gold-600 transition-colors"
             >
-              Browse All Fragrances
+              {t('browseAll')}
             </Link>
           </div>
         )}

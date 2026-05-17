@@ -77,6 +77,7 @@ interface FooterProps {
 
 export default function Footer({ categories = [] }: FooterProps) {
   const t = useTranslations('footer')
+  const tn = useTranslations('newsletter')
   const locale = useLocale()
 
   const [email, setEmail] = useState('')
@@ -133,6 +134,7 @@ export default function Footer({ categories = [] }: FooterProps) {
           )}
         >
           {displayCategories.map((cat, i) => {
+            const catName = locale === 'ar' ? cat.name_ar : cat.name_en
             const sanityUrl = cat.image?.asset?._ref
               ? urlFor(cat.image).width(800).height(500).url()
               : null
@@ -151,7 +153,7 @@ export default function Footer({ categories = [] }: FooterProps) {
               >
                 <Image
                   src={imageUrl}
-                  alt={cat.name}
+                  alt={catName}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
                   sizes="(max-width: 768px) 50vw, 33vw"
@@ -168,7 +170,7 @@ export default function Footer({ categories = [] }: FooterProps) {
                       {t('explore')}
                     </p>
                     <h3 className="font-display text-2xl font-light text-cream-100 md:text-3xl">
-                      {cat.name}
+                      {catName}
                     </h3>
                   </div>
 
@@ -278,7 +280,7 @@ export default function Footer({ categories = [] }: FooterProps) {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={t('newsletter.placeholder')}
+                  placeholder={tn('placeholder')}
                   aria-label="Email address for newsletter"
                   required
                   className={cn(

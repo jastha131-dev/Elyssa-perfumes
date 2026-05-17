@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 import type { Category, CategoriesSectionBlock } from '@/lib/types'
 import { urlFor } from '@/lib/sanity/image'
@@ -12,30 +13,6 @@ import { urlFor } from '@/lib/sanity/image'
 interface CategoriesProps {
   data: CategoriesSectionBlock
 }
-
-const FALLBACK = [
-  {
-    _id: 'men',
-    name: 'Men',
-    slug: 'men',
-    gradient: 'from-stone-800 via-stone-700 to-stone-600',
-    tagline: 'Bold & Distinguished',
-  },
-  {
-    _id: 'women',
-    name: 'Women',
-    slug: 'women',
-    gradient: 'from-stone-900 via-stone-800 to-stone-700',
-    tagline: 'Elegant & Alluring',
-  },
-  {
-    _id: 'unisex',
-    name: 'Unisex',
-    slug: 'unisex',
-    gradient: 'from-stone-700 via-stone-800 to-stone-900',
-    tagline: 'Beyond Boundaries',
-  },
-]
 
 const LOCAL_CAT_IMAGES = [
   '/images/categories/I1.webp',
@@ -57,6 +34,7 @@ interface CardData {
   imageUrl?: string
   gradient: string
   tagline?: string
+  explore: string
 }
 
 function CategoryCard({ name, slug, imageUrl, gradient, tagline }: CardData) {
@@ -105,22 +83,11 @@ function CategoryCard({ name, slug, imageUrl, gradient, tagline }: CardData) {
               </h3>
             </div>
 
-            <div
-              className={cn(
-                'mt-3 flex items-center gap-2',
-                'translate-y-4 opacity-0 transition-all duration-300 ease-out',
-                'group-hover:translate-y-0 group-hover:opacity-100'
-              )}
-            >
-              <span className="font-body text-xs uppercase tracking-[0.2em] text-camel-300">
-                Explore
+            <div className="mt-3">
+              <span className="inline-flex items-center gap-2 border border-camel-300/60 px-4 py-1.5 font-body text-[11px] uppercase tracking-[0.2em] text-camel-200 transition-all duration-200 group-hover:border-camel-400 group-hover:bg-camel-500/20">
+                Shop {name}
+                <ArrowRight size={12} className="text-camel-300" strokeWidth={1.5} />
               </span>
-              <motion.div
-                animate={{ x: [0, 4, 0] }}
-                transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
-              >
-                <ArrowRight size={14} className="text-camel-400" strokeWidth={1.5} />
-              </motion.div>
             </div>
           </div>
 
@@ -133,38 +100,39 @@ function CategoryCard({ name, slug, imageUrl, gradient, tagline }: CardData) {
 }
 
 export default function Categories({ data }: CategoriesProps) {
+  const t = useTranslations('home')
+  const locale = useLocale()
   const categories: Category[] = (data?.categories ?? []) as Category[]
-  const title = data?.title ?? 'Shop Categories'
+  const title =
+    (locale === 'ar' ? data?.title_ar : data?.title_en) ?? 'Shop Categories'
 
   const headingRef = useRef<HTMLDivElement>(null)
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
 
-  // Build display items: use ALL real Sanity categories, or fallback to 3 hardcoded
-  let cards: CardData[]
+  // Build display items: use ALL real Sanity categories, or return null if none
+  if (!categories || categories.length === 0) return null
 
-  if (categories && categories.length > 0) {
-    cards = categories.map((cat, i) => {
-      let imageUrl: string | undefined
-      if (cat.image?.asset?._ref) {
-        try {
-          imageUrl = urlFor(cat.image).width(800).height(800).url()
-        } catch {
-          imageUrl = undefined
-        }
+  const cards: CardData[] = categories.map((cat, i) => {
+    let imageUrl: string | undefined
+    if (cat.image?.asset?._ref) {
+      try {
+        imageUrl = urlFor(cat.image).width(800).height(800).url()
+      } catch {
+        imageUrl = undefined
       }
-      imageUrl = imageUrl || LOCAL_CAT_IMAGES[i % LOCAL_CAT_IMAGES.length]
-      return {
-        _id: cat._id,
-        name: cat.name,
-        slug: cat.slug,
-        imageUrl,
-        gradient: GRADIENTS[i % GRADIENTS.length],
-        tagline: undefined,
-      }
-    })
-  } else {
-    cards = FALLBACK.map((f, i) => ({ ...f, imageUrl: LOCAL_CAT_IMAGES[i % LOCAL_CAT_IMAGES.length] }))
-  }
+    }
+    imageUrl = imageUrl || LOCAL_CAT_IMAGES[i % LOCAL_CAT_IMAGES.length]
+    const name = locale === 'ar' ? cat.name_ar : cat.name_en
+    return {
+      _id: cat._id,
+      name,
+      slug: cat.slug,
+      imageUrl,
+      gradient: GRADIENTS[i % GRADIENTS.length],
+      tagline: undefined,
+      explore: t('explore'),
+    }
+  })
 
   // Grid class adapts to count
   const gridClass =
@@ -185,15 +153,15 @@ export default function Categories({ data }: CategoriesProps) {
           initial={{ opacity: 0, y: 24 }}
           animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-14 text-center"
+          className="mb-14"
         >
           <p className="mb-3 font-body text-xs uppercase tracking-widest text-camel-500">
-            Explore By
+            {t('exploreBy')}
           </p>
           <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
             {title}
           </h2>
-          <div className="mx-auto mt-5 h-px w-16 bg-camel-500/50" />
+          <div className="mt-5 h-px w-16 bg-camel-500/50" />
         </motion.div>
 
         {/* Grid */}
@@ -202,30 +170,6 @@ export default function Categories({ data }: CategoriesProps) {
             <CategoryCard key={card._id} {...card} />
           ))}
         </div>
-
-        {/* CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mt-14 text-center"
-        >
-          <Link
-            href="/products"
-            className={cn(
-              'group inline-flex items-center gap-3 border border-ink-800 px-10 py-3.5',
-              'font-body text-sm uppercase tracking-[0.2em] text-ink-800',
-              'transition-all duration-300 hover:bg-ink-900 hover:text-white'
-            )}
-          >
-            Shop Now
-            <ArrowRight
-              size={13}
-              strokeWidth={1.5}
-              className="transition-transform duration-300 group-hover:translate-x-1"
-            />
-          </Link>
-        </motion.div>
       </div>
     </section>
   )

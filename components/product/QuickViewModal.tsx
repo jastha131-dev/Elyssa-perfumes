@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag, Heart, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslations } from 'next-intl';
 import { useCartStore } from "@/lib/store/cart-store";
 import { useCartDrawerStore } from "@/lib/store/cart-drawer-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
@@ -47,6 +48,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const [added, setAdded] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
 
+  const t = useTranslations('product');
   const { addItem } = useCartStore();
   const { openCart } = useCartDrawerStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
@@ -161,12 +163,12 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 <div className="absolute left-3 top-3 flex flex-col gap-1.5">
                   {product.new && (
                     <span className="bg-charcoal-900 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
-                      New
+                      {t('new')}
                     </span>
                   )}
                   {product.bestSeller && (
                     <span className="bg-gold-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
-                      Best Seller
+                      {t('bestSeller')}
                     </span>
                   )}
                   {discount > 0 && (
@@ -185,7 +187,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                       ? "bg-red-500 text-white"
                       : "bg-white/90 text-charcoal-500 hover:bg-white hover:text-red-500 backdrop-blur-sm"
                   )}
-                  aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
+                  aria-label={isWishlisted ? t('removeFromWishlist') : t('addToWishlist')}
                 >
                   <Heart className={cn("h-3.5 w-3.5", isWishlisted && "fill-current")} />
                 </button>
@@ -263,7 +265,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                       {product.name}
                     </h2>
                     <p className="mt-0.5 text-[11px] uppercase tracking-[0.25em] text-charcoal-400">
-                      Eau de Parfum
+                      {t('eauDeParfum')}
                     </p>
                   </div>
 
@@ -281,9 +283,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   {(product.topNotes?.length > 0 || product.middleNotes?.length > 0 || product.baseNotes?.length > 0) && (
                     <div className="space-y-2">
                       {[
-                        { label: 'Top', notes: product.topNotes },
-                        { label: 'Heart', notes: product.middleNotes },
-                        { label: 'Base', notes: product.baseNotes },
+                        { label: t('top'), notes: product.topNotes },
+                        { label: t('middle'), notes: product.middleNotes },
+                        { label: t('base'), notes: product.baseNotes },
                       ].filter(({ notes }) => notes?.length > 0).map(({ label, notes }) => (
                         <div key={label} className="flex items-start gap-2">
                           <span className="w-9 flex-shrink-0 pt-px text-[10px] uppercase tracking-[0.2em] text-charcoal-400">
@@ -307,7 +309,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   {/* Intensity */}
                   {product.intensity && (
                     <div className="flex items-center gap-3">
-                      <span className="text-[10px] uppercase tracking-[0.2em] text-charcoal-400">Intensity</span>
+                      <span className="text-[10px] uppercase tracking-[0.2em] text-charcoal-400">{t('intensity')}</span>
                       <IntensityBar label={product.intensity} />
                     </div>
                   )}
@@ -326,7 +328,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                           {formatPrice(product.compareAtPrice)}
                         </span>
                         <span className="rounded-sm bg-red-50 px-1.5 py-0.5 text-[11px] font-medium text-red-600">
-                          Save {discount}%
+                          {t('save', { percent: discount })}
                         </span>
                       </>
                     )}
@@ -336,7 +338,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   {product.volume && product.volume.length > 0 && (
                     <div>
                       <p className="mb-2 text-[10px] uppercase tracking-[0.2em] text-charcoal-400">
-                        Size
+                        {t('size')}
                       </p>
                       <div className="flex flex-wrap gap-2">
                         {product.volume.map((vol) => (
@@ -379,11 +381,11 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     {adding ? (
                       <span className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin" />
                     ) : added ? (
-                      "Added to Bag ✓"
+                      `${t('addedToBag')} ✓`
                     ) : (
                       <>
                         <ShoppingBag className="h-4 w-4" />
-                        Add to Bag
+                        {t('addToBag')}
                       </>
                     )}
                   </button>
@@ -393,7 +395,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     onClick={onClose}
                     className="flex items-center justify-center gap-1.5 py-2 text-[12px] uppercase tracking-[0.15em] text-charcoal-500 hover:text-gold-600 transition-colors"
                   >
-                    View Full Details
+                    {t('viewFullDetails')}
                     <ArrowRight className="h-3 w-3" />
                   </Link>
                 </div>

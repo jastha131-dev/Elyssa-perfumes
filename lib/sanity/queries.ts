@@ -187,6 +187,85 @@ export const getHomePageQuery = `
   }
 `
 
+// ─── Dynamic Page Queries ─────────────────────────────────────────────────────
+
+export const getNavPagesQuery = `
+  *[_type == "page" && showInNav == true] | order(navOrder asc) {
+    _id,
+    title_en,
+    title_ar,
+    "slug": slug.current,
+    navOrder
+  }
+`
+
+export const getPageBySlugQuery = `
+  *[_type == "page" && slug.current == $slug][0] {
+    _id,
+    title_en,
+    title_ar,
+    "slug": slug.current,
+    showInNav,
+    navOrder,
+    "sections": sections[] {
+      ...,
+      "bgImageUrl": bgImage.asset->url,
+      "bgImageAlt": bgImage.alt,
+      "imageUrl": image.asset->url,
+      "imageAlt": image.alt,
+      "products": products[]->{
+        _id,
+        "id": _id,
+        name_en,
+        name_ar,
+        "slug": slug.current,
+        price,
+        compareAtPrice,
+        description_en,
+        description_ar,
+        "images": images[]{"url": asset->url, alt},
+        "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+        stock,
+        featured,
+        bestSeller,
+        "new": new,
+        fragranceFamily,
+        topNotes_en,
+        topNotes_ar,
+        middleNotes_en,
+        middleNotes_ar,
+        baseNotes_en,
+        baseNotes_ar,
+        intensity,
+        sillage,
+        longevity,
+        volume
+      },
+      "categories": categories[]->{
+        _id,
+        name_en,
+        name_ar,
+        "slug": slug.current,
+        description_en,
+        description_ar,
+        image,
+        order
+      },
+      "testimonials": testimonials[]->{
+        _id,
+        name_en,
+        name_ar,
+        location_en,
+        location_ar,
+        rating,
+        review_en,
+        review_ar,
+        "product": product->{ _id, name_en, name_ar, "slug": slug.current }
+      }
+    }
+  }
+`
+
 export const getTestimonialsQuery = `
   *[_type == "testimonial"] | order(_createdAt desc) {
     _id,

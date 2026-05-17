@@ -3,6 +3,7 @@ import { SchemaTypeDefinition } from 'sanity'
 import { product } from './product'
 import { category } from './category'
 import { homePage } from './homePage'
+import { page } from './page'
 import { testimonial } from './testimonial'
 import {
   ctaButton,
@@ -43,4 +44,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 
   // ── Singleton page documents ───────────────────────────────────
   homePage,
+
+  // ── Dynamic pages ─────────────────────────────────────────────
+  page,
 ]

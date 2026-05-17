@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Heart, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { cn, formatPrice } from '@/lib/utils'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
@@ -26,6 +27,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [imageLoaded, setImageLoaded] = useState(false)
   const [isHovered, setIsHovered] = useState(false)
 
+  const t = useTranslations('product')
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const { addProduct } = useRecentlyViewedStore()
   const hydrated = useHydrated()
@@ -156,7 +158,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                   aria-label={`Quick view ${product.name}`}
                 >
                   <Sparkles size={10} />
-                  Quick View
+                  {t('quickView')}
                 </motion.button>
               </div>
             </motion.div>
@@ -167,12 +169,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         <div className="absolute top-0 left-0 flex flex-col z-10">
           {product.new && (
             <span className="bg-gold-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white leading-none">
-              New
+              {t('new')}
             </span>
           )}
           {product.bestSeller && !product.new && (
             <span className="bg-charcoal-900/90 backdrop-blur-sm px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-cream-200 leading-none">
-              Best Seller
+              {t('bestSeller')}
             </span>
           )}
           {discount > 0 && (
@@ -197,7 +199,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               : 'bg-white/80 text-charcoal-600 hover:bg-white hover:text-red-400'
           )}
           whileTap={{ scale: 0.82 }}
-          aria-label={isWishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+          aria-label={isWishlisted ? `${t('removeFromWishlist')}: ${product.name}` : `${t('addToWishlist')}: ${product.name}`}
           aria-pressed={isWishlisted}
         >
           <Heart

@@ -1,4 +1,4 @@
-import { defineField, defineType } from 'sanity'
+import { defineField, defineType, defineArrayMember } from 'sanity'
 import { createSectionIcon, getSectionLabel } from '../../components/SectionMediaIcon'
 
 export const heroSection = defineType({
@@ -52,6 +52,24 @@ export const heroSection = defineType({
     }),
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
     defineField({
+      name: 'stats',
+      title: 'Stats / Social Proof',
+      description: 'Up to 3 stat items shown below the CTA button.',
+      type: 'array',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'value', title: 'Value', type: 'string', description: 'e.g. "100%" or "50+"', validation: (Rule) => Rule.required().max(20) }),
+            defineField({ name: 'label_en', title: 'Label (English)', type: 'string', description: 'e.g. "Authentic"', validation: (Rule) => Rule.required().max(40) }),
+            defineField({ name: 'label_ar', title: 'التصنيف (Arabic)', type: 'string', validation: (Rule) => Rule.max(40) }),
+          ],
+          preview: { select: { title: 'value', subtitle: 'label_en' } },
+        }),
+      ],
+      validation: (Rule) => Rule.max(3),
+    }),
+    defineField({
       name: 'headlineSize',
       title: 'Headline Size',
       type: 'string',
@@ -78,6 +96,19 @@ export const heroSection = defineType({
         layout: 'radio',
       },
       initialValue: 'light',
+    }),
+    defineField({
+      name: 'layout',
+      title: 'Hero Layout',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Split — text left, image right (default)', value: 'split' },
+          { title: 'Full Bleed — image fills entire hero', value: 'full' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'split',
     }),
   ],
   preview: {

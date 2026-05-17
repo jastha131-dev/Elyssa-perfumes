@@ -1,7 +1,7 @@
 import { Suspense } from 'react'
 import type { Metadata } from 'next'
 import { stripe } from '@/lib/stripe'
-import SuccessClient from './SuccessClient'
+import SuccessClient from '@/app/checkout/success/SuccessClient'
 
 export const dynamic = 'force-dynamic'
 

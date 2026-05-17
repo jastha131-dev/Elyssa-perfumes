@@ -1,4 +1,4 @@
-import CartPageClient from './CartPageClient'
+import CartPageClient from '@/app/cart/CartPageClient'
 
 export const metadata = {
   title: 'Your Cart | Luxe Parfum',

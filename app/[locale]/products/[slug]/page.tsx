@@ -7,7 +7,7 @@ import {
   getRelatedProducts,
 } from '@/lib/sanity/fetch'
 import type { Product } from '@/lib/types'
-import { ProductDetailClient } from './_client'
+import { ProductDetailClient } from '@/app/products/[slug]/_client'
 
 export const revalidate = 3600
 

@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ShoppingBag, Trash2 } from 'lucide-react'
@@ -21,6 +22,7 @@ const listVariants = {
 }
 
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
+  const t = useTranslations('cart')
   const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart } =
     useCartStore()
 
@@ -68,14 +70,14 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
             )}
             role="dialog"
             aria-modal="true"
-            aria-label="Shopping cart"
+            aria-label={t('title')}
           >
             {/* Header */}
             <div className="flex flex-shrink-0 items-center justify-between border-b border-charcoal-100 px-6 py-5">
               <div className="flex items-center gap-2.5">
                 <ShoppingBag className="h-5 w-5 text-gold-500" strokeWidth={1.5} />
                 <h2 className="font-display text-lg font-semibold text-charcoal-900">
-                  Your Bag
+                  {t('bag')}
                 </h2>
                 <AnimatePresence mode="popLayout">
                   {count > 0 && (
@@ -101,8 +103,8 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       'hover:bg-charcoal-50 hover:text-charcoal-600',
                       'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
                     )}
-                    aria-label="Clear cart"
-                    title="Clear all items"
+                    aria-label={t('clearCart')}
+                    title={t('clearItems')}
                   >
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -114,7 +116,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     'hover:bg-charcoal-50 hover:text-charcoal-900',
                     'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
                   )}
-                  aria-label="Close cart"
+                  aria-label={t('close')}
                 >
                   <X className="h-5 w-5" />
                 </button>
@@ -136,10 +138,10 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       <ShoppingBag className="h-7 w-7 text-gold-400" strokeWidth={1.2} />
                     </div>
                     <p className="font-display text-lg font-light text-charcoal-800">
-                      Your bag is empty
+                      {t('bagEmpty')}
                     </p>
                     <p className="mt-2 max-w-[220px] font-body text-sm leading-relaxed text-charcoal-400">
-                      Discover our collection of fine fragrances and find your signature scent.
+                      {t('bagEmptyDrawerDesc')}
                     </p>
                     <Link
                       href="/products"
@@ -151,7 +153,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
                       )}
                     >
-                      Shop Now
+                      {t('shopNow')}
                     </Link>
                   </motion.div>
                 ) : (
@@ -193,7 +195,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 >
                   {/* Subtotal row */}
                   <div className="flex items-center justify-between">
-                    <span className="font-body text-sm text-charcoal-500">Subtotal</span>
+                    <span className="font-body text-sm text-charcoal-500">{t('subtotal')}</span>
                     <span className="font-display text-base font-semibold text-charcoal-900">
                       {formatPrice(subtotal)}
                     </span>
@@ -203,18 +205,20 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <p className="mt-1.5 font-body text-xs text-charcoal-400">
                     {subtotal >= 100 ? (
                       <span className="text-green-600 font-medium">
-                        You qualify for free shipping
+                        {t('freeShipping')}
                       </span>
                     ) : (
-                      <>
-                        Free shipping on orders over{' '}
-                        <span className="text-charcoal-600 font-medium">$100</span>
-                      </>
+                      t.rich('freeShippingThreshold', {
+                        threshold: '$100',
+                        span: (chunks) => (
+                          <span className="text-charcoal-600 font-medium">{chunks}</span>
+                        ),
+                      })
                     )}
                   </p>
 
                   <p className="mt-1 font-body text-xs text-charcoal-400">
-                    Taxes calculated at checkout
+                    {t('taxNote')}
                   </p>
 
                   {/* Checkout CTA */}
@@ -229,7 +233,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2'
                     )}
                   >
-                    Checkout
+                    {t('checkout')}
                   </Link>
 
                   <button
@@ -240,7 +244,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                       'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
                     )}
                   >
-                    Continue Shopping
+                    {t('continueShopping')}
                   </button>
                 </motion.div>
               )}

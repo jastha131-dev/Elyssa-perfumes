@@ -4,7 +4,8 @@ import { useRef, useCallback } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
-import { ChevronLeft, ChevronRight, Heart } from 'lucide-react'
+import { Heart } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
@@ -62,12 +63,18 @@ interface BestSellerCardProps {
 }
 
 function BestSellerCard({ product, index }: BestSellerCardProps) {
+  const tp = useTranslations('product')
+  const locale = useLocale()
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const hydrated = useHydrated()
   const isWishlisted = hydrated && isInWishlist(product._id)
   const primaryImage = product.images?.[0]
   const imageUrl = primaryImage?.url || LOCAL_PRODUCT_IMAGES[index % LOCAL_PRODUCT_IMAGES.length]
   const displayPrice = product.volume?.[0]?.price ?? product.price
+  const productName = locale === 'ar' ? product.name_ar : product.name_en
+  const categoryName = product.category
+    ? (locale === 'ar' ? product.category.name_ar : product.category.name_en)
+    : null
 
   const handleWishlist = useCallback(
     (e: React.MouseEvent) => {
@@ -79,26 +86,19 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
   )
 
   return (
-    <motion.div
-      variants={cardVariants}
-      className="group relative flex-none"
-      style={{ width: 'clamp(220px, 25vw, 280px)' }}
-    >
+    <motion.div variants={cardVariants} className="group relative">
       <Link href={`/products/${product.slug}`} className="block">
         {/* Image */}
-        <div
-          className="relative w-full overflow-hidden bg-stone-200"
-          style={{ aspectRatio: '3/4' }}
-        >
+        <div className="relative w-full overflow-hidden bg-stone-200" style={{ aspectRatio: '3/4' }}>
           <Image
             src={imageUrl}
-            alt={primaryImage?.alt || product.name}
+            alt={primaryImage?.alt || productName}
             fill
             className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-            sizes="280px"
+            sizes="(max-width: 1024px) 50vw, 30vw"
           />
 
-          {/* Badge */}
+          {/* Best Seller Badge */}
           <div className="absolute left-3 top-3">
             <span className="bg-camel-500 px-2.5 py-1 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
               Best Seller
@@ -113,7 +113,7 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
               'bg-white/90 backdrop-blur-sm transition-all duration-200 hover:bg-white',
               'shadow-sm'
             )}
-            aria-label={isWishlisted ? 'Remove from wishlist' : 'Add to wishlist'}
+            aria-label={isWishlisted ? tp('removeFromWishlist') : tp('addToWishlist')}
             aria-pressed={isWishlisted}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -136,20 +136,17 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
               </motion.div>
             </AnimatePresence>
           </button>
-
-          {/* Hover tint */}
-          <div className="absolute inset-0 bg-ink-950/0 transition-colors duration-300 group-hover:bg-ink-950/10" />
         </div>
 
-        {/* Info */}
+        {/* Product Info */}
         <div className="mt-3 px-0.5">
-          {product.category?.name && (
+          {categoryName && (
             <p className="font-body text-[10px] uppercase tracking-[0.25em] text-camel-500/80">
-              {product.category.name}
+              {categoryName}
             </p>
           )}
           <h3 className="mt-0.5 font-display text-base font-light text-ink-900 transition-colors group-hover:text-camel-600">
-            {product.name}
+            {productName}
           </h3>
           <div className="mt-1 flex items-center gap-2">
             <span className="font-body text-sm font-medium text-ink-900">
@@ -168,116 +165,94 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
 }
 
 export default function BestSellers({ data }: BestSellersProps) {
+  const t = useTranslations('home')
+  const locale = useLocale()
   const products: Product[] = (data?.products ?? []) as Product[]
-  const title = data?.title ?? 'Best Sellers'
+  const title =
+    (locale === 'ar' ? data?.title_ar : data?.title_en) ?? 'Best Sellers'
 
   const headingRef = useRef<HTMLDivElement>(null)
-  const trackRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
   const isInView = useInView(sectionRef, { once: true, margin: '-100px' })
 
-  const scroll = useCallback((direction: 'prev' | 'next') => {
-    if (!trackRef.current) return
-    trackRef.current.scrollBy({
-      left: direction === 'next' ? 300 : -300,
-      behavior: 'smooth',
-    })
-  }, [])
-
   if (products.length === 0) return null
 
   return (
-    <section ref={sectionRef} className="overflow-hidden bg-stone-50 py-20 md:py-28">
+    <motion.section
+      ref={sectionRef}
+      initial={{ opacity: 0 }}
+      animate={isInView ? { opacity: 1 } : {}}
+      transition={{ duration: 0.6 }}
+      className="bg-stone-50 py-20 md:py-28"
+    >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Heading + Arrows */}
-        <div className="mb-12 flex items-end justify-between">
-          <motion.div
-            ref={headingRef}
-            variants={headingVariants}
-            initial="hidden"
-            animate={isHeadingInView ? 'visible' : 'hidden'}
-          >
-            <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">
-              Top Picks
-            </p>
-            <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
-              {title}
-            </h2>
-            <div className="mt-4 h-px w-16 bg-camel-500/50" />
-          </motion.div>
+        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[60%_40%] lg:gap-8 lg:items-start">
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={isHeadingInView ? { opacity: 1 } : {}}
-            transition={{ delay: 0.4, duration: 0.5 }}
-            className="flex items-center gap-3"
-          >
-            <button
-              onClick={() => scroll('prev')}
-              className={cn(
-                'flex h-11 w-11 items-center justify-center border border-stone-300',
-                'text-ink-700 transition-all duration-200',
-                'hover:border-camel-500 hover:bg-camel-500 hover:text-white'
-              )}
-              aria-label="Previous products"
+          {/* ── Left column ── */}
+          <div className="flex flex-col">
+            {/* Heading */}
+            <motion.div
+              ref={headingRef}
+              variants={headingVariants}
+              initial="hidden"
+              animate={isHeadingInView ? 'visible' : 'hidden'}
+              className="mb-10"
             >
-              <ChevronLeft size={18} strokeWidth={1.5} />
-            </button>
-            <button
-              onClick={() => scroll('next')}
-              className={cn(
-                'flex h-11 w-11 items-center justify-center border border-stone-300',
-                'text-ink-700 transition-all duration-200',
-                'hover:border-camel-500 hover:bg-camel-500 hover:text-white'
-              )}
-              aria-label="Next products"
-            >
-              <ChevronRight size={18} strokeWidth={1.5} />
-            </button>
-          </motion.div>
-        </div>
+              <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">
+                Top Picks
+              </p>
+              <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
+                {title}
+              </h2>
+              <div className="mt-4 h-px w-16 bg-camel-500/50" />
+            </motion.div>
 
-        {/* Carousel */}
-        <motion.div
-          ref={trackRef}
-          variants={containerVariants}
-          initial="hidden"
-          animate={isInView ? 'visible' : 'hidden'}
-          className={cn(
-            'flex gap-5 overflow-x-auto pb-4',
-            '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-            'scroll-smooth'
-          )}
-          style={{ scrollSnapType: 'x mandatory' }}
-        >
-          {products.map((product, idx) => (
-            <div key={product._id} style={{ scrollSnapAlign: 'start' }}>
-              <BestSellerCard product={product} index={idx} />
+            {/* 2×2 product grid */}
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate={isInView ? 'visible' : 'hidden'}
+              className="grid grid-cols-2 gap-4"
+            >
+              {products.slice(0, 4).map((product, idx) => (
+                <BestSellerCard key={product._id} product={product} index={idx} />
+              ))}
+            </motion.div>
+
+            {/* View All */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: 0.5, duration: 0.6 }}
+              className="mt-8"
+            >
+              <Link
+                href="/products?filter=bestseller"
+                className="font-body text-sm uppercase tracking-[0.2em] text-ink-600 border-b border-stone-300 pb-0.5 hover:border-camel-500 hover:text-camel-600 transition-colors"
+              >
+                {t('viewAllBestSellers')}
+              </Link>
+            </motion.div>
+          </div>
+
+          {/* ── Right column — lifestyle image ── */}
+          <div className="hidden lg:block relative">
+            <div className="sticky top-0 h-[600px] overflow-hidden">
+              <Image
+                src="/images/categories/I2.webp"
+                alt="Best sellers lifestyle"
+                fill
+                className="object-cover object-center"
+                sizes="40vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-stone-100/10" />
             </div>
-          ))}
-        </motion.div>
+          </div>
 
-        {/* View All */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          className="mt-10 text-center"
-        >
-          <Link
-            href="/products?filter=bestseller"
-            className={cn(
-              'font-body text-sm uppercase tracking-[0.2em] text-ink-600',
-              'border-b border-stone-300 pb-0.5 transition-colors duration-200',
-              'hover:border-camel-500 hover:text-camel-600'
-            )}
-          >
-            View All Best Sellers
-          </Link>
-        </motion.div>
+        </div>
       </div>
-    </section>
+    </motion.section>
   )
 }

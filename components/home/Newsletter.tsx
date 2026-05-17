@@ -4,6 +4,7 @@ import { useState, useRef, FormEvent } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { toast } from 'sonner'
 import { ArrowRight, Loader2 } from 'lucide-react'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 import type { NewsletterSectionBlock } from '@/lib/types'
 
@@ -23,16 +24,21 @@ const itemVariants = {
   },
 }
 
-const PERKS = ['Early access to new collections', 'Exclusive member-only offers', 'Rare fragrance stories & guides']
-
 interface NewsletterProps {
   data?: NewsletterSectionBlock
 }
 
 export default function Newsletter({ data }: NewsletterProps = {}) {
-  const headline = data?.headline ?? 'Join The Inner Circle'
-  const subtext = data?.subtext ?? 'Be the first to discover new collections, exclusive launches, and the rare stories behind each fragrance.'
-  const buttonLabel = data?.buttonLabel ?? 'Subscribe'
+  const t = useTranslations('newsletter')
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+  const PERKS = [t('perk1'), t('perk2'), t('perk3')]
+
+  const headline = (isAr ? data?.headline_ar : data?.headline_en) ?? ''
+  const subtext = (isAr ? data?.subtext_ar : data?.subtext_en) ?? ''
+  const buttonLabel = (isAr ? data?.buttonLabel_ar : data?.buttonLabel_en) ?? ''
+
+  if (!headline) return null
   const bgImageUrl = data?.bgImageUrl
   const safeBgImageUrl = bgImageUrl && (bgImageUrl.startsWith('http://') || bgImageUrl.startsWith('https://') || bgImageUrl.startsWith('/'))
     ? bgImageUrl
@@ -56,7 +62,7 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
 
     if (!validateEmail(email)) {
       setHasError(true)
-      toast.error('Please enter a valid email address.')
+      toast.error(t('invalidEmail'))
       inputRef.current?.focus()
       return
     }
@@ -68,13 +74,13 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
       await new Promise<void>((resolve) => setTimeout(resolve, 1200))
       setStatus('success')
       setEmail('')
-      toast.success('Welcome to the Inner Circle', {
-        description: "You'll be the first to know about new collections and exclusive offers.",
+      toast.success(t('welcomeInnerCircle'), {
+        description: t('welcomeToastDesc'),
         duration: 5000,
       })
     } catch {
       setStatus('idle')
-      toast.error('Something went wrong. Please try again.')
+      toast.error(t('errorGeneric'))
     }
   }
 
@@ -113,14 +119,10 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
             className="flex flex-col justify-center py-20 lg:py-28 lg:pr-16"
           >
             <p className="mb-4 font-body text-xs uppercase tracking-[0.35em] text-camel-500">
-              Exclusive Access
+              {t('exclusiveAccess')}
             </p>
             <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight text-3xl md:text-4xl">
-              {headline === 'Join The Inner Circle' ? (
-                <>Join The <span className="italic text-camel-600">Inner Circle</span></>
-              ) : (
-                headline
-              )}
+              {headline}
             </h2>
             <div className="mt-8 h-px w-16 bg-camel-400/40" />
             <ul className="mt-8 space-y-4">
@@ -182,7 +184,7 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
                   }}
                   onFocus={() => setInputFocused(true)}
                   onBlur={() => setInputFocused(false)}
-                  placeholder="Your email address"
+                  placeholder={t('placeholder')}
                   disabled={status === 'loading' || status === 'success'}
                   aria-label="Email address"
                   className={cn(
@@ -201,7 +203,7 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
                     exit={{ opacity: 0, y: -4 }}
                     className="mt-1.5 font-body text-xs text-red-400"
                   >
-                    Please enter a valid email address.
+                    {t('invalidEmail')}
                   </motion.p>
                 )}
               </AnimatePresence>
@@ -226,11 +228,11 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
                   {status === 'loading' ? (
                     <motion.span key="loading" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
                       <Loader2 size={14} className="animate-spin" />
-                      Subscribing…
+                      {t('subscribing')}
                     </motion.span>
                   ) : status === 'success' ? (
                     <motion.span key="success" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                      Welcome to the Inner Circle
+                      {t('welcomeInnerCircle')}
                     </motion.span>
                   ) : (
                     <motion.span key="idle" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="flex items-center gap-2">
@@ -246,9 +248,9 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
               variants={itemVariants}
               className="mt-5 font-body text-[11px] font-light leading-relaxed text-ink-400"
             >
-              We respect your privacy. Unsubscribe at any time. By subscribing you agree to our{' '}
+              {t('privacyNote')}{' '}
               <a href="/privacy" className="text-ink-400 underline underline-offset-2 transition-colors hover:text-ink-600">
-                Privacy Policy
+                {t('privacyPolicy')}
               </a>
               .
             </motion.p>

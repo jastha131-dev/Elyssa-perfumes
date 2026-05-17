@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ShoppingBag, ChevronRight, ArrowRight, Tag } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { useCartStore } from '@/lib/store/cart-store'
 import CartItem from '@/components/cart/CartItem'
 import { cn, formatPrice } from '@/lib/utils'
@@ -20,6 +21,8 @@ const listVariants = {
 }
 
 function Breadcrumb() {
+  const t = useTranslations('cart')
+  const tn = useTranslations('nav')
   return (
     <nav aria-label="Breadcrumb" className="mb-8">
       <ol className="flex items-center gap-1.5 font-body text-xs text-charcoal-400">
@@ -28,14 +31,14 @@ function Breadcrumb() {
             href="/"
             className="transition-colors hover:text-charcoal-700 focus:outline-none focus-visible:underline"
           >
-            Home
+            {tn('home')}
           </Link>
         </li>
         <li>
           <ChevronRight className="h-3 w-3 flex-shrink-0" />
         </li>
         <li className="font-medium text-charcoal-900" aria-current="page">
-          Cart
+          {t('title')}
         </li>
       </ol>
     </nav>
@@ -43,6 +46,7 @@ function Breadcrumb() {
 }
 
 function EmptyCart() {
+  const t = useTranslations('cart')
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -88,11 +92,10 @@ function EmptyCart() {
       </div>
 
       <h2 className="font-display text-2xl font-light text-charcoal-900">
-        Your bag is empty
+        {t('bagEmpty')}
       </h2>
       <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-charcoal-400">
-        You haven&apos;t added any fragrances yet. Explore our curated collection to find your
-        signature scent.
+        {t('bagEmptyDesc')}
       </p>
 
       <Link
@@ -104,7 +107,7 @@ function EmptyCart() {
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2'
         )}
       >
-        Start Shopping
+        {t('startShopping')}
         <ArrowRight className="h-4 w-4" />
       </Link>
     </motion.div>
@@ -122,6 +125,8 @@ function OrderSummary({
   tax: number
   total: number
 }) {
+  const t = useTranslations('cart')
+  const tc = useTranslations('checkout')
   return (
     <motion.div
       initial={{ opacity: 0, y: 16 }}
@@ -130,42 +135,38 @@ function OrderSummary({
       className="sticky top-24 rounded-2xl border border-charcoal-100 bg-white p-6 shadow-sm"
     >
       <h2 className="mb-5 font-display text-lg font-semibold text-charcoal-900">
-        Order Summary
+        {tc('orderSummary')}
       </h2>
 
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <span className="font-body text-sm text-charcoal-500">Subtotal</span>
+          <span className="font-body text-sm text-charcoal-500">{t('subtotal')}</span>
           <span className="font-body text-sm font-medium text-charcoal-900">
             {formatPrice(subtotal)}
           </span>
         </div>
 
         <div className="flex items-center justify-between">
-          <span className="font-body text-sm text-charcoal-500">Shipping</span>
+          <span className="font-body text-sm text-charcoal-500">{t('shipping')}</span>
           <span
             className={cn(
               'font-body text-sm font-medium',
               shipping === 0 ? 'text-green-600' : 'text-charcoal-900'
             )}
           >
-            {shipping === 0 ? 'Free' : formatPrice(shipping)}
+            {shipping === 0 ? t('free') : formatPrice(shipping)}
           </span>
         </div>
 
         {shipping > 0 && (
           <p className="rounded-lg bg-cream-50 px-3 py-2 font-body text-xs text-charcoal-500 leading-relaxed">
-            Add{' '}
-            <span className="font-semibold text-gold-600">
-              {formatPrice(SHIPPING_THRESHOLD - subtotal)}
-            </span>{' '}
-            more to qualify for free shipping
+            {t('addMore', { amount: formatPrice(SHIPPING_THRESHOLD - subtotal) })}
           </p>
         )}
 
         <div className="flex items-center justify-between">
           <span className="font-body text-sm text-charcoal-500">
-            Tax <span className="text-charcoal-400">(est. {TAX_RATE * 100}%)</span>
+            {t('tax')} <span className="text-charcoal-400">(est. {TAX_RATE * 100}%)</span>
           </span>
           <span className="font-body text-sm font-medium text-charcoal-900">
             {formatPrice(tax)}
@@ -175,7 +176,7 @@ function OrderSummary({
         <div className="my-1 border-t border-charcoal-100" />
 
         <div className="flex items-center justify-between">
-          <span className="font-display text-base font-semibold text-charcoal-900">Total</span>
+          <span className="font-display text-base font-semibold text-charcoal-900">{t('total')}</span>
           <span className="font-display text-lg font-semibold text-charcoal-900">
             {formatPrice(total)}
           </span>
@@ -192,7 +193,7 @@ function OrderSummary({
           )}
         >
           <Tag className="h-4 w-4" />
-          Apply promo code
+          {t('applyPromo')}
         </button>
       </div>
 
@@ -205,15 +206,15 @@ function OrderSummary({
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2'
         )}
       >
-        Proceed to Checkout
+        {t('proceedToCheckout')}
       </Link>
 
       {/* Trust signals */}
       <div className="mt-5 flex flex-col gap-2">
         {[
-          '🔒 Secure checkout',
-          '↩ Free returns within 30 days',
-          '📦 Discreet luxury packaging',
+          '🔒 ' + t('secureCheckoutBadge'),
+          '↩ ' + t('freeReturnsBadge'),
+          '📦 ' + t('luxuryPackagingBadge'),
         ].map((signal) => (
           <p key={signal} className="font-body text-xs text-charcoal-400 text-center">
             {signal}
@@ -225,22 +226,23 @@ function OrderSummary({
 }
 
 function YouMayAlsoLike() {
+  const t = useTranslations('cart')
   return (
     <section className="mt-20 border-t border-charcoal-100 pt-14">
       <div className="mb-8 flex items-end justify-between">
         <div>
           <p className="mb-1.5 font-body text-xs uppercase tracking-[0.3em] text-gold-500">
-            Recommendations
+            {t('recommendations')}
           </p>
           <h2 className="font-display text-2xl font-light text-charcoal-900">
-            You May Also Like
+            {t('youMayAlsoLike')}
           </h2>
         </div>
         <Link
           href="/products"
           className="hidden font-body text-sm text-charcoal-400 underline-offset-2 transition-colors hover:text-charcoal-700 hover:underline sm:block"
         >
-          View all
+          {t('viewAll')}
         </Link>
       </div>
 
@@ -259,6 +261,7 @@ function YouMayAlsoLike() {
 }
 
 export default function CartPageClient() {
+  const t = useTranslations('cart')
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCartStore()
   const hydrated = useHydrated()
 
@@ -278,11 +281,11 @@ export default function CartPageClient() {
         {/* Page heading */}
         <div className="mb-8">
           <h1 className="font-display text-3xl font-light text-charcoal-900 sm:text-4xl">
-            Your Bag
+            {t('bag')}
           </h1>
           {hasItems && (
             <p className="mt-1 font-body text-sm text-charcoal-400">
-              {count} {count === 1 ? 'item' : 'items'}
+              {t('itemCount', { count })}
             </p>
           )}
         </div>
@@ -335,10 +338,10 @@ export default function CartPageClient() {
                     className="inline-flex items-center gap-1.5 font-body text-sm text-charcoal-400 transition-colors hover:text-charcoal-700 focus:outline-none focus-visible:underline"
                   >
                     <ChevronRight className="h-3.5 w-3.5 rotate-180" />
-                    Continue Shopping
+                    {t('continueShopping')}
                   </Link>
                   <span className="font-body text-sm text-charcoal-500">
-                    Subtotal:{' '}
+                    {t('subtotal')}:{' '}
                     <span className="font-semibold text-charcoal-900">
                       {formatPrice(subtotal)}
                     </span>

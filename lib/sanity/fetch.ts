@@ -15,8 +15,10 @@ import {
   getAllCategoriesQuery,
   getHomePageQuery,
   getTestimonialsQuery,
+  getNavPagesQuery,
+  getPageBySlugQuery,
 } from './queries'
-import type { Product, Category, HomePage, Testimonial } from '../types'
+import type { Product, Category, HomePage, Testimonial, NavPage, Page } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -120,6 +122,16 @@ export async function getHomePage(): Promise<HomePage | null> {
     // draftMode() throws outside a request context (e.g. during static build)
   }
   return useClient.fetch<HomePage>(getHomePageQuery, {}, fetchOptions)
+}
+
+export async function getNavPages(): Promise<NavPage[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<NavPage[]>(getNavPagesQuery, {}, { next: { revalidate: 300 } })
+}
+
+export async function getPageBySlug(slug: string): Promise<Page | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<Page | null>(getPageBySlugQuery, { slug }, { next: { revalidate: 60 } })
 }
 
 export async function getTestimonials(): Promise<Testimonial[]> {

@@ -132,6 +132,8 @@ export interface HeroSectionBlock {
   cta?: CtaButton
   textColor?: 'light' | 'dark'
   headlineSize?: 'sm' | 'md' | 'lg' | 'xl'
+  layout?: 'split' | 'full'
+  stats?: Array<{ value: string; label_en: string; label_ar?: string }>
 }
 
 export interface CustomBannerSectionBlock {
@@ -264,5 +266,23 @@ export type HomePageSection =
 
 export interface HomePage {
   _id: string
+  sections: HomePageSection[]
+}
+
+export interface NavPage {
+  _id: string
+  title_en: string
+  title_ar?: string
+  slug: string
+  navOrder: number
+}
+
+export interface Page {
+  _id: string
+  title_en: string
+  title_ar?: string
+  slug: string
+  showInNav?: boolean
+  navOrder?: number
   sections: HomePageSection[]
 }

@@ -13,6 +13,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
@@ -36,6 +37,7 @@ const cardVariants = {
 }
 
 function EmptyWishlist() {
+  const t = useTranslations('wishlist')
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -58,10 +60,10 @@ function EmptyWishlist() {
       </div>
 
       <h2 className="font-display text-2xl font-light text-charcoal-900">
-        Your wishlist is empty
+        {t('empty')}
       </h2>
       <p className="mt-3 max-w-xs font-body text-sm leading-relaxed text-charcoal-400">
-        Save fragrances you love by tapping the heart icon on any product.
+        {t('emptyDesc')}
       </p>
 
       <Link
@@ -73,7 +75,7 @@ function EmptyWishlist() {
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400 focus-visible:ring-offset-2'
         )}
       >
-        Explore Collection
+        {t('exploreCollection')}
         <ArrowRight className="h-4 w-4" />
       </Link>
     </motion.div>
@@ -85,6 +87,8 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
   const { removeItem } = useWishlistStore()
   const { addItem } = useCartStore()
   const [addedToCart, setAddedToCart] = useState(false)
+  const t = useTranslations('wishlist')
+  const tp = useTranslations('product')
 
   const primaryImage = product.images?.[0]
   const defaultVolume = product.volume?.[0]
@@ -142,12 +146,12 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
           <div className="absolute left-3 top-3 flex flex-col gap-1.5">
             {product.new && (
               <span className="bg-gold-500 px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-widest text-charcoal-950">
-                New
+                {tp('new')}
               </span>
             )}
             {product.bestSeller && (
               <span className="bg-charcoal-900/90 px-2 py-0.5 font-body text-[10px] font-medium uppercase tracking-widest text-gold-400">
-                Best Seller
+                {tp('bestSeller')}
               </span>
             )}
           </div>
@@ -161,7 +165,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
           >
             <span className="flex items-center gap-1.5 bg-white/90 px-4 py-2 font-body text-xs font-medium uppercase tracking-[0.15em] text-charcoal-900 backdrop-blur-sm">
               <ExternalLink className="h-3.5 w-3.5" />
-              View Details
+              {t('viewDetails')}
             </span>
           </div>
         </div>
@@ -226,7 +230,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
                 className="flex items-center gap-1.5"
               >
                 <Check className="h-3.5 w-3.5" />
-                Added to Bag
+                {t('addedToBag')}
               </motion.span>
             ) : (
               <motion.span
@@ -237,7 +241,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
                 className="flex items-center gap-1.5"
               >
                 <ShoppingBag className="h-3.5 w-3.5" />
-                Move to Cart
+                {t('moveToBag')}
               </motion.span>
             )}
           </AnimatePresence>
@@ -249,6 +253,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
 
 function ShareButton() {
   const [copied, setCopied] = useState(false)
+  const t = useTranslations('wishlist')
 
   const handleShare = async () => {
     try {
@@ -282,7 +287,7 @@ function ShareButton() {
           ? 'border-green-300 bg-green-50 text-green-600'
           : 'border-charcoal-200 bg-white text-charcoal-600 hover:border-charcoal-400 hover:text-charcoal-900'
       )}
-      aria-label="Share wishlist"
+      aria-label={t('shareWishlist')}
     >
       <AnimatePresence mode="wait" initial={false}>
         {copied ? (
@@ -294,7 +299,7 @@ function ShareButton() {
             className="flex items-center gap-2"
           >
             <Check className="h-4 w-4" />
-            Link Copied!
+            {t('linkCopied')}
           </motion.span>
         ) : (
           <motion.span
@@ -305,7 +310,7 @@ function ShareButton() {
             className="flex items-center gap-2"
           >
             <Share2 className="h-4 w-4" />
-            Share Wishlist
+            {t('shareWishlist')}
           </motion.span>
         )}
       </AnimatePresence>
@@ -318,6 +323,7 @@ export default function WishlistPage() {
   const hydrated = useHydrated()
   const count = hydrated ? totalItems() : 0
   const hasItems = hydrated && items.length > 0
+  const t = useTranslations('wishlist')
 
   return (
     <main className="min-h-screen bg-cream-50 pb-20">
@@ -331,14 +337,14 @@ export default function WishlistPage() {
         >
           <div>
             <p className="mb-1.5 font-body text-xs uppercase tracking-[0.3em] text-gold-500">
-              Saved Items
+              {t('savedItems')}
             </p>
             <h1 className="font-display text-3xl font-light text-charcoal-900 sm:text-4xl">
-              My Wishlist
+              {t('myWishlist')}
             </h1>
             {hasItems && (
               <p className="mt-1.5 font-body text-sm text-charcoal-400">
-                {count} {count === 1 ? 'fragrance' : 'fragrances'} saved
+                {t('fragranceCount', { count })}
               </p>
             )}
           </div>
@@ -390,7 +396,7 @@ export default function WishlistPage() {
             className="mt-14 text-center"
           >
             <p className="mb-4 font-body text-sm text-charcoal-400">
-              Discover more fragrances to add to your wishlist
+              {t('discoverMore')}
             </p>
             <Link
               href="/products"
@@ -401,7 +407,7 @@ export default function WishlistPage() {
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-charcoal-400'
               )}
             >
-              Explore All Fragrances
+              {t('exploreAll')}
             </Link>
           </motion.div>
         )}
