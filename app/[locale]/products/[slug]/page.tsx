@@ -32,9 +32,9 @@ export async function generateStaticParams() {
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
 }): Promise<Metadata> {
-  const { slug } = await params
+  const { slug, locale } = await params
   const product = await getProduct(slug)
 
   if (!product) {
@@ -44,11 +44,13 @@ export async function generateMetadata({
     }
   }
 
-  const title = product.seoTitle || product.name
+  const isAr = locale === 'ar'
+  const name = isAr ? product.name_ar : product.name_en
+  const title = (isAr ? product.seoTitle_ar : product.seoTitle_en) || name
   const description =
-    product.seoDescription ||
-    product.description ||
-    `Discover ${product.name} — a ${product.fragranceFamily ?? 'luxury'} fragrance from Luxe Parfum.`
+    (isAr ? product.seoDescription_ar : product.seoDescription_en) ||
+    (isAr ? product.description_ar : product.description_en) ||
+    `Discover ${name} — a ${product.fragranceFamily ?? 'luxury'} fragrance from Luxe Parfum.`
 
   const primaryImage = product.images?.[0]
 
@@ -60,7 +62,7 @@ export async function generateMetadata({
       description,
       type: 'website',
       ...(primaryImage?.url
-        ? { images: [{ url: primaryImage.url, width: 1200, height: 630, alt: primaryImage.alt || product.name }] }
+        ? { images: [{ url: primaryImage.url, width: 1200, height: 630, alt: primaryImage.alt || name }] }
         : {}),
     },
     twitter: { card: 'summary_large_image', title, description },
@@ -72,7 +74,7 @@ export async function generateMetadata({
 export default async function ProductDetailPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string; locale: string }>
 }) {
   const { slug } = await params
 

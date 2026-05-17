@@ -13,7 +13,7 @@ import {
   ExternalLink,
 } from 'lucide-react'
 import { useState } from 'react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
@@ -89,6 +89,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
   const [addedToCart, setAddedToCart] = useState(false)
   const t = useTranslations('wishlist')
   const tp = useTranslations('product')
+  const locale = useLocale()
 
   const primaryImage = product.images?.[0]
   const defaultVolume = product.volume?.[0]
@@ -122,7 +123,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
           'focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-400',
           'opacity-0 group-hover:opacity-100'
         )}
-        aria-label={`Remove ${product.name} from wishlist`}
+        aria-label={`Remove ${locale === 'ar' ? product.name_ar : product.name_en} from wishlist`}
       >
         <X className="h-3.5 w-3.5" />
       </button>
@@ -133,7 +134,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
           {primaryImage?.url ? (
             <Image
               src={primaryImage.url}
-              alt={primaryImage.alt || product.name}
+              alt={primaryImage.alt || (locale === 'ar' ? product.name_ar : product.name_en)}
               fill
               className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
               sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
@@ -174,16 +175,16 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
       {/* Card info */}
       <div className="flex flex-1 flex-col gap-3 p-4">
         <div>
-          {product.category?.name && (
+          {(locale === 'ar' ? product.category?.name_ar : product.category?.name_en) && (
             <p className="mb-1 font-body text-[10px] uppercase tracking-[0.25em] text-gold-500/80">
-              {product.category.name}
+              {locale === 'ar' ? product.category?.name_ar : product.category?.name_en}
             </p>
           )}
           <Link
             href={`/products/${product.slug}`}
             className="font-display text-base font-light text-charcoal-900 transition-colors hover:text-gold-600 line-clamp-2"
           >
-            {product.name}
+            {locale === 'ar' ? product.name_ar : product.name_en}
           </Link>
 
           <div className="mt-1.5 flex items-center gap-2">
@@ -218,7 +219,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
               : 'bg-gold-500 text-white hover:bg-gold-600 active:scale-[0.97]',
             !defaultVolume && 'cursor-not-allowed opacity-50'
           )}
-          aria-label={`Add ${product.name} to cart`}
+          aria-label={`Add ${locale === 'ar' ? product.name_ar : product.name_en} to cart`}
         >
           <AnimatePresence mode="wait" initial={false}>
             {addedToCart ? (

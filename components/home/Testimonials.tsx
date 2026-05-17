@@ -2,32 +2,45 @@
 
 import { useRef, useState } from 'react'
 import { motion, useInView, AnimatePresence } from 'framer-motion'
+import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 import type { Testimonial, TestimonialsSectionBlock } from '@/lib/types'
 
 const FALLBACK: Testimonial[] = [
   {
     _id: 'f1',
-    name: 'Sophia Marchand',
-    location: 'Paris, France',
+    name_en: 'Sophia Marchand',
+    name_ar: 'Sophia Marchand',
+    location_en: 'Paris, France',
+    location_ar: 'Paris, France',
     rating: 5,
-    review:
+    review_en:
+      'The most transcendent fragrance I have ever experienced. It evolves beautifully on skin — from a bright citrus opening to the most intoxicating warm base. I receive compliments every time I wear it.',
+    review_ar:
       'The most transcendent fragrance I have ever experienced. It evolves beautifully on skin — from a bright citrus opening to the most intoxicating warm base. I receive compliments every time I wear it.',
   },
   {
     _id: 'f2',
-    name: 'James Harrington',
-    location: 'London, UK',
+    name_en: 'James Harrington',
+    name_ar: 'James Harrington',
+    location_en: 'London, UK',
+    location_ar: 'London, UK',
     rating: 5,
-    review:
+    review_en:
+      'I have spent years searching for a scent that truly feels bespoke. Luxe Parfum delivered exactly that. The longevity is extraordinary — a single application lasts the entire day.',
+    review_ar:
       'I have spent years searching for a scent that truly feels bespoke. Luxe Parfum delivered exactly that. The longevity is extraordinary — a single application lasts the entire day.',
   },
   {
     _id: 'f3',
-    name: 'Isabella Romano',
-    location: 'Milan, Italy',
+    name_en: 'Isabella Romano',
+    name_ar: 'Isabella Romano',
+    location_en: 'Milan, Italy',
+    location_ar: 'Milan, Italy',
     rating: 5,
-    review:
+    review_en:
+      'From the moment it arrived in its exquisite packaging I knew this was different. The fragrance itself is a masterpiece — complex, evolving, deeply personal. Absolutely worth every penny.',
+    review_ar:
       'From the moment it arrived in its exquisite packaging I knew this was different. The fragrance itself is a masterpiece — complex, evolving, deeply personal. Absolutely worth every penny.',
   },
 ]
@@ -64,8 +77,9 @@ function Avatar({ name }: { name: string }) {
 }
 
 export default function Testimonials({ data }: TestimonialsProps = {}) {
+  const locale = useLocale()
   const testimonials: Testimonial[] = (data?.testimonials ?? FALLBACK) as Testimonial[]
-  const title = data?.title ?? 'Words From Our Clients'
+  const title = locale === 'ar' ? (data?.title_ar ?? 'Words From Our Clients') : (data?.title_en ?? 'Words From Our Clients')
 
   const headingRef = useRef<HTMLDivElement>(null)
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
@@ -126,19 +140,19 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
               <Stars rating={display[active].rating} />
 
               <blockquote className="mt-6 font-display text-xl font-light italic leading-relaxed text-ink-800 md:text-2xl lg:text-3xl">
-                {display[active].review}
+                {locale === 'ar' ? display[active].review_ar : display[active].review_en}
               </blockquote>
 
               <div className="mx-auto mt-8 h-px w-12 bg-stone-200" />
 
               <div className="mt-6 flex items-center justify-center gap-3">
-                <Avatar name={display[active].name} />
+                <Avatar name={locale === 'ar' ? display[active].name_ar : display[active].name_en} />
                 <div className="text-left">
                   <p className="font-display text-base font-medium text-ink-800">
-                    {display[active].name}
+                    {locale === 'ar' ? display[active].name_ar : display[active].name_en}
                   </p>
                   <p className="mt-0.5 font-body text-[11px] uppercase tracking-[0.2em] text-ink-600">
-                    {display[active].product?.name ?? display[active].location}
+                    {(locale === 'ar' ? display[active].product?.name_ar : display[active].product?.name_en) ?? (locale === 'ar' ? display[active].location_ar : display[active].location_en)}
                   </p>
                 </div>
               </div>
@@ -181,14 +195,14 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
               >
                 <Stars rating={t.rating} />
                 <p className="mt-3 line-clamp-2 font-body text-xs font-light leading-relaxed text-ink-800 transition-colors group-hover:text-ink-800">
-                  &ldquo;{t.review}&rdquo;
+                  &ldquo;{locale === 'ar' ? t.review_ar : t.review_en}&rdquo;
                 </p>
                 <div className="mt-4 flex items-center gap-2.5">
-                  <Avatar name={t.name} />
+                  <Avatar name={locale === 'ar' ? t.name_ar : t.name_en} />
                   <div>
-                    <p className="font-display text-sm text-ink-800">{t.name}</p>
+                    <p className="font-display text-sm text-ink-800">{locale === 'ar' ? t.name_ar : t.name_en}</p>
                     <p className="font-body text-[10px] uppercase tracking-widest text-ink-600">
-                      {t.product?.name ?? t.location}
+                      {(locale === 'ar' ? t.product?.name_ar : t.product?.name_en) ?? (locale === 'ar' ? t.location_ar : t.location_en)}
                     </p>
                   </div>
                 </div>

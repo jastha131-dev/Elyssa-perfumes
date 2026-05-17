@@ -5,21 +5,27 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { CustomBannerSectionBlock } from '@/lib/types'
+import { useLocale } from 'next-intl'
 
 interface CustomBannerProps {
   data: CustomBannerSectionBlock
 }
 
 export default function CustomBanner({ data }: CustomBannerProps) {
+  const locale = useLocale()
   const {
     imageUrl,
     imageAlt,
-    headline,
-    subtext,
+    headline_en,
+    headline_ar,
+    subtext_en,
+    subtext_ar,
     overlayOpacity = 50,
     cta,
     textAlign = 'center',
   } = data
+  const headline = locale === 'ar' ? headline_ar : headline_en
+  const subtext = locale === 'ar' ? subtext_ar : subtext_en
 
   const alignClass = {
     left:   'items-start text-left',
@@ -90,7 +96,7 @@ export default function CustomBanner({ data }: CustomBannerProps) {
                 : 'bg-gold-500 text-charcoal-950 hover:bg-gold-400 hover:shadow-xl hover:shadow-gold-500/25'
             )}
           >
-            {cta.label || 'Shop Now'}
+            {(locale === 'ar' ? cta.label_ar : cta.label_en) || 'Shop Now'}
             <ArrowRight
               size={11}
               strokeWidth={2.5}

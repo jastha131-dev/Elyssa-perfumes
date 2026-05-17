@@ -6,6 +6,7 @@ import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { ArrowRight } from 'lucide-react'
 import type { ScentBannerSectionBlock } from '@/lib/types'
+import { useLocale } from 'next-intl'
 
 interface ScentBannerProps {
   data?: ScentBannerSectionBlock | null
@@ -23,13 +24,14 @@ const NOTES = [
 ]
 
 export default function ScentBanner({ data }: ScentBannerProps) {
+  const locale = useLocale()
   const ref = useRef<HTMLDivElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
-  const eyebrow    = data?.eyebrow       ?? 'Explore by Note'
-  const titleMain  = data?.headline      ?? 'Every Scent\nTells'
-  const titleGold  = data?.highlightWord ?? 'A Story'
-  const bodyText   = data?.subtext       ?? 'Each note in our palette is a world unto itself — sourced from the finest gardens, distilled by master perfumers, composed to unfold on your skin.'
+  const eyebrow    = (locale === 'ar' ? data?.eyebrow_ar       : data?.eyebrow_en)       ?? 'Explore by Note'
+  const titleMain  = (locale === 'ar' ? data?.headline_ar      : data?.headline_en)      ?? 'Every Scent\nTells'
+  const titleGold  = (locale === 'ar' ? data?.highlightWord_ar : data?.highlightWord_en) ?? 'A Story'
+  const bodyText   = (locale === 'ar' ? data?.subtext_ar       : data?.subtext_en)       ?? 'Each note in our palette is a world unto itself — sourced from the finest gardens, distilled by master perfumers, composed to unfold on your skin.'
   const bgImage    = data?.bgImageUrl    ?? '/images/products/default-product.jpeg'
 
   return (
@@ -75,7 +77,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
               transition={{ duration: 0.75, delay: 0.1 }}
               className="font-headline font-bold uppercase text-white leading-tight text-4xl md:text-5xl lg:text-6xl"
             >
-              {titleMain.split('\n').map((line, i) => (
+              {titleMain.split('\n').map((line: string, i: number) => (
                 <span key={i}>{line}{i < titleMain.split('\n').length - 1 && <br />}</span>
               ))}{' '}
               <span className="italic text-stone-100">{titleGold}</span>
@@ -106,7 +108,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
                 href={data?.cta?.link ?? '/products'}
                 className="group inline-flex items-center gap-3 bg-ink-900 text-white px-8 py-3.5 font-body text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-ink-700"
               >
-                {data?.cta?.label ?? 'Browse All Fragrances'}
+                {(locale === 'ar' ? data?.cta?.label_ar : data?.cta?.label_en) ?? 'Browse All Fragrances'}
                 <ArrowRight size={13} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </motion.div>

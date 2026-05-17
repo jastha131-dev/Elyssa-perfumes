@@ -28,7 +28,8 @@
       "Bash(npm show *)",
       "Bash(awk 'NR==2 {print $4 \" free\"}')",
       "Bash(git stash *)",
-      "Bash(grep *)"
+      "Bash(grep *)",
+      "Bash(echo \"PID: $!\")"
     ]
   }
 }

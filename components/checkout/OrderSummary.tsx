@@ -3,7 +3,7 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Package, Truck, Tag } from 'lucide-react'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn, formatPrice } from '@/lib/utils'
 import type { CartItem } from '@/lib/types'
 
@@ -35,6 +35,7 @@ export default function OrderSummary({
 
   const t = useTranslations('checkout')
   const tc = useTranslations('cart')
+  const locale = useLocale()
 
   return (
     <div className={cn('flex flex-col gap-0', className)}>
@@ -68,7 +69,7 @@ export default function OrderSummary({
                   {primaryImage?.url ? (
                     <Image
                       src={primaryImage.url}
-                      alt={primaryImage.alt || item.product.name}
+                      alt={primaryImage.alt || (locale === 'ar' ? item.product.name_ar : item.product.name_en)}
                       fill
                       className="object-cover"
                       sizes="48px"
@@ -88,13 +89,13 @@ export default function OrderSummary({
               {/* Details */}
               <div className="flex flex-1 items-start justify-between gap-2 min-w-0">
                 <div className="min-w-0">
-                  {item.product.category?.name && (
+                  {(locale === 'ar' ? item.product.category?.name_ar : item.product.category?.name_en) && (
                     <p className="mb-0.5 text-[10px] uppercase tracking-[0.2em] text-gold-500">
-                      {item.product.category.name}
+                      {locale === 'ar' ? item.product.category?.name_ar : item.product.category?.name_en}
                     </p>
                   )}
                   <p className="truncate text-sm font-medium text-charcoal-900">
-                    {item.product.name}
+                    {locale === 'ar' ? item.product.name_ar : item.product.name_en}
                   </p>
                   <p className="text-xs text-charcoal-400">
                     {item.selectedVolume.ml}ml

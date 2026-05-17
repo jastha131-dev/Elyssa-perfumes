@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
+import { useLocale } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, SlidersHorizontal, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -107,6 +108,7 @@ function FilterPanel({
   onFilterChange,
   activeFilters,
 }: ProductFiltersProps) {
+  const locale = useLocale()
   const handleCategoryChange = useCallback(
     (value: string) => {
       onFilterChange({
@@ -170,7 +172,7 @@ function FilterPanel({
 
   const categoryOptions = [
     { value: 'all', label: 'All Fragrances' },
-    ...categories.map((c) => ({ value: c.slug, label: c.name })),
+    ...categories.map((c) => ({ value: c.slug, label: locale === 'ar' ? c.name_ar : c.name_en })),
   ]
 
   return (

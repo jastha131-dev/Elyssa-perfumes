@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ShoppingBag, Heart, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useCartStore } from "@/lib/store/cart-store";
 import { useCartDrawerStore } from "@/lib/store/cart-drawer-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
@@ -49,6 +49,9 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const [imageIndex, setImageIndex] = useState(0);
 
   const t = useTranslations('product');
+  const locale = useLocale();
+  const isAr = locale === 'ar';
+  const productName = product ? (isAr ? product.name_ar : product.name_en) : '';
   const { addItem } = useCartStore();
   const { openCart } = useCartDrawerStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();
@@ -138,7 +141,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     >
                       <Image
                         src={images[imageIndex].url}
-                        alt={images[imageIndex].alt || product.name}
+                        alt={images[imageIndex].alt || productName}
                         fill
                         className="object-cover"
                         sizes="(max-width: 640px) 95vw, 40vw"
@@ -149,7 +152,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-gradient-to-br from-cream-50 via-cream-100 to-cream-200">
                       <div className="h-px w-12 bg-gold-300/60" />
                       <span className="font-display text-8xl font-light italic text-charcoal-200 select-none">
-                        {product.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+                        {productName.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
                       </span>
                       <div className="h-px w-12 bg-gold-300/60" />
                     </div>
@@ -246,7 +249,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   <div className="flex items-center gap-2">
                     {product.category && (
                       <span className="text-[10px] font-semibold uppercase tracking-[0.25em] text-gold-500">
-                        {product.category.name}
+                        {isAr ? product.category.name_ar : product.category.name_en}
                       </span>
                     )}
                     {product.fragranceFamily && (
@@ -262,7 +265,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   {/* Name */}
                   <div>
                     <h2 className="font-display text-2xl font-light text-charcoal-900 leading-tight">
-                      {product.name}
+                      {productName}
                     </h2>
                     <p className="mt-0.5 text-[11px] uppercase tracking-[0.25em] text-charcoal-400">
                       {t('eauDeParfum')}
@@ -273,26 +276,26 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   <div className="h-px bg-gradient-to-r from-gold-300/60 via-gold-200/40 to-transparent" />
 
                   {/* Description */}
-                  {product.description && (
+                  {(isAr ? product.description_ar : product.description_en) && (
                     <p className="text-[13px] text-charcoal-600 leading-relaxed line-clamp-3">
-                      {product.description}
+                      {isAr ? product.description_ar : product.description_en}
                     </p>
                   )}
 
                   {/* Notes */}
-                  {(product.topNotes?.length > 0 || product.middleNotes?.length > 0 || product.baseNotes?.length > 0) && (
+                  {((isAr ? product.topNotes_ar : product.topNotes_en)?.length > 0 || (isAr ? product.middleNotes_ar : product.middleNotes_en)?.length > 0 || (isAr ? product.baseNotes_ar : product.baseNotes_en)?.length > 0) && (
                     <div className="space-y-2">
                       {[
-                        { label: t('top'), notes: product.topNotes },
-                        { label: t('middle'), notes: product.middleNotes },
-                        { label: t('base'), notes: product.baseNotes },
+                        { label: t('top'), notes: isAr ? product.topNotes_ar : product.topNotes_en },
+                        { label: t('middle'), notes: isAr ? product.middleNotes_ar : product.middleNotes_en },
+                        { label: t('base'), notes: isAr ? product.baseNotes_ar : product.baseNotes_en },
                       ].filter(({ notes }) => notes?.length > 0).map(({ label, notes }) => (
                         <div key={label} className="flex items-start gap-2">
                           <span className="w-9 flex-shrink-0 pt-px text-[10px] uppercase tracking-[0.2em] text-charcoal-400">
                             {label}
                           </span>
                           <div className="flex flex-wrap gap-1">
-                            {notes.map((note) => (
+                            {notes!.map((note: string) => (
                               <span
                                 key={note}
                                 className="rounded-sm bg-cream-100 px-2 py-0.5 text-[11px] text-charcoal-600"

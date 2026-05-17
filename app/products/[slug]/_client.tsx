@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
+import { useLocale } from 'next-intl'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -90,6 +91,12 @@ const portableTextComponents = {
 // ─── Breadcrumb ───────────────────────────────────────────────────────────────
 
 function Breadcrumb({ product }: { product: Product }) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+  const productName = isAr ? product.name_ar : product.name_en
+  const categoryName = product.category
+    ? (isAr ? product.category.name_ar : product.category.name_en)
+    : undefined
   return (
     <nav aria-label="Breadcrumb" className="flex items-center gap-1 flex-wrap">
       <Link
@@ -103,11 +110,11 @@ function Breadcrumb({ product }: { product: Product }) {
         href="/products"
         className="font-body text-xs text-charcoal-400 transition-colors hover:text-charcoal-700"
       >
-        {product.category?.name ?? 'Fragrances'}
+        {categoryName ?? 'Fragrances'}
       </Link>
       <ChevronRight className="h-3 w-3 text-charcoal-300 flex-shrink-0" />
       <span className="font-body text-xs text-charcoal-700 truncate max-w-[180px]">
-        {product.name}
+        {productName}
       </span>
     </nav>
   )
@@ -175,6 +182,8 @@ function AccordionSection({
 // ─── Recently Viewed ──────────────────────────────────────────────────────────
 
 function RecentlyViewed({ excludeId }: { excludeId: string }) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
   const { products } = useRecentlyViewedStore()
   const visible = products.filter((p) => p._id !== excludeId).slice(0, 4)
 
@@ -201,6 +210,10 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-2 md:grid-cols-4">
         {visible.map((product, i) => {
           const displayPrice = product.volume?.[0]?.price ?? product.price
+          const rvName = isAr ? product.name_ar : product.name_en
+          const rvCategoryName = product.category
+            ? (isAr ? product.category.name_ar : product.category.name_en)
+            : undefined
           return (
             <motion.div
               key={product._id}
@@ -220,7 +233,7 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={product.images[0].url}
-                      alt={product.images[0].alt || product.name}
+                      alt={product.images[0].alt || rvName}
                       className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     />
                   ) : (
@@ -230,13 +243,13 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
                   )}
                 </div>
                 <div className="mt-3 px-0.5">
-                  {product.category?.name && (
+                  {rvCategoryName && (
                     <p className="font-body text-[10px] uppercase tracking-[0.22em] text-gold-500 mb-0.5">
-                      {product.category.name}
+                      {rvCategoryName}
                     </p>
                   )}
                   <h3 className="font-display text-sm font-light text-charcoal-900 transition-colors group-hover:text-gold-600 leading-snug">
-                    {product.name}
+                    {rvName}
                   </h3>
                   <p className="mt-1 font-body text-sm font-medium text-charcoal-800">
                     {formatPrice(displayPrice)}
@@ -257,6 +270,18 @@ export function ProductDetailClient({
   product,
   relatedProducts,
 }: ProductDetailClientProps) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+  const productName = isAr ? product.name_ar : product.name_en
+  const categoryName = product.category
+    ? (isAr ? product.category.name_ar : product.category.name_en)
+    : undefined
+  const description = isAr ? product.description_ar : product.description_en
+  const story = isAr ? product.story_ar : product.story_en
+  const topNotes = isAr ? product.topNotes_ar : product.topNotes_en
+  const middleNotes = isAr ? product.middleNotes_ar : product.middleNotes_en
+  const baseNotes = isAr ? product.baseNotes_ar : product.baseNotes_en
+
   const { addItem: addToCart } = useCartStore()
   const { openCart } = useCartDrawerStore()
   const { toggleWishlist, isInWishlist } = useWishlistStore()
@@ -323,7 +348,7 @@ export function ProductDetailClient({
               <div className="aspect-[3/4] w-full bg-gradient-to-br from-cream-100 to-cream-200 flex flex-col items-center justify-center gap-4">
                 <div className="h-px w-16 bg-gold-300/50" />
                 <span className="font-display text-8xl font-light italic text-charcoal-200 select-none">
-                  {product.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+                  {productName.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
                 </span>
                 <div className="h-px w-16 bg-gold-300/50" />
               </div>

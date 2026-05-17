@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     // Validate each item has required fields
     for (const item of items) {
-      if (!item.product?._id || !item.product?.name || !item.selectedVolume?.price || !item.quantity) {
+      if (!item.product?._id || !item.product?.name_en || !item.selectedVolume?.price || !item.quantity) {
         return NextResponse.json(
           { error: 'Invalid cart item data.' },
           { status: 400 }
@@ -39,13 +39,13 @@ export async function POST(request: NextRequest) {
       }
       if (item.quantity < 1 || !Number.isInteger(item.quantity)) {
         return NextResponse.json(
-          { error: `Invalid quantity for ${item.product.name}.` },
+          { error: `Invalid quantity for ${item.product.name_en}.` },
           { status: 400 }
         )
       }
       if (item.selectedVolume.price <= 0) {
         return NextResponse.json(
-          { error: `Invalid price for ${item.product.name}.` },
+          { error: `Invalid price for ${item.product.name_en}.` },
           { status: 400 }
         )
       }
@@ -61,10 +61,10 @@ export async function POST(request: NextRequest) {
           currency: 'usd' as const,
           unit_amount: Math.round(item.selectedVolume.price * 100),
           product_data: {
-            name: `${item.product.name} — ${item.selectedVolume.ml}ml`,
+            name: `${item.product.name_en} — ${item.selectedVolume.ml}ml`,
             images,
-            description: item.product.description
-              ? item.product.description.slice(0, 500)
+            description: item.product.description_en
+              ? item.product.description_en.slice(0, 500)
               : `${item.product.fragranceFamily ?? 'Luxury'} fragrance, ${item.selectedVolume.ml}ml`,
           },
         },

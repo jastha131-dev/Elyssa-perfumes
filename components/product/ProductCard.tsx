@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { Heart, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { cn, formatPrice } from '@/lib/utils'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
@@ -28,6 +28,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false)
 
   const t = useTranslations('product')
+  const locale = useLocale()
+  const name = locale === 'ar' ? product.name_ar : product.name_en
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const { addProduct } = useRecentlyViewedStore()
   const hydrated = useHydrated()
@@ -80,7 +82,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         href={`/products/${product.slug}`}
         onClick={handleLinkClick}
         className="relative block overflow-hidden bg-cream-100 aspect-[3/4] focus-visible:outline-2 focus-visible:outline-gold-500 focus-visible:outline-offset-2"
-        aria-label={`View ${product.name}`}
+        aria-label={`View ${name}`}
       >
         {/* Primary image */}
         {primaryImage ? (
@@ -91,7 +93,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           >
             <Image
               src={primaryImage.url}
-              alt={primaryImage.alt || product.name}
+              alt={primaryImage.alt || name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className={cn(
@@ -107,7 +109,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-cream-50 via-cream-100 to-cream-200">
             <div className="h-px w-8 bg-gold-300/50" />
             <span className="font-display text-5xl font-light italic text-charcoal-200 select-none">
-              {product.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+              {name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
             </span>
             <div className="h-px w-8 bg-gold-300/50" />
           </div>
@@ -123,7 +125,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           >
             <Image
               src={hoverImage.url}
-              alt={hoverImage.alt || product.name}
+              alt={hoverImage.alt || name}
               fill
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
               className="object-cover"
@@ -155,7 +157,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                   transition={{ duration: 0.2, delay: 0.06 }}
                   onClick={handleQuickView}
                   className="flex items-center justify-center gap-1.5 w-full py-2.5 border border-gold-400/60 text-gold-300 text-[10px] font-semibold tracking-[0.22em] uppercase hover:bg-gold-500/20 transition-colors"
-                  aria-label={`Quick view ${product.name}`}
+                  aria-label={`Quick view ${name}`}
                 >
                   <Sparkles size={10} />
                   {t('quickView')}
@@ -199,7 +201,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               : 'bg-white/80 text-charcoal-600 hover:bg-white hover:text-red-400'
           )}
           whileTap={{ scale: 0.82 }}
-          aria-label={isWishlisted ? `${t('removeFromWishlist')}: ${product.name}` : `${t('addToWishlist')}: ${product.name}`}
+          aria-label={isWishlisted ? `${t('removeFromWishlist')}: ${name}` : `${t('addToWishlist')}: ${name}`}
           aria-pressed={isWishlisted}
         >
           <Heart
@@ -213,7 +215,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
       {/* ── Product info ────────────────────────────────────────────────── */}
       <div className="flex flex-col gap-0.5 pt-3 px-0.5">
         <p className="text-[9px] font-medium tracking-[0.22em] uppercase text-charcoal-400">
-          {product.category?.name ?? product.fragranceFamily}
+          {(locale === 'ar' ? product.category?.name_ar : product.category?.name_en) ?? product.fragranceFamily}
         </p>
 
         <Link
@@ -222,7 +224,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           className="font-display text-[15px] font-light text-charcoal-900 leading-snug hover:text-gold-600 transition-colors duration-150 focus-visible:outline-none focus-visible:underline"
           tabIndex={-1}
         >
-          {product.name}
+          {name}
         </Link>
 
         <div className="flex items-baseline gap-2 mt-1">

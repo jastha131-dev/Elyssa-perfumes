@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useTranslations } from 'next-intl'
+import { useTranslations, useLocale } from 'next-intl'
 import { motion } from 'framer-motion'
 import { X, Plus, Minus } from 'lucide-react'
 import { cn, formatPrice } from '@/lib/utils'
@@ -21,7 +21,9 @@ export default function CartItem({
   size = 'sm',
 }: CartItemProps) {
   const t = useTranslations('cart')
+  const locale = useLocale()
   const { product, selectedVolume, quantity } = item
+  const name = locale === 'ar' ? product.name_ar : product.name_en
   const lineTotal = selectedVolume.price * quantity
   const primaryImage = product.images?.[0]
 
@@ -49,7 +51,7 @@ export default function CartItem({
         {primaryImage?.url ? (
           <Image
             src={primaryImage.url}
-            alt={primaryImage.alt || product.name}
+            alt={primaryImage.alt || name}
             fill
             className="object-cover"
             sizes={isLarge ? '80px' : '64px'}
@@ -64,9 +66,9 @@ export default function CartItem({
         {/* Top row: name + remove */}
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">
-            {product.category?.name && (
+            {(locale === 'ar' ? product.category?.name_ar : product.category?.name_en) && (
               <p className="mb-0.5 font-body text-[10px] uppercase tracking-[0.25em] text-gold-500/80">
-                {product.category.name}
+                {locale === 'ar' ? product.category?.name_ar : product.category?.name_en}
               </p>
             )}
             <p
@@ -75,7 +77,7 @@ export default function CartItem({
                 isLarge ? 'text-base' : 'text-sm'
               )}
             >
-              {product.name}
+              {name}
             </p>
             <p className={cn('text-charcoal-400', isLarge ? 'text-sm mt-0.5' : 'text-xs')}>
               {selectedVolume.ml} ml
@@ -89,7 +91,7 @@ export default function CartItem({
               'hover:bg-charcoal-100 hover:text-charcoal-700',
               'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
             )}
-            aria-label={`Remove ${product.name} from cart`}
+            aria-label={`Remove ${name} from cart`}
           >
             <X className={isLarge ? 'h-4 w-4' : 'h-3.5 w-3.5'} />
           </button>

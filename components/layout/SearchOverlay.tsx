@@ -244,7 +244,7 @@ export default function SearchOverlay() {
                                       {product.images?.[0]?.url ? (
                                         <Image
                                           src={product.images[0].url}
-                                          alt={product.images[0].alt || product.name}
+                                          alt={product.images[0].alt || (locale === 'ar' ? product.name_ar : product.name_en)}
                                           fill
                                           sizes="40px"
                                           className="object-cover"
@@ -252,7 +252,7 @@ export default function SearchOverlay() {
                                       ) : (
                                         <div className="h-full w-full flex items-center justify-center">
                                           <span className="font-display text-xs italic text-charcoal-500">
-                                            {product.name.split(' ').map((w) => w[0]).join('').slice(0, 2)}
+                                            {(locale === 'ar' ? product.name_ar : product.name_en).split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
                                           </span>
                                         </div>
                                       )}
@@ -261,10 +261,10 @@ export default function SearchOverlay() {
                                     {/* Info */}
                                     <div className="flex-1 min-w-0">
                                       <p className="font-display text-sm font-light text-cream-100 truncate group-hover:text-gold-400 transition-colors">
-                                        {product.name}
+                                        {locale === 'ar' ? product.name_ar : product.name_en}
                                       </p>
                                       <p className="text-[11px] text-charcoal-500 truncate">
-                                        {product.category?.name} · {product.fragranceFamily}
+                                        {locale === 'ar' ? product.category?.name_ar : product.category?.name_en} · {product.fragranceFamily}
                                       </p>
                                     </div>
 
