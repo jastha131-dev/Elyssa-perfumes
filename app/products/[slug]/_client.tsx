@@ -561,9 +561,9 @@ export function ProductDetailClient({
             {/* Fragrance Notes */}
             <div className="mt-6">
               <FragranceNotes
-                topNotes={product.topNotes ?? []}
-                middleNotes={product.middleNotes ?? []}
-                baseNotes={product.baseNotes ?? []}
+                topNotes={topNotes ?? []}
+                middleNotes={middleNotes ?? []}
+                baseNotes={baseNotes ?? []}
                 intensity={product.intensity}
                 sillage={product.sillage}
                 longevity={product.longevity}

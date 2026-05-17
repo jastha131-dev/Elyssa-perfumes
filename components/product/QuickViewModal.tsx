@@ -283,13 +283,13 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                   )}
 
                   {/* Notes */}
-                  {((isAr ? product.topNotes_ar : product.topNotes_en)?.length > 0 || (isAr ? product.middleNotes_ar : product.middleNotes_en)?.length > 0 || (isAr ? product.baseNotes_ar : product.baseNotes_en)?.length > 0) && (
+                  {(product.topNotes_en?.length || product.middleNotes_en?.length || product.baseNotes_en?.length || product.topNotes_ar?.length || product.middleNotes_ar?.length || product.baseNotes_ar?.length) ? (
                     <div className="space-y-2">
                       {[
-                        { label: t('top'), notes: isAr ? product.topNotes_ar : product.topNotes_en },
-                        { label: t('middle'), notes: isAr ? product.middleNotes_ar : product.middleNotes_en },
-                        { label: t('base'), notes: isAr ? product.baseNotes_ar : product.baseNotes_en },
-                      ].filter(({ notes }) => notes?.length > 0).map(({ label, notes }) => (
+                        { label: t('top'), notes: (isAr ? product.topNotes_ar : product.topNotes_en) ?? [] },
+                        { label: t('middle'), notes: (isAr ? product.middleNotes_ar : product.middleNotes_en) ?? [] },
+                        { label: t('base'), notes: (isAr ? product.baseNotes_ar : product.baseNotes_en) ?? [] },
+                      ].filter(({ notes }) => notes.length > 0).map(({ label, notes }) => (
                         <div key={label} className="flex items-start gap-2">
                           <span className="w-9 flex-shrink-0 pt-px text-[10px] uppercase tracking-[0.2em] text-charcoal-400">
                             {label}
@@ -307,7 +307,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                         </div>
                       ))}
                     </div>
-                  )}
+                  ) : null}
 
                   {/* Intensity */}
                   {product.intensity && (

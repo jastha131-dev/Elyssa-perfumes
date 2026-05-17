@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useMemo, useCallback, useEffect } from 'react'
+import { useLocale } from 'next-intl'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -132,6 +133,8 @@ function FilterChips({
   onRemoveFamily,
   onRemovePriceRange,
 }: FilterChipsProps) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
   const hasChips =
     filters.category ||
     (filters.fragranceFamily && filters.fragranceFamily.length > 0) ||
@@ -141,7 +144,11 @@ function FilterChips({
   if (!hasChips) return null
 
   const categoryLabel = filters.category
-    ? categories.find((c) => c.slug === filters.category)?.name ?? filters.category
+    ? (categories.find((c) => c.slug === filters.category)
+        ? (isAr
+            ? categories.find((c) => c.slug === filters.category)!.name_ar
+            : categories.find((c) => c.slug === filters.category)!.name_en)
+        : filters.category)
     : null
 
   const hasPriceFilter =
