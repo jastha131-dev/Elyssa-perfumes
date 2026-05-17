@@ -360,12 +360,12 @@ export function ProductDetailClient({
 
             {/* Category + status row */}
             <div className="flex items-center gap-3 flex-wrap mb-4">
-              {product.category?.name && (
+              {categoryName && (
                 <Link
                   href={`/products?category=${product.category.slug}`}
                   className="font-body text-[10px] font-semibold uppercase tracking-[0.28em] text-gold-500 hover:text-gold-600 transition-colors"
                 >
-                  {product.category.name}
+                  {categoryName}
                 </Link>
               )}
               {product.fragranceFamily && (
@@ -390,7 +390,7 @@ export function ProductDetailClient({
 
             {/* Product name */}
             <h1 className="font-display text-4xl font-light text-charcoal-900 leading-[1.1] tracking-tight md:text-5xl">
-              {product.name}
+              {productName}
             </h1>
             <p className="mt-2 font-body text-xs tracking-[0.22em] uppercase text-charcoal-400">
               Eau de Parfum
@@ -403,9 +403,9 @@ export function ProductDetailClient({
             </div>
 
             {/* Description */}
-            {product.description && (
+            {description && (
               <p className="mt-5 font-body text-[15px] text-charcoal-600 leading-relaxed">
-                {product.description}
+                {description}
               </p>
             )}
 
@@ -522,7 +522,7 @@ export function ProductDetailClient({
                     ? 'border-gold-500 bg-gold-50 text-gold-600'
                     : 'border-charcoal-200 text-charcoal-400 hover:border-charcoal-400 hover:text-charcoal-700'
                 )}
-                aria-label={wishlisted ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+                aria-label={wishlisted ? `Remove ${productName} from wishlist` : `Add ${productName} to wishlist`}
                 aria-pressed={wishlisted}
               >
                 <Heart className="h-5 w-5" fill={wishlisted ? 'currentColor' : 'none'} />
@@ -549,12 +549,12 @@ export function ProductDetailClient({
             <div className="mt-8 h-px bg-gradient-to-r from-gold-300/60 via-gold-200/30 to-transparent" />
 
             {/* Story */}
-            {product.story && product.story.length > 0 && (
+            {story && story.length > 0 && (
               <div className="mt-6">
                 <p className="mb-3 font-body text-[10px] uppercase tracking-[0.28em] text-charcoal-400">
                   The Story
                 </p>
-                <PortableText value={product.story} components={portableTextComponents} />
+                <PortableText value={story} components={portableTextComponents} />
               </div>
             )}
 
