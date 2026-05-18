@@ -1,4 +1,3 @@
-import React from 'react'
 import { defineField, defineType } from 'sanity'
 
 export const category = defineType({
@@ -69,6 +68,13 @@ export const category = defineType({
       description: 'Lower numbers appear first in navigation and category listings.',
       validation: (Rule) => Rule.required().integer().min(0),
       initialValue: 0,
+    }),
+    defineField({
+      name: 'subcategories',
+      title: 'Subcategories',
+      type: 'array',
+      description: 'Optional subcategories nested under this category (e.g. Men → Oud, Woody, Fresh).',
+      of: [{ type: 'reference', to: [{ type: 'category' }] }],
     }),
   ],
 

@@ -1,5 +1,5 @@
 import { Suspense } from 'react'
-import { getAllProducts, getAllCategories } from '@/lib/sanity/fetch'
+import { getAllProducts, getAllCategories, getCollections } from '@/lib/sanity/fetch'
 import { ProductsPageClient } from '@/app/products/_client'
 
 export const revalidate = 3600
@@ -11,9 +11,10 @@ export const metadata = {
 }
 
 export default async function ProductsPage() {
-  const [products, categories] = await Promise.all([
+  const [products, categories, collections] = await Promise.all([
     getAllProducts(),
     getAllCategories(),
+    getCollections(),
   ])
 
   return (
@@ -29,7 +30,7 @@ export default async function ProductsPage() {
         </div>
       }
     >
-      <ProductsPageClient products={products} categories={categories} />
+      <ProductsPageClient products={products} categories={categories} collections={collections} />
     </Suspense>
   )
 }

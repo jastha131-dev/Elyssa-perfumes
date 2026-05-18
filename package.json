@@ -9,9 +9,12 @@
     "lint": "next lint",
     "sanity": "sanity dev",
     "seed": "npx tsx scripts/seed.ts",
-    "seed:images": "npx tsx scripts/seed-images.ts"
+    "seed:images": "npx tsx scripts/seed-images.ts",
+    "seed:all": "npx tsx scripts/seed-all.ts",
+    "seed:all:force": "npx tsx scripts/seed-all.ts --force"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.96.0",
     "@portabletext/react": "^3.1.0",
     "@sanity/assist": "^5.0.4",
     "@sanity/client": "^6.22.5",

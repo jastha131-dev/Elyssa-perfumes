@@ -29,7 +29,26 @@
       "Bash(awk 'NR==2 {print $4 \" free\"}')",
       "Bash(git stash *)",
       "Bash(grep *)",
-      "Bash(echo \"PID: $!\")"
+      "Bash(echo \"PID: $!\")",
+      "Bash(python3 -c ' *)",
+      "Bash(python3 -c \"import sys; print\\(sys.stdin.read\\(\\)\\)\")",
+      "Bash(python3 -c \"import sys; out=sys.stdin.read\\(\\); print\\(out[:2000] if out else 'No errors'\\)\")",
+      "Bash(python3 -c \"import sys; print\\(sys.stdin.read\\(\\)[:2000]\\)\")",
+      "Bash(python3 -c \"import sys; out=sys.stdin.read\\(\\); print\\(out[:1000] if out else 'No errors'\\)\")",
+      "Bash(npx next *)",
+      "Bash(python3 -c \"import sys; print\\(sys.stdin.read\\(\\)[:3000]\\)\")",
+      "Bash(python3 -c \"import json,sys; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d.get\\('scripts',{}\\), indent=2\\)\\)\")",
+      "Bash(python3 -c \"import sys; print\\(sys.stdin.read\\(\\)[3000:]\\)\")",
+      "Bash(node -e ' *)",
+      "Bash(vercel --version 2>/dev/null; which vercel 2>/dev/null; ls /Users/californiamediadubai/.npm-global/bin/vercel 2>/dev/null)",
+      "Read(//Users/californiamediadubai/.npm-global/bin/**)",
+      "Bash(rm -rf /Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq && npm install -g vercel 2>&1 | tail -5)",
+      "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --version)",
+      "Bash(/Users/californiamediadubai/.npm-global/bin/vercel whoami *)",
+      "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --yes)"
+    ],
+    "additionalDirectories": [
+      "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq"
     ]
   }
 }

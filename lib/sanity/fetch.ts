@@ -13,12 +13,16 @@ import {
   getRelatedProductsQuery,
   searchProductsQuery,
   getAllCategoriesQuery,
+  getCollectionsQuery,
   getHomePageQuery,
   getTestimonialsQuery,
   getNavPagesQuery,
   getPageBySlugQuery,
+  getFaqItemsQuery,
+  getContactPageQuery,
+  getNavConfigQuery,
 } from './queries'
-import type { Product, Category, HomePage, Testimonial, NavPage, Page } from '../types'
+import type { Product, Category, Collection, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -105,6 +109,15 @@ export async function getAllCategories(): Promise<Category[]> {
   )
 }
 
+export async function getCollections(): Promise<Collection[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<Collection[]>(
+    getCollectionsQuery,
+    {},
+    { next: { revalidate: 300 } }
+  )
+}
+
 // ─── Pages ────────────────────────────────────────────────────────────────────
 
 export async function getHomePage(): Promise<HomePage | null> {
@@ -118,8 +131,9 @@ export async function getHomePage(): Promise<HomePage | null> {
       useClient = draftModeClient
       fetchOptions = { cache: 'no-store' }
     }
-  } catch {
+  } catch (e) {
     // draftMode() throws outside a request context (e.g. during static build)
+    if (process.env.NODE_ENV === 'development') console.debug('[draft-mode]', e)
   }
   return useClient.fetch<HomePage>(getHomePageQuery, {}, fetchOptions)
 }
@@ -141,4 +155,22 @@ export async function getTestimonials(): Promise<Testimonial[]> {
     {},
     { next: { revalidate: 300 } }
   )
+}
+
+export async function getFaqItems(): Promise<FaqItem[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<FaqItem[]>(getFaqItemsQuery, {}, { next: { revalidate: 3600 } })
+}
+
+export async function getContactPage(): Promise<ContactPageData | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<ContactPageData | null>(getContactPageQuery, {}, { next: { revalidate: 3600 } })
+}
+
+export async function getNavConfig(): Promise<NavItem[]> {
+  if (!isSanityConfigured) return []
+  const data = await client.fetch<{ items: NavItem[] } | null>(
+    getNavConfigQuery, {}, { next: { revalidate: 300 } }
+  )
+  return data?.items ?? []
 }

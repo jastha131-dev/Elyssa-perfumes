@@ -183,11 +183,11 @@ function TextContent({ title, subtitle, ctaLabel, ctaLink, isLight, STATS }: Tex
   return (
     <>
       {/* Eyebrow */}
-      <motion.div variants={itemVariants} className="mb-6 flex items-center gap-3">
+      <motion.div variants={itemVariants} className="mb-6 flex items-center gap-3 outline-none">
         <div className="h-px w-8 flex-shrink-0 bg-camel-500" />
-        <p className="font-body text-[10px] font-light uppercase tracking-[0.42em] text-camel-500">
+        <span className="font-body text-[10px] font-light uppercase tracking-[0.42em] text-camel-500 select-none">
           Inspired by Icons. Reimagined for You.
-        </p>
+        </span>
       </motion.div>
 
       {/* Headline */}

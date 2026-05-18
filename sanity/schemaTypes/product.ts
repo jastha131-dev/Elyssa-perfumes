@@ -1,5 +1,6 @@
 import React from 'react'
 import { defineField, defineType, defineArrayMember } from 'sanity'
+import { AiFillInput } from '../components/AiFillInput'
 
 export const product = defineType({
   name: 'product',
@@ -50,6 +51,9 @@ export const product = defineType({
       rows: 4,
       description: 'A brief description shown on product cards and meta tags.',
       validation: (Rule) => Rule.required().min(20).max(500),
+      components: {
+        input: AiFillInput,
+      },
     }),
     defineField({
       name: 'description_ar',

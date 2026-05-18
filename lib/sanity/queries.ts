@@ -7,7 +7,14 @@ const categoryFragment = `
   description_en,
   description_ar,
   image,
-  order
+  order,
+  "subcategories": subcategories[]->{
+    _id,
+    name_en,
+    name_ar,
+    "slug": slug.current,
+    image
+  }
 `
 
 // Reusable fragment for core product fields
@@ -266,6 +273,19 @@ export const getPageBySlugQuery = `
   }
 `
 
+export const getCollectionsQuery = `
+  *[_type == "collection" && showInTiles == true] | order(order asc) {
+    _id,
+    title_en,
+    title_ar,
+    "slug": slug.current,
+    "imageUrl": image.asset->url,
+    filterParam,
+    showInTiles,
+    order
+  }
+`
+
 export const getTestimonialsQuery = `
   *[_type == "testimonial"] | order(_createdAt desc) {
     _id,
@@ -281,6 +301,27 @@ export const getTestimonialsQuery = `
       name_en,
       name_ar,
       "slug": slug.current
+    }
+  }
+`
+
+export const getFaqItemsQuery = `
+  *[_type == "faqItem"] | order(category asc, order asc) {
+    _id, question_en, question_ar, answer_en, answer_ar, category, order
+  }
+`
+
+export const getContactPageQuery = `
+  *[_type == "contactPage"][0] {
+    _id, heading_en, heading_ar, subtext_en, subtext_ar,
+    email, phone, address_en, address_ar, instagramUrl, whatsappNumber
+  }
+`
+
+export const getNavConfigQuery = `
+  *[_type == "navConfig"][0] {
+    "items": items[] {
+      _key, label_en, label_ar, href, highlight, visible
     }
   }
 `

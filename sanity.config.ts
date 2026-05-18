@@ -5,6 +5,7 @@ import { assist } from '@sanity/assist'
 import { schemaTypes } from './sanity/schemaTypes'
 import { StudioLogo } from './sanity/components/StudioLogo'
 import { translateToArabicAction } from './sanity/actions/translateToArabic'
+import { aiFillAction } from './sanity/actions/aiFill'
 
 export default defineConfig({
   name: 'default',
@@ -26,7 +27,7 @@ export default defineConfig({
   ],
   schema: { types: schemaTypes },
   document: {
-    actions: (prev) => [...prev, translateToArabicAction],
+    actions: (prev) => [...prev, translateToArabicAction, aiFillAction],
   },
   studio: {
     components: {

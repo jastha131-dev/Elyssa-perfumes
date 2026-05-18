@@ -107,7 +107,7 @@ function Breadcrumb({ product }: { product: Product }) {
       </Link>
       <ChevronRight className="h-3 w-3 text-charcoal-300 flex-shrink-0" />
       <Link
-        href="/products"
+        href={`/${locale}/products`}
         className="font-body text-xs text-charcoal-400 transition-colors hover:text-charcoal-700"
       >
         {categoryName ?? 'Fragrances'}
@@ -227,7 +227,7 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
               }}
               className="group"
             >
-              <Link href={`/products/${product.slug}`} className="block">
+              <Link href={`/${locale}/products/${product.slug}`} className="block">
                 <div className="relative aspect-[3/4] overflow-hidden bg-cream-50">
                   {product.images?.[0]?.url ? (
                     // eslint-disable-next-line @next/next/no-img-element
@@ -362,7 +362,7 @@ export function ProductDetailClient({
             <div className="flex items-center gap-3 flex-wrap mb-4">
               {categoryName && (
                 <Link
-                  href={`/products?category=${product.category.slug}`}
+                  href={`/${locale}/products?category=${product.category.slug}`}
                   className="font-body text-[10px] font-semibold uppercase tracking-[0.28em] text-gold-500 hover:text-gold-600 transition-colors"
                 >
                   {categoryName}

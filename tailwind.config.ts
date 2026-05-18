@@ -18,6 +18,8 @@ const config: Config = {
           400: "#CAB898",
         },
         camel: {
+          50:  "#FAF4EC",
+          100: "#F2E4CE",
           300: "#D4A96A",
           400: "#C49A5A",
           500: "#B08040",

@@ -79,7 +79,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
     >
       {/* ── Image container ─────────────────────────────────────────────── */}
       <Link
-        href={`/products/${product.slug}`}
+        href={`/${locale}/products/${product.slug}`}
         onClick={handleLinkClick}
         className="relative block overflow-hidden bg-cream-100 aspect-[3/4] focus-visible:outline-2 focus-visible:outline-gold-500 focus-visible:outline-offset-2"
         aria-label={`View ${name}`}
@@ -179,12 +179,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               {t('bestSeller')}
             </span>
           )}
-          {discount > 0 && (
-            <span className="bg-red-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white leading-none">
-              -{discount}%
-            </span>
-          )}
         </div>
+
+        {/* ── Discount badge (top-right) ────────────────────────────────── */}
+        {discount > 0 && (
+          <span className="absolute top-0 right-0 z-10 bg-red-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white leading-none">
+            -{discount}%
+          </span>
+        )}
 
         {/* ── Wishlist (top-right, circular) ────────────────────────────── */}
         <motion.button
@@ -193,7 +195,8 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           animate={{ opacity: isHovered || isWishlisted ? 1 : 0 }}
           transition={{ duration: 0.2 }}
           className={cn(
-            'absolute top-2.5 right-2.5 z-10',
+            'absolute z-10',
+            discount > 0 ? 'top-8 right-2.5' : 'top-2.5 right-2.5',
             'w-7 h-7 flex items-center justify-center rounded-full',
             'backdrop-blur-sm transition-colors duration-200',
             isWishlisted
@@ -219,7 +222,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         </p>
 
         <Link
-          href={`/products/${product.slug}`}
+          href={`/${locale}/products/${product.slug}`}
           onClick={handleLinkClick}
           className="font-display text-[15px] font-light text-charcoal-900 leading-snug hover:text-gold-600 transition-colors duration-150 focus-visible:outline-none focus-visible:underline"
           tabIndex={-1}
@@ -237,6 +240,13 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             </span>
           )}
         </div>
+
+        {product.tags?.[0] && (
+          <p className="mt-1 text-[10px] text-charcoal-400 leading-none">
+            Inspired by{' '}
+            <span className="font-medium text-charcoal-600">{product.tags[0]}</span>
+          </p>
+        )}
       </div>
     </motion.article>
   )

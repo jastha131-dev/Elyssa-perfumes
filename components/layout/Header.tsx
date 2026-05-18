@@ -7,15 +7,13 @@ import { usePathname } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import { urlFor } from '@/lib/sanity/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, TrendingUp, Gift, BookOpen, ArrowRight } from 'lucide-react'
+import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, TrendingUp, Gift, BookOpen, ArrowRight, HelpCircle, Mail } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
-import type { Category, NavPage } from '@/lib/types'
+import type { Category, NavPage, NavItem } from '@/lib/types'
 import LanguageSwitcher from './LanguageSwitcher'
-
-// STATIC_LINKS are now built inside the component using locale + translations
 
 const FALLBACK_CATEGORIES = [
   { _id: 'men', name_en: 'Men', name_ar: 'رجالي', slug: 'men' },
@@ -23,22 +21,32 @@ const FALLBACK_CATEGORIES = [
   { _id: 'unisex', name_en: 'Unisex', name_ar: 'جنسين', slug: 'unisex' },
 ]
 
+const FALLBACK_NAV_ITEMS: NavItem[] = [
+  { label_en: 'New Arrivals', label_ar: 'الوافدون الجدد',  href: '/products?sort=newest',    highlight: false, visible: true },
+  { label_en: 'Bestsellers',  label_ar: 'الأكثر مبيعاً',   href: '/products?sort=popular',   highlight: false, visible: true },
+  { label_en: 'Journal',      label_ar: 'المجلة',            href: '/journal',                 highlight: false, visible: true },
+  { label_en: 'About',        label_ar: 'من نحن',            href: '/about',                   highlight: false, visible: true },
+  { label_en: 'FAQ',          label_ar: 'الأسئلة الشائعة',  href: '/faq',                     highlight: false, visible: true },
+  { label_en: 'Contact',      label_ar: 'تواصل معنا',        href: '/contact',                 highlight: false, visible: true },
+  { label_en: 'Scent Quiz',   label_ar: 'اختبار العطور',     href: '/quiz',                    highlight: true,  visible: true },
+]
+
 interface HeaderProps {
   categories: Category[]
   navPages?: NavPage[]
+  navItems?: NavItem[]
 }
 
-export default function Header({ categories, navPages = [] }: HeaderProps) {
+export default function Header({ categories, navPages = [], navItems = [] }: HeaderProps) {
   const pathname = usePathname()
   const t = useTranslations('nav')
   const locale = useLocale()
 
-  const STATIC_LINKS = [
-    { label: t('newArrivals'), href: `/${locale}/products?sort=newest` },
-    { label: t('bestsellers'), href: `/${locale}/products?sort=popular` },
-    { label: t('journal'), href: `/${locale}/journal` },
-    { label: t('about'), href: `/${locale}/about` },
-  ]
+  const resolvedItems = (navItems.length > 0 ? navItems : FALLBACK_NAV_ITEMS)
+    .filter((item) => item.visible !== false)
+
+  const regularLinks = resolvedItems.filter((item) => !item.highlight)
+  const highlightLinks = resolvedItems.filter((item) => item.highlight)
 
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collectionsHovered, setCollectionsHovered] = useState(false)
@@ -150,123 +158,216 @@ export default function Header({ categories, navPages = [] }: HeaderProps) {
               <AnimatePresence>
                 {collectionsHovered && (
                   <motion.div
-                    initial={{ opacity: 0, y: 6 }}
+                    initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 6 }}
-                    transition={{ duration: 0.16, ease: 'easeOut' }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.18, ease: 'easeOut' }}
                     className="absolute left-1/2 top-full -translate-x-1/2 pt-4"
                     onMouseEnter={handleCollectionsEnter}
                     onMouseLeave={handleCollectionsLeave}
                   >
-                    {/* Luxury mega-menu */}
-                    <div className="w-[480px] overflow-hidden border border-camel-500/20 bg-[#0D0D0D] shadow-2xl shadow-black/60">
-                      {/* Camel gradient top accent */}
+                    {/* 3-col luxury mega-menu */}
+                    <div className="w-[700px] overflow-hidden border border-camel-500/20 bg-[#0A0A0A] shadow-2xl shadow-black/70">
                       <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
 
-                      <div className="grid grid-cols-2">
-                        {/* Left: Shop by category */}
-                        <div className="border-r border-white/8 px-6 py-6">
-                          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
-                            Shop
-                          </p>
+                      <div className="grid grid-cols-[220px_1fr_200px]">
 
+                        {/* ── Col 1: Shop All + Categories ── */}
+                        <div className="border-r border-white/[0.06] px-5 py-6">
+                          {/* Shop All */}
                           <Link
                             href={`/${locale}/products`}
-                            className="group/all mb-4 flex items-center justify-between transition-colors"
+                            className="group/all mb-5 flex items-center justify-between rounded-sm border border-camel-500/20 bg-camel-500/5 px-3 py-2.5 transition-all duration-200 hover:border-camel-500/50 hover:bg-camel-500/10"
                           >
-                            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-camel-400 transition-colors group-hover/all:text-camel-300">
-                              {t('allFragrances')}
-                            </span>
-                            <ArrowRight className="h-3 w-3 text-camel-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-300" />
+                            <div>
+                              <span className="block text-[10px] font-bold uppercase tracking-[0.25em] text-camel-400 transition-colors group-hover/all:text-camel-300">
+                                {t('allFragrances')}
+                              </span>
+                              <span className="block text-[9px] text-stone-600 tracking-wide">
+                                Full collection
+                              </span>
+                            </div>
+                            <ArrowRight className="h-3 w-3 flex-shrink-0 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-400" />
                           </Link>
 
-                          <div className="mb-4 h-px bg-white/8" />
+                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                            Shop by Category
+                          </p>
 
-                          <ul className="space-y-1">
+                          <ul className="space-y-0.5">
                             {(categories.length > 0 ? categories : FALLBACK_CATEGORIES).map((cat) => {
-                              const catName = locale === 'ar' ? (cat as any).name_ar : (cat as any).name_en
+                              const catName = locale === 'ar' ? (cat as Category).name_ar : (cat as Category).name_en
                               const imgUrl = (cat as Category).image?.asset?._ref
-                                ? urlFor((cat as Category).image).width(80).height(80).url()
+                                ? urlFor((cat as Category).image).width(96).height(96).url()
                                 : null
+                              const subs = (cat as Category).subcategories ?? []
                               return (
                                 <li key={cat._id}>
                                   <Link
                                     href={`/${locale}/products?category=${cat.slug}`}
-                                    className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-camel-500"
+                                    className="group/item flex items-center gap-3 border-l-2 border-transparent py-2 pl-1 transition-all duration-200 hover:border-camel-500 hover:pl-2"
                                   >
-                                    <div className="relative h-9 w-9 flex-shrink-0 overflow-hidden bg-charcoal-800">
+                                    <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden bg-charcoal-800">
                                       {imgUrl ? (
                                         <Image
                                           src={imgUrl}
-                                          alt={catName}
+                                          alt={catName ?? ''}
                                           fill
-                                          className="object-cover opacity-60 transition-all duration-300 group-hover/item:opacity-100 group-hover/item:scale-105"
+                                          className="object-cover opacity-50 transition-all duration-400 group-hover/item:opacity-100 group-hover/item:scale-110"
                                         />
                                       ) : (
                                         <div className="h-full w-full bg-gradient-to-br from-charcoal-700 to-charcoal-900" />
                                       )}
                                     </div>
-                                    <span className="text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
-                                      {catName}
-                                    </span>
+                                    <div>
+                                      <span className="block text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
+                                        {catName}
+                                      </span>
+                                      <span className="block text-[9px] tracking-wide text-stone-600 transition-colors group-hover/item:text-stone-500">
+                                        Shop →
+                                      </span>
+                                    </div>
                                   </Link>
+                                  {subs.length > 0 && (
+                                    <ul className="ml-[52px] mb-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                                      {subs.map((sub) => {
+                                        const subName = locale === 'ar' ? (sub.name_ar || sub.name_en) : sub.name_en
+                                        return (
+                                          <li key={sub._id}>
+                                            <Link
+                                              href={`/${locale}/products?category=${sub.slug}`}
+                                              className="text-[10px] tracking-wide text-stone-600 transition-colors hover:text-camel-400"
+                                            >
+                                              {subName}
+                                            </Link>
+                                          </li>
+                                        )
+                                      })}
+                                    </ul>
+                                  )}
                                 </li>
                               )
                             })}
                           </ul>
                         </div>
 
-                        {/* Right: Discover */}
-                        <div className="px-6 py-6">
-                          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
+                        {/* ── Col 2: Discover + Fragrance Families ── */}
+                        <div className="border-r border-white/[0.06] px-5 py-6">
+                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
                             Discover
                           </p>
 
-                          <ul className="space-y-1">
+                          <ul className="mb-5 space-y-0.5">
                             {[
-                              { href: `/${locale}/products?sort=newest`, icon: Sparkles, label: t('newArrivals'), sub: t('latestReleases') },
-                              { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'), sub: t('mostLoved') },
-                              { href: `/${locale}/products?category=gift-sets`, icon: Gift, label: t('giftSets'), sub: t('forSomeoneSpecial') },
-                              { href: `/${locale}/journal`, icon: BookOpen, label: t('journal'), sub: t('storiesGuides') },
-                            ].map(({ href, icon: Icon, label, sub }) => (
+                              { href: `/${locale}/products?sort=newest`,       icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
+                              { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
+                              { href: `/${locale}/products?category=gift-sets`,icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
+                              { href: `/${locale}/journal`,                    icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
+                              { href: `/${locale}/quiz`,                       icon: Sparkles,   label: t('quiz'),         sub: 'AI fragrance matching', badge: 'AI' },
+                              { href: `/${locale}/faq`,                        icon: HelpCircle, label: t('faq'),          sub: 'Common questions',       badge: null },
+                              { href: `/${locale}/contact`,                    icon: Mail,       label: t('contact'),      sub: 'Get in touch',           badge: null },
+                            ].map(({ href, icon: Icon, label, sub, badge }) => (
                               <li key={href}>
                                 <Link
                                   href={href}
-                                  className="group/item flex items-center gap-3 rounded-sm py-2.5 transition-colors"
+                                  className="group/item flex items-center gap-3 py-2.5 transition-colors"
                                 >
-                                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-camel-400 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-500/10">
+                                  <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/[0.08] bg-white/[0.03] text-camel-400 transition-all duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-500/10 group-hover/item:text-camel-300">
                                     <Icon className="h-3.5 w-3.5" />
                                   </span>
-                                  <div>
-                                    <span className="block text-[13px] font-light leading-tight tracking-wide text-cream-200 transition-colors group-hover/item:text-cream-100">
+                                  <div className="flex-1">
+                                    <span className="flex items-center gap-2 text-[13px] font-light leading-tight tracking-wide text-cream-200 transition-colors group-hover/item:text-cream-100">
                                       {label}
+                                      {badge && (
+                                        <span className="rounded-full bg-camel-500 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">
+                                          {badge}
+                                        </span>
+                                      )}
                                     </span>
-                                    <span className="block text-[10px] tracking-wide text-cream-400/60">
+                                    <span className="block text-[10px] tracking-wide text-cream-500/50">
                                       {sub}
                                     </span>
                                   </div>
+                                  <ArrowRight className="h-3 w-3 flex-shrink-0 text-stone-700 transition-all duration-200 group-hover/item:translate-x-0.5 group-hover/item:text-camel-500" />
                                 </Link>
                               </li>
                             ))}
                           </ul>
+
+                          <div className="mb-4 h-px bg-white/[0.06]" />
+
+                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                            Fragrance Family
+                          </p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {['Woody', 'Floral', 'Citrus', 'Oriental', 'Fresh', 'Aquatic', 'Gourmand'].map((family) => (
+                              <Link
+                                key={family}
+                                href={`/${locale}/products?family=${family.toLowerCase()}`}
+                                className="border border-white/10 px-2.5 py-1 text-[10px] font-light tracking-[0.15em] text-stone-500 transition-all duration-200 hover:border-camel-500/50 hover:bg-camel-500/8 hover:text-camel-300"
+                              >
+                                {family}
+                              </Link>
+                            ))}
+                          </div>
                         </div>
+
+                        {/* ── Col 3: Editorial panel ── */}
+                        <div className="relative overflow-hidden">
+                          <Image
+                            src="/images/categories/I1.webp"
+                            alt="New Season"
+                            fill
+                            className="object-cover object-center opacity-35"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/20" />
+
+                          {/* Top badge */}
+                          <div className="absolute left-4 top-4">
+                            <span className="bg-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3em] text-white">
+                              New Season
+                            </span>
+                          </div>
+
+                          {/* Bottom content */}
+                          <div className="absolute bottom-0 left-0 right-0 p-5">
+                            <p className="mb-1 text-[9px] uppercase tracking-[0.4em] text-camel-400/80">
+                              Spring / Summer
+                            </p>
+                            <p className="mb-1 font-display text-xl font-light leading-tight text-stone-100">
+                              Spring Summer Story
+                            </p>
+                            <p className="mb-4 text-[10px] leading-relaxed text-stone-500">
+                              Rare fragrances crafted for the discerning soul.
+                            </p>
+                            <Link
+                              href={`/${locale}/products`}
+                              className="group/cta inline-flex items-center gap-2 border-b border-camel-500/40 pb-0.5 text-[10px] uppercase tracking-[0.25em] text-camel-400 transition-all duration-200 hover:border-camel-400 hover:text-camel-300"
+                            >
+                              Shop Now
+                              <ArrowRight className="h-2.5 w-2.5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
+                            </Link>
+                          </div>
+                        </div>
+
                       </div>
 
-                      {/* Bottom camel gradient */}
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/30 to-transparent" />
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/20 to-transparent" />
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {/* Static links */}
-            {STATIC_LINKS.map((link) => {
-              const isActive = !link.href.includes('?') && pathname === link.href
+            {/* Regular nav links */}
+            {regularLinks.map((item) => {
+              const fullHref = `/${locale}${item.href}`
+              const label = locale === 'ar' ? (item.label_ar || item.label_en) : item.label_en
+              const isActive = !item.href.includes('?') && pathname === fullHref
               return (
                 <Link
-                  key={link.href}
-                  href={link.href}
+                  key={item._key ?? item.href}
+                  href={fullHref}
                   className={cn(
                     'relative text-sm font-medium tracking-wide transition-colors duration-200',
                     'after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full',
@@ -275,7 +376,28 @@ export default function Header({ categories, navPages = [] }: HeaderProps) {
                     isActive ? 'text-camel-400 after:scale-x-100' : 'text-stone-200'
                   )}
                 >
-                  {link.label}
+                  {label}
+                </Link>
+              )
+            })}
+
+            {/* Highlighted nav links (e.g. Scent Quiz) */}
+            {highlightLinks.map((item) => {
+              const fullHref = `/${locale}${item.href}`
+              const label = locale === 'ar' ? (item.label_ar || item.label_en) : item.label_en
+              return (
+                <Link
+                  key={item._key ?? item.href}
+                  href={fullHref}
+                  className={cn(
+                    'flex items-center gap-1.5 rounded-sm border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-200',
+                    pathname === fullHref
+                      ? 'border-camel-400 bg-camel-500/20 text-camel-300'
+                      : 'border-camel-500/40 bg-camel-500/10 text-camel-400 hover:border-camel-400 hover:bg-camel-500/20 hover:text-camel-300'
+                  )}
+                >
+                  <Sparkles className="h-3 w-3" />
+                  {label}
                 </Link>
               )
             })}
@@ -412,112 +534,155 @@ export default function Header({ categories, navPages = [] }: HeaderProps) {
                         transition={{ duration: 0.22, ease: 'easeInOut' }}
                         className="overflow-hidden"
                       >
-                        {/* Shop section */}
-                        <p className="mb-2 mt-1 px-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
-                          Shop
-                        </p>
-
+                        {/* All Fragrances */}
                         <Link
                           href={`/${locale}/products`}
-                          className="group/all mb-3 flex items-center justify-between px-4 py-2 transition-colors"
+                          className="group/all mx-4 mt-2 mb-4 flex items-center justify-between border border-camel-500/20 bg-camel-500/5 px-3 py-2.5 transition-all hover:border-camel-500/40"
                         >
-                          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-camel-400 group-hover/all:text-camel-300 transition-colors">
+                          <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-camel-400 group-hover/all:text-camel-300 transition-colors">
                             {t('allFragrances')}
                           </span>
-                          <ArrowRight className="h-3 w-3 text-camel-500 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-300" />
+                          <ArrowRight className="h-3 w-3 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-400" />
                         </Link>
 
-                        <ul className="mb-4 space-y-1 px-4">
+                        {/* Shop by Category */}
+                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                          Shop by Category
+                        </p>
+                        <ul className="mb-4 space-y-0.5 px-4">
                           {(categories.length > 0 ? categories : FALLBACK_CATEGORIES).map((cat) => {
-                            const catName = locale === 'ar' ? (cat as any).name_ar : (cat as any).name_en
+                            const catName = locale === 'ar' ? (cat as Category).name_ar : (cat as Category).name_en
                             const imgUrl = (cat as Category).image?.asset?._ref
-                              ? urlFor((cat as Category).image).width(64).height(64).url()
+                              ? urlFor((cat as Category).image).width(80).height(80).url()
                               : null
+                            const subs = (cat as Category).subcategories ?? []
                             return (
                               <li key={cat._id}>
                                 <Link
                                   href={`/${locale}/products?category=${cat.slug}`}
-                                  className="group/item flex items-center gap-3 border-l-2 border-transparent py-1.5 pl-1 transition-all duration-200 hover:border-camel-500"
+                                  className="group/item flex items-center gap-3 border-l-2 border-transparent py-2 pl-1 transition-all duration-200 hover:border-camel-500 hover:pl-2"
                                 >
-                                  <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden bg-charcoal-800">
+                                  <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden bg-charcoal-800">
                                     {imgUrl ? (
                                       <Image
                                         src={imgUrl}
-                                        alt={catName}
+                                        alt={catName ?? ''}
                                         fill
-                                        className="object-cover opacity-70 transition-all duration-300 group-hover/item:opacity-100"
+                                        className="object-cover opacity-60 transition-all duration-300 group-hover/item:opacity-100"
                                       />
                                     ) : (
                                       <div className="h-full w-full bg-charcoal-700" />
                                     )}
                                   </div>
-                                  <span className="text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
-                                    {catName}
-                                  </span>
+                                  <div>
+                                    <span className="block text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
+                                      {catName}
+                                    </span>
+                                    <span className="block text-[9px] text-stone-600">Shop →</span>
+                                  </div>
                                 </Link>
+                                {subs.length > 0 && (
+                                  <div className="ml-[52px] mb-1 flex flex-wrap gap-x-3 gap-y-1">
+                                    {subs.map((sub) => {
+                                      const subName = locale === 'ar' ? (sub.name_ar || sub.name_en) : sub.name_en
+                                      return (
+                                        <Link
+                                          key={sub._id}
+                                          href={`/${locale}/products?category=${sub.slug}`}
+                                          className="text-[11px] tracking-wide text-stone-600 transition-colors hover:text-camel-400"
+                                        >
+                                          {subName}
+                                        </Link>
+                                      )
+                                    })}
+                                  </div>
+                                )}
                               </li>
                             )
                           })}
                         </ul>
 
-                        {/* Discover section */}
-                        <div className="mx-4 mb-3 h-px bg-white/10" />
-                        <p className="mb-2 px-4 text-[9px] font-semibold uppercase tracking-[0.35em] text-camel-400/60">
+                        {/* Discover */}
+                        <div className="mx-4 mb-3 h-px bg-white/[0.06]" />
+                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
                           Discover
                         </p>
-
-                        <ul className="mb-4 space-y-1 px-4">
+                        <ul className="mb-4 space-y-0.5 px-4">
                           {[
-                            { href: `/${locale}/products?sort=newest`, icon: Sparkles, label: t('newArrivals'), sub: t('latestReleases') },
-                            { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'), sub: t('mostLoved') },
-                            { href: `/${locale}/products?category=gift-sets`, icon: Gift, label: t('giftSets'), sub: t('forSomeoneSpecial') },
-                            { href: `/${locale}/journal`, icon: BookOpen, label: t('journal'), sub: t('storiesGuides') },
-                          ].map(({ href, icon: Icon, label, sub }) => (
+                            { href: `/${locale}/products?sort=newest`,        icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
+                            { href: `/${locale}/products?sort=best_selling`,  icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
+                            { href: `/${locale}/products?category=gift-sets`, icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
+                            { href: `/${locale}/journal`,                     icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
+                            { href: `/${locale}/quiz`,                        icon: Sparkles,   label: t('quiz'),         sub: 'AI fragrance matching', badge: 'AI' },
+                            { href: `/${locale}/faq`,                         icon: HelpCircle, label: t('faq'),          sub: 'Common questions',       badge: null },
+                            { href: `/${locale}/contact`,                     icon: Mail,       label: t('contact'),      sub: 'Get in touch',           badge: null },
+                          ].map(({ href, icon: Icon, label, sub, badge }) => (
                             <li key={href}>
-                              <Link
-                                href={href}
-                                className="group/item flex items-center gap-3 py-2 transition-colors"
-                              >
-                                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-white/10 bg-white/5 text-camel-400 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-500/10">
+                              <Link href={href} className="group/item flex items-center gap-3 py-2 transition-colors">
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/[0.08] bg-white/[0.03] text-camel-400 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:text-camel-300">
                                   <Icon className="h-3.5 w-3.5" />
                                 </span>
                                 <div>
-                                  <span className="block text-[13px] font-light leading-tight tracking-wide text-cream-200 transition-colors group-hover/item:text-cream-100">
+                                  <span className="flex items-center gap-1.5 text-[13px] font-light tracking-wide text-cream-200 transition-colors group-hover/item:text-cream-100">
                                     {label}
+                                    {badge && (
+                                      <span className="rounded-full bg-camel-500 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">
+                                        {badge}
+                                      </span>
+                                    )}
                                   </span>
-                                  <span className="block text-[10px] tracking-wide text-cream-400/60">
-                                    {sub}
-                                  </span>
+                                  <span className="block text-[10px] tracking-wide text-cream-500/50">{sub}</span>
                                 </div>
                               </Link>
                             </li>
                           ))}
                         </ul>
+
+                        {/* Fragrance Family */}
+                        <div className="mx-4 mb-3 h-px bg-white/[0.06]" />
+                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                          Fragrance Family
+                        </p>
+                        <div className="mb-4 flex flex-wrap gap-1.5 px-4">
+                          {['Woody', 'Floral', 'Citrus', 'Oriental', 'Fresh', 'Aquatic', 'Gourmand'].map((family) => (
+                            <Link
+                              key={family}
+                              href={`/${locale}/products?family=${family.toLowerCase()}`}
+                              className="border border-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] text-stone-500 transition-all hover:border-camel-500/50 hover:text-camel-300"
+                            >
+                              {family}
+                            </Link>
+                          ))}
+                        </div>
                       </motion.div>
                     )}
                   </AnimatePresence>
                 </li>
 
-                {/* Static links */}
-                {STATIC_LINKS.map((link, i) => (
-                  <motion.li
-                    key={link.href}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.06 + 0.05, duration: 0.22 }}
-                  >
-                    <Link
-                      href={link.href}
-                      className={cn(
-                        'block py-4 text-base font-medium tracking-wide transition-colors',
-                        'hover:text-camel-300',
-                        pathname === link.href.split('?')[0] ? 'text-camel-400' : 'text-stone-200'
-                      )}
+                {/* Regular nav links */}
+                {regularLinks.map((item, i) => {
+                  const fullHref = `/${locale}${item.href}`
+                  const label = locale === 'ar' ? (item.label_ar || item.label_en) : item.label_en
+                  return (
+                    <motion.li
+                      key={item._key ?? item.href}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.06 + 0.05, duration: 0.22 }}
                     >
-                      {link.label}
-                    </Link>
-                  </motion.li>
-                ))}
+                      <Link
+                        href={fullHref}
+                        className={cn(
+                          'block py-4 text-base font-medium tracking-wide transition-colors',
+                          'hover:text-camel-300',
+                          pathname === fullHref.split('?')[0] ? 'text-camel-400' : 'text-stone-200'
+                        )}
+                      >
+                        {label}
+                      </Link>
+                    </motion.li>
+                  )
+                })}
 
                 {/* Dynamic CMS pages */}
                 {navPages.map((p, i) => {
@@ -528,7 +693,7 @@ export default function Header({ categories, navPages = [] }: HeaderProps) {
                       key={p._id}
                       initial={{ opacity: 0, x: -16 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: (STATIC_LINKS.length + i) * 0.06 + 0.05, duration: 0.22 }}
+                      transition={{ delay: (regularLinks.length + i) * 0.06 + 0.05, duration: 0.22 }}
                     >
                       <Link
                         href={href}
@@ -552,6 +717,25 @@ export default function Header({ categories, navPages = [] }: HeaderProps) {
                 transition={{ delay: 0.35 }}
                 className="mt-6 flex flex-col gap-3"
               >
+                {/* Highlighted links (e.g. Scent Quiz) */}
+                {highlightLinks.map((item) => {
+                  const fullHref = `/${locale}${item.href}`
+                  const label = locale === 'ar' ? (item.label_ar || item.label_en) : item.label_en
+                  return (
+                    <Link
+                      key={item._key ?? item.href}
+                      href={fullHref}
+                      className="flex items-center justify-between border border-camel-500/30 bg-camel-500/10 px-4 py-3 transition-all hover:border-camel-500/60 hover:bg-camel-500/15"
+                    >
+                      <div className="flex items-center gap-2">
+                        <Sparkles className="h-4 w-4 text-camel-400" />
+                        <span className="text-sm font-medium tracking-wide text-camel-300">{label}</span>
+                      </div>
+                      <span className="rounded-full bg-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">AI</span>
+                    </Link>
+                  )
+                })}
+
                 <Link
                   href={`/${locale}/wishlist`}
                   className="flex items-center gap-2 text-sm text-cream-300 hover:text-camel-400 transition-colors"

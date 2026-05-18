@@ -2,9 +2,13 @@ import { SchemaTypeDefinition } from 'sanity'
 
 import { product } from './product'
 import { category } from './category'
+import { collection } from './collection'
 import { homePage } from './homePage'
 import { page } from './page'
 import { testimonial } from './testimonial'
+import { faqItem } from './faqItem'
+import { contactPage } from './contactPage'
+import { navConfig } from './navConfig'
 import {
   ctaButton,
   heroSection,
@@ -40,10 +44,14 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Content documents ──────────────────────────────────────────
   product,
   category,
+  collection,
   testimonial,
+  faqItem,
+  contactPage,
 
   // ── Singleton page documents ───────────────────────────────────
   homePage,
+  navConfig,
 
   // ── Dynamic pages ─────────────────────────────────────────────
   page,

@@ -16,7 +16,10 @@
     "latestReleases": "أحدث الإصدارات",
     "mostLoved": "الأكثر حباً",
     "forSomeoneSpecial": "لشخص مميز",
-    "storiesGuides": "قصص ودليل"
+    "storiesGuides": "قصص ودليل",
+    "quiz": "اختبار العطور",
+    "faq": "الأسئلة الشائعة",
+    "contact": "تواصل معنا"
   },
   "product": {
     "addToCart": "أضف إلى السلة",

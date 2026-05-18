@@ -1,23 +1,11 @@
 'use client'
 
-import Image from 'next/image'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Instagram, Twitter, Facebook, ArrowRight } from 'lucide-react'
 import { useState } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
-import { urlFor } from '@/lib/sanity/image'
-import type { Category } from '@/lib/types'
-
-// These keys are used in FooterColumn component
-// Actual labels come from useTranslations('footer')
-
-const LOCAL_CAT_IMAGES = [
-  '/images/categories/I1.webp',
-  '/images/categories/I2.webp',
-  '/images/categories/I3.webp',
-]
 
 const SOCIAL_LINKS = [
   { label: 'Instagram', href: 'https://instagram.com', icon: Instagram },
@@ -71,11 +59,7 @@ function FooterColumn({ titleKey, links }: FooterColumnProps) {
   )
 }
 
-interface FooterProps {
-  categories?: Category[]
-}
-
-export default function Footer({ categories = [] }: FooterProps) {
+export default function Footer() {
   const t = useTranslations('footer')
   const tn = useTranslations('newsletter')
   const locale = useLocale()
@@ -93,8 +77,6 @@ export default function Footer({ categories = [] }: FooterProps) {
     setLoading(false)
     setEmail('')
   }
-
-  const displayCategories = categories.slice(0, 3)
 
   // Link definitions with translation keys
   const SHOP_LINKS = [
@@ -122,78 +104,6 @@ export default function Footer({ categories = [] }: FooterProps) {
 
   return (
     <footer className="bg-charcoal-950 text-charcoal-100">
-
-      {/* ── Category image strip from Sanity admin ── */}
-      {displayCategories.length > 0 && (
-        <div
-          className={cn(
-            'grid border-b border-charcoal-800',
-            displayCategories.length === 1 ? 'grid-cols-1' :
-            displayCategories.length === 2 ? 'grid-cols-2' :
-            'grid-cols-2 md:grid-cols-3'
-          )}
-        >
-          {displayCategories.map((cat, i) => {
-            const catName = locale === 'ar' ? cat.name_ar : cat.name_en
-            const sanityUrl = cat.image?.asset?._ref
-              ? urlFor(cat.image).width(800).height(500).url()
-              : null
-            const imageUrl = sanityUrl || LOCAL_CAT_IMAGES[i % LOCAL_CAT_IMAGES.length]
-
-            // Hide 3rd item on mobile (2-col grid) — only show 2
-            const isThird = i === 2
-            return (
-              <Link
-                key={cat._id}
-                href={`/${locale}/products?category=${cat.slug}`}
-                className={cn(
-                  'group relative aspect-[4/3] overflow-hidden bg-charcoal-800',
-                  isThird && 'hidden md:block'
-                )}
-              >
-                <Image
-                  src={imageUrl}
-                  alt={catName}
-                  fill
-                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  sizes="(max-width: 768px) 50vw, 33vw"
-                />
-
-                {/* Gradient overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-ink-950/90 via-charcoal-950/30 to-ink-950/10" />
-                <div className="absolute inset-0 bg-charcoal-950/0 transition-colors duration-500 group-hover:bg-charcoal-950/20" />
-
-                {/* Category info */}
-                <div className="absolute bottom-0 left-0 right-0 p-5 md:p-7">
-                  <div className="transform transition-transform duration-400 group-hover:-translate-y-1">
-                    <p className="mb-1 font-body text-[10px] uppercase tracking-[0.3em] text-camel-400/70">
-                      {t('explore')}
-                    </p>
-                    <h3 className="font-display text-2xl font-light text-cream-100 md:text-3xl">
-                      {catName}
-                    </h3>
-                  </div>
-
-                  <div className="mt-3 flex items-center gap-2 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-                    <span className="font-body text-[10px] uppercase tracking-[0.2em] text-camel-400">
-                      {t('shopNow')}
-                    </span>
-                    <ArrowRight size={12} className="text-camel-400" strokeWidth={1.5} />
-                  </div>
-                </div>
-
-                {/* Camel border on hover */}
-                <div className="pointer-events-none absolute inset-0 border border-camel-500/0 transition-colors duration-500 group-hover:border-camel-500/25" />
-
-                {/* Divider between tiles */}
-                {i < displayCategories.length - 1 && (
-                  <div className="pointer-events-none absolute right-0 inset-y-0 w-px bg-charcoal-800" />
-                )}
-              </Link>
-            )
-          })}
-        </div>
-      )}
 
       {/* Camel gradient accent */}
       <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/35 to-transparent" />

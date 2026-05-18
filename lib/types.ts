@@ -7,6 +7,18 @@ export interface Category {
   description_ar?: string
   image: SanityImageAsset
   order: number
+  subcategories?: Pick<Category, '_id' | 'name_en' | 'name_ar' | 'slug' | 'image'>[]
+}
+
+export interface Collection {
+  _id: string
+  title_en: string
+  title_ar?: string
+  slug: string
+  imageUrl?: string
+  filterParam?: string
+  showInTiles?: boolean
+  order: number
 }
 
 export interface VolumeOption {
@@ -285,4 +297,37 @@ export interface Page {
   showInNav?: boolean
   navOrder?: number
   sections: HomePageSection[]
+}
+
+export interface FaqItem {
+  _id: string
+  question_en: string
+  question_ar?: string
+  answer_en: string
+  answer_ar?: string
+  category?: string
+  order: number
+}
+
+export interface ContactPageData {
+  _id: string
+  heading_en?: string
+  heading_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  email?: string
+  phone?: string
+  address_en?: string
+  address_ar?: string
+  instagramUrl?: string
+  whatsappNumber?: string
+}
+
+export interface NavItem {
+  _key?: string
+  label_en: string
+  label_ar?: string
+  href: string
+  highlight?: boolean
+  visible: boolean
 }

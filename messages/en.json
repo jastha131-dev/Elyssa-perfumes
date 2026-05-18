@@ -16,7 +16,10 @@
     "latestReleases": "Latest releases",
     "mostLoved": "Most loved",
     "forSomeoneSpecial": "For someone special",
-    "storiesGuides": "Stories & guides"
+    "storiesGuides": "Stories & guides",
+    "quiz": "Scent Quiz",
+    "faq": "FAQ",
+    "contact": "Contact"
   },
   "product": {
     "addToCart": "Add to Cart",
