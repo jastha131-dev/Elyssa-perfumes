@@ -38,6 +38,7 @@ import {
   upsellSection,
 } from './blocks'
 import { announcementBar } from './announcementBar'
+import { promotion } from './promotion'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
@@ -72,6 +73,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 
   // ── Global singletons ──────────────────────────────────────────
   announcementBar,
+  promotion,
 
   // ── Content documents ──────────────────────────────────────────
   product,
