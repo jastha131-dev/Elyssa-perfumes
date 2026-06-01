@@ -82,6 +82,7 @@ export interface Product {
   seoTitle_ar?: string
   seoDescription_en?: string
   seoDescription_ar?: string
+  sections?: HomePageSection[]
 }
 
 export interface CartItem {

@@ -12,6 +12,7 @@ export const product = defineType({
     { name: 'pricing', title: 'Pricing & Stock' },
     { name: 'media', title: 'Media' },
     { name: 'merchandising', title: 'Merchandising' },
+    { name: 'pageBuilder', title: 'Page Sections' },
     { name: 'seo', title: 'SEO' },
   ],
   fields: [
@@ -464,6 +465,36 @@ export const product = defineType({
       options: {
         layout: 'tags',
       },
+    }),
+
+    // ─── Page Builder ─────────────────────────────────────────────────────────
+    defineField({
+      name: 'sections',
+      title: 'Page Sections',
+      group: 'pageBuilder',
+      type: 'array',
+      description: 'Add optional sections below the product detail (banners, FAQs, testimonials, etc.).',
+      of: [
+        defineArrayMember({ type: 'heroSection' }),
+        defineArrayMember({ type: 'customBannerSection' }),
+        defineArrayMember({ type: 'videoBannerSection' }),
+        defineArrayMember({ type: 'imageWithTextSection' }),
+        defineArrayMember({ type: 'videoWithTextSection' }),
+        defineArrayMember({ type: 'marqueeSection' }),
+        defineArrayMember({ type: 'richTextSection' }),
+        defineArrayMember({ type: 'multiColumnSection' }),
+        defineArrayMember({ type: 'faqSection' }),
+        defineArrayMember({ type: 'testimonialsSection' }),
+        defineArrayMember({ type: 'instagramFeedSection' }),
+        defineArrayMember({ type: 'countdownTimerSection' }),
+        defineArrayMember({ type: 'beforeAfterSection' }),
+        defineArrayMember({ type: 'comparisonTableSection' }),
+        defineArrayMember({ type: 'tabsSection' }),
+        defineArrayMember({ type: 'upsellSection' }),
+        defineArrayMember({ type: 'newsletterSection' }),
+        defineArrayMember({ type: 'trustBarSection' }),
+        defineArrayMember({ type: 'brandStorySection' }),
+      ],
     }),
 
     // ─── SEO ──────────────────────────────────────────────────────────────────

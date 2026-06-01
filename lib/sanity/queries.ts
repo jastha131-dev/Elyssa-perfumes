@@ -69,7 +69,62 @@ export const getAllProductsQuery = `
 
 export const getProductBySlugQuery = `
   *[_type == "product" && slug.current == $slug][0] {
-    ${productFragment}
+    ${productFragment},
+    "sections": sections[] {
+      ...,
+      "bgImageUrl": bgImage.asset->url,
+      "bgImageAlt": bgImage.alt,
+      "imageUrl": image.asset->url,
+      "imageAlt": image.alt,
+      "posterImageUrl": posterImage.asset->url,
+      "products": products[]->{
+        _id,
+        "id": _id,
+        name_en,
+        name_ar,
+        "slug": slug.current,
+        price,
+        compareAtPrice,
+        description_en,
+        description_ar,
+        "images": images[]{"url": asset->url, alt},
+        "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+        stock,
+        featured,
+        bestSeller,
+        "new": new,
+        fragranceFamily,
+        intensity,
+        sillage,
+        longevity,
+        volume
+      },
+      "faqs": faqs[]->{
+        _id,
+        question_en,
+        question_ar,
+        answer_en,
+        answer_ar,
+        category,
+        order
+      },
+      "testimonials": testimonials[]->{
+        _id,
+        name_en,
+        name_ar,
+        location_en,
+        location_ar,
+        rating,
+        review_en,
+        review_ar,
+        "product": product->{ _id, name_en, name_ar, "slug": slug.current }
+      },
+      "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
+      "beforeImageUrl": beforeImage.asset->url,
+      "beforeImageAlt": beforeImage.alt,
+      "afterImageUrl": afterImage.asset->url,
+      "afterImageAlt": afterImage.alt
+    }
   }
 `
 

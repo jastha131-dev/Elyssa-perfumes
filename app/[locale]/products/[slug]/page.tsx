@@ -8,6 +8,7 @@ import {
 } from '@/lib/sanity/fetch'
 import type { Product } from '@/lib/types'
 import { ProductDetailClient } from '@/app/products/[slug]/_client'
+import PageBuilder from '@/components/PageBuilder'
 
 export const revalidate = 3600
 
@@ -98,6 +99,9 @@ export default async function ProductDetailPage({
       }
     >
       <ProductDetailClient product={product} relatedProducts={related} />
+      {product.sections && product.sections.length > 0 && (
+        <PageBuilder sections={product.sections} />
+      )}
     </Suspense>
   )
 }
