@@ -603,6 +603,34 @@ export const getCollectionBySlugQuery = `
   }
 `
 
+export const getActivePromotionsQuery = `
+  *[_type == "promotion" && isActive == true && (!defined(validFrom) || dateTime(validFrom) <= dateTime(now())) && (!defined(validUntil) || dateTime(validUntil) >= dateTime(now()))] {
+    _id,
+    name,
+    isActive,
+    code,
+    type,
+    discountValue,
+    tiers,
+    buyQuantity,
+    getQuantity,
+    minOrderValue,
+    minQuantity,
+    validFrom,
+    validUntil,
+    usageLimit,
+    onePerCustomer,
+    "applicableProducts": applicableProducts[]->{_id},
+    label_en,
+    label_ar,
+    badgeText_en,
+    badgeText_ar,
+    cartMessage_en,
+    cartMessage_ar,
+    freeShippingThreshold
+  }
+`
+
 export const getSmartCollectionProductsQuery = `
   *[
     _type == "product"

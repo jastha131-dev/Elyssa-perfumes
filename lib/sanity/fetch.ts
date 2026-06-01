@@ -24,8 +24,9 @@ import {
   getAnnouncementBarQuery,
   getCollectionBySlugQuery,
   getSmartCollectionProductsQuery,
+  getActivePromotionsQuery,
 } from './queries'
-import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -216,5 +217,12 @@ export async function getSmartCollectionProducts(filters: {
       new: filters.new ?? false,
     },
     { next: { revalidate: 60 } }
+  )
+}
+
+export async function getActivePromotions(): Promise<Promotion[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<Promotion[]>(
+    getActivePromotionsQuery, {}, { next: { revalidate: 60 } }
   )
 }
