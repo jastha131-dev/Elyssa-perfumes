@@ -56,7 +56,51 @@ const productFragment = `
   seoTitle_en,
   seoTitle_ar,
   seoDescription_en,
-  seoDescription_ar
+  seoDescription_ar,
+  concentration,
+  ingredients,
+  "shippingText_en": shippingText_en,
+  "shippingText_ar": shippingText_ar,
+  "layeringProducts": layeringProducts[]->{
+    _id,
+    "id": _id,
+    name_en,
+    name_ar,
+    "slug": slug.current,
+    price,
+    compareAtPrice,
+    fragranceFamily,
+    concentration,
+    "images": images[]{"url": asset->url, alt},
+    "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+    stock,
+    volume
+  },
+  "frequentlyBoughtTogether": frequentlyBoughtTogether[]->{
+    _id,
+    "id": _id,
+    name_en,
+    name_ar,
+    "slug": slug.current,
+    price,
+    compareAtPrice,
+    fragranceFamily,
+    concentration,
+    "images": images[]{"url": asset->url, alt},
+    "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+    stock,
+    volume
+  },
+  "reviews": reviews[]{
+    _key,
+    name,
+    location,
+    rating,
+    review_en,
+    review_ar,
+    date,
+    verified
+  }
 `
 
 // ─── Product Queries ──────────────────────────────────────────────────────────
