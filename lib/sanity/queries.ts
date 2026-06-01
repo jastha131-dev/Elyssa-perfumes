@@ -536,3 +536,103 @@ export const getAnnouncementBarQuery = `
     dismissible
   }
 `
+
+export const getCollectionBySlugQuery = `
+  *[_type == "collection" && slug.current == $slug && isActive != false][0] {
+    _id,
+    title_en,
+    title_ar,
+    "slug": slug.current,
+    "imageUrl": image.asset->url,
+    "heroImageUrl": heroImage.asset->url,
+    "heroImageAlt": heroImage.alt,
+    headline_en,
+    headline_ar,
+    subtext_en,
+    subtext_ar,
+    "cta": ctaButton,
+    filterType,
+    smartFilters,
+    defaultSort,
+    filterParam,
+    seoTitle_en,
+    seoTitle_ar,
+    seoDescription_en,
+    seoDescription_ar,
+    "manualProducts": manualProducts[]->{
+      _id,
+      "id": _id,
+      name_en,
+      name_ar,
+      "slug": slug.current,
+      price,
+      compareAtPrice,
+      description_en,
+      description_ar,
+      "images": images[]{"url": asset->url, alt},
+      "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+      stock,
+      featured,
+      bestSeller,
+      "new": new,
+      fragranceFamily,
+      concentration,
+      intensity,
+      sillage,
+      longevity,
+      volume,
+      tags
+    },
+    "sections": sections[] {
+      ...,
+      "bgImageUrl": bgImage.asset->url,
+      "bgImageAlt": bgImage.alt,
+      "imageUrl": image.asset->url,
+      "imageAlt": image.alt,
+      "posterImageUrl": posterImage.asset->url,
+      "products": products[]->{
+        _id, "id": _id, name_en, name_ar, "slug": slug.current, price, compareAtPrice,
+        "images": images[]{"url": asset->url, alt},
+        "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+        stock, featured, bestSeller, "new": new, fragranceFamily, intensity, sillage, longevity, volume
+      },
+      "faqs": faqs[]->{_id, question_en, question_ar, answer_en, answer_ar, category, order},
+      "collections": collections[]->{_id, title_en, title_ar, "slug": slug.current, "imageUrl": image.asset->url, filterParam, order},
+      "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link}
+    }
+  }
+`
+
+export const getSmartCollectionProductsQuery = `
+  *[
+    _type == "product"
+    && (!defined($fragranceFamilies) || count($fragranceFamilies) == 0 || fragranceFamily in $fragranceFamilies)
+    && (!defined($tags) || count($tags) == 0 || count((tags)[@ in $tags]) > 0)
+    && (!defined($priceMin) || price >= $priceMin)
+    && (!defined($priceMax) || price <= $priceMax)
+    && ($featured == false || featured == true)
+    && ($bestSeller == false || bestSeller == true)
+    && ($new == false || new == true)
+  ] | order(_createdAt desc) {
+    _id,
+    "id": _id,
+    name_en,
+    name_ar,
+    "slug": slug.current,
+    price,
+    compareAtPrice,
+    "images": images[]{"url": asset->url, alt},
+    "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+    stock,
+    featured,
+    bestSeller,
+    "new": new,
+    fragranceFamily,
+    concentration,
+    intensity,
+    sillage,
+    longevity,
+    volume,
+    tags
+  }
+`

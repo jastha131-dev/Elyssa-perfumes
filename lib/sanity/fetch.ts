@@ -22,8 +22,10 @@ import {
   getContactPageQuery,
   getNavConfigQuery,
   getAnnouncementBarQuery,
+  getCollectionBySlugQuery,
+  getSmartCollectionProductsQuery,
 } from './queries'
-import type { Product, Category, Collection, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -180,5 +182,39 @@ export async function getAnnouncementBar(): Promise<AnnouncementBar | null> {
   if (!isSanityConfigured) return null
   return client.fetch<AnnouncementBar | null>(
     getAnnouncementBarQuery, {}, { next: { revalidate: 300 } }
+  )
+}
+
+export async function getCollectionBySlug(slug: string): Promise<CollectionDetail | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<CollectionDetail | null>(
+    getCollectionBySlugQuery,
+    { slug },
+    { next: { revalidate: 60 } }
+  )
+}
+
+export async function getSmartCollectionProducts(filters: {
+  fragranceFamilies?: string[]
+  tags?: string[]
+  priceMin?: number
+  priceMax?: number
+  featured?: boolean
+  bestSeller?: boolean
+  new?: boolean
+}): Promise<Product[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<Product[]>(
+    getSmartCollectionProductsQuery,
+    {
+      fragranceFamilies: filters.fragranceFamilies ?? [],
+      tags: filters.tags ?? [],
+      priceMin: filters.priceMin ?? null,
+      priceMax: filters.priceMax ?? null,
+      featured: filters.featured ?? false,
+      bestSeller: filters.bestSeller ?? false,
+      new: filters.new ?? false,
+    },
+    { next: { revalidate: 60 } }
   )
 }

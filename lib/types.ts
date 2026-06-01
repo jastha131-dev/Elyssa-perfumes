@@ -21,6 +21,39 @@ export interface Collection {
   order: number
 }
 
+export interface CollectionDetail {
+  _id: string
+  title_en: string
+  title_ar?: string
+  slug: string
+  imageUrl?: string
+  heroImageUrl?: string
+  heroImageAlt?: string
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  cta?: CtaButton
+  filterType?: 'manual' | 'smart'
+  smartFilters?: {
+    fragranceFamilies?: string[]
+    tags?: string[]
+    priceMin?: number
+    priceMax?: number
+    featured?: boolean
+    bestSeller?: boolean
+    new?: boolean
+  }
+  defaultSort?: string
+  filterParam?: string
+  seoTitle_en?: string
+  seoTitle_ar?: string
+  seoDescription_en?: string
+  seoDescription_ar?: string
+  manualProducts?: Product[]
+  sections?: HomePageSection[]
+}
+
 export interface VolumeOption {
   ml: number
   price: number
@@ -546,6 +579,41 @@ export interface AnnouncementBar {
   linkLabel_en?: string
   linkLabel_ar?: string
   dismissible?: boolean
+}
+
+// ─── Promotions ───────────────────────────────────────────────────────────────
+
+export interface PromotionTier {
+  minSpend: number
+  discountPercent: number
+  label_en?: string
+  label_ar?: string
+}
+
+export interface Promotion {
+  _id: string
+  name: string
+  isActive: boolean
+  code?: string
+  type: 'percentage' | 'fixed' | 'free_shipping' | 'buy_x_get_y' | 'tiered' | 'free_gift'
+  discountValue?: number
+  tiers?: PromotionTier[]
+  buyQuantity?: number
+  getQuantity?: number
+  minOrderValue?: number
+  minQuantity?: number
+  validFrom?: string
+  validUntil?: string
+  usageLimit?: number
+  onePerCustomer?: boolean
+  applicableProducts?: Array<{ _id: string }>
+  label_en?: string
+  label_ar?: string
+  badgeText_en?: string
+  badgeText_ar?: string
+  cartMessage_en?: string
+  cartMessage_ar?: string
+  freeShippingThreshold?: number
 }
 
 // ─── Updated Union ────────────────────────────────────────────────────────────
