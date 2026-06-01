@@ -12,6 +12,21 @@ const SECTION_CONFIG: Record<string, { emoji: string; bg: string; fg: string; sh
   testimonialsSection:     { emoji: '❝', bg: '#14532D', fg: '#86EFAC', shortLabel: 'REVIEWS',    label: 'Testimonials'        },
   newsletterSection:       { emoji: '✉', bg: '#1E3A8A', fg: '#BFDBFE', shortLabel: 'EMAIL',      label: 'Newsletter'          },
   trustBarSection:         { emoji: '✓', bg: '#44403C', fg: '#D6D3D1', shortLabel: 'TRUST',      label: 'Trust Bar'           },
+  videoBannerSection:      { emoji: '▶', bg: '#1C1917', fg: '#FCA5A5', shortLabel: 'VIDEO',      label: 'Video Banner'        },
+  newArrivalsSection:      { emoji: '✦', bg: '#065F46', fg: '#6EE7B7', shortLabel: 'NEW',        label: 'New Arrivals'        },
+  collectionsGridSection:  { emoji: '⊟', bg: '#1E3A5F', fg: '#BFDBFE', shortLabel: 'COLLS',     label: 'Collections Grid'   },
+  faqSection:              { emoji: '?', bg: '#312E81', fg: '#C4B5FD', shortLabel: 'FAQ',        label: 'FAQ Accordion'       },
+  imageWithTextSection:    { emoji: '◧', bg: '#78350F', fg: '#FDE68A', shortLabel: 'IMG+TXT',   label: 'Image with Text'    },
+  videoWithTextSection:    { emoji: '◧', bg: '#1C1917', fg: '#D6D3D1', shortLabel: 'VID+TXT',   label: 'Video with Text'    },
+  instagramFeedSection:    { emoji: '◈', bg: '#831843', fg: '#FBCFE8', shortLabel: 'INSTA',      label: 'Instagram Feed'      },
+  countdownTimerSection:   { emoji: '⏱', bg: '#7C2D12', fg: '#FED7AA', shortLabel: 'TIMER',      label: 'Countdown Timer'     },
+  richTextSection:         { emoji: '¶', bg: '#374151', fg: '#E5E7EB', shortLabel: 'TEXT',       label: 'Rich Text'           },
+  multiColumnSection:      { emoji: '⊞', bg: '#14532D', fg: '#86EFAC', shortLabel: 'COLS',       label: 'Multi-Column'        },
+  beforeAfterSection:      { emoji: '⇔', bg: '#4C1D95', fg: '#C4B5FD', shortLabel: 'B/AFT',      label: 'Before / After'      },
+  comparisonTableSection:  { emoji: '≡', bg: '#1F2937', fg: '#D1D5DB', shortLabel: 'COMPARE',   label: 'Comparison Table'   },
+  tabsSection:             { emoji: '⊡', bg: '#064E3B', fg: '#A7F3D0', shortLabel: 'TABS',       label: 'Tabs Section'        },
+  upsellSection:           { emoji: '↑', bg: '#92400E', fg: '#FDE68A', shortLabel: 'UPSELL',     label: 'Upsell Products'     },
+  announcementBar:         { emoji: '!', bg: '#B45309', fg: '#FEF3C7', shortLabel: 'ANNC',       label: 'Announcement Bar'    },
 }
 
 export function createSectionIcon(type: string) {

@@ -189,7 +189,55 @@ export const getHomePageQuery = `
         review_en,
         review_ar,
         "product": product->{ _id, name_en, name_ar, "slug": slug.current }
-      }
+      },
+      "collections": collections[]->{
+        _id,
+        title_en,
+        title_ar,
+        "slug": slug.current,
+        "imageUrl": image.asset->url,
+        filterParam,
+        order
+      },
+      "faqs": faqs[]->{
+        _id,
+        question_en,
+        question_ar,
+        answer_en,
+        answer_ar,
+        category,
+        order
+      },
+      "newArrivalsProducts": select(
+        _type == "newArrivalsSection" => *[_type == "product" && new == true] | order(_createdAt desc)[0..11]{
+          _id,
+          "id": _id,
+          name_en,
+          name_ar,
+          "slug": slug.current,
+          price,
+          compareAtPrice,
+          description_en,
+          description_ar,
+          "images": images[]{"url": asset->url, alt},
+          "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+          stock,
+          featured,
+          bestSeller,
+          "new": new,
+          fragranceFamily,
+          intensity,
+          sillage,
+          longevity,
+          volume
+        }
+      ),
+      "posterImageUrl": posterImage.asset->url,
+      "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
+      "beforeImageUrl": beforeImage.asset->url,
+      "beforeImageAlt": beforeImage.alt,
+      "afterImageUrl": afterImage.asset->url,
+      "afterImageAlt": afterImage.alt
     }
   }
 `
@@ -268,7 +316,55 @@ export const getPageBySlugQuery = `
         review_en,
         review_ar,
         "product": product->{ _id, name_en, name_ar, "slug": slug.current }
-      }
+      },
+      "collections": collections[]->{
+        _id,
+        title_en,
+        title_ar,
+        "slug": slug.current,
+        "imageUrl": image.asset->url,
+        filterParam,
+        order
+      },
+      "faqs": faqs[]->{
+        _id,
+        question_en,
+        question_ar,
+        answer_en,
+        answer_ar,
+        category,
+        order
+      },
+      "newArrivalsProducts": select(
+        _type == "newArrivalsSection" => *[_type == "product" && new == true] | order(_createdAt desc)[0..11]{
+          _id,
+          "id": _id,
+          name_en,
+          name_ar,
+          "slug": slug.current,
+          price,
+          compareAtPrice,
+          description_en,
+          description_ar,
+          "images": images[]{"url": asset->url, alt},
+          "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+          stock,
+          featured,
+          bestSeller,
+          "new": new,
+          fragranceFamily,
+          intensity,
+          sillage,
+          longevity,
+          volume
+        }
+      ),
+      "posterImageUrl": posterImage.asset->url,
+      "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
+      "beforeImageUrl": beforeImage.asset->url,
+      "beforeImageAlt": beforeImage.alt,
+      "afterImageUrl": afterImage.asset->url,
+      "afterImageAlt": afterImage.alt
     }
   }
 `
@@ -323,5 +419,21 @@ export const getNavConfigQuery = `
     "items": items[] {
       _key, label_en, label_ar, href, highlight, visible
     }
+  }
+`
+
+export const getAnnouncementBarQuery = `
+  *[_type == "announcementBar"][0] {
+    _id,
+    isEnabled,
+    text_en,
+    text_ar,
+    bgColor,
+    customBgColor,
+    textColor,
+    link,
+    linkLabel_en,
+    linkLabel_ar,
+    dismissible
   }
 `

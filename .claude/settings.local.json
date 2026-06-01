@@ -47,10 +47,12 @@
       "Bash(/Users/californiamediadubai/.npm-global/bin/vercel whoami *)",
       "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --yes)",
       "Bash(git fetch *)",
-      "Bash(git pull *)"
+      "Bash(git pull *)",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs)"
     ],
     "additionalDirectories": [
-      "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq"
+      "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq",
+      "/Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs"
     ]
   }
 }

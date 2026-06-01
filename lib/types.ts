@@ -263,6 +263,254 @@ export interface TrustBarSectionBlock {
   items?: Array<{ icon?: string; label_en?: string; label_ar?: string; value?: string }>
 }
 
+// ─── Phase 1 Section Blocks ───────────────────────────────────────────────────
+
+export interface VideoBannerSectionBlock {
+  _type: 'videoBannerSection'
+  _key: string
+  isVisible?: boolean
+  videoUrl?: string
+  muxPlaybackId?: string
+  posterImageUrl?: string
+  posterImageAlt?: string
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  overlayOpacity?: number
+  layout?: 'fullscreen' | 'split'
+  cta?: CtaButton
+  autoplay?: boolean
+  muted?: boolean
+  loop?: boolean
+}
+
+export interface NewArrivalsSectionBlock {
+  _type: 'newArrivalsSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
+  limit?: number
+  layout?: 'grid' | 'carousel'
+  cta?: CtaButton
+  newArrivalsProducts?: Product[]
+}
+
+export interface CollectionsGridSectionBlock {
+  _type: 'collectionsGridSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
+  collections?: Collection[]
+  columnCount?: 2 | 3 | 4
+  cta?: CtaButton
+}
+
+export interface FaqSectionBlock {
+  _type: 'faqSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
+  faqs?: FaqItem[]
+  layout?: 'single-column' | 'two-column'
+}
+
+export interface ImageWithTextSectionBlock {
+  _type: 'imageWithTextSection'
+  _key: string
+  isVisible?: boolean
+  imageUrl?: string
+  imageAlt?: string
+  headline_en?: string
+  headline_ar?: string
+  eyebrow_en?: string
+  eyebrow_ar?: string
+  body_en?: string
+  body_ar?: string
+  imagePosition?: 'left' | 'right'
+  imageStyle?: 'square' | 'rounded' | 'full-bleed'
+  bgColor?: 'white' | 'cream' | 'black'
+  cta?: CtaButton
+}
+
+export interface VideoWithTextSectionBlock {
+  _type: 'videoWithTextSection'
+  _key: string
+  isVisible?: boolean
+  videoUrl?: string
+  muxPlaybackId?: string
+  posterImageUrl?: string
+  autoplay?: boolean
+  headline_en?: string
+  headline_ar?: string
+  eyebrow_en?: string
+  eyebrow_ar?: string
+  body_en?: string
+  body_ar?: string
+  videoPosition?: 'left' | 'right'
+  bgColor?: 'white' | 'cream' | 'black'
+  cta?: CtaButton
+}
+
+export interface InstagramPhoto {
+  imageUrl?: string
+  imageAlt?: string
+  caption_en?: string
+  caption_ar?: string
+  link?: string
+}
+
+export interface InstagramFeedSectionBlock {
+  _type: 'instagramFeedSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  handle?: string
+  photos?: InstagramPhoto[]
+  columns?: 3 | 4 | 6
+  cta?: CtaButton
+}
+
+export interface CountdownTimerSectionBlock {
+  _type: 'countdownTimerSection'
+  _key: string
+  isVisible?: boolean
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  endDate?: string
+  expiredText_en?: string
+  expiredText_ar?: string
+  bgImageUrl?: string
+  style?: 'minimal' | 'card' | 'full-bleed'
+  cta?: CtaButton
+}
+
+export interface RichTextSectionBlock {
+  _type: 'richTextSection'
+  _key: string
+  isVisible?: boolean
+  content_en?: PortableTextBlock[]
+  content_ar?: PortableTextBlock[]
+  maxWidth?: 'narrow' | 'normal' | 'wide'
+  textAlign?: 'left' | 'center'
+}
+
+export interface MultiColumnItem {
+  _key: string
+  icon?: string
+  headline_en?: string
+  headline_ar?: string
+  body_en?: string
+  body_ar?: string
+  cta?: CtaButton
+}
+
+export interface MultiColumnSectionBlock {
+  _type: 'multiColumnSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
+  columnCount?: 2 | 3 | 4
+  columns?: MultiColumnItem[]
+  bgColor?: 'white' | 'cream' | 'black'
+}
+
+// ─── Phase 2 Section Blocks ───────────────────────────────────────────────────
+
+export interface BeforeAfterSectionBlock {
+  _type: 'beforeAfterSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
+  beforeImageUrl?: string
+  beforeImageAlt?: string
+  afterImageUrl?: string
+  afterImageAlt?: string
+  beforeLabel_en?: string
+  beforeLabel_ar?: string
+  afterLabel_en?: string
+  afterLabel_ar?: string
+  initialPosition?: number
+}
+
+export interface ComparisonTableSectionBlock {
+  _type: 'comparisonTableSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  products?: Product[]
+  highlightProductIndex?: number
+  showAddToCart?: boolean
+}
+
+export interface TabItem {
+  _key: string
+  label_en?: string
+  label_ar?: string
+  content_en?: PortableTextBlock[]
+  content_ar?: PortableTextBlock[]
+  icon?: string
+}
+
+export interface TabsSectionBlock {
+  _type: 'tabsSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  tabs?: TabItem[]
+}
+
+export interface UpsellSectionBlock {
+  _type: 'upsellSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  subtitle_en?: string
+  subtitle_ar?: string
+  products?: Product[]
+  layout?: 'grid' | 'carousel'
+  cta?: CtaButton
+}
+
+// ─── Global Announcement Bar ──────────────────────────────────────────────────
+
+export interface AnnouncementBar {
+  _id: string
+  isEnabled?: boolean
+  text_en?: string
+  text_ar?: string
+  bgColor?: 'gold' | 'black' | 'cream' | 'custom'
+  customBgColor?: string
+  textColor?: 'light' | 'dark'
+  link?: string
+  linkLabel_en?: string
+  linkLabel_ar?: string
+  dismissible?: boolean
+}
+
+// ─── Updated Union ────────────────────────────────────────────────────────────
+
 export type HomePageSection =
   | HeroSectionBlock
   | CustomBannerSectionBlock
@@ -275,6 +523,20 @@ export type HomePageSection =
   | TestimonialsSectionBlock
   | NewsletterSectionBlock
   | TrustBarSectionBlock
+  | VideoBannerSectionBlock
+  | NewArrivalsSectionBlock
+  | CollectionsGridSectionBlock
+  | FaqSectionBlock
+  | ImageWithTextSectionBlock
+  | VideoWithTextSectionBlock
+  | InstagramFeedSectionBlock
+  | CountdownTimerSectionBlock
+  | RichTextSectionBlock
+  | MultiColumnSectionBlock
+  | BeforeAfterSectionBlock
+  | ComparisonTableSectionBlock
+  | TabsSectionBlock
+  | UpsellSectionBlock
 
 export interface HomePage {
   _id: string

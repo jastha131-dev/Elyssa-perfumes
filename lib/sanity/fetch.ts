@@ -21,8 +21,9 @@ import {
   getFaqItemsQuery,
   getContactPageQuery,
   getNavConfigQuery,
+  getAnnouncementBarQuery,
 } from './queries'
-import type { Product, Category, Collection, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem } from '../types'
+import type { Product, Category, Collection, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -173,4 +174,11 @@ export async function getNavConfig(): Promise<NavItem[]> {
     getNavConfigQuery, {}, { next: { revalidate: 300 } }
   )
   return data?.items ?? []
+}
+
+export async function getAnnouncementBar(): Promise<AnnouncementBar | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<AnnouncementBar | null>(
+    getAnnouncementBarQuery, {}, { next: { revalidate: 300 } }
+  )
 }

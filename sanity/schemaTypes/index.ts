@@ -22,7 +22,22 @@ import {
   testimonialsSection,
   newsletterSection,
   trustBarSection,
+  videoBannerSection,
+  newArrivalsSection,
+  collectionsGridSection,
+  faqSection,
+  imageWithTextSection,
+  videoWithTextSection,
+  instagramFeedSection,
+  countdownTimerSection,
+  richTextSection,
+  multiColumnSection,
+  beforeAfterSection,
+  comparisonTableSection,
+  tabsSection,
+  upsellSection,
 } from './blocks'
+import { announcementBar } from './announcementBar'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
@@ -40,6 +55,23 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   testimonialsSection,
   newsletterSection,
   trustBarSection,
+  videoBannerSection,
+  newArrivalsSection,
+  collectionsGridSection,
+  faqSection,
+  imageWithTextSection,
+  videoWithTextSection,
+  instagramFeedSection,
+  countdownTimerSection,
+  richTextSection,
+  multiColumnSection,
+  beforeAfterSection,
+  comparisonTableSection,
+  tabsSection,
+  upsellSection,
+
+  // ── Global singletons ──────────────────────────────────────────
+  announcementBar,
 
   // ── Content documents ──────────────────────────────────────────
   product,
