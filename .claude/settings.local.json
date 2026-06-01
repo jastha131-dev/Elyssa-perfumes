@@ -45,7 +45,9 @@
       "Bash(rm -rf /Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq && npm install -g vercel 2>&1 | tail -5)",
       "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --version)",
       "Bash(/Users/californiamediadubai/.npm-global/bin/vercel whoami *)",
-      "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --yes)"
+      "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --yes)",
+      "Bash(git fetch *)",
+      "Bash(git pull *)"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq"
