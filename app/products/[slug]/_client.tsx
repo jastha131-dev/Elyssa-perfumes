@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useRef } from 'react'
 import { useLocale } from 'next-intl'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import Link from 'next/link'
@@ -16,6 +16,7 @@ import {
   RotateCcw,
   Leaf,
   Droplets,
+  Star,
 } from 'lucide-react'
 import { PortableText } from '@portabletext/react'
 import { cn, formatPrice, calculateDiscount } from '@/lib/utils'
@@ -26,7 +27,7 @@ import { useCartDrawerStore } from '@/lib/store/cart-drawer-store'
 import { ImageGallery } from '@/components/product/ImageGallery'
 import { FragranceNotes } from '@/components/product/FragranceNotes'
 import { RelatedProducts } from '@/components/product/RelatedProducts'
-import type { Product, VolumeOption } from '@/lib/types'
+import type { Product, VolumeOption, ProductReview } from '@/lib/types'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -179,6 +180,388 @@ function AccordionSection({
   )
 }
 
+// ─── Pairing Section ─────────────────────────────────────────────────────────
+
+function PairingSection({ products }: { products: Product[] }) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+  const items = products.slice(0, 3)
+
+  if (items.length === 0) return null
+
+  return (
+    <section className="mt-8">
+      <p className="mb-4 font-body text-[10px] uppercase tracking-[0.28em] text-charcoal-400">
+        {isAr ? 'يتناسب مع' : 'Pairs Well With'}
+      </p>
+      <div className="flex flex-col gap-3">
+        {items.map((p) => {
+          const name = isAr ? p.name_ar : p.name_en
+          const price = p.volume?.[0]?.price ?? p.price
+          const concentration = p.concentration ?? 'Eau de Parfum'
+          return (
+            <Link
+              key={p._id}
+              href={`/${locale}/products/${p.slug}`}
+              className="group flex items-center gap-4 border border-charcoal-100 bg-cream-50 px-4 py-3 transition-colors hover:border-charcoal-300 hover:bg-white"
+            >
+              {/* Thumbnail */}
+              <div className="relative h-20 w-[60px] flex-shrink-0 overflow-hidden bg-cream-100">
+                {p.images?.[0]?.url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={p.images[0].url}
+                    alt={p.images[0].alt || name}
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="flex h-full w-full items-center justify-center">
+                    <Droplets className="h-5 w-5 text-charcoal-300" />
+                  </div>
+                )}
+              </div>
+
+              {/* Info */}
+              <div className="min-w-0 flex-1">
+                <h4 className="font-display text-sm font-light text-charcoal-900 leading-snug group-hover:text-gold-600 transition-colors truncate">
+                  {name}
+                </h4>
+                <span className="mt-1 inline-block bg-charcoal-100 px-2 py-0.5 font-body text-[9px] uppercase tracking-[0.18em] text-charcoal-500">
+                  {concentration}
+                </span>
+              </div>
+
+              {/* Price */}
+              <p className="flex-shrink-0 font-body text-sm font-medium text-charcoal-800">
+                {formatPrice(price)}
+              </p>
+            </Link>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+// ─── Frequently Bought Together ───────────────────────────────────────────────
+
+function FrequentlyBoughtTogether({
+  currentProduct,
+  companions,
+}: {
+  currentProduct: Product
+  companions: Product[]
+}) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+  const { addItem: addToCart } = useCartStore()
+  const { openCart } = useCartDrawerStore()
+  const [added, setAdded] = useState(false)
+
+  const items = companions.slice(0, 3)
+  const allProducts = [currentProduct, ...items]
+
+  const combinedPrice = allProducts.reduce((sum, p) => {
+    const vol = p.volume?.[0]
+    return sum + (vol?.price ?? p.price)
+  }, 0)
+
+  const handleAddAll = useCallback(() => {
+    allProducts.forEach((p) => {
+      const vol = p.volume?.[0] ?? { ml: 100, price: p.price }
+      addToCart(p, 1, vol)
+    })
+    openCart()
+    setAdded(true)
+    const timer = setTimeout(() => setAdded(false), 2500)
+    return () => clearTimeout(timer)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allProducts, addToCart, openCart])
+
+  if (items.length === 0) return null
+
+  return (
+    <section className="py-12 border-t border-charcoal-100">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="mb-8"
+      >
+        <p className="mb-1.5 font-body text-[10px] uppercase tracking-[0.35em] text-charcoal-400">
+          {isAr ? 'يُشترى معه عادةً' : 'Frequently Bought Together'}
+        </p>
+        <h2 className="font-display text-2xl font-light text-charcoal-900">
+          {isAr ? 'كوّن طقمك المثالي' : 'Complete the Collection'}
+        </h2>
+        <div className="mt-3 h-px w-10 bg-charcoal-200" />
+      </motion.div>
+
+      {/* Product row */}
+      <div className="flex items-center gap-3 overflow-x-auto pb-2">
+        {allProducts.map((p, idx) => {
+          const name = isAr ? p.name_ar : p.name_en
+          const price = p.volume?.[0]?.price ?? p.price
+          return (
+            <div key={p._id} className="flex items-center gap-3">
+              <div className="flex-shrink-0 w-[120px] text-center">
+                <Link href={`/${locale}/products/${p.slug}`} className="group block">
+                  <div className="relative mx-auto h-[150px] w-[100px] overflow-hidden bg-cream-50 border border-charcoal-100">
+                    {p.images?.[0]?.url ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        src={p.images[0].url}
+                        alt={p.images[0].alt || name}
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="flex h-full w-full items-center justify-center">
+                        <Droplets className="h-6 w-6 text-charcoal-300" />
+                      </div>
+                    )}
+                    {idx === 0 && (
+                      <div className="absolute bottom-0 left-0 right-0 bg-charcoal-900/80 py-1">
+                        <p className="font-body text-[9px] uppercase tracking-[0.15em] text-white text-center">
+                          {isAr ? 'هذا المنتج' : 'This item'}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                  <p className="mt-2 font-display text-xs font-light text-charcoal-800 leading-snug truncate group-hover:text-gold-600 transition-colors">
+                    {name}
+                  </p>
+                  <p className="mt-0.5 font-body text-xs font-medium text-charcoal-700">
+                    {formatPrice(price)}
+                  </p>
+                </Link>
+              </div>
+              {idx < allProducts.length - 1 && (
+                <div className="flex-shrink-0 flex h-7 w-7 items-center justify-center rounded-full border border-charcoal-200 bg-white">
+                  <Plus className="h-3 w-3 text-charcoal-400" />
+                </div>
+              )}
+            </div>
+          )
+        })}
+      </div>
+
+      {/* Combined price + CTA */}
+      <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-6">
+        <div>
+          <p className="font-body text-xs text-charcoal-400 uppercase tracking-[0.18em]">
+            {isAr ? 'المجموع' : 'Combined Price'}
+          </p>
+          <p className="font-display text-2xl font-light text-charcoal-900">
+            {formatPrice(combinedPrice)}
+          </p>
+        </div>
+        <motion.button
+          type="button"
+          onClick={handleAddAll}
+          whileTap={{ scale: 0.98 }}
+          className={cn(
+            'flex items-center justify-center gap-2 px-8 py-3.5',
+            'font-body text-sm font-medium uppercase tracking-[0.18em]',
+            'transition-all duration-300',
+            added
+              ? 'bg-charcoal-900 text-white'
+              : 'bg-gold-500 text-white hover:bg-gold-600'
+          )}
+        >
+          <ShoppingBag className="h-4 w-4 flex-shrink-0" />
+          {added
+            ? (isAr ? 'تمت الإضافة ✓' : 'Added to Bag ✓')
+            : (isAr ? 'إضافة الكل إلى الحقيبة' : 'Add All to Bag')}
+        </motion.button>
+      </div>
+    </section>
+  )
+}
+
+// ─── Reviews Section ──────────────────────────────────────────────────────────
+
+function ReviewsSection({ reviews }: { reviews: ProductReview[] }) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+
+  if (reviews.length === 0) return null
+
+  const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length
+  const roundedAvg = Math.round(avgRating * 10) / 10
+
+  function formatReviewDate(dateStr?: string): string {
+    if (!dateStr) return ''
+    const date = new Date(dateStr)
+    if (isNaN(date.getTime())) return dateStr
+    return date.toLocaleDateString(isAr ? 'ar-AE' : 'en-US', {
+      month: 'long',
+      year: 'numeric',
+    })
+  }
+
+  function StarRow({ rating, size = 14 }: { rating: number; size?: number }) {
+    return (
+      <div className="flex items-center gap-0.5">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <Star
+            key={i}
+            style={{ width: size, height: size }}
+            className={i < Math.round(rating) ? 'text-gold-500' : 'text-charcoal-200'}
+            fill={i < Math.round(rating) ? 'currentColor' : 'none'}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  return (
+    <section className="py-12 border-t border-charcoal-100">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="mb-8"
+      >
+        {/* Header */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="mb-1.5 font-body text-[10px] uppercase tracking-[0.35em] text-charcoal-400">
+              {isAr ? 'آراء العملاء' : 'Customer Reviews'}
+            </p>
+            <h2 className="font-display text-2xl font-light text-charcoal-900">
+              {isAr ? 'ما يقوله العملاء' : 'What Our Customers Say'}
+            </h2>
+          </div>
+          <div className="flex items-center gap-3">
+            <StarRow rating={roundedAvg} size={16} />
+            <span className="font-display text-xl font-light text-charcoal-900">
+              {roundedAvg}
+            </span>
+            <span className="font-body text-xs text-charcoal-400">
+              ({reviews.length} {isAr ? 'تقييم' : 'reviews'})
+            </span>
+          </div>
+        </div>
+        <div className="mt-3 h-px w-10 bg-charcoal-200" />
+      </motion.div>
+
+      {/* Review cards grid */}
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {reviews.map((review, i) => {
+          const reviewText = isAr && review.review_ar ? review.review_ar : review.review_en
+          return (
+            <motion.div
+              key={review._key}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.07, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col gap-3 border border-charcoal-100 bg-cream-50 px-5 py-4"
+            >
+              {/* Stars */}
+              <StarRow rating={review.rating} />
+
+              {/* Review text */}
+              <p className="font-body text-sm text-charcoal-600 leading-relaxed flex-1">
+                &ldquo;{reviewText}&rdquo;
+              </p>
+
+              {/* Reviewer info */}
+              <div className="flex items-start justify-between gap-2 pt-1 border-t border-charcoal-100">
+                <div>
+                  <p className="font-body text-xs font-semibold text-charcoal-800">
+                    {review.name}
+                  </p>
+                  {review.location && (
+                    <p className="font-body text-[10px] text-charcoal-400 mt-0.5">
+                      {review.location}
+                    </p>
+                  )}
+                </div>
+                <div className="flex flex-col items-end gap-1 flex-shrink-0">
+                  {review.verified && (
+                    <span className="inline-flex items-center gap-1 bg-charcoal-900 px-1.5 py-0.5 font-body text-[9px] uppercase tracking-[0.15em] text-gold-400">
+                      {isAr ? 'شراء موثق' : 'Verified'}
+                    </span>
+                  )}
+                  {review.date && (
+                    <p className="font-body text-[10px] text-charcoal-400">
+                      {formatReviewDate(review.date)}
+                    </p>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          )
+        })}
+      </div>
+    </section>
+  )
+}
+
+// ─── Sticky Add-to-Cart Bar ───────────────────────────────────────────────────
+
+interface StickyBarProps {
+  productName: string
+  selectedVolume: VolumeOption
+  onAddToCart: () => void
+  addedToCart: boolean
+}
+
+function StickyBar({
+  productName,
+  selectedVolume,
+  onAddToCart,
+  addedToCart,
+}: StickyBarProps) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+
+  return (
+    <div
+      className={cn(
+        'fixed bottom-0 left-0 right-0 z-50 lg:hidden',
+        'border-t border-charcoal-200 bg-white/95 backdrop-blur-sm shadow-lg',
+        'px-4 py-3',
+      )}
+    >
+      <div className="flex items-center gap-3">
+        {/* Product info */}
+        <div className="min-w-0 flex-1">
+          <p className="font-display text-sm font-light text-charcoal-900 truncate leading-snug">
+            {productName}
+          </p>
+          <p className="font-body text-[11px] text-charcoal-400">
+            {selectedVolume.ml}ml &middot; {formatPrice(selectedVolume.price)}
+          </p>
+        </div>
+
+        {/* CTA */}
+        <motion.button
+          type="button"
+          onClick={onAddToCart}
+          whileTap={{ scale: 0.97 }}
+          className={cn(
+            'flex flex-shrink-0 items-center gap-2 px-5 py-3',
+            'font-body text-xs font-medium uppercase tracking-[0.16em]',
+            'transition-all duration-300',
+            addedToCart
+              ? 'bg-charcoal-900 text-white'
+              : 'bg-gold-500 text-white hover:bg-gold-600'
+          )}
+        >
+          <ShoppingBag className="h-3.5 w-3.5 flex-shrink-0" />
+          {addedToCart
+            ? (isAr ? 'تمت الإضافة ✓' : 'Added ✓')
+            : (isAr ? 'أضف للحقيبة' : 'Add to Bag')}
+        </motion.button>
+      </div>
+    </div>
+  )
+}
+
 // ─── Recently Viewed ──────────────────────────────────────────────────────────
 
 function RecentlyViewed({ excludeId }: { excludeId: string }) {
@@ -199,10 +582,10 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
         className="mb-10 text-center"
       >
         <p className="mb-2 font-body text-[10px] uppercase tracking-[0.35em] text-charcoal-400">
-          Recently Viewed
+          {isAr ? 'شاهدته مؤخراً' : 'Recently Viewed'}
         </p>
         <h2 className="font-display text-3xl font-light text-charcoal-900">
-          Continue Exploring
+          {isAr ? 'تابع الاستكشاف' : 'Continue Exploring'}
         </h2>
         <div className="mx-auto mt-4 h-px w-12 bg-charcoal-200" aria-hidden="true" />
       </motion.div>
@@ -295,6 +678,10 @@ export function ProductDetailClient({
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
 
+  // Sticky bar visibility
+  const [stickyVisible, setStickyVisible] = useState(false)
+  const mainCtaRef = useRef<HTMLButtonElement>(null)
+
   const hydrated = useHydrated()
   const wishlisted = hydrated && isInWishlist(product._id)
 
@@ -303,6 +690,22 @@ export function ProductDetailClient({
     addToRecentlyViewed(product)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [product._id])
+
+  // IntersectionObserver for sticky bar
+  useEffect(() => {
+    const btn = mainCtaRef.current
+    if (!btn) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setStickyVisible(!entry.isIntersecting)
+      },
+      { threshold: 0, rootMargin: '0px' }
+    )
+
+    observer.observe(btn)
+    return () => observer.disconnect()
+  }, [])
 
   const handleAddToCart = useCallback(() => {
     addToCart(product, quantity, selectedVolume)
@@ -323,6 +726,9 @@ export function ProductDetailClient({
 
   const safeImages = (product.images ?? []).filter((img) => img?.url)
 
+  // Shipping text (locale-aware with PortableText fallback)
+  const shippingText = isAr ? product.shippingText_ar : product.shippingText_en
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -330,6 +736,26 @@ export function ProductDetailClient({
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-white pt-20"
     >
+      {/* ── Sticky Add-to-Cart Bar ───────────────────────────────────────── */}
+      <AnimatePresence>
+        {stickyVisible && (
+          <motion.div
+            key="sticky-bar"
+            initial={{ y: '100%', opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: '100%', opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+          >
+            <StickyBar
+              productName={productName}
+              selectedVolume={selectedVolume}
+              onAddToCart={handleAddToCart}
+              addedToCart={addedToCart}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── Main Product Section ─────────────────────────────────────────── */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
@@ -393,7 +819,7 @@ export function ProductDetailClient({
               {productName}
             </h1>
             <p className="mt-2 font-body text-xs tracking-[0.22em] uppercase text-charcoal-400">
-              Eau de Parfum
+              {product.concentration ?? 'Eau de Parfum'}
             </p>
 
             {/* Gold accent divider */}
@@ -432,7 +858,7 @@ export function ProductDetailClient({
             {volumes.length > 0 && (
               <div className="mt-6">
                 <p className="mb-3 font-body text-[10px] uppercase tracking-[0.22em] text-charcoal-500">
-                  Size
+                  {isAr ? 'الحجم' : 'Size'}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {volumes.map((vol) => {
@@ -463,7 +889,7 @@ export function ProductDetailClient({
             {/* Quantity stepper */}
             <div className="mt-5">
               <p className="mb-3 font-body text-[10px] uppercase tracking-[0.22em] text-charcoal-500">
-                Quantity
+                {isAr ? 'الكمية' : 'Quantity'}
               </p>
               <div className="inline-flex items-center border border-charcoal-200">
                 <button
@@ -496,6 +922,7 @@ export function ProductDetailClient({
             {/* CTA Buttons */}
             <div className="mt-6 flex gap-3">
               <motion.button
+                ref={mainCtaRef}
                 type="button"
                 onClick={handleAddToCart}
                 whileTap={{ scale: 0.98 }}
@@ -509,7 +936,9 @@ export function ProductDetailClient({
                 )}
               >
                 <ShoppingBag className="h-4 w-4 flex-shrink-0" />
-                {addedToCart ? 'Added to Bag ✓' : 'Add to Bag'}
+                {addedToCart
+                  ? (isAr ? 'تمت الإضافة ✓' : 'Added to Bag ✓')
+                  : (isAr ? 'أضف إلى الحقيبة' : 'Add to Bag')}
               </motion.button>
 
               <motion.button
@@ -532,8 +961,8 @@ export function ProductDetailClient({
             {/* Trust strip */}
             <div className="mt-6 grid grid-cols-2 gap-3">
               {[
-                { icon: Truck, label: 'Free shipping', sub: 'Orders over $150' },
-                { icon: RotateCcw, label: '30-day returns', sub: 'Hassle-free' },
+                { icon: Truck, label: isAr ? 'شحن مجاني' : 'Free shipping', sub: isAr ? 'للطلبات فوق $150' : 'Orders over $150' },
+                { icon: RotateCcw, label: isAr ? 'إرجاع 30 يوم' : '30-day returns', sub: isAr ? 'بدون متاعب' : 'Hassle-free' },
               ].map(({ icon: Icon, label, sub }) => (
                 <div key={label} className="flex items-center gap-3 bg-cream-50 border border-cream-200 px-4 py-3">
                   <Icon className="h-4 w-4 text-gold-500 flex-shrink-0" />
@@ -552,7 +981,7 @@ export function ProductDetailClient({
             {story && story.length > 0 && (
               <div className="mt-6">
                 <p className="mb-3 font-body text-[10px] uppercase tracking-[0.28em] text-charcoal-400">
-                  The Story
+                  {isAr ? 'القصة' : 'The Story'}
                 </p>
                 <PortableText value={story} components={portableTextComponents} />
               </div>
@@ -570,30 +999,81 @@ export function ProductDetailClient({
               />
             </div>
 
+            {/* Pairing / Pairs Well With */}
+            {product.layeringProducts && product.layeringProducts.length > 0 && (
+              <PairingSection products={product.layeringProducts} />
+            )}
+
             {/* Accordions */}
             <div className="mt-6 border-t border-charcoal-100">
-              <AccordionSection title="How to Apply" icon={<Droplets className="h-4 w-4" />}>
+              <AccordionSection
+                title={isAr ? 'كيفية الاستخدام' : 'How to Apply'}
+                icon={<Droplets className="h-4 w-4" />}
+              >
                 <div className="space-y-2.5">
-                  <p>Apply to pulse points — inner wrists, neck, behind ears, and inside elbows. These areas emit heat which diffuses and amplifies the scent.</p>
-                  <p>Hold the bottle 15–20cm from skin and spray 2–3 times. Avoid rubbing — this breaks down scent molecules and reduces longevity.</p>
-                  <p>Apply to freshly moisturised skin for best results. Fragrance adheres better to hydrated skin.</p>
+                  <p>{isAr
+                    ? 'ضعيه على نقاط النبض — الرسغين الداخليين، الرقبة، خلف الأذنين، وداخل المرفقين. تولّد هذه المناطق حرارة تنشر العطر وتضخّمه.'
+                    : 'Apply to pulse points — inner wrists, neck, behind ears, and inside elbows. These areas emit heat which diffuses and amplifies the scent.'}</p>
+                  <p>{isAr
+                    ? 'امسك الزجاجة على بعد 15–20 سم من الجلد ورشّ 2–3 مرات. تجنّب الفرك — فهو يكسر جزيئات العطر ويقلّل ثباته.'
+                    : 'Hold the bottle 15–20cm from skin and spray 2–3 times. Avoid rubbing — this breaks down scent molecules and reduces longevity.'}</p>
+                  <p>{isAr
+                    ? 'ضعيه على بشرة مرطّبة حديثاً للحصول على أفضل النتائج. يثبت العطر بشكل أفضل على البشرة الرطبة.'
+                    : 'Apply to freshly moisturised skin for best results. Fragrance adheres better to hydrated skin.'}</p>
                 </div>
               </AccordionSection>
-              <AccordionSection title="Shipping & Returns" icon={<Truck className="h-4 w-4" />}>
-                <div className="space-y-2.5">
-                  <p><strong className="font-semibold text-charcoal-800">Complimentary shipping</strong> on all orders over $150. Standard delivery 3–5 business days. Express 1–2 days available at checkout.</p>
-                  <p>Returns accepted on unopened, unused items within 30 days. Opened items cannot be returned unless faulty.</p>
-                  <p>To initiate a return: <span className="text-gold-600">support@luxeparfum.com</span></p>
-                </div>
+
+              <AccordionSection
+                title={isAr ? 'الشحن والإرجاع' : 'Shipping & Returns'}
+                icon={<Truck className="h-4 w-4" />}
+              >
+                {shippingText && shippingText.length > 0 ? (
+                  <PortableText value={shippingText} components={portableTextComponents} />
+                ) : (
+                  <div className="space-y-2.5">
+                    <p>
+                      <strong className="font-semibold text-charcoal-800">
+                        {isAr ? 'شحن مجاني' : 'Complimentary shipping'}
+                      </strong>{' '}
+                      {isAr
+                        ? 'على جميع الطلبات التي تزيد عن $150. التوصيل الاعتيادي 3–5 أيام عمل. التوصيل السريع 1–2 يوم متاح عند الدفع.'
+                        : 'on all orders over $150. Standard delivery 3–5 business days. Express 1–2 days available at checkout.'}
+                    </p>
+                    <p>
+                      {isAr
+                        ? 'يُقبل الإرجاع على المنتجات غير المفتوحة وغير المستخدمة خلال 30 يوماً. لا يمكن إرجاع المنتجات المفتوحة إلا إذا كانت معيبة.'
+                        : 'Returns accepted on unopened, unused items within 30 days. Opened items cannot be returned unless faulty.'}
+                    </p>
+                    <p>
+                      {isAr ? 'لبدء الإرجاع:' : 'To initiate a return:'}{' '}
+                      <span className="text-gold-600">support@luxeparfum.com</span>
+                    </p>
+                  </div>
+                )}
               </AccordionSection>
+
+              {product.ingredients && (
+                <AccordionSection
+                  title={isAr ? 'المكوّنات' : 'Ingredients'}
+                  icon={<Leaf className="h-4 w-4" />}
+                >
+                  <p className="font-body text-sm text-charcoal-600 leading-relaxed">
+                    {product.ingredients}
+                  </p>
+                </AccordionSection>
+              )}
             </div>
 
             {/* Sustainability */}
             <div className="mt-4 flex items-start gap-3 bg-gradient-to-r from-cream-50 to-white border border-cream-200 px-5 py-4">
               <Leaf className="h-4 w-4 text-gold-500 flex-shrink-0 mt-0.5" />
               <p className="font-body text-xs text-charcoal-600 leading-relaxed">
-                <span className="font-semibold text-charcoal-800">Sustainably crafted.</span>{' '}
-                FSC-certified packaging, refillable bottles, carbon-conscious shipping. Every fragrance we make is a step toward a smaller footprint.
+                <span className="font-semibold text-charcoal-800">
+                  {isAr ? 'مُصنَّع باستدامة.' : 'Sustainably crafted.'}
+                </span>{' '}
+                {isAr
+                  ? 'تغليف معتمد من FSC، زجاجات قابلة لإعادة الملء، شحن واعٍ بالبيئة. كل عطر نصنعه خطوة نحو بصمة أصغر.'
+                  : 'FSC-certified packaging, refillable bottles, carbon-conscious shipping. Every fragrance we make is a step toward a smaller footprint.'}
               </p>
             </div>
           </div>
@@ -601,10 +1081,22 @@ export function ProductDetailClient({
 
         {/* ── Below-fold ───────────────────────────────────────────────────── */}
         <div className="mt-6 border-t border-charcoal-100 pt-6">
+          {product.frequentlyBoughtTogether && product.frequentlyBoughtTogether.length > 0 && (
+            <FrequentlyBoughtTogether
+              currentProduct={product}
+              companions={product.frequentlyBoughtTogether}
+            />
+          )}
           <RelatedProducts products={relatedProducts} />
+          {product.reviews && product.reviews.length > 0 && (
+            <ReviewsSection reviews={product.reviews} />
+          )}
           <RecentlyViewed excludeId={product._id} />
         </div>
       </div>
+
+      {/* Bottom padding on mobile to prevent content hidden behind sticky bar */}
+      <div className="h-20 lg:hidden" aria-hidden="true" />
     </motion.div>
   )
 }
