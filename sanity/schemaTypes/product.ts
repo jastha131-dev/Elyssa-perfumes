@@ -12,6 +12,8 @@ export const product = defineType({
     { name: 'pricing', title: 'Pricing & Stock' },
     { name: 'media', title: 'Media' },
     { name: 'merchandising', title: 'Merchandising' },
+    { name: 'reviews', title: 'Reviews' },
+    { name: 'content', title: 'Additional Content' },
     { name: 'pageBuilder', title: 'Page Sections' },
     { name: 'seo', title: 'SEO' },
   ],
@@ -172,6 +174,25 @@ export const product = defineType({
       group: 'basic',
       to: [{ type: 'category' }],
       validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'concentration',
+      title: 'Concentration',
+      type: 'string',
+      group: 'basic',
+      description: 'The concentration of fragrance oil (determines intensity and longevity).',
+      options: {
+        list: [
+          { title: 'Eau de Cologne (EDC) — 2–4%', value: 'Eau de Cologne' },
+          { title: 'Eau de Toilette (EDT) — 5–15%', value: 'Eau de Toilette' },
+          { title: 'Eau de Parfum (EDP) — 15–20%', value: 'Eau de Parfum' },
+          { title: 'EDP Intense — 20–25%', value: 'EDP Intense' },
+          { title: 'Extrait de Parfum — 25–40%', value: 'Extrait de Parfum' },
+          { title: 'Parfum Oil — 15–30% (oil-based)', value: 'Parfum Oil' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'Eau de Parfum',
     }),
 
     // ─── Fragrance Details ────────────────────────────────────────────────────
@@ -465,6 +486,81 @@ export const product = defineType({
       options: {
         layout: 'tags',
       },
+    }),
+    defineField({
+      name: 'layeringProducts',
+      title: 'Pairs / Layers Well With',
+      type: 'array',
+      group: 'merchandising',
+      description: 'Products that complement or layer well with this fragrance (max 3).',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
+      validation: (Rule) => Rule.max(3).unique(),
+    }),
+    defineField({
+      name: 'frequentlyBoughtTogether',
+      title: 'Frequently Bought Together',
+      type: 'array',
+      group: 'merchandising',
+      description: 'Products often purchased alongside this one (max 3).',
+      of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
+      validation: (Rule) => Rule.max(3).unique(),
+    }),
+
+    // ─── Reviews ──────────────────────────────────────────────────────────────
+    defineField({
+      name: 'reviews',
+      title: 'Customer Reviews',
+      group: 'reviews',
+      type: 'array',
+      description: 'Manually curated customer reviews shown on the product page.',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'name', title: 'Customer Name', type: 'string', validation: (Rule) => Rule.required().max(80) }),
+            defineField({ name: 'location', title: 'Location', type: 'string', validation: (Rule) => Rule.max(60) }),
+            defineField({ name: 'rating', title: 'Rating (1–5)', type: 'number', validation: (Rule) => Rule.required().min(1).max(5).integer(), initialValue: 5 }),
+            defineField({ name: 'review_en', title: 'Review (English)', type: 'text', rows: 3, validation: (Rule) => Rule.required().max(500) }),
+            defineField({ name: 'review_ar', title: 'المراجعة (Arabic)', type: 'text', rows: 3, validation: (Rule) => Rule.max(500) }),
+            defineField({ name: 'date', title: 'Review Date', type: 'date' }),
+            defineField({ name: 'verified', title: 'Verified Purchase', type: 'boolean', initialValue: true }),
+          ],
+          preview: {
+            select: { title: 'name', subtitle: 'rating' },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            prepare: (val: any) => ({
+              title: val.title,
+              subtitle: `${'★'.repeat(val.rating ?? 5)} ${val.rating ?? 5}/5`,
+            }),
+          },
+        }),
+      ],
+    }),
+
+    // ─── Additional Content ───────────────────────────────────────────────────
+    defineField({
+      name: 'ingredients',
+      title: 'Ingredients / INCI List',
+      group: 'content',
+      type: 'text',
+      rows: 5,
+      description: 'Full ingredient list (INCI). Shown in accordion on product page.',
+      validation: (Rule) => Rule.max(2000),
+    }),
+    defineField({
+      name: 'shippingText_en',
+      title: 'Shipping & Returns (English)',
+      group: 'content',
+      type: 'array',
+      description: 'Custom shipping/returns text for this product. Falls back to site default if empty.',
+      of: [{ type: 'block' }],
+    }),
+    defineField({
+      name: 'shippingText_ar',
+      title: 'الشحن والإرجاع (Arabic)',
+      group: 'content',
+      type: 'array',
+      of: [{ type: 'block' }],
     }),
 
     // ─── Page Builder ─────────────────────────────────────────────────────────
