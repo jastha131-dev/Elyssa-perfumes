@@ -194,6 +194,22 @@ export const product = defineType({
       },
       initialValue: 'Eau de Parfum',
     }),
+    defineField({
+      name: 'productSku',
+      title: 'Product SKU',
+      type: 'string',
+      group: 'basic',
+      description: 'Master SKU for this product. Individual size SKUs are set in Volumes & Prices.',
+      validation: (Rule) => Rule.max(100),
+    }),
+    defineField({
+      name: 'barcode',
+      title: 'Barcode (EAN / UPC)',
+      type: 'string',
+      group: 'basic',
+      description: 'EAN-13 or UPC-A barcode for this product.',
+      validation: (Rule) => Rule.max(50),
+    }),
 
     // ─── Fragrance Details ────────────────────────────────────────────────────
     defineField({
@@ -402,6 +418,20 @@ export const product = defineType({
               type: 'string',
               description: 'Stock-keeping unit for this size variant.',
             }),
+            defineField({
+              name: 'isSample',
+              title: 'Sample Size',
+              type: 'boolean',
+              description: 'Mark this as a sample/discovery size.',
+              initialValue: false,
+            }),
+            defineField({
+              name: 'stockQty',
+              title: 'Stock Qty (this size)',
+              type: 'number',
+              description: 'Optional per-size stock. Overrides product-level stock when set.',
+              validation: (Rule) => Rule.min(0).integer(),
+            }),
           ],
         }),
       ],
@@ -414,6 +444,24 @@ export const product = defineType({
       description: 'Total units in stock across all sizes.',
       validation: (Rule) => Rule.required().min(0).integer(),
       initialValue: 0,
+    }),
+    defineField({
+      name: 'stockStatus',
+      title: 'Stock Status Override',
+      type: 'string',
+      group: 'pricing',
+      description: 'Override the automatic stock status derived from Stock Quantity.',
+      options: {
+        list: [
+          { title: 'Auto (derived from quantity)', value: 'auto' },
+          { title: 'In Stock', value: 'in_stock' },
+          { title: 'Low Stock', value: 'low_stock' },
+          { title: 'Out of Stock', value: 'out_of_stock' },
+          { title: 'Pre-order / Backorder', value: 'backorder' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'auto',
     }),
 
     // ─── Media ────────────────────────────────────────────────────────────────
@@ -445,6 +493,27 @@ export const product = defineType({
         }),
       ],
       validation: (Rule) => Rule.required().min(1).max(10),
+    }),
+    defineField({
+      name: 'videos',
+      title: 'Product Videos',
+      type: 'array',
+      group: 'media',
+      description: 'Videos shown in the product gallery (supports direct URL or Mux).',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'videoUrl', title: 'Video URL', type: 'url' }),
+            defineField({ name: 'muxPlaybackId', title: 'Mux Playback ID', type: 'string' }),
+            defineField({ name: 'caption_en', title: 'Caption (English)', type: 'string', validation: (Rule) => Rule.max(120) }),
+            defineField({ name: 'caption_ar', title: 'التعليق (Arabic)', type: 'string', validation: (Rule) => Rule.max(120) }),
+            defineField({ name: 'posterImage', title: 'Poster Image', type: 'image', options: { hotspot: true } }),
+          ],
+          preview: { select: { title: 'caption_en', subtitle: 'videoUrl' } },
+        }),
+      ],
+      validation: (Rule) => Rule.max(5),
     }),
 
     // ─── Merchandising ────────────────────────────────────────────────────────
@@ -504,6 +573,51 @@ export const product = defineType({
       description: 'Products often purchased alongside this one (max 3).',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
       validation: (Rule) => Rule.max(3).unique(),
+    }),
+    defineField({
+      name: 'status',
+      title: 'Product Status',
+      type: 'string',
+      group: 'merchandising',
+      description: 'Controls visibility on the storefront.',
+      options: {
+        list: [
+          { title: 'Active — visible on store', value: 'active' },
+          { title: 'Draft — hidden from store', value: 'draft' },
+          { title: 'Archived — discontinued', value: 'archived' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'active',
+    }),
+    defineField({
+      name: 'scheduledPublishAt',
+      title: 'Scheduled Publish Date',
+      type: 'datetime',
+      group: 'merchandising',
+      description: 'Product becomes visible on the store at this date/time. Only applies when status is "Draft".',
+    }),
+    defineField({
+      name: 'bundleProducts',
+      title: 'Bundle — Included Products',
+      type: 'array',
+      group: 'merchandising',
+      description: 'If this product is a bundle, list the included products here.',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'product', title: 'Product', type: 'reference', to: [{ type: 'product' }], validation: (Rule) => Rule.required() }),
+            defineField({ name: 'quantity', title: 'Quantity', type: 'number', initialValue: 1, validation: (Rule) => Rule.required().min(1).integer() }),
+          ],
+          preview: {
+            select: { title: 'product.name_en', subtitle: 'quantity' },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            prepare: (val: any) => ({ title: val.title, subtitle: `Qty: ${val.quantity ?? 1}` }),
+          },
+        }),
+      ],
+      validation: (Rule) => Rule.max(10),
     }),
 
     // ─── Reviews ──────────────────────────────────────────────────────────────

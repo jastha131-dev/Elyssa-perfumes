@@ -24,6 +24,9 @@ export interface Collection {
 export interface VolumeOption {
   ml: number
   price: number
+  sku?: string
+  isSample?: boolean
+  stockQty?: number
 }
 
 export interface ProductImage {
@@ -83,6 +86,41 @@ export interface Product {
   seoDescription_en?: string
   seoDescription_ar?: string
   sections?: HomePageSection[]
+  // Product management fields
+  productSku?: string
+  barcode?: string
+  stockStatus?: 'auto' | 'in_stock' | 'low_stock' | 'out_of_stock' | 'backorder'
+  status?: 'active' | 'draft' | 'archived'
+  scheduledPublishAt?: string
+  videos?: ProductVideo[]
+  bundleProducts?: Array<{ product: Product; quantity: number }>
+  // Enhanced PDP fields
+  concentration?: string
+  ingredients?: string
+  shippingText_en?: PortableTextBlock[]
+  shippingText_ar?: PortableTextBlock[]
+  layeringProducts?: Product[]
+  frequentlyBoughtTogether?: Product[]
+  reviews?: ProductReview[]
+}
+
+export interface ProductVideo {
+  videoUrl?: string
+  muxPlaybackId?: string
+  caption_en?: string
+  caption_ar?: string
+  posterImageUrl?: string
+}
+
+export interface ProductReview {
+  _key: string
+  name: string
+  location?: string
+  rating: number
+  review_en: string
+  review_ar?: string
+  date?: string
+  verified?: boolean
 }
 
 export interface CartItem {
