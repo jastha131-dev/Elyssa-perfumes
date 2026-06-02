@@ -165,11 +165,17 @@ interface CategoryTilesProps {
 }
 
 function parseCollectionFilter(filterParam: string | undefined, base: FilterState): FilterState {
-  if (!filterParam) return { ...base, category: undefined }
+  if (!filterParam) return { ...base, category: undefined, fragranceFamily: undefined, inspiredBy: undefined, intensity: undefined }
   const p = new URLSearchParams(filterParam)
+  const family = p.get('fragranceFamily')
+  const inspired = p.get('inspiredBy')
+  const intensity = p.get('intensity')
   return {
     ...base,
     category: p.get('category') ?? undefined,
+    fragranceFamily: family ? [family] : undefined,
+    inspiredBy: inspired ? [inspired] : undefined,
+    intensity: intensity ? [intensity] : undefined,
     sortBy: p.get('sort') ?? base.sortBy,
   }
 }
@@ -195,15 +201,22 @@ function CategoryTiles({ categories, collections, filters, locale, onChange }: C
           onClick={() => onChange({ ...filters, category: c.slug })}
         />
       ))}
-      {collections.map(c => (
-        <Tile
-          key={c._id}
-          label={isAr ? (c.title_ar || c.title_en) : c.title_en}
-          imgUrl={c.imageUrl ?? null}
-          active={false}
-          onClick={() => onChange(parseCollectionFilter(c.filterParam, filters))}
-        />
-      ))}
+      {collections.map(c => {
+        const parsed = parseCollectionFilter(c.filterParam, filters)
+        const isCollectionActive = c.filterParam
+          ? (parsed.category === filters.category &&
+             JSON.stringify(parsed.fragranceFamily) === JSON.stringify(filters.fragranceFamily))
+          : false
+        return (
+          <Tile
+            key={c._id}
+            label={isAr ? (c.title_ar || c.title_en) : c.title_en}
+            imgUrl={c.imageUrl ?? null}
+            active={isCollectionActive}
+            onClick={() => onChange(parseCollectionFilter(c.filterParam, filters))}
+          />
+        )
+      })}
     </div>
   )
 }
@@ -261,7 +274,7 @@ function FilterPill({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.96 }}
             transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-            className="absolute left-0 top-full z-30 mt-2.5 min-w-[220px] overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-2xl shadow-black/15"
+            className="absolute left-0 top-full z-50 mt-2.5 min-w-[220px] overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-2xl shadow-black/15"
           >
             {children}
           </motion.div>
@@ -320,9 +333,9 @@ function FilterBar({
     const hi = Math.ceil(priceMax / 50) * 50
     const mid = Math.round((lo + hi) / 2 / 50) * 50
     return [
-      { label: `Under AED ${mid}`,         range: [0, mid] },
-      { label: `AED ${mid}–${hi}`,         range: [mid, hi] },
-      { label: `Over AED ${hi}`,           range: [hi, 10000] },
+      { label: `Under $${mid}`,    range: [0, mid] as [number, number] },
+      { label: `$${mid} – $${hi}`, range: [mid, hi] as [number, number] },
+      { label: `Over $${hi}`,      range: [hi, 10000] as [number, number] },
     ]
   }, [priceMin, priceMax])
 
@@ -355,7 +368,7 @@ function FilterBar({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-              className="absolute left-0 top-full z-30 mt-2.5 w-52 overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-2xl shadow-black/15"
+              className="absolute left-0 top-full z-50 mt-2.5 w-52 overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-2xl shadow-black/15"
             >
               <div className="p-1.5">
                 <p className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Sort by</p>
@@ -564,7 +577,7 @@ function ActiveChips({ filters, categories, locale, onChange }: {
     label: i, onRemove: () => onChange({ ...filters, intensity: filters.intensity?.filter(x => x !== i) })
   }))
   if (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000)
-    chips.push({ label: `AED ${filters.priceRange[0]}–${filters.priceRange[1]}`, onRemove: () => onChange({ ...filters, priceRange: [0, 10000] }) })
+    chips.push({ label: `$${filters.priceRange[0]} – $${filters.priceRange[1]}`, onRemove: () => onChange({ ...filters, priceRange: [0, 10000] }) })
 
   if (!chips.length) return null
   return (
@@ -698,7 +711,7 @@ export function ProductsPageClient({ products, categories, collections }: Produc
       </div>
 
       {/* ── Filter Bar — sticky ── */}
-      <div className="sticky top-[72px] z-20 border-b border-charcoal-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 shadow-sm sm:px-6 lg:px-8">
+      <div className="sticky top-[72px] z-20 border-b border-charcoal-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 shadow-sm sm:px-6 lg:px-8 overflow-visible">
         <div className="mx-auto max-w-[1400px]">
           <FilterBar
             filters={filters}
