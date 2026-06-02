@@ -1,4 +1,3 @@
-import React from 'react'
 import { defineField, defineType, defineArrayMember } from 'sanity'
 import { AiFillInput } from '../components/AiFillInput'
 
@@ -685,7 +684,6 @@ export const product = defineType({
       type: 'array',
       description: 'Add optional sections below the product detail (banners, FAQs, testimonials, etc.).',
       of: [
-        defineArrayMember({ type: 'heroSection' }),
         defineArrayMember({ type: 'customBannerSection' }),
         defineArrayMember({ type: 'videoBannerSection' }),
         defineArrayMember({ type: 'imageWithTextSection' }),
@@ -698,12 +696,11 @@ export const product = defineType({
         defineArrayMember({ type: 'instagramFeedSection' }),
         defineArrayMember({ type: 'countdownTimerSection' }),
         defineArrayMember({ type: 'beforeAfterSection' }),
-        defineArrayMember({ type: 'comparisonTableSection' }),
         defineArrayMember({ type: 'tabsSection' }),
-        defineArrayMember({ type: 'upsellSection' }),
         defineArrayMember({ type: 'newsletterSection' }),
         defineArrayMember({ type: 'trustBarSection' }),
         defineArrayMember({ type: 'brandStorySection' }),
+        defineArrayMember({ type: 'categoryTilesSection' }),
       ],
     }),
 

@@ -48,11 +48,17 @@
       "Bash(/Users/californiamediadubai/.npm-global/bin/vercel --yes)",
       "Bash(git fetch *)",
       "Bash(git pull *)",
-      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs)"
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test status)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test diff --stat)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add sanity/schemaTypes/index.ts sanity/schemaTypes/promotion.ts lib/store/promotions-store.ts lib/types.ts)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m ' *)",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/collections/\\\\[slug\\\\] && mkdir -p /Users/californiamediadubai/Desktop/test/p1test/components/collections)"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq",
-      "/Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs"
+      "/Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs",
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/collections"
     ]
   }
 }
