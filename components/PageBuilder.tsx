@@ -23,6 +23,7 @@ import BeforeAfter from '@/components/home/BeforeAfter'
 import ComparisonTable from '@/components/home/ComparisonTable'
 import Tabs from '@/components/home/Tabs'
 import UpsellProducts from '@/components/home/UpsellProducts'
+import CategoryTilesSection from '@/components/home/CategoryTilesSection'
 import type { HomePageSection } from '@/lib/types'
 
 const blockMap: Record<string, React.ComponentType<{ data: any }>> = {
@@ -51,6 +52,7 @@ const blockMap: Record<string, React.ComponentType<{ data: any }>> = {
   comparisonTableSection: ComparisonTable,
   tabsSection: Tabs,
   upsellSection: UpsellProducts,
+  categoryTilesSection: CategoryTilesSection,
 }
 
 interface PageBuilderProps {

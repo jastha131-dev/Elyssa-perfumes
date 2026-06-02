@@ -26,6 +26,7 @@ const SECTION_CONFIG: Record<string, { emoji: string; bg: string; fg: string; sh
   comparisonTableSection:  { emoji: '≡', bg: '#1F2937', fg: '#D1D5DB', shortLabel: 'COMPARE',   label: 'Comparison Table'   },
   tabsSection:             { emoji: '⊡', bg: '#064E3B', fg: '#A7F3D0', shortLabel: 'TABS',       label: 'Tabs Section'        },
   upsellSection:           { emoji: '↑', bg: '#92400E', fg: '#FDE68A', shortLabel: 'UPSELL',     label: 'Upsell Products'     },
+  categoryTilesSection:    { emoji: '⊟', bg: '#92400E', fg: '#FDE68A', shortLabel: 'TILES',      label: 'Category Tiles'      },
   announcementBar:         { emoji: '!', bg: '#B45309', fg: '#FEF3C7', shortLabel: 'ANNC',       label: 'Announcement Bar'    },
 }
 

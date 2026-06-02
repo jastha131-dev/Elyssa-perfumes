@@ -616,6 +616,25 @@ export interface Promotion {
   freeShippingThreshold?: number
 }
 
+export interface CategoryTileItem {
+  _key: string
+  label_en?: string
+  label_ar?: string
+  imageUrl?: string
+  imageAlt?: string
+  href?: string
+}
+
+export interface CategoryTilesSectionBlock {
+  _type: 'categoryTilesSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  tiles?: CategoryTileItem[]
+  bgColor?: string
+}
+
 // ─── Updated Union ────────────────────────────────────────────────────────────
 
 export type HomePageSection =
@@ -644,6 +663,7 @@ export type HomePageSection =
   | ComparisonTableSectionBlock
   | TabsSectionBlock
   | UpsellSectionBlock
+  | CategoryTilesSectionBlock
 
 export interface HomePage {
   _id: string

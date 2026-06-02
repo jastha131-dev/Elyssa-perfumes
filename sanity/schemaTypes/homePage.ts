@@ -38,6 +38,7 @@ export const homePage = defineType({
         defineArrayMember({ type: 'comparisonTableSection' }),
         defineArrayMember({ type: 'tabsSection' }),
         defineArrayMember({ type: 'upsellSection' }),
+        defineArrayMember({ type: 'categoryTilesSection' }),
       ],
     }),
   ],
