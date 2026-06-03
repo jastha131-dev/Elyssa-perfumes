@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
@@ -74,15 +74,37 @@ export default function CountdownTimer({ data }: Props) {
       )}
 
       {mounted && (
-        <div className="mt-8 flex items-center justify-center gap-4 md:gap-8">
-          {timeLeft ? units.map(({ label, value }) => (
-            <div key={label} className="flex flex-col items-center">
-              <span className={cn('font-headline text-4xl md:text-6xl font-bold tabular-nums', isFullBleed ? 'text-white' : 'text-ink-900')}>
-                {String(value).padStart(2, '0')}
-              </span>
-              <span className={cn('mt-1 font-body text-[10px] uppercase tracking-widest', isFullBleed ? 'text-white/60' : 'text-camel-500')}>
-                {label}
-              </span>
+        <div className="mt-10 flex items-center justify-center gap-2.5 sm:gap-4 md:gap-5">
+          {timeLeft ? units.map(({ label, value }, i) => (
+            <div key={label} className="flex items-center gap-2.5 sm:gap-4 md:gap-5">
+              <div className="flex flex-col items-center">
+                <div className={cn(
+                  'relative flex h-[66px] w-[62px] items-center justify-center overflow-hidden rounded-2xl sm:h-20 sm:w-[72px] md:h-28 md:w-[104px]',
+                  isFullBleed
+                    ? 'bg-white/10 ring-1 ring-white/15 backdrop-blur-md'
+                    : 'bg-gradient-to-b from-ink-900 to-ink-800 shadow-[0_16px_44px_-18px_rgba(0,0,0,0.55)] ring-1 ring-white/5'
+                )}>
+                  <AnimatePresence initial={false}>
+                    <motion.span
+                      key={value}
+                      initial={{ y: '-100%', opacity: 0 }}
+                      animate={{ y: '0%', opacity: 1 }}
+                      exit={{ y: '100%', opacity: 0 }}
+                      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+                      className="absolute inset-0 flex items-center justify-center font-headline text-3xl font-bold tabular-nums text-white sm:text-4xl md:text-6xl"
+                    >
+                      {String(value).padStart(2, '0')}
+                    </motion.span>
+                  </AnimatePresence>
+                  <div className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-black/30" />
+                </div>
+                <span className={cn('mt-3 font-body text-[9px] uppercase tracking-[0.2em] sm:text-[10px]', isFullBleed ? 'text-white/60' : 'text-camel-600')}>
+                  {label}
+                </span>
+              </div>
+              {i < units.length - 1 && (
+                <span className={cn('-mt-6 font-headline text-2xl font-light sm:text-3xl md:text-4xl', isFullBleed ? 'text-white/25' : 'text-camel-400/50')}>:</span>
+              )}
             </div>
           )) : (
             <p className={cn('font-body text-sm', isFullBleed ? 'text-white/70' : 'text-ink-500')}>
@@ -125,9 +147,13 @@ export default function CountdownTimer({ data }: Props) {
 
   if (isCard) {
     return (
-      <section ref={ref} className="bg-stone-50 py-20 md:py-28">
-        <div className="mx-auto max-w-2xl px-6">
-          <div className="border border-stone-200 bg-white p-10 shadow-sm">{content}</div>
+      <section ref={ref} className="bg-gradient-to-b from-stone-50 to-white py-20 md:py-28">
+        <div className="mx-auto max-w-3xl px-6">
+          <div className="relative overflow-hidden rounded-[28px] border border-camel-500/15 bg-gradient-to-b from-white via-white to-stone-50/60 p-10 shadow-[0_40px_90px_-50px_rgba(0,0,0,0.35)] md:p-16">
+            <div className="pointer-events-none absolute -top-24 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full bg-camel-400/15 blur-3xl" />
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-transparent via-camel-500/60 to-transparent" />
+            <div className="relative">{content}</div>
+          </div>
         </div>
       </section>
     )
