@@ -1,13 +1,39 @@
+import { auth } from '@/auth'
 import createMiddleware from 'next-intl/middleware'
+import { NextRequest, NextResponse } from 'next/server'
 
-export default createMiddleware({
-  locales: ['en', 'ar'],
-  defaultLocale: 'en',
-  localePrefix: 'always'
+const LOCALES = ['en', 'ar']
+const DEFAULT_LOCALE = 'en'
+
+const intlMiddleware = createMiddleware({
+  locales: LOCALES,
+  defaultLocale: DEFAULT_LOCALE,
 })
 
+const PROTECTED_PATTERNS = [
+  /^\/[a-z]{2}\/account(\/.*)?$/,
+]
+
+export default async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname
+
+  // Check if route is protected
+  const isProtected = PROTECTED_PATTERNS.some((p) => p.test(pathname))
+
+  if (isProtected) {
+    const session = await auth()
+    if (!session) {
+      const locale = pathname.split('/')[1] || DEFAULT_LOCALE
+      const url = request.nextUrl.clone()
+      url.pathname = `/${locale}/login`
+      url.searchParams.set('callbackUrl', pathname)
+      return NextResponse.redirect(url)
+    }
+  }
+
+  return intlMiddleware(request)
+}
+
 export const config = {
-  matcher: [
-    '/((?!api|studio|_next|_vercel|favicon\\.ico|.*\\..*).*)'
-  ]
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|studio|.*\\..*).*)'],
 }

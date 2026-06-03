@@ -41,6 +41,9 @@ import {
 } from './blocks'
 import { announcementBar } from './announcementBar'
 import { promotion } from './promotion'
+import { user } from './user'
+import { address } from './address'
+import { order } from './order'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
@@ -86,6 +89,9 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   testimonial,
   faqItem,
   contactPage,
+  user,
+  address,
+  order,
 
   // ── Singleton page documents ───────────────────────────────────
   homePage,

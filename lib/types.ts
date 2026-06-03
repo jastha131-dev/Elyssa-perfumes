@@ -747,3 +747,56 @@ export interface NavItem {
   highlight?: boolean
   visible: boolean
 }
+
+// ─── Auth / Account Types ─────────────────────────────────────────────────────
+
+export interface UserAccount {
+  _id: string
+  name: string
+  email: string
+  role: 'customer' | 'admin'
+  phone?: string
+  createdAt?: string
+}
+
+export interface UserAddress {
+  _id: string
+  label?: string
+  firstName: string
+  lastName: string
+  address1: string
+  address2?: string
+  city: string
+  state?: string
+  country: string
+  postalCode?: string
+  phone?: string
+  isDefault?: boolean
+}
+
+export interface OrderItem {
+  _key: string
+  productId: string
+  productName: string
+  imageUrl?: string
+  quantity: number
+  ml?: number
+  price: number
+}
+
+export interface Order {
+  _id: string
+  stripeSessionId?: string
+  stripePaymentIntentId?: string
+  status: 'pending' | 'paid' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'refunded'
+  items: OrderItem[]
+  subtotal: number
+  discount?: number
+  shipping?: number
+  total: number
+  currency: string
+  shippingAddress?: string
+  trackingNumber?: string
+  trackingUrl?: string
+  placedAt?: string
+}

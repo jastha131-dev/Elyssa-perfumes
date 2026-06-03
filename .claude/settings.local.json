@@ -53,12 +53,18 @@
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test diff --stat)",
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add sanity/schemaTypes/index.ts sanity/schemaTypes/promotion.ts lib/store/promotions-store.ts lib/types.ts)",
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m ' *)",
-      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/collections/\\\\[slug\\\\] && mkdir -p /Users/californiamediadubai/Desktop/test/p1test/components/collections)"
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/collections/\\\\[slug\\\\] && mkdir -p /Users/californiamediadubai/Desktop/test/p1test/components/collections)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test diff --stat HEAD)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add app/[locale]/collections/[slug]/page.tsx components/collections/CollectionPageClient.tsx)",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/api/auth/\\\\[...nextauth\\\\])",
+      "Bash(mkdir -p \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/login\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/register\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/forgot-password\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/orders/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/addresses/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/profile/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/api/account/addresses\" \"/Users/californiamediadubai/Desktop/test/p1test/app/api/account/profile\")"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq",
       "/Users/californiamediadubai/Desktop/test/p1test/docs/superpowers/specs",
-      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/collections"
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/collections",
+      "/Users/californiamediadubai/Desktop/test/p1test/app/api/auth",
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]"
     ]
   }
 }
