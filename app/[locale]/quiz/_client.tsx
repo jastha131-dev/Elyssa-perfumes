@@ -114,28 +114,33 @@ function OptionCard({
 }) {
   return (
     <motion.button
-      whileHover={{ y: -2, scale: 1.01 }}
-      whileTap={{ scale: 0.98 }}
+      type="button"
       onClick={onClick}
+      whileHover={{ y: -3 }}
+      whileTap={{ scale: 0.96 }}
+      transition={{ type: 'spring', stiffness: 400, damping: 24 }}
       className={cn(
-        'relative flex items-center gap-4 rounded-2xl border-2 px-5 py-4 text-left transition-all duration-200 w-full',
+        'group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border-2 px-5 py-4 text-left transition-colors duration-200',
         selected
-          ? 'border-[#C8A96E] bg-[#FBF6EE] shadow-lg shadow-[#C8A96E]/10'
-          : 'border-charcoal-100 bg-white hover:border-charcoal-300 hover:shadow-md hover:shadow-black/5'
+          ? 'border-[#C8A96E] bg-[#FBF6EE] shadow-lg shadow-[#C8A96E]/20'
+          : 'border-charcoal-100 bg-white hover:border-[#C8A96E]/50 hover:shadow-lg hover:shadow-[#C8A96E]/10'
       )}
     >
+      {/* gold light sweep on hover */}
+      <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#C8A96E]/10 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
+
       {emoji && (
         <span className={cn(
-          'flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl text-xl',
-          selected ? 'bg-[#C8A96E]/15' : 'bg-charcoal-50'
+          'relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl text-xl transition-all duration-200 group-hover:scale-110',
+          selected ? 'bg-[#C8A96E]/20 scale-110' : 'bg-charcoal-50 group-hover:bg-[#C8A96E]/10'
         )}>
           {emoji}
         </span>
       )}
-      <div className="flex-1 min-w-0">
+      <div className="relative flex-1 min-w-0">
         <p className={cn(
-          'font-medium text-[14px] leading-snug',
-          selected ? 'text-charcoal-950' : 'text-charcoal-800'
+          'font-medium text-[14px] leading-snug transition-colors',
+          selected ? 'text-charcoal-950' : 'text-charcoal-800 group-hover:text-charcoal-950'
         )}>
           {label}
         </p>
@@ -143,11 +148,20 @@ function OptionCard({
           <p className="mt-0.5 text-[11.5px] text-charcoal-400">{desc}</p>
         )}
       </div>
-      {selected && (
-        <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#C8A96E]">
-          <span className="text-[10px] font-bold text-white">✓</span>
-        </span>
-      )}
+
+      <AnimatePresence>
+        {selected && (
+          <motion.span
+            initial={{ scale: 0, rotate: -120, opacity: 0 }}
+            animate={{ scale: 1, rotate: 0, opacity: 1 }}
+            exit={{ scale: 0, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 520, damping: 20 }}
+            className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#C8A96E] shadow-sm shadow-[#C8A96E]/40"
+          >
+            <span className="text-[10px] font-bold text-white">✓</span>
+          </motion.span>
+        )}
+      </AnimatePresence>
     </motion.button>
   )
 }
@@ -286,6 +300,69 @@ function ResultCard({ rec, locale, rank }: { rec: Recommendation; locale: string
   )
 }
 
+// ─── Local scent-matching (no AI — scores products from your DB) ───────────────
+
+const VIBE_FAMILY: Record<string, string[]> = {
+  'Fresh & Citrus': ['Citrus', 'Fresh', 'Aquatic'],
+  'Warm & Oriental': ['Oriental', 'Gourmand'],
+  'Bold & Woody': ['Woody'],
+  'Light & Floral': ['Floral'],
+}
+const INTENSITY_ORDER = ['Light', 'Moderate', 'Strong', 'Intense']
+const OCCASION_TAGS: Record<string, string[]> = {
+  Daily: ['daily', 'everyday', 'fresh', 'summer', 'light', 'citrus'],
+  Work: ['fresh', 'light', 'everyday', 'citrus', 'clean'],
+  Evening: ['evening', 'oud', 'luxury', 'oriental', 'dark', 'rose'],
+  Special: ['luxury', 'iconic', 'oud', 'evening', 'amber'],
+}
+
+function scoreProduct(p: Product, a: Answers): number {
+  let s = 0
+  // Vibe → fragrance family (strongest signal)
+  const fams = VIBE_FAMILY[a.vibe] ?? []
+  if (p.fragranceFamily && fams.includes(p.fragranceFamily)) s += 45
+  // Intensity match (closer = more points)
+  if (p.intensity && a.intensity) {
+    const d = Math.abs(INTENSITY_ORDER.indexOf(p.intensity) - INTENSITY_ORDER.indexOf(a.intensity))
+    s += d === 0 ? 30 : d === 1 ? 16 : d === 2 ? 6 : 0
+  }
+  // Occasion → tags
+  const otags = OCCASION_TAGS[a.occasion] ?? []
+  const matches = (p.tags ?? []).filter((t) => otags.includes(t.toLowerCase())).length
+  s += Math.min(matches * 8, 24)
+  // Budget → price (USD prices; soft preference)
+  const price = p.volume?.[0]?.price ?? p.price ?? 0
+  if (a.budget === 'Under AED 100') s += price <= 180 ? 15 : price <= 240 ? 6 : 0
+  else if (a.budget === 'AED 100-200') s += price >= 150 && price <= 300 ? 15 : 6
+  else if (a.budget === 'AED 200+') s += price >= 250 ? 15 : 6
+  // Tie-breakers
+  if (p.featured) s += 2
+  if (p.bestSeller) s += 2
+  return s
+}
+
+const FAM_AR: Record<string, string> = { Woody: 'خشبي', Floral: 'زهري', Citrus: 'حمضي', Oriental: 'شرقي', Fresh: 'منعش', Aquatic: 'مائي', Gourmand: 'حلواني' }
+const INT_AR: Record<string, string> = { Light: 'خفيف', Moderate: 'معتدل', Strong: 'قوي', Intense: 'كثيف' }
+const OCC_AR: Record<string, string> = { Daily: 'للاستخدام اليومي', Work: 'للعمل', Evening: 'للسهرات', Special: 'للمناسبات الخاصة' }
+const OCC_EN: Record<string, string> = { Daily: 'everyday wear', Work: 'the workplace', Evening: 'evenings out', Special: 'special occasions' }
+
+function buildReason(p: Product, a: Answers, locale: string): string {
+  const fam = p.fragranceFamily ?? ''
+  const intensity = p.intensity ?? ''
+  if (locale === 'ar') {
+    return `عطر ${FAM_AR[fam] ?? ''} بأثر ${INT_AR[intensity] ?? ''} — اختيار مثالي ${OCC_AR[a.occasion] ?? ''}.`.replace(/\s+/g, ' ').trim()
+  }
+  return `A ${fam.toLowerCase()} scent with a ${intensity.toLowerCase()} trail — a perfect match for ${OCC_EN[a.occasion] ?? 'any occasion'}.`
+}
+
+function recommendProducts(products: Product[], a: Answers, locale: string): Recommendation[] {
+  return [...products]
+    .map((p) => ({ p, score: scoreProduct(p, a) }))
+    .sort((x, y) => y.score - x.score)
+    .slice(0, 3)
+    .map(({ p }) => ({ id: p._id, slug: p.slug, reason: buildReason(p, a, locale), product: p }))
+}
+
 // ─── Main Quiz Component ──────────────────────────────────────────────────────
 
 export function QuizClient({ products }: { products: Product[] }) {
@@ -307,46 +384,21 @@ export function QuizClient({ products }: { products: Product[] }) {
     if (currentStep < STEPS.length - 1) {
       setCurrentStep(s => s + 1)
     } else {
-      // Submit
+      // Submit — local scoring (no AI), picks top matches from your products
       setStatus('loading')
-      try {
-        const productInfo = products.map(p => ({
-          _id: p._id,
-          name: p.name_en,
-          slug: p.slug,
-          price: p.volume?.[0]?.price ?? p.price,
-          fragranceFamily: p.fragranceFamily,
-          intensity: p.intensity,
-          tags: p.tags ?? [],
-          topNotes: p.topNotes_en ?? [],
-          imageUrl: p.images?.[0]?.url,
-        }))
-
-        const res = await fetch('/api/quiz', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ answers, products: productInfo }),
-        })
-
-        if (!res.ok) throw new Error('Quiz API failed')
-
-        const data = await res.json()
-
-        // Hydrate recs with full product objects
-        const hydrated = data.recommendations.map((rec: Recommendation) => ({
-          ...rec,
-          product: products.find(p => p._id === rec.id || p.slug === rec.slug),
-        }))
-
-        setRecommendations(hydrated)
-        setStatus('results')
-      } catch (err) {
-        console.error(err)
-        setError('Something went wrong. Please try again.')
-        setStatus('error')
-      }
+      const recs = recommendProducts(products, answers, locale)
+      // brief delay so the curation animation plays
+      setTimeout(() => {
+        if (recs.length) {
+          setRecommendations(recs)
+          setStatus('results')
+        } else {
+          setError('No fragrances available right now. Please try again.')
+          setStatus('error')
+        }
+      }, 900)
     }
-  }, [currentStep, answers, products])
+  }, [currentStep, answers, products, locale])
 
   const handleBack = useCallback(() => {
     if (currentStep > 0) setCurrentStep(s => s - 1)
