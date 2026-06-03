@@ -44,25 +44,28 @@ export default function Tabs({ data }: Props) {
         )}
 
         {/* Tab bar */}
-        <div className="relative flex items-center gap-0 overflow-x-auto border-b border-stone-200 pb-0">
+        <div className="scrollbar-hide relative mx-auto flex w-fit max-w-full items-center justify-center gap-1 overflow-x-auto">
           {tabs.map((tab, i) => {
             const label = locale === 'ar' ? tab.label_ar : tab.label_en
             const isActive = i === activeIdx
             return (
               <button
+                type="button"
                 key={tab._key}
                 onClick={() => setActiveIdx(i)}
                 className={cn(
-                  'relative flex flex-shrink-0 items-center gap-2 px-5 py-3.5 font-body text-xs uppercase tracking-[0.15em] transition-colors',
+                  'relative flex flex-shrink-0 items-center rounded-t-md px-6 py-4 font-body text-xs uppercase tracking-[0.18em] transition-colors hover:bg-stone-50',
                   isActive ? 'text-ink-900' : 'text-ink-400 hover:text-ink-700'
                 )}
               >
-                {tab.icon && <span>{tab.icon}</span>}
                 {label}
                 {isActive && (
-                  <motion.div
-                    layoutId="tab-indicator"
-                    className="absolute bottom-0 left-0 right-0 h-0.5 bg-camel-500"
+                  <motion.span
+                    key={activeIdx}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.4, ease: 'easeOut' }}
+                    className="absolute bottom-0 left-3 right-3 h-[3px] origin-left rounded-full bg-camel-500"
                   />
                 )}
               </button>
@@ -78,14 +81,14 @@ export default function Tabs({ data }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8"
+            className="mt-10"
           >
             {content?.length ? (
-              <div className="font-body text-sm font-light text-ink-600 leading-relaxed prose-sm max-w-none">
+              <div className="mx-auto max-w-2xl text-center font-body text-base font-light leading-relaxed text-ink-600 md:text-lg">
                 <PortableText value={content} />
               </div>
             ) : (
-              <p className="font-body text-sm text-ink-400">No content for this tab.</p>
+              <p className="text-center font-body text-sm text-ink-400">No content for this tab.</p>
             )}
           </motion.div>
         </AnimatePresence>

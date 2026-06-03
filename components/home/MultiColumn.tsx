@@ -76,7 +76,7 @@ export default function MultiColumn({ data }: Props) {
           animate={isInView ? 'visible' : 'hidden'}
           className={cn('grid grid-cols-1 gap-px', colClass, bgColor !== 'black' && 'border border-stone-200')}
         >
-          {columns.map((col) => {
+          {columns.map((col, idx) => {
             const colHeadline = locale === 'ar' ? col.headline_ar : col.headline_en
             const colBody = locale === 'ar' ? col.body_ar : col.body_en
             const ctaLabel = locale === 'ar' ? col.cta?.label_ar : col.cta?.label_en
@@ -84,30 +84,35 @@ export default function MultiColumn({ data }: Props) {
               <motion.div
                 key={col._key}
                 variants={itemVariants}
-                className={cn('flex flex-col p-8 border', borderClass, bgClass)}
+                className={cn('group relative flex flex-col overflow-hidden border transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_24px_60px_-28px_rgba(0,0,0,0.25)]', borderClass, bgClass)}
               >
-                {col.icon && (
-                  <span className="mb-4 text-3xl">{col.icon}</span>
-                )}
-                {colHeadline && (
-                  <h3 className={cn('font-headline font-bold uppercase text-lg mb-3', textClass)}>
-                    {colHeadline}
-                  </h3>
-                )}
-                {colBody && (
-                  <p className={cn('font-body text-sm font-light leading-relaxed flex-1', subtextClass)}>
-                    {colBody}
-                  </p>
-                )}
-                {col.cta?.link && ctaLabel && (
-                  <Link
-                    href={col.cta.link}
-                    className="mt-5 inline-flex items-center gap-1.5 font-body text-xs uppercase tracking-[0.15em] text-camel-500 hover:text-camel-600 transition-colors"
-                  >
-                    {ctaLabel}
-                    <ArrowRight size={10} />
-                  </Link>
-                )}
+                {/* gold fill-up overlay on hover */}
+                <span className="pointer-events-none absolute inset-0 origin-bottom scale-y-0 bg-camel-500 transition-transform duration-500 ease-out group-hover:scale-y-100" />
+                <div className="relative z-10 flex flex-1 flex-col p-8 md:p-10">
+                  <span className={cn('mb-5 font-headline text-3xl font-bold tabular-nums transition-colors duration-300 group-hover:text-white', bgColor === 'black' ? 'text-camel-400' : 'text-camel-500')}>
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div className={cn('mb-5 h-px w-10 transition-all duration-500 group-hover:w-16 group-hover:bg-white/50', bgColor === 'black' ? 'bg-white/20' : 'bg-camel-500/30')} />
+                  {colHeadline && (
+                    <h3 className={cn('mb-3 font-headline text-lg font-bold uppercase tracking-wide transition-colors duration-300 group-hover:text-white', textClass)}>
+                      {colHeadline}
+                    </h3>
+                  )}
+                  {colBody && (
+                    <p className={cn('flex-1 font-body text-sm font-light leading-relaxed transition-colors duration-300 group-hover:text-white/85', subtextClass)}>
+                      {colBody}
+                    </p>
+                  )}
+                  {col.cta?.link && ctaLabel && (
+                    <Link
+                      href={col.cta.link}
+                      className="mt-5 inline-flex items-center gap-1.5 font-body text-xs uppercase tracking-[0.15em] text-camel-500 transition-colors hover:text-camel-600 group-hover:text-white"
+                    >
+                      {ctaLabel}
+                      <ArrowRight size={10} />
+                    </Link>
+                  )}
+                </div>
               </motion.div>
             )
           })}
