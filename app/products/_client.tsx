@@ -26,6 +26,7 @@ export interface FilterState {
   fragranceFamily?: string[]
   inspiredBy?: string[]
   intensity?: string[]
+  flag?: string // 'bestseller' | 'new'
   priceRange: [number, number]
   sortBy: string
 }
@@ -37,6 +38,7 @@ const DEFAULT_FILTER_STATE: FilterState = {
   fragranceFamily: undefined,
   inspiredBy: undefined,
   intensity: undefined,
+  flag: undefined,
   priceRange: [0, 10000],
   sortBy: 'featured',
 }
@@ -64,6 +66,8 @@ function applyFiltersAndSort(products: Product[], filters: FilterState): Product
     if (filters.fragranceFamily?.length && !(p.fragranceFamily && filters.fragranceFamily.map(normalise).includes(normalise(p.fragranceFamily)))) return false
     if (filters.inspiredBy?.length && !filters.inspiredBy.some(b => p.tags?.some(t => normalise(t) === normalise(b)))) return false
     if (filters.intensity?.length && !(p.intensity && filters.intensity.map(normalise).includes(normalise(p.intensity)))) return false
+    if (filters.flag === 'bestseller' && !p.bestSeller) return false
+    if (filters.flag === 'new' && !p.new) return false
     const [lo, hi] = filters.priceRange
     const pr = getPrice(p)
     if (pr < lo || pr > hi) return false
@@ -165,7 +169,7 @@ interface CategoryTilesProps {
 }
 
 function parseCollectionFilter(filterParam: string | undefined, base: FilterState): FilterState {
-  if (!filterParam) return { ...base, category: undefined, fragranceFamily: undefined, inspiredBy: undefined, intensity: undefined }
+  if (!filterParam) return { ...base, category: undefined, fragranceFamily: undefined, inspiredBy: undefined, intensity: undefined, flag: undefined }
   const p = new URLSearchParams(filterParam)
   const family = p.get('fragranceFamily')
   const inspired = p.get('inspiredBy')
@@ -176,6 +180,7 @@ function parseCollectionFilter(filterParam: string | undefined, base: FilterStat
     fragranceFamily: family ? [family] : undefined,
     inspiredBy: inspired ? [inspired] : undefined,
     intensity: intensity ? [intensity] : undefined,
+    flag: p.get('filter') ?? undefined,
     sortBy: p.get('sort') ?? base.sortBy,
   }
 }
@@ -205,6 +210,8 @@ function CategoryTiles({ categories, collections, filters, locale, onChange }: C
         const parsed = parseCollectionFilter(c.filterParam, filters)
         const isCollectionActive = c.filterParam
           ? (parsed.category === filters.category &&
+             parsed.flag === filters.flag &&
+             parsed.sortBy === filters.sortBy &&
              JSON.stringify(parsed.fragranceFamily) === JSON.stringify(filters.fragranceFamily))
           : false
         return (
@@ -307,6 +314,7 @@ function FilterBar({
     filters.fragranceFamily?.length ?? 0,
     filters.inspiredBy?.length ?? 0,
     filters.intensity?.length ?? 0,
+    filters.flag ? 1 : 0,
     (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000) ? 1 : 0,
   ].reduce((a, b) => a + b, 0)
 
@@ -340,7 +348,7 @@ function FilterBar({
   }, [priceMin, priceMax])
 
   return (
-    <div className="flex items-center gap-2.5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+    <div className="flex flex-wrap items-center gap-2.5">
 
       {/* Sort & Filter */}
       <div ref={sortRef} className="relative flex-shrink-0">
@@ -576,6 +584,10 @@ function ActiveChips({ filters, categories, locale, onChange }: {
   filters.intensity?.forEach(i => chips.push({
     label: i, onRemove: () => onChange({ ...filters, intensity: filters.intensity?.filter(x => x !== i) })
   }))
+  if (filters.flag) chips.push({
+    label: filters.flag === 'bestseller' ? 'Best Sellers' : filters.flag === 'new' ? 'New Arrivals' : filters.flag,
+    onRemove: () => onChange({ ...filters, flag: undefined }),
+  })
   if (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000)
     chips.push({ label: `$${filters.priceRange[0]} – $${filters.priceRange[1]}`, onRemove: () => onChange({ ...filters, priceRange: [0, 10000] }) })
 
@@ -667,6 +679,7 @@ export function ProductsPageClient({ products, categories, collections }: Produc
   const [filters, setFilters] = useState<FilterState>(() => ({
     ...DEFAULT_FILTER_STATE,
     category: searchParams.get('category') ?? undefined,
+    flag: searchParams.get('filter') ?? undefined,
     sortBy: searchParams.get('sort') ?? 'featured',
   }))
 
@@ -681,7 +694,7 @@ export function ProductsPageClient({ products, categories, collections }: Produc
   }, [])
 
   const showEditorial = !filters.category && !filters.fragranceFamily?.length
-    && !filters.inspiredBy?.length && !filters.intensity?.length
+    && !filters.inspiredBy?.length && !filters.intensity?.length && !filters.flag
     && filters.sortBy === 'featured' && !!collections[0]?.imageUrl
 
   const isAr = locale === 'ar'
@@ -761,7 +774,7 @@ export function ProductsPageClient({ products, categories, collections }: Produc
 
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${filters.category}-${filters.sortBy}-${filters.fragranceFamily?.join()}-${filters.inspiredBy?.join()}-${filters.intensity?.join()}`}
+            key={`${filters.category}-${filters.flag}-${filters.sortBy}-${filters.fragranceFamily?.join()}-${filters.inspiredBy?.join()}-${filters.intensity?.join()}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
