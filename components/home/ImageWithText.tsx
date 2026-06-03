@@ -34,7 +34,7 @@ export default function ImageWithText({ data }: Props) {
   const imageRounding = imageStyle === 'rounded' ? 'rounded-2xl' : ''
 
   const imageCol = (
-    <div className={cn('relative overflow-hidden', imageStyle === 'full-bleed' ? 'min-h-[480px]' : 'aspect-square lg:aspect-auto', imageRounding)}>
+    <div className={cn('relative overflow-hidden', imageStyle === 'full-bleed' ? 'min-h-[480px]' : 'aspect-square lg:aspect-auto lg:min-h-[460px]', imageRounding)}>
       {imageUrl ? (
         <Image
           src={imageUrl}
@@ -85,8 +85,7 @@ export default function ImageWithText({ data }: Props) {
     <section ref={ref} className={cn('overflow-hidden', bgClass)}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
         <div className={cn(
-          'grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0',
-          imageStyle === 'full-bleed' ? 'lg:items-stretch' : 'lg:items-center'
+          'grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0 lg:items-stretch'
         )}>
           {imagePosition === 'left' ? (
             <>{imageCol}{textCol}</>
