@@ -748,6 +748,37 @@ export interface NavItem {
   visible: boolean
 }
 
+// ─── About Page ───────────────────────────────────────────────────────────────
+
+export interface AboutPageData {
+  _id: string
+  heroHeadline_en?: string
+  heroHeadline_ar?: string
+  heroSubline_en?: string
+  heroSubline_ar?: string
+  heroEyebrow_en?: string
+  heroEyebrow_ar?: string
+  heroBgImageUrl?: string
+  stats?: Array<{ value: string; label_en: string; label_ar?: string }>
+  philosophyHeadline_en?: string
+  philosophyHeadline_ar?: string
+  philosophyBody_en?: PortableTextBlock[]
+  philosophyBody_ar?: PortableTextBlock[]
+  pillars?: Array<{ number: string; title_en: string; title_ar?: string; body_en: string; body_ar?: string }>
+  timeline?: Array<{ year: string; event_en: string; event_ar?: string }>
+  ctaHeadline_en?: string
+  ctaHeadline_ar?: string
+  ctaBody_en?: string
+  ctaBody_ar?: string
+  ctaPrimary?: CtaButton
+  ctaSecondary?: CtaButton
+  seoTitle_en?: string
+  seoTitle_ar?: string
+  seoDescription_en?: string
+  seoDescription_ar?: string
+  sections?: HomePageSection[]
+}
+
 // ─── Auth / Account Types ─────────────────────────────────────────────────────
 
 export interface UserAccount {
@@ -799,4 +830,30 @@ export interface Order {
   trackingNumber?: string
   trackingUrl?: string
   placedAt?: string
+}
+
+// ─── Article Types ────────────────────────────────────────────────────────────
+
+export interface ArticleSummary {
+  _id: string
+  title_en: string
+  title_ar?: string
+  slug: string
+  category?: string
+  excerpt_en?: string
+  excerpt_ar?: string
+  coverImageUrl?: string
+  coverImageAlt?: string
+  readTime?: string
+  publishedAt?: string
+  featured?: boolean
+}
+
+export interface ArticleDetail extends ArticleSummary {
+  body_en?: PortableTextBlock[]
+  body_ar?: PortableTextBlock[]
+  seoTitle_en?: string
+  seoTitle_ar?: string
+  seoDescription_en?: string
+  seoDescription_ar?: string
 }

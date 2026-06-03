@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/journal/\\\\[slug\\\\])"
+    ],
+    "additionalDirectories": [
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/journal"
+    ]
+  }
+}

@@ -1,9 +1,11 @@
 import { SchemaTypeDefinition } from 'sanity'
 
+import { article } from './article'
 import { product } from './product'
 import { category } from './category'
 import { collection } from './collection'
 import { homePage } from './homePage'
+import { aboutPage } from './aboutPage'
 import { page } from './page'
 import { testimonial } from './testimonial'
 import { faqItem } from './faqItem'
@@ -83,6 +85,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   promotion,
 
   // ── Content documents ──────────────────────────────────────────
+  article,
   product,
   category,
   collection,
@@ -95,6 +98,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
 
   // ── Singleton page documents ───────────────────────────────────
   homePage,
+  aboutPage,
   navConfig,
 
   // ── Dynamic pages ─────────────────────────────────────────────

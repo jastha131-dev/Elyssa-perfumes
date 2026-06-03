@@ -25,8 +25,11 @@ import {
   getCollectionBySlugQuery,
   getSmartCollectionProductsQuery,
   getActivePromotionsQuery,
+  getAboutPageQuery,
+  getArticlesQuery,
+  getArticleBySlugQuery,
 } from './queries'
-import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion, AboutPageData, ArticleSummary, ArticleDetail } from '../types'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -225,4 +228,21 @@ export async function getActivePromotions(): Promise<Promotion[]> {
   return client.fetch<Promotion[]>(
     getActivePromotionsQuery, {}, { next: { revalidate: 60 } }
   )
+}
+
+export async function getAboutPage(): Promise<AboutPageData | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<AboutPageData | null>(getAboutPageQuery, {}, { next: { revalidate: 300 } })
+}
+
+// ─── Articles ─────────────────────────────────────────────────────────────────
+
+export async function getArticles(): Promise<ArticleSummary[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<ArticleSummary[]>(getArticlesQuery, {}, { next: { revalidate: 300 } })
+}
+
+export async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<ArticleDetail | null>(getArticleBySlugQuery, { slug }, { next: { revalidate: 300 } })
 }

@@ -637,6 +637,74 @@ export const getActivePromotionsQuery = `
   }
 `
 
+export const getAboutPageQuery = `
+  *[_type == "aboutPage"][0] {
+    _id,
+    heroHeadline_en, heroHeadline_ar,
+    heroSubline_en, heroSubline_ar,
+    heroEyebrow_en, heroEyebrow_ar,
+    "heroBgImageUrl": heroBgImage.asset->url,
+    stats,
+    philosophyHeadline_en, philosophyHeadline_ar,
+    philosophyBody_en, philosophyBody_ar,
+    pillars,
+    timeline,
+    ctaHeadline_en, ctaHeadline_ar,
+    ctaBody_en, ctaBody_ar,
+    ctaPrimary, ctaSecondary,
+    seoTitle_en, seoTitle_ar,
+    seoDescription_en, seoDescription_ar,
+    "sections": sections[] {
+      ...,
+      "bgImageUrl": bgImage.asset->url,
+      "bgImageAlt": bgImage.alt,
+      "imageUrl": image.asset->url,
+      "imageAlt": image.alt,
+      "posterImageUrl": posterImage.asset->url,
+      "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
+      "testimonials": testimonials[]->{
+        _id, name_en, name_ar, location_en, location_ar, rating, review_en, review_ar,
+        "product": product->{ _id, name_en, name_ar, "slug": slug.current }
+      }
+    }
+  }
+`
+
+// ─── Article Queries ──────────────────────────────────────────────────────────
+
+export const getArticlesQuery = `
+  *[_type == "article"] | order(publishedAt desc) {
+    _id,
+    title_en, title_ar,
+    "slug": slug.current,
+    category,
+    excerpt_en, excerpt_ar,
+    "coverImageUrl": coverImage.asset->url,
+    "coverImageAlt": coverImage.alt,
+    readTime,
+    publishedAt,
+    featured
+  }
+`
+
+export const getArticleBySlugQuery = `
+  *[_type == "article" && slug.current == $slug][0] {
+    _id,
+    title_en, title_ar,
+    "slug": slug.current,
+    category,
+    excerpt_en, excerpt_ar,
+    "coverImageUrl": coverImage.asset->url,
+    "coverImageAlt": coverImage.alt,
+    body_en, body_ar,
+    readTime,
+    publishedAt,
+    featured,
+    seoTitle_en, seoTitle_ar,
+    seoDescription_en, seoDescription_ar
+  }
+`
+
 export const getSmartCollectionProductsQuery = `
   *[
     _type == "product"
