@@ -17,7 +17,7 @@ export default function VideoBanner({ data }: Props) {
   const isInView = useInView(ref, { once: true, margin: '-60px' })
 
   const {
-    videoUrl, muxPlaybackId, posterImageUrl, posterImageAlt,
+    videoUrl, muxPlaybackId, videoFileUrl, posterImageUrl, posterImageAlt,
     headline_en, headline_ar, subtext_en, subtext_ar,
     overlayOpacity = 40, layout = 'fullscreen', cta,
     autoplay = true, muted = true, loop = true,
@@ -26,9 +26,8 @@ export default function VideoBanner({ data }: Props) {
   const headline = locale === 'ar' ? headline_ar : headline_en
   const subtext = locale === 'ar' ? subtext_ar : subtext_en
   const ctaLabel = locale === 'ar' ? cta?.label_ar : cta?.label_en
-  const videoSrc = muxPlaybackId
-    ? `https://stream.mux.com/${muxPlaybackId}/high.mp4`
-    : videoUrl
+  const videoSrc = videoFileUrl
+    || (muxPlaybackId ? `https://stream.mux.com/${muxPlaybackId}/high.mp4` : videoUrl)
 
   const overlayAlpha = Math.min(1, Math.max(0, (overlayOpacity) / 100))
 
@@ -89,7 +88,7 @@ export default function VideoBanner({ data }: Props) {
   }
 
   return (
-    <section ref={ref} className="relative w-full overflow-hidden" style={{ minHeight: '70vh' }}>
+    <section ref={ref} className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-video max-h-[90vh]">
       {videoSrc ? (
         <video
           src={videoSrc}
@@ -110,7 +109,7 @@ export default function VideoBanner({ data }: Props) {
         initial={{ opacity: 0, y: 24 }}
         animate={isInView ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 flex min-h-[70vh] flex-col items-center justify-center px-6 text-center"
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center px-6 text-center"
       >
         {headline && (
           <h2 className="font-display font-light text-white text-4xl md:text-5xl lg:text-6xl leading-tight max-w-3xl">

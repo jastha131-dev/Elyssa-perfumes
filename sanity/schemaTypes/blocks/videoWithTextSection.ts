@@ -9,6 +9,7 @@ export const videoWithTextSection = defineType({
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
     defineField({ name: 'videoUrl', title: 'Video URL', type: 'url' }),
     defineField({ name: 'muxPlaybackId', title: 'Mux Playback ID', type: 'string' }),
+    defineField({ name: 'videoFile', title: 'Upload Video File (MP4/WebM)', type: 'file', description: 'Upload a video directly. Takes priority over Video URL / Mux.', options: { accept: 'video/mp4,video/webm,video/quicktime' } }),
     defineField({
       name: 'posterImage',
       title: 'Poster / Fallback Image',

@@ -343,6 +343,7 @@ export interface VideoBannerSectionBlock {
   isVisible?: boolean
   videoUrl?: string
   muxPlaybackId?: string
+  videoFileUrl?: string
   posterImageUrl?: string
   posterImageAlt?: string
   headline_en?: string
@@ -420,6 +421,7 @@ export interface VideoWithTextSectionBlock {
   isVisible?: boolean
   videoUrl?: string
   muxPlaybackId?: string
+  videoFileUrl?: string
   posterImageUrl?: string
   autoplay?: boolean
   headline_en?: string

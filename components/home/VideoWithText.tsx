@@ -17,7 +17,7 @@ export default function VideoWithText({ data }: Props) {
   const isInView = useInView(ref, { once: true, margin: '-80px' })
 
   const {
-    videoUrl, muxPlaybackId, posterImageUrl,
+    videoUrl, muxPlaybackId, videoFileUrl, posterImageUrl,
     headline_en, headline_ar, eyebrow_en, eyebrow_ar, body_en, body_ar,
     videoPosition = 'left', bgColor = 'white', cta, autoplay = true,
   } = data
@@ -26,7 +26,7 @@ export default function VideoWithText({ data }: Props) {
   const eyebrow = locale === 'ar' ? eyebrow_ar : eyebrow_en
   const body = locale === 'ar' ? body_ar : body_en
   const ctaLabel = locale === 'ar' ? cta?.label_ar : cta?.label_en
-  const videoSrc = muxPlaybackId ? `https://stream.mux.com/${muxPlaybackId}/high.mp4` : videoUrl
+  const videoSrc = videoFileUrl || (muxPlaybackId ? `https://stream.mux.com/${muxPlaybackId}/high.mp4` : videoUrl)
 
   const bgClass = { white: 'bg-white', cream: 'bg-stone-50', black: 'bg-ink-900' }[bgColor] ?? 'bg-white'
   const textClass = bgColor === 'black' ? 'text-white' : 'text-ink-900'

@@ -121,6 +121,7 @@ export const getProductBySlugQuery = `
       "imageUrl": image.asset->url,
       "imageAlt": image.alt,
       "posterImageUrl": posterImage.asset->url,
+      "videoFileUrl": videoFile.asset->url,
       "products": products[]->{
         _id,
         "id": _id,
@@ -332,8 +333,9 @@ export const getHomePageQuery = `
         }
       ),
       "posterImageUrl": posterImage.asset->url,
+      "videoFileUrl": videoFile.asset->url,
       "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
-      "tiles": tiles[]{"imageUrl": image.asset->url, "imageAlt": image.alt, label_en, label_ar, href},
+      "tiles": tiles[]{_key, "imageUrl": image.asset->url, "imageAlt": image.alt, label_en, label_ar, href},
       "beforeImageUrl": beforeImage.asset->url,
       "beforeImageAlt": beforeImage.alt,
       "afterImageUrl": afterImage.asset->url,
@@ -460,8 +462,9 @@ export const getPageBySlugQuery = `
         }
       ),
       "posterImageUrl": posterImage.asset->url,
+      "videoFileUrl": videoFile.asset->url,
       "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
-      "tiles": tiles[]{"imageUrl": image.asset->url, "imageAlt": image.alt, label_en, label_ar, href},
+      "tiles": tiles[]{_key, "imageUrl": image.asset->url, "imageAlt": image.alt, label_en, label_ar, href},
       "beforeImageUrl": beforeImage.asset->url,
       "beforeImageAlt": beforeImage.alt,
       "afterImageUrl": afterImage.asset->url,
@@ -592,6 +595,7 @@ export const getCollectionBySlugQuery = `
       "imageUrl": image.asset->url,
       "imageAlt": image.alt,
       "posterImageUrl": posterImage.asset->url,
+      "videoFileUrl": videoFile.asset->url,
       "products": products[]->{
         _id, "id": _id, name_en, name_ar, "slug": slug.current, price, compareAtPrice,
         "images": images[]{"url": asset->url, alt},
