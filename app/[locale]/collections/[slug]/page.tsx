@@ -54,14 +54,12 @@ export default async function CollectionPage({
     products = (collection.manualProducts as Product[]) ?? []
   }
 
-  // Split sections: before and after product grid
-  const sectionsAbove = collection.sections?.slice(0, Math.ceil((collection.sections.length) / 2)) ?? []
-  const sectionsBelow = collection.sections?.slice(Math.ceil((collection.sections.length) / 2)) ?? []
-
   return (
     <>
       <CollectionPageClient collection={collection} products={products} />
-      {sectionsBelow.length > 0 && <PageBuilder sections={sectionsBelow} />}
+      {collection.sections && collection.sections.length > 0 && (
+        <PageBuilder sections={collection.sections} />
+      )}
     </>
   )
 }
