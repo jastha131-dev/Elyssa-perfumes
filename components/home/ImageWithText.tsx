@@ -83,7 +83,7 @@ export default function ImageWithText({ data }: Props) {
 
   return (
     <section ref={ref} className={cn('overflow-hidden', bgClass)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-16 lg:py-0">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
         <div className={cn(
           'grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0',
           imageStyle === 'full-bleed' ? 'lg:items-stretch' : 'lg:items-center'

@@ -57,7 +57,7 @@ export default function VideoWithText({ data }: Props) {
       initial={{ opacity: 0, x: videoPosition === 'left' ? 30 : -30 }}
       animate={isInView ? { opacity: 1, x: 0 } : {}}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-      className="flex flex-col justify-center py-12 lg:px-12"
+      className="flex flex-col justify-center py-12 lg:py-0 lg:px-12"
     >
       {eyebrow && (
         <p className="mb-3 font-body text-xs uppercase tracking-widest text-camel-500">{eyebrow}</p>
@@ -86,7 +86,7 @@ export default function VideoWithText({ data }: Props) {
 
   return (
     <section ref={ref} className={cn('overflow-hidden', bgClass)}>
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
         <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-stretch gap-8 lg:gap-0">
           {videoPosition === 'left' ? <>{videoCol}{textCol}</> : <>{textCol}{videoCol}</>}
         </div>
