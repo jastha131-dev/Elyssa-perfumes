@@ -637,6 +637,30 @@ export interface CategoryTilesSectionBlock {
   bgColor?: string
 }
 
+export interface BrowseCategoriesSectionBlock {
+  _type: 'browseCategoriesSection'
+  _key: string
+  isVisible?: boolean
+  title_en?: string
+  title_ar?: string
+  categories?: Array<{
+    _id: string
+    name_en: string
+    name_ar?: string
+    slug: string
+    image?: SanityImageAsset
+  }>
+  collections?: Array<{
+    _id: string
+    title_en: string
+    title_ar?: string
+    slug: string
+    imageUrl?: string
+  }>
+  showAllTile?: boolean
+  bgColor?: string
+}
+
 // ─── Updated Union ────────────────────────────────────────────────────────────
 
 export type HomePageSection =
@@ -666,6 +690,7 @@ export type HomePageSection =
   | TabsSectionBlock
   | UpsellSectionBlock
   | CategoryTilesSectionBlock
+  | BrowseCategoriesSectionBlock
 
 export interface HomePage {
   _id: string

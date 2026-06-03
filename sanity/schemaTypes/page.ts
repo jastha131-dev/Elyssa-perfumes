@@ -56,6 +56,7 @@ export const page = defineType({
         defineArrayMember({ type: 'testimonialsSection' }),
         defineArrayMember({ type: 'newsletterSection' }),
         defineArrayMember({ type: 'trustBarSection' }),
+        defineArrayMember({ type: 'browseCategoriesSection' }),
       ],
     }),
   ],

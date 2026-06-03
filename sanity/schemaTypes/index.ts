@@ -37,6 +37,7 @@ import {
   tabsSection,
   upsellSection,
   categoryTilesSection,
+  browseCategoriesSection,
 } from './blocks'
 import { announcementBar } from './announcementBar'
 import { promotion } from './promotion'
@@ -72,6 +73,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   tabsSection,
   upsellSection,
   categoryTilesSection,
+  browseCategoriesSection,
 
   // ── Global singletons ──────────────────────────────────────────
   announcementBar,
