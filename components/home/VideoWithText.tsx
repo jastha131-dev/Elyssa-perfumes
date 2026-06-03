@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
@@ -28,21 +28,32 @@ export default function VideoWithText({ data }: Props) {
   const ctaLabel = locale === 'ar' ? cta?.label_ar : cta?.label_en
   const videoSrc = videoFileUrl || (muxPlaybackId ? `https://stream.mux.com/${muxPlaybackId}/high.mp4` : videoUrl)
 
+  const videoRef = useRef<HTMLVideoElement>(null)
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el || !videoSrc) return
+    el.muted = true
+    const p = el.play()
+    if (p && typeof p.catch === 'function') p.catch(() => {})
+  }, [videoSrc])
+
   const bgClass = { white: 'bg-white', cream: 'bg-stone-50', black: 'bg-ink-900' }[bgColor] ?? 'bg-white'
   const textClass = bgColor === 'black' ? 'text-white' : 'text-ink-900'
   const subtextClass = bgColor === 'black' ? 'text-white/60' : 'text-ink-500'
 
   const videoCol = (
-    <div className="relative min-h-[360px] lg:min-h-[480px] overflow-hidden">
+    <div className="relative aspect-video w-full overflow-hidden rounded-2xl bg-ink-900 shadow-[0_30px_70px_-30px_rgba(0,0,0,0.35)] ring-1 ring-black/5">
       {videoSrc ? (
         <video
+          ref={videoRef}
           src={videoSrc}
           poster={posterImageUrl ?? undefined}
           autoPlay={autoplay}
           muted
           loop
           playsInline
-          className="absolute inset-0 h-full w-full object-cover"
+          preload="auto"
+          className="absolute inset-0 h-full w-full object-contain"
         />
       ) : posterImageUrl ? (
         <Image src={posterImageUrl} alt="" fill className="object-cover" />
@@ -87,7 +98,7 @@ export default function VideoWithText({ data }: Props) {
   return (
     <section ref={ref} className={cn('overflow-hidden', bgClass)}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
-        <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-stretch gap-8 lg:gap-0">
+        <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-center gap-10 lg:gap-14">
           {videoPosition === 'left' ? <>{videoCol}{textCol}</> : <>{textCol}{videoCol}</>}
         </div>
       </div>

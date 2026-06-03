@@ -29,6 +29,13 @@ export default function VideoBanner({ data }: Props) {
   const videoSrc = videoFileUrl
     || (muxPlaybackId ? `https://stream.mux.com/${muxPlaybackId}/high.mp4` : videoUrl)
 
+  const playVideo = (el: HTMLVideoElement | null) => {
+    if (!el) return
+    el.muted = true
+    const p = el.play()
+    if (p && typeof p.catch === 'function') p.catch(() => {})
+  }
+
   const overlayAlpha = Math.min(1, Math.max(0, (overlayOpacity) / 100))
 
   if (layout === 'split') {
@@ -67,12 +74,14 @@ export default function VideoBanner({ data }: Props) {
             <div className="relative min-h-[400px] lg:min-h-[560px] overflow-hidden">
               {videoSrc ? (
                 <video
+                  ref={playVideo}
                   src={videoSrc}
                   poster={posterImageUrl ?? undefined}
                   autoPlay={autoplay}
                   muted={muted}
                   loop={loop}
                   playsInline
+                  preload="auto"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               ) : posterImageUrl ? (
@@ -91,12 +100,14 @@ export default function VideoBanner({ data }: Props) {
     <section ref={ref} className="relative w-full overflow-hidden aspect-[4/5] sm:aspect-video max-h-[90vh]">
       {videoSrc ? (
         <video
+          ref={playVideo}
           src={videoSrc}
           poster={posterImageUrl ?? undefined}
           autoPlay={autoplay}
           muted={muted}
           loop={loop}
           playsInline
+          preload="auto"
           className="absolute inset-0 h-full w-full object-cover"
         />
       ) : posterImageUrl ? (
