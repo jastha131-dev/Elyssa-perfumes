@@ -188,70 +188,49 @@ export default function BestSellers({ data }: BestSellersProps) {
       className="bg-stone-50 py-20 md:py-28"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[60%_40%] lg:gap-8 lg:items-start">
+        {/* Heading */}
+        <motion.div
+          ref={headingRef}
+          variants={headingVariants}
+          initial="hidden"
+          animate={isHeadingInView ? 'visible' : 'hidden'}
+          className="mb-10"
+        >
+          <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">
+            Top Picks
+          </p>
+          <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
+            {title}
+          </h2>
+          <div className="mt-4 h-px w-16 bg-camel-500/50" />
+        </motion.div>
 
-          {/* ── Left column ── */}
-          <div className="flex flex-col">
-            {/* Heading */}
-            <motion.div
-              ref={headingRef}
-              variants={headingVariants}
-              initial="hidden"
-              animate={isHeadingInView ? 'visible' : 'hidden'}
-              className="mb-10"
-            >
-              <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">
-                Top Picks
-              </p>
-              <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
-                {title}
-              </h2>
-              <div className="mt-4 h-px w-16 bg-camel-500/50" />
-            </motion.div>
+        {/* Product grid — full width */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate={isInView ? 'visible' : 'hidden'}
+          className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4"
+        >
+          {products.slice(0, 4).map((product, idx) => (
+            <BestSellerCard key={product._id} product={product} index={idx} />
+          ))}
+        </motion.div>
 
-            {/* 2×2 product grid */}
-            <motion.div
-              variants={containerVariants}
-              initial="hidden"
-              animate={isInView ? 'visible' : 'hidden'}
-              className="grid grid-cols-2 gap-4"
-            >
-              {products.slice(0, 4).map((product, idx) => (
-                <BestSellerCard key={product._id} product={product} index={idx} />
-              ))}
-            </motion.div>
-
-            {/* View All */}
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="mt-8"
-            >
-              <Link
-                href="/products?filter=bestseller"
-                className="font-body text-sm uppercase tracking-[0.2em] text-ink-600 border-b border-stone-300 pb-0.5 hover:border-camel-500 hover:text-camel-600 transition-colors"
-              >
-                {t('viewAllBestSellers')}
-              </Link>
-            </motion.div>
-          </div>
-
-          {/* ── Right column — lifestyle image ── */}
-          <div className="hidden lg:block relative">
-            <div className="sticky top-0 h-[600px] overflow-hidden">
-              <Image
-                src="/images/categories/I2.webp"
-                alt="Best sellers lifestyle"
-                fill
-                className="object-cover object-center"
-                sizes="40vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent to-stone-100/10" />
-            </div>
-          </div>
-
-        </div>
+        {/* View All */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mt-10"
+        >
+          <Link
+            href="/products?filter=bestseller"
+            className="font-body text-sm uppercase tracking-[0.2em] text-ink-600 border-b border-stone-300 pb-0.5 hover:border-camel-500 hover:text-camel-600 transition-colors"
+          >
+            {t('viewAllBestSellers')}
+          </Link>
+        </motion.div>
       </div>
     </motion.section>
   )
