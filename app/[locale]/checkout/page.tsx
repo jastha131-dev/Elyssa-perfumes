@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Lock, ShieldCheck, RefreshCw, AlertCircle } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart-store'
+import { usePromotionsStore } from '@/lib/store/promotions-store'
 import { Button } from '@/components/ui/Button'
 import OrderSummary from '@/components/checkout/OrderSummary'
 import type { CartItem } from '@/lib/types'
@@ -21,6 +22,7 @@ export default function CheckoutPage() {
     { emoji: '↩️', label: t('easyReturns') },
     { emoji: '📦', label: t('premiumPackaging') },
   ]
+  const { appliedPromotion } = usePromotionsStore()
   const { items, clearCart } = useCartStore()
   const [state, setState] = useState<CheckoutState>('loading')
   const [errorMessage, setErrorMessage] = useState<string>('')
@@ -40,6 +42,7 @@ export default function CheckoutPage() {
           items: cartItems,
           successUrl: `${origin}/checkout/success`,
           cancelUrl: `${origin}/checkout/cancel`,
+          ...(appliedPromotion?.code ? { promoCode: appliedPromotion.code } : {}),
         }),
       })
 
@@ -63,7 +66,7 @@ export default function CheckoutPage() {
       setErrorMessage(message)
       setState('error')
     }
-  }, [])
+  }, [appliedPromotion])
 
   useEffect(() => {
     setMounted(true)
