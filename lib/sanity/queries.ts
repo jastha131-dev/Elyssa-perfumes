@@ -17,6 +17,15 @@ const categoryFragment = `
   }
 `
 
+const authorFragment = `
+  _id,
+  name_en, name_ar,
+  "slug": slug.current,
+  role_en, role_ar,
+  bio_en, bio_ar,
+  "photoUrl": photo.asset->url
+`
+
 // Reusable fragment for core product fields
 const productFragment = `
   _id,
@@ -693,7 +702,8 @@ export const getArticlesQuery = `
     "coverImageAlt": coverImage.alt,
     readTime,
     publishedAt,
-    featured
+    featured,
+    "author": author->{ ${authorFragment} }
   }
 `
 
@@ -710,6 +720,7 @@ export const getArticleBySlugQuery = `
     readTime,
     publishedAt,
     featured,
+    "author": author->{ ${authorFragment} },
     seoTitle_en, seoTitle_ar,
     seoDescription_en, seoDescription_ar
   }
@@ -764,5 +775,62 @@ export const getSmartCollectionProductsQuery = `
     longevity,
     volume,
     tags
+  }
+`
+
+// ─── Author Queries ───────────────────────────────────────────────────────────
+
+export const getAuthorsQuery = `
+  *[_type == "author"] | order(name_en asc) {
+    ${authorFragment}
+  }
+`
+
+export const getAuthorBySlugQuery = `
+  *[_type == "author" && slug.current == $slug][0] {
+    ${authorFragment},
+    "articles": *[_type == "article" && author._ref == ^._id] | order(publishedAt desc) {
+      _id,
+      title_en, title_ar,
+      "slug": slug.current,
+      category,
+      excerpt_en, excerpt_ar,
+      "coverImageUrl": coverImage.asset->url,
+      "coverImageAlt": coverImage.alt,
+      readTime,
+      publishedAt,
+      featured
+    }
+  }
+`
+
+// ─── Article Category Queries ─────────────────────────────────────────────────
+
+export const getArticlesByCategoryQuery = `
+  *[_type == "article" && category == $category] | order(publishedAt desc) {
+    _id,
+    title_en, title_ar,
+    "slug": slug.current,
+    category,
+    excerpt_en, excerpt_ar,
+    "coverImageUrl": coverImage.asset->url,
+    "coverImageAlt": coverImage.alt,
+    readTime,
+    publishedAt,
+    featured,
+    "author": author->{ ${authorFragment} }
+  }
+`
+
+// ─── Gift Card Queries ────────────────────────────────────────────────────────
+
+export const getGiftCardPageQuery = `
+  *[_type == "giftCardPage"][0] {
+    _id,
+    headline_en, headline_ar,
+    subtext_en, subtext_ar,
+    "denominations": denominations[]{ _key, label_en, label_ar, amountCents, popular },
+    "howItWorks": howItWorks[]{ _key, step, text_en, text_ar },
+    terms_en, terms_ar
   }
 `
