@@ -48,6 +48,9 @@ import { user } from './user'
 import { address } from './address'
 import { order } from './order'
 import { siteSettings } from './siteSettings'
+import { author } from './author'
+import { giftCardPage } from './giftCardPage'
+import { giftCardOrder } from './giftCardOrder'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
@@ -89,6 +92,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   siteSettings,
 
   // ── Content documents ──────────────────────────────────────────
+  author,
   article,
   product,
   category,
@@ -104,6 +108,10 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   homePage,
   aboutPage,
   navConfig,
+  giftCardPage,
+
+  // ── Gift card orders ───────────────────────────────────────────
+  giftCardOrder,
 
   // ── Dynamic pages ─────────────────────────────────────────────
   page,
