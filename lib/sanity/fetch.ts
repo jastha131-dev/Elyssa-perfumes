@@ -29,8 +29,12 @@ import {
   getArticlesQuery,
   getArticleBySlugQuery,
   getSiteSettingsQuery,
+  getAuthorsQuery,
+  getAuthorBySlugQuery,
+  getArticlesByCategoryQuery,
+  getGiftCardPageQuery,
 } from './queries'
-import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion, AboutPageData, ArticleSummary, ArticleDetail } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData } from '../types'
 import type { SiteTypographySettings } from '@/lib/typography'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -247,6 +251,38 @@ export async function getArticles(): Promise<ArticleSummary[]> {
 export async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
   if (!isSanityConfigured) return null
   return client.fetch<ArticleDetail | null>(getArticleBySlugQuery, { slug }, { next: { revalidate: 300 } })
+}
+
+export async function getAuthors(): Promise<Author[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<Author[]>(getAuthorsQuery, {}, { next: { revalidate: 300 } })
+}
+
+export async function getAuthorBySlug(slug: string): Promise<AuthorWithArticles | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<AuthorWithArticles | null>(
+    getAuthorBySlugQuery,
+    { slug },
+    { next: { revalidate: 300 } }
+  )
+}
+
+export async function getArticlesByCategory(category: string): Promise<ArticleSummary[]> {
+  if (!isSanityConfigured) return []
+  return client.fetch<ArticleSummary[]>(
+    getArticlesByCategoryQuery,
+    { category },
+    { next: { revalidate: 300 } }
+  )
+}
+
+export async function getGiftCardPage(): Promise<GiftCardPageData | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<GiftCardPageData | null>(
+    getGiftCardPageQuery,
+    {},
+    { next: { revalidate: 300 } }
+  )
 }
 
 // ─── Site Settings ────────────────────────────────────────────────────────────
