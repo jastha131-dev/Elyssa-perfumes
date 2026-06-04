@@ -9,7 +9,8 @@ import { useTranslations, useLocale } from 'next-intl';
 import { useCartStore } from "@/lib/store/cart-store";
 import { useCartDrawerStore } from "@/lib/store/cart-drawer-store";
 import { useWishlistStore } from "@/lib/store/wishlist-store";
-import { formatPrice, cn } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { useCurrencyStore } from "@/lib/store/currency-store";
 import type { Product, VolumeOption } from "@/lib/types";
 
 interface QuickViewModalProps {
@@ -52,6 +53,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
   const locale = useLocale();
   const isAr = locale === 'ar';
   const productName = product ? (isAr ? product.name_ar : product.name_en) : '';
+  const formatPrice = useCurrencyStore((s) => s.format);
   const { addItem } = useCartStore();
   const { openCart } = useCartDrawerStore();
   const { toggleWishlist, isInWishlist } = useWishlistStore();

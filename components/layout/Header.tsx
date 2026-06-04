@@ -14,6 +14,7 @@ import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
 import type { Category, NavPage, NavItem } from '@/lib/types'
 import LanguageSwitcher from './LanguageSwitcher'
+import CurrencySwitcher from './CurrencySwitcher'
 
 const FALLBACK_CATEGORIES = [
   { _id: 'men', name_en: 'Men', name_ar: 'رجالي', slug: 'men' },
@@ -427,8 +428,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
-            <div className="hidden lg:flex">
+            <div className="hidden lg:flex items-center gap-2">
               <LanguageSwitcher />
+              <CurrencySwitcher />
             </div>
 
             <IconButton onClick={openSearch} label="Open search">
@@ -749,8 +751,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                   )}
                 </Link>
 
-                <div className="pt-2">
+                <div className="pt-2 flex items-center gap-3">
                   <LanguageSwitcher />
+                  <CurrencySwitcher />
                 </div>
               </motion.div>
             </nav>

@@ -28,3 +28,5 @@ export { tabsSection } from './tabsSection'
 export { upsellSection } from './upsellSection'
 export { categoryTilesSection } from './categoryTilesSection'
 export { browseCategoriesSection } from './browseCategoriesSection'
+// Quiz Promo
+export { quizPromoSection } from './quizPromoSection'

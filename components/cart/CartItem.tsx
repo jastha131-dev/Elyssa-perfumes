@@ -4,7 +4,8 @@ import Image from 'next/image'
 import { useTranslations, useLocale } from 'next-intl'
 import { motion } from 'framer-motion'
 import { X, Plus, Minus } from 'lucide-react'
-import { cn, formatPrice } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { CartItem as CartItemType } from '@/lib/types'
 
 interface CartItemProps {
@@ -22,6 +23,7 @@ export default function CartItem({
 }: CartItemProps) {
   const t = useTranslations('cart')
   const locale = useLocale()
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { product, selectedVolume, quantity } = item
   const name = locale === 'ar' ? product.name_ar : product.name_en
   const lineTotal = selectedVolume.price * quantity

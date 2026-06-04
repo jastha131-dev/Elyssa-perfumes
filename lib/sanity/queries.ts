@@ -705,6 +705,24 @@ export const getArticleBySlugQuery = `
   }
 `
 
+export const getSiteSettingsQuery = `
+  *[_type == "siteSettings"][0] {
+    fontPairing,
+    baseFontSize,
+    headingLetterSpacing,
+    bodyLineHeight,
+    headingWeight,
+    colorPalette,
+    defaultCurrency,
+    "currencies": currencies[isEnabled == true]{
+      code,
+      symbol,
+      rate,
+      position
+    }
+  }
+`
+
 export const getSmartCollectionProductsQuery = `
   *[
     _type == "product"

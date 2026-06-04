@@ -19,7 +19,8 @@ import {
   Star,
 } from 'lucide-react'
 import { PortableText } from '@portabletext/react'
-import { cn, formatPrice, calculateDiscount } from '@/lib/utils'
+import { cn, calculateDiscount } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useRecentlyViewedStore } from '@/lib/store/recently-viewed-store'
@@ -185,6 +186,7 @@ function AccordionSection({
 function PairingSection({ products }: { products: Product[] }) {
   const locale = useLocale()
   const isAr = locale === 'ar'
+  const formatPrice = useCurrencyStore((s) => s.format)
   const items = products.slice(0, 3)
 
   if (items.length === 0) return null
@@ -254,6 +256,7 @@ function FrequentlyBoughtTogether({
 }) {
   const locale = useLocale()
   const isAr = locale === 'ar'
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { addItem: addToCart } = useCartStore()
   const { openCart } = useCartDrawerStore()
   const [added, setAdded] = useState(false)
@@ -518,6 +521,7 @@ function StickyBar({
 }: StickyBarProps) {
   const locale = useLocale()
   const isAr = locale === 'ar'
+  const formatPrice = useCurrencyStore((s) => s.format)
 
   return (
     <div
@@ -567,6 +571,7 @@ function StickyBar({
 function RecentlyViewed({ excludeId }: { excludeId: string }) {
   const locale = useLocale()
   const isAr = locale === 'ar'
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { products } = useRecentlyViewedStore()
   const visible = products.filter((p) => p._id !== excludeId).slice(0, 4)
 
@@ -665,6 +670,7 @@ export function ProductDetailClient({
   const middleNotes = isAr ? product.middleNotes_ar : product.middleNotes_en
   const baseNotes = isAr ? product.baseNotes_ar : product.baseNotes_en
 
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { addItem: addToCart } = useCartStore()
   const { openCart } = useCartDrawerStore()
   const { toggleWishlist, isInWishlist } = useWishlistStore()

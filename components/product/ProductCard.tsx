@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { Heart, Sparkles } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTranslations, useLocale } from 'next-intl'
-import { cn, formatPrice } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import { useRecentlyViewedStore } from '@/lib/store/recently-viewed-store'
@@ -30,6 +31,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const t = useTranslations('product')
   const locale = useLocale()
   const name = locale === 'ar' ? product.name_ar : product.name_en
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const { addProduct } = useRecentlyViewedStore()
   const hydrated = useHydrated()

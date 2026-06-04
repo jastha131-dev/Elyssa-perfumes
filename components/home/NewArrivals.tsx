@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useLocale } from 'next-intl'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { Product, NewArrivalsSectionBlock } from '@/lib/types'
 
 const LOCAL_IMAGES = [
@@ -29,6 +30,7 @@ interface Props { data: NewArrivalsSectionBlock }
 
 export default function NewArrivals({ data }: Props) {
   const locale = useLocale()
+  const formatPrice = useCurrencyStore((s) => s.format)
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -93,7 +95,7 @@ export default function NewArrivals({ data }: Props) {
                     <h3 className="font-display text-base font-light text-ink-900 transition-colors group-hover:text-camel-600">
                       {name}
                     </h3>
-                    <p className="mt-1 font-body text-sm font-medium text-ink-900">${price.toFixed(2)}</p>
+                    <p className="mt-1 font-body text-sm font-medium text-ink-900">{formatPrice(price)}</p>
                   </div>
                 </Link>
               </motion.div>

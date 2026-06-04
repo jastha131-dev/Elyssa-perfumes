@@ -8,7 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Clock, ArrowRight, TrendingUp } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useUIStore } from '@/lib/store/ui-store'
-import { cn, formatPrice } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { Product } from '@/lib/types'
 
 const TRENDING_SEARCHES = ['Oud', 'Rose', 'Amber', 'Citrus', 'Vetiver', 'Jasmine']
@@ -42,6 +43,7 @@ export default function SearchOverlay() {
   const { isSearchOpen, closeSearch } = useUIStore()
   const t = useTranslations('search')
   const locale = useLocale()
+  const formatPrice = useCurrencyStore((s) => s.format)
 
   const [query, setQuery] = useState('')
   const [recentSearches, setRecentSearches] = useState<string[]>([])

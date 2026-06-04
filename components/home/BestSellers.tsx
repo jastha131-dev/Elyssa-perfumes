@@ -7,6 +7,7 @@ import { motion, useInView, AnimatePresence } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import type { Product, BestSellersSectionBlock } from '@/lib/types'
@@ -65,6 +66,7 @@ interface BestSellerCardProps {
 function BestSellerCard({ product, index }: BestSellerCardProps) {
   const tp = useTranslations('product')
   const locale = useLocale()
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const hydrated = useHydrated()
   const isWishlisted = hydrated && isInWishlist(product._id)
@@ -150,11 +152,11 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
           </h3>
           <div className="mt-1 flex items-center gap-2">
             <span className="font-body text-sm font-medium text-ink-900">
-              ${displayPrice.toFixed(2)}
+              {formatPrice(displayPrice)}
             </span>
             {product.compareAtPrice && product.compareAtPrice > displayPrice && (
               <span className="font-body text-xs text-ink-400 line-through">
-                ${product.compareAtPrice.toFixed(2)}
+                {formatPrice(product.compareAtPrice)}
               </span>
             )}
           </div>

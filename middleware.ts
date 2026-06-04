@@ -1,9 +1,13 @@
-import { auth } from '@/auth'
+import NextAuth from 'next-auth'
+import { authConfig } from './auth.config'
 import createMiddleware from 'next-intl/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 
 const LOCALES = ['en', 'ar']
 const DEFAULT_LOCALE = 'en'
+
+// Edge-safe auth — uses JWT only, no bcryptjs
+const { auth } = NextAuth(authConfig)
 
 const intlMiddleware = createMiddleware({
   locales: LOCALES,
@@ -16,8 +20,6 @@ const PROTECTED_PATTERNS = [
 
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-
-  // Check if route is protected
   const isProtected = PROTECTED_PATTERNS.some((p) => p.test(pathname))
 
   if (isProtected) {

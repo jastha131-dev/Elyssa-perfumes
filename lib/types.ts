@@ -661,6 +661,24 @@ export interface BrowseCategoriesSectionBlock {
   bgColor?: string
 }
 
+export interface QuizPromoSectionBlock {
+  _type: 'quizPromoSection'
+  _key: string
+  isVisible?: boolean
+  eyebrow_en?: string
+  eyebrow_ar?: string
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  ctaLabel_en?: string
+  ctaLabel_ar?: string
+  quizUrl?: string
+  style?: 'dark' | 'light' | 'accent'
+  bgImageUrl?: string
+  steps?: string[]
+}
+
 // ─── Updated Union ────────────────────────────────────────────────────────────
 
 export type HomePageSection =
@@ -691,6 +709,7 @@ export type HomePageSection =
   | UpsellSectionBlock
   | CategoryTilesSectionBlock
   | BrowseCategoriesSectionBlock
+  | QuizPromoSectionBlock
 
 export interface HomePage {
   _id: string

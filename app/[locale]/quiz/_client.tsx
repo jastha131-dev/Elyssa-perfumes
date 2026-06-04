@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import { Sparkles, ArrowRight, ArrowLeft, RotateCcw, ExternalLink } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { formatPrice } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { Product } from '@/lib/types'
 
 // ─── Quiz data ────────────────────────────────────────────────────────────────
@@ -223,6 +223,7 @@ function ResultCard({ rec, locale, rank }: { rec: Recommendation; locale: string
   const p = rec.product
   if (!p) return null
 
+  const formatPrice = useCurrencyStore((s) => s.format)
   const name = locale === 'ar' ? p.name_ar : p.name_en
   const image = p.images?.[0]?.url
   const price = p.volume?.[0]?.price ?? p.price

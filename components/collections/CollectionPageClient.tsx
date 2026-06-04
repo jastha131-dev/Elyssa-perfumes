@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, SlidersHorizontal, ChevronDown, X, Sparkles, Zap, DollarSign } from 'lucide-react'
 import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { CollectionDetail, Product } from '@/lib/types'
 
 const LOCAL_IMAGES = ['/images/products/default-product.jpeg', '/images/products/p1.jpeg', '/images/products/p2.jpeg', '/images/products/p3.jpeg']
@@ -109,6 +110,7 @@ interface Props { collection: CollectionDetail; products: Product[] }
 export default function CollectionPageClient({ collection, products }: Props) {
   const locale = useLocale()
   const isAr = locale === 'ar'
+  const formatPrice = useCurrencyStore((s) => s.format)
 
   const [sort, setSort] = useState(collection.defaultSort ?? '_createdAt_desc')
   const [showSort, setShowSort] = useState(false)
@@ -348,8 +350,8 @@ export default function CollectionPageClient({ collection, products }: Props) {
                       {product.fragranceFamily && <p className="font-body text-[10px] uppercase tracking-[0.22em] text-camel-500 mb-0.5">{product.fragranceFamily}</p>}
                       <h3 className="font-display text-base font-light text-ink-900 transition-colors group-hover:text-camel-600 leading-snug">{name}</h3>
                       <div className="mt-1 flex items-center gap-2">
-                        <span className="font-body text-sm font-medium text-ink-900">${price.toFixed(2)}</span>
-                        {product.compareAtPrice && product.compareAtPrice > price && <span className="font-body text-xs text-ink-400 line-through">${product.compareAtPrice.toFixed(2)}</span>}
+                        <span className="font-body text-sm font-medium text-ink-900">{formatPrice(price)}</span>
+                        {product.compareAtPrice && product.compareAtPrice > price && <span className="font-body text-xs text-ink-400 line-through">{formatPrice(product.compareAtPrice)}</span>}
                       </div>
                     </div>
                   </Link>

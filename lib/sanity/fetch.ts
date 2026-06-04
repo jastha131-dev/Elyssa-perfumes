@@ -28,8 +28,10 @@ import {
   getAboutPageQuery,
   getArticlesQuery,
   getArticleBySlugQuery,
+  getSiteSettingsQuery,
 } from './queries'
 import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion, AboutPageData, ArticleSummary, ArticleDetail } from '../types'
+import type { SiteTypographySettings } from '@/lib/typography'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
 
@@ -245,4 +247,13 @@ export async function getArticles(): Promise<ArticleSummary[]> {
 export async function getArticleBySlug(slug: string): Promise<ArticleDetail | null> {
   if (!isSanityConfigured) return null
   return client.fetch<ArticleDetail | null>(getArticleBySlugQuery, { slug }, { next: { revalidate: 300 } })
+}
+
+// ─── Site Settings ────────────────────────────────────────────────────────────
+
+export async function getSiteSettings(): Promise<SiteTypographySettings | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<SiteTypographySettings | null>(
+    getSiteSettingsQuery, {}, { next: { revalidate: 300 } }
+  )
 }

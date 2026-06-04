@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
 import { Cairo } from "next/font/google";
+import localFont from "next/font/local";
 import { getLocale } from "next-intl/server";
 import "./globals.css";
+import { getSiteSettings } from "@/lib/sanity/fetch";
+import { buildGoogleFontsUrl, buildTypographyCss } from "@/lib/typography";
+import CurrencyProvider from "@/components/layout/CurrencyProvider";
+
+// Satoshi — loaded locally (covers all weights 300–900)
+const satoshi = localFont({
+  src: [
+    { path: "../public/fonts/Satoshi-Variable.woff2", style: "normal" },
+    { path: "../public/fonts/Satoshi-VariableItalic.woff2", style: "italic" },
+  ],
+  variable: "--font-satoshi",
+  display: "swap",
+  weight: "300 900",
+});
 
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
@@ -69,28 +84,43 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocale();
+  const [locale, settings] = await Promise.all([
+    getLocale(),
+    getSiteSettings(),
+  ]);
   const isArabic = locale === "ar";
+
+  const fontsUrl = buildGoogleFontsUrl(settings?.fontPairing ?? "satoshi");
+  const typographyCss = buildTypographyCss(settings);
 
   return (
     <html
       lang={locale}
       dir={isArabic ? "rtl" : "ltr"}
-      className={isArabic ? cairo.variable : ""}
+      className={`${satoshi.variable} ${isArabic ? cairo.variable : ""}`.trim()}
     >
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap"
-          rel="stylesheet"
-        />
+        {/* Only load Google Fonts when NOT using local Satoshi pairing */}
+        {fontsUrl && !fontsUrl.includes('Satoshi') && (
+          <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link href={fontsUrl} rel="stylesheet" />
+          </>
+        )}
+        <style dangerouslySetInnerHTML={{ __html: typographyCss }} />
       </head>
-      <body>{children}</body>
+      <body>
+        <CurrencyProvider
+          currencies={settings?.currencies ?? [
+            { code: 'USD', symbol: '$', rate: 1, position: 'before' },
+            { code: 'AED', symbol: 'AED', rate: 3.67, position: 'after' },
+            { code: 'INR', symbol: '₹', rate: 83.5, position: 'before' },
+          ]}
+          defaultCurrency={settings?.defaultCurrency ?? 'USD'}
+        />
+        {children}
+      </body>
     </html>
   );
 }

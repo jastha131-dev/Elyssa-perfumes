@@ -40,6 +40,7 @@ export const homePage = defineType({
         defineArrayMember({ type: 'upsellSection' }),
         defineArrayMember({ type: 'categoryTilesSection' }),
         defineArrayMember({ type: 'browseCategoriesSection' }),
+        defineArrayMember({ type: 'quizPromoSection' }),
       ],
     }),
   ],

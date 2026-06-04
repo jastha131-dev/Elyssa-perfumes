@@ -8,7 +8,8 @@ import { X, ShoppingBag, Trash2, Tag, CheckCircle, AlertCircle, Truck } from 'lu
 import { useCartStore } from '@/lib/store/cart-store'
 import { usePromotionsStore } from '@/lib/store/promotions-store'
 import CartItem from '@/components/cart/CartItem'
-import { cn, formatPrice } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -23,6 +24,7 @@ const listVariants = {
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const t = useTranslations('cart')
   const locale = useLocale()
+  const formatPrice = useCurrencyStore((s) => s.format)
   const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart } = useCartStore()
 
   const {

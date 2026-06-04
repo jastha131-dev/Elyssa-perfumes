@@ -17,7 +17,8 @@ import { useTranslations, useLocale } from 'next-intl'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
-import { cn, formatPrice } from '@/lib/utils'
+import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { WishlistItem } from '@/lib/types'
 
 const gridVariants = {
@@ -86,6 +87,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
   const { product } = wishlistItem
   const { removeItem } = useWishlistStore()
   const { addItem } = useCartStore()
+  const formatPrice = useCurrencyStore((s) => s.format)
   const [addedToCart, setAddedToCart] = useState(false)
   const t = useTranslations('wishlist')
   const tp = useTranslations('product')

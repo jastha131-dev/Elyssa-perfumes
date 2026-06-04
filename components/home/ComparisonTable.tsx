@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
+import { useCurrencyStore } from '@/lib/store/currency-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import type { Product, ComparisonTableSectionBlock } from '@/lib/types'
 
@@ -23,6 +24,7 @@ const cardVariant = { hidden: { opacity: 0, y: 32 }, visible: { opacity: 1, y: 0
 
 export default function ComparisonTable({ data }: Props) {
   const locale = useLocale()
+  const formatPrice = useCurrencyStore((s) => s.format)
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const { addItem } = useCartStore()
@@ -103,7 +105,7 @@ export default function ComparisonTable({ data }: Props) {
                     {name}
                   </Link>
                   <span className="font-body text-base font-medium text-camel-600 transition-colors duration-300 group-hover:text-white">
-                    ${price.toFixed(2)}
+                    {formatPrice(price)}
                   </span>
                 </div>
 

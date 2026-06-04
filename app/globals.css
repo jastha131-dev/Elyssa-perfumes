@@ -3,15 +3,20 @@
 @tailwind utilities;
 
 :root {
-  --font-display: 'Playfair Display', Georgia, serif;
-  --font-headline: 'Oswald', 'Barlow', sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
-  --gold: #d99a1b;
-  --charcoal: #1a1a1a;
-  --cream: #fdf9ec;
-  --stone: #F7F0E6;
-  --camel: #B08040;
-  --ink: #0D0D0D;
+  --font-display: var(--font-satoshi), system-ui, sans-serif;
+  --font-headline: var(--font-satoshi), system-ui, sans-serif;
+  --font-body: var(--font-satoshi), system-ui, sans-serif;
+  /* Electric Ginger — primary accent */
+  --gold:    #E9631A;
+  --camel:   #E9631A;
+  /* Deep Charcoal — dark / text */
+  --charcoal: #323232;
+  --ink:      #323232;
+  /* Off-White Parchment — backgrounds */
+  --cream:   #EBEBDF;
+  --stone:   #F4F4EE;
+  /* Azure Mist — secondary accent */
+  --azure:   #A9C2E0;
 }
 
 * {
@@ -24,11 +29,13 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: #ffffff;
+  background-color: var(--stone);
   color: var(--charcoal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+/* Explicit white bg for sections that need it */
+.bg-explicit-white { background-color: #ffffff; }
 
 .font-display {
   font-family: var(--font-display);

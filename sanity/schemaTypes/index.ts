@@ -40,12 +40,14 @@ import {
   upsellSection,
   categoryTilesSection,
   browseCategoriesSection,
+  quizPromoSection,
 } from './blocks'
 import { announcementBar } from './announcementBar'
 import { promotion } from './promotion'
 import { user } from './user'
 import { address } from './address'
 import { order } from './order'
+import { siteSettings } from './siteSettings'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
@@ -79,10 +81,12 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   upsellSection,
   categoryTilesSection,
   browseCategoriesSection,
+  quizPromoSection,
 
   // ── Global singletons ──────────────────────────────────────────
   announcementBar,
   promotion,
+  siteSettings,
 
   // ── Content documents ──────────────────────────────────────────
   article,

@@ -28,6 +28,7 @@ const SECTION_CONFIG: Record<string, { emoji: string; bg: string; fg: string; sh
   upsellSection:           { emoji: '↑', bg: '#92400E', fg: '#FDE68A', shortLabel: 'UPSELL',     label: 'Upsell Products'     },
   categoryTilesSection:    { emoji: '⊟', bg: '#92400E', fg: '#FDE68A', shortLabel: 'TILES',      label: 'Category Tiles'      },
   browseCategoriesSection: { emoji: '⊞', bg: '#78350F', fg: '#FDE68A', shortLabel: 'BROWSE',     label: 'Browse Categories'   },
+  quizPromoSection:        { emoji: '✦', bg: '#E9631A', fg: '#FFFFFF', shortLabel: 'QUIZ',        label: 'Scent Quiz Promo'    },
   announcementBar:         { emoji: '!', bg: '#B45309', fg: '#FEF3C7', shortLabel: 'ANNC',       label: 'Announcement Bar'    },
 }
 
