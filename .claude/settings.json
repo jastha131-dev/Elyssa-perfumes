@@ -3,10 +3,22 @@
     "allow": [
       "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/journal/\\\\[slug\\\\])",
       "Bash(timeout 30 node -e ' *)",
-      "Bash(openssl rand *)"
+      "Bash(openssl rand *)",
+      "Bash(node -e \"const m = require\\('./middleware.ts'\\); console.log\\('ok'\\)\")",
+      "Bash(next build *)",
+      "Bash(npm run dev > /tmp/nextjs-dev.log 2>&1 & *)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{time_total}s total\" http://localhost:3000/en)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} %{redirect_url}\\\\n\" http://localhost:3000)",
+      "Bash(curl -s -o /dev/null -w \"%{http_code} total_time=%{time_total}s\\\\n\" http://localhost:3000/en)",
+      "Bash(timeout 15 curl -s -o /dev/null -w \"%{http_code} time=%{time_total}s\\\\n\" http://localhost:3002/en)",
+      "Bash(curl -s -m 20 -o /dev/null -w \"%{http_code} time=%{time_total}s\\\\n\" http://localhost:3002/en)",
+      "Bash(kill 35655)"
     ],
     "additionalDirectories": [
-      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/journal"
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/journal",
+      "/tmp"
     ]
   }
 }

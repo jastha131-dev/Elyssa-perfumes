@@ -5,7 +5,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, SlidersHorizontal, ChevronDown, X, Sparkles, Zap, DollarSign } from 'lucide-react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { CollectionDetail, Product } from '@/lib/types'
@@ -109,6 +109,7 @@ interface Props { collection: CollectionDetail; products: Product[] }
 
 export default function CollectionPageClient({ collection, products }: Props) {
   const locale = useLocale()
+  const t = useTranslations('filters')
   const isAr = locale === 'ar'
   const formatPrice = useCurrencyStore((s) => s.format)
 
@@ -329,7 +330,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
           <div className="py-24 text-center">
             <p className="font-body text-sm text-ink-400 mb-4">No fragrances match your filters.</p>
             <button onClick={clearAll} className="rounded-full border-2 border-ink-900 px-6 py-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-ink-900 hover:bg-ink-900 hover:text-white transition-all">
-              Clear Filters
+              {t('clearFilters')}
             </button>
           </div>
         ) : (

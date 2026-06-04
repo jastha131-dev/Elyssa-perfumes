@@ -315,7 +315,7 @@ export default function SearchOverlay() {
                             <li key={term} className="group flex items-center gap-2">
                               <button
                                 onClick={() => handleSearch(term)}
-                                className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-left text-sm text-charcoal-300 transition-colors hover:bg-charcoal-800 hover:text-cream-100"
+                                className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-left rtl:text-right text-sm text-charcoal-300 transition-colors hover:bg-charcoal-800 hover:text-cream-100"
                               >
                                 <Clock className="h-3.5 w-3.5 flex-shrink-0 text-charcoal-600" />
                                 {term}
@@ -370,7 +370,7 @@ export default function SearchOverlay() {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ delay: 0.1 }}
             whileTap={{ scale: 0.88 }}
-            className="absolute right-4 top-4 z-10 rounded-full p-2 sm:right-8 sm:top-8 border border-charcoal-700 bg-charcoal-900/80 text-charcoal-300 transition-all hover:border-charcoal-500 hover:text-cream-100"
+            className="absolute right-4 rtl:right-auto rtl:left-4 top-4 z-10 rounded-full p-2 sm:right-8 rtl:sm:right-auto rtl:sm:left-8 sm:top-8 border border-charcoal-700 bg-charcoal-900/80 text-charcoal-300 transition-all hover:border-charcoal-500 hover:text-cream-100"
           >
             <X className="h-5 w-5" />
           </motion.button>

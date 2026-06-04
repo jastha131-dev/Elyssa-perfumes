@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 
 interface GalleryImage {
@@ -16,6 +17,7 @@ interface ImageGalleryProps {
 }
 
 export function ImageGallery({ images }: ImageGalleryProps) {
+  const t = useTranslations('product')
   const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxIndex, setLightboxIndex] = useState(0)
@@ -126,7 +128,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                 <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white/80 backdrop-blur-sm text-charcoal-800">
                   <ZoomIn size={12} />
                   <span className="text-[10px] tracking-wider uppercase font-medium">
-                    Click to zoom
+                    {t('clickToZoom')}
                   </span>
                 </div>
               </motion.div>

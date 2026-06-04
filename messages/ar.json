@@ -19,7 +19,28 @@
     "storiesGuides": "قصص ودليل",
     "quiz": "اختبار العطور",
     "faq": "الأسئلة الشائعة",
-    "contact": "تواصل معنا"
+    "contact": "تواصل معنا",
+    "announcementText": "شحن مجاني لجميع الطلبات فوق $100",
+    "fullCollection": "المجموعة الكاملة",
+    "shopNow": "تسوق الآن",
+    "shopByCategory": "تسوق حسب الفئة",
+    "discover": "اكتشف",
+    "fragranceFamily": "عائلة العطر",
+    "newSeason": "موسم جديد",
+    "seasonLabel": "الربيع / الصيف",
+    "seasonHeadline": "قصة الربيع والصيف",
+    "seasonDesc": "عطور نادرة صُنعت للروح المتذوقة.",
+    "aiMatching": "مطابقة العطور بالذكاء الاصطناعي",
+    "commonQuestions": "الأسئلة الشائعة",
+    "getInTouch": "تواصل معنا",
+    "shopArrow": "تسوق ←",
+    "familyWoody": "خشبي",
+    "familyFloral": "زهري",
+    "familyCitrus": "حمضي",
+    "familyOriental": "شرقي",
+    "familyFresh": "منعش",
+    "familyAquatic": "مائي",
+    "familyGourmand": "حلوي"
   },
   "product": {
     "addToCart": "أضف إلى السلة",
@@ -56,7 +77,8 @@
     "eauDeParfum": "إيو دي بارفان",
     "save": "وفر {percent}%",
     "scrollLeft": "التمرير لليسار",
-    "scrollRight": "التمرير لليمين"
+    "scrollRight": "التمرير لليمين",
+    "clickToZoom": "انقر للتكبير"
   },
   "cart": {
     "title": "سلة التسوق",
@@ -257,6 +279,29 @@
     "trust3Title": "هدايا فاخرة",
     "trust3Sub": "تغليف هدايا مميز",
     "trust4Title": "إرجاع خلال 30 يوماً",
-    "trust4Sub": "استبدال بدون متاعب"
+    "trust4Sub": "استبدال بدون متاعب",
+    "heroEyebrow": "مستوحى من الأيقونات. أُعيد تصوره لأجلك.",
+    "heroScroll": "انتقل",
+    "heroCta": "تسوق المجموعة",
+    "inspiredBy": "مستوحى من",
+    "browseAllFragrances": "تصفح جميع العطور"
+  },
+  "filters": {
+    "title": "الفلاتر",
+    "clearAll": "مسح الكل",
+    "clearFilters": "مسح الفلاتر",
+    "allFragrances": "جميع العطور",
+    "featured": "مميز",
+    "newest": "الأحدث",
+    "priceLow": "السعر: من الأقل للأعلى",
+    "priceHigh": "السعر: من الأعلى للأقل",
+    "bestSelling": "الأكثر مبيعاً",
+    "woody": "خشبي",
+    "floral": "زهري",
+    "citrus": "حمضي",
+    "oriental": "شرقي",
+    "fresh": "منعش",
+    "aquatic": "مائي",
+    "gourmand": "حلوي"
   }
 }

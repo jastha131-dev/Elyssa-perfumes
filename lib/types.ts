@@ -212,6 +212,12 @@ export interface HeroSectionBlock {
   subheadline_ar?: string
   bgImageUrl?: string
   bgImageAlt?: string
+  mobileImageUrl?: string
+  mobileImageAlt?: string
+  badge_en?: string
+  badge_ar?: string
+  badgeSub_en?: string
+  badgeSub_ar?: string
   bgVideo?: { url?: string; muxPlaybackId?: string }
   cta?: CtaButton
   textColor?: 'light' | 'dark'

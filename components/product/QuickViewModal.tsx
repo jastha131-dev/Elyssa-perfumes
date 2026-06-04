@@ -165,7 +165,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-charcoal-950/30 to-transparent pointer-events-none" />
 
                 {/* Badges */}
-                <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+                <div className="absolute left-3 top-3 rtl:left-auto rtl:right-3 flex flex-col gap-1.5">
                   {product.new && (
                     <span className="bg-charcoal-900 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
                       {t('new')}
@@ -187,7 +187,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 <button
                   onClick={() => toggleWishlist(product)}
                   className={cn(
-                    "absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200",
+                    "absolute right-3 top-3 rtl:right-auto rtl:left-3 flex h-8 w-8 items-center justify-center rounded-full transition-all duration-200",
                     isWishlisted
                       ? "bg-red-500 text-white"
                       : "bg-white/90 text-charcoal-500 hover:bg-white hover:text-red-500 backdrop-blur-sm"
@@ -203,7 +203,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     <button
                       onClick={() => setImageIndex((i) => Math.max(0, i - 1))}
                       disabled={imageIndex === 0}
-                      className="absolute left-2 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center bg-white/80 backdrop-blur-sm text-charcoal-700 disabled:opacity-30 hover:bg-white transition-colors"
+                      className="absolute left-2 top-1/2 rtl:left-auto rtl:right-2 -translate-y-1/2 flex h-7 w-7 items-center justify-center bg-white/80 backdrop-blur-sm text-charcoal-700 disabled:opacity-30 hover:bg-white transition-colors"
                       aria-label="Previous image"
                     >
                       <ChevronLeft className="h-4 w-4" />
@@ -211,7 +211,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     <button
                       onClick={() => setImageIndex((i) => Math.min(images.length - 1, i + 1))}
                       disabled={imageIndex === images.length - 1}
-                      className="absolute right-2 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center bg-white/80 backdrop-blur-sm text-charcoal-700 disabled:opacity-30 hover:bg-white transition-colors"
+                      className="absolute right-2 top-1/2 rtl:right-auto rtl:left-2 -translate-y-1/2 flex h-7 w-7 items-center justify-center bg-white/80 backdrop-blur-sm text-charcoal-700 disabled:opacity-30 hover:bg-white transition-colors"
                       aria-label="Next image"
                     >
                       <ChevronRight className="h-4 w-4" />
@@ -240,7 +240,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 {/* Close */}
                 <button
                   onClick={onClose}
-                  className="absolute right-4 top-4 z-10 flex h-7 w-7 items-center justify-center text-charcoal-400 hover:text-charcoal-900 transition-colors"
+                  className="absolute right-4 top-4 rtl:right-auto rtl:left-4 z-10 flex h-7 w-7 items-center justify-center text-charcoal-400 hover:text-charcoal-900 transition-colors"
                   aria-label="Close"
                 >
                   <X className="h-4 w-4" />

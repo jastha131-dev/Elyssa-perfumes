@@ -1,5 +1,6 @@
 'use client'
 
+import { SessionProvider } from 'next-auth/react'
 import { Toaster } from 'sonner'
 import CartDrawer from '@/components/cart/CartDrawer'
 import SearchOverlay from '@/components/layout/SearchOverlay'
@@ -32,7 +33,7 @@ function GlobalOverlays() {
 
 export default function Providers({ children }: ProvidersProps) {
   return (
-    <>
+    <SessionProvider>
       {children}
       <GlobalOverlays />
       <Toaster
@@ -56,6 +57,6 @@ export default function Providers({ children }: ProvidersProps) {
         expand={false}
         closeButton
       />
-    </>
+    </SessionProvider>
   )
 }

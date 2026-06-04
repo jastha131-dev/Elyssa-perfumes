@@ -44,14 +44,18 @@ export default function Hero({ data }: HeroProps) {
   const bgY    = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
   const fadeOp = useTransform(scrollYProgress, [0, 0.65], [1, 0])
 
+  const badge     = (isAr ? data?.badge_ar   : data?.badge_en)   ?? null
+  const badgeSub  = (isAr ? data?.badgeSub_ar : data?.badgeSub_en) ?? null
+
   const title    = (isAr ? data?.headline_ar    : data?.headline_en)    ?? ''
   const subtitle = (isAr ? data?.subheadline_ar : data?.subheadline_en) ?? ''
   const cta      = data?.cta
-  const ctaLabel = (isAr ? cta?.label_ar : cta?.label_en) ?? 'Shop Collection'
+  const ctaLabel = (isAr ? cta?.label_ar : cta?.label_en) ?? t('heroCta')
   const layout   = data?.layout ?? 'split'
   const isFull   = layout === 'full'
   const isLight  = data?.textColor === 'light'
-  const heroImageSrc = data?.bgImageUrl || '/images/categories/I1.webp'
+  const heroImageSrc       = data?.bgImageUrl || '/images/categories/I1.webp'
+  const mobileImageSrc     = data?.mobileImageUrl || heroImageSrc
 
   if (!title) return null
 
@@ -67,9 +71,15 @@ export default function Hero({ data }: HeroProps) {
         <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
           <Image
             src={heroImageSrc}
-            alt="Luxury fragrance"
+            alt={data?.bgImageAlt || 'Luxury fragrance'}
             fill priority quality={100}
-            className="object-cover object-center"
+            className="hidden sm:block object-cover object-center"
+          />
+          <Image
+            src={mobileImageSrc}
+            alt={data?.mobileImageAlt || data?.bgImageAlt || 'Luxury fragrance'}
+            fill priority quality={100}
+            className="block sm:hidden object-cover object-center"
           />
           <div className={cn(
             'absolute inset-0',
@@ -98,6 +108,8 @@ export default function Hero({ data }: HeroProps) {
               ctaLink={cta?.link}
               isLight={isLight}
               STATS={STATS}
+              badge={badge}
+              badgeSub={badgeSub}
             />
           </motion.div>
         </motion.div>
@@ -111,7 +123,7 @@ export default function Hero({ data }: HeroProps) {
           style={{ opacity: fadeOp }}
         >
           <span className={cn('font-body text-[8px] uppercase tracking-[0.38em]', isLight ? 'text-stone-400/70' : 'text-ink-400/70')}>
-            Scroll
+            {t('heroScroll')}
           </span>
           <motion.div animate={{ y: [0, 7, 0] }} transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}>
             <ChevronDown className="text-camel-500/40" size={15} strokeWidth={1} />
@@ -144,17 +156,27 @@ export default function Hero({ data }: HeroProps) {
               ctaLink={cta?.link}
               isLight={false}
               STATS={STATS}
+              badge={badge}
+              badgeSub={badgeSub}
             />
           </motion.div>
         </div>
 
-        {/* Right: image 45% */}
-        <div className="relative hidden w-full min-h-[500px] sm:block lg:w-[45%]">
+        {/* Right: image 45% — mobile uses mobileImage if set */}
+        <div className="relative w-full min-h-[340px] sm:min-h-[500px] lg:w-[45%]">
+          {/* Desktop image */}
           <Image
             src={heroImageSrc}
-            alt="Luxury fragrance"
+            alt={data?.bgImageAlt || 'Luxury fragrance'}
             fill priority quality={100}
-            className="object-cover object-center"
+            className="hidden sm:block object-cover object-center"
+          />
+          {/* Mobile image */}
+          <Image
+            src={mobileImageSrc}
+            alt={data?.mobileImageAlt || data?.bgImageAlt || 'Luxury fragrance'}
+            fill priority quality={100}
+            className="block sm:hidden object-cover object-center"
           />
         </div>
       </div>
@@ -170,9 +192,12 @@ interface TextContentProps {
   ctaLink?: string
   isLight: boolean
   STATS: { value: string; label: string }[]
+  badge?: string | null
+  badgeSub?: string | null
 }
 
-function TextContent({ title, subtitle, ctaLabel, ctaLink, isLight, STATS }: TextContentProps) {
+function TextContent({ title, subtitle, ctaLabel, ctaLink, isLight, STATS, badge, badgeSub }: TextContentProps) {
+  const t = useTranslations('home')
   const headlineColor = isLight ? 'text-stone-50' : 'text-ink-900'
   const bodyColor     = isLight ? 'text-stone-300' : 'text-ink-600'
   const statColor     = isLight ? 'text-stone-100' : 'text-ink-900'
@@ -186,7 +211,7 @@ function TextContent({ title, subtitle, ctaLabel, ctaLink, isLight, STATS }: Tex
       <motion.div variants={itemVariants} className="mb-6 flex items-center gap-3 outline-none">
         <div className="h-px w-8 flex-shrink-0 bg-camel-500" />
         <span className="font-body text-[10px] font-light uppercase tracking-[0.42em] text-camel-500 select-none">
-          Inspired by Icons. Reimagined for You.
+          {t('heroEyebrow')}
         </span>
       </motion.div>
 
@@ -198,13 +223,15 @@ function TextContent({ title, subtitle, ctaLabel, ctaLink, isLight, STATS }: Tex
         {title}
       </motion.h1>
 
-      {/* Discount badge */}
-      <motion.div variants={itemVariants} className="mb-6">
-        <span className="inline-block bg-camel-500 px-4 py-2 text-white font-body text-center leading-tight">
-          <span className="block text-sm font-bold tracking-widest">50% OFF</span>
-          <span className="block text-[9px] font-semibold uppercase tracking-[0.3em] opacity-90">Limited Time Offer</span>
-        </span>
-      </motion.div>
+      {/* Promo badge — only shown if set in Sanity */}
+      {badge && (
+        <motion.div variants={itemVariants} className="mb-6">
+          <span className="inline-block bg-camel-500 px-4 py-2 text-white font-body text-center leading-tight">
+            <span className="block text-sm font-bold tracking-widest">{badge}</span>
+            {badgeSub && <span className="block text-[9px] font-semibold uppercase tracking-[0.3em] opacity-90">{badgeSub}</span>}
+          </span>
+        </motion.div>
+      )}
 
       {/* Subtitle */}
       {subtitle && (

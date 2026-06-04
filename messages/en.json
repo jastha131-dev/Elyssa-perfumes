@@ -19,7 +19,28 @@
     "storiesGuides": "Stories & guides",
     "quiz": "Scent Quiz",
     "faq": "FAQ",
-    "contact": "Contact"
+    "contact": "Contact",
+    "announcementText": "Complimentary shipping on all orders over $100",
+    "fullCollection": "Full collection",
+    "shopNow": "Shop Now",
+    "shopByCategory": "Shop by Category",
+    "discover": "Discover",
+    "fragranceFamily": "Fragrance Family",
+    "newSeason": "New Season",
+    "seasonLabel": "Spring / Summer",
+    "seasonHeadline": "Spring Summer Story",
+    "seasonDesc": "Rare fragrances crafted for the discerning soul.",
+    "aiMatching": "AI fragrance matching",
+    "commonQuestions": "Common questions",
+    "getInTouch": "Get in touch",
+    "shopArrow": "Shop →",
+    "familyWoody": "Woody",
+    "familyFloral": "Floral",
+    "familyCitrus": "Citrus",
+    "familyOriental": "Oriental",
+    "familyFresh": "Fresh",
+    "familyAquatic": "Aquatic",
+    "familyGourmand": "Gourmand"
   },
   "product": {
     "addToCart": "Add to Cart",
@@ -56,7 +77,8 @@
     "eauDeParfum": "Eau de Parfum",
     "save": "Save {percent}%",
     "scrollLeft": "Scroll left",
-    "scrollRight": "Scroll right"
+    "scrollRight": "Scroll right",
+    "clickToZoom": "Click to zoom"
   },
   "cart": {
     "title": "Your Cart",
@@ -257,6 +279,29 @@
     "trust3Title": "Luxury Gifting",
     "trust3Sub": "Signature gift packaging",
     "trust4Title": "30-Day Returns",
-    "trust4Sub": "Hassle-free exchanges"
+    "trust4Sub": "Hassle-free exchanges",
+    "heroEyebrow": "Inspired by Icons. Reimagined for You.",
+    "heroScroll": "Scroll",
+    "heroCta": "Shop Collection",
+    "inspiredBy": "Inspired By",
+    "browseAllFragrances": "Browse All Fragrances"
+  },
+  "filters": {
+    "title": "Filters",
+    "clearAll": "Clear All",
+    "clearFilters": "Clear Filters",
+    "allFragrances": "All Fragrances",
+    "featured": "Featured",
+    "newest": "Newest",
+    "priceLow": "Price: Low to High",
+    "priceHigh": "Price: High to Low",
+    "bestSelling": "Best Selling",
+    "woody": "Woody",
+    "floral": "Floral",
+    "citrus": "Citrus",
+    "oriental": "Oriental",
+    "fresh": "Fresh",
+    "aquatic": "Aquatic",
+    "gourmand": "Gourmand"
   }
 }

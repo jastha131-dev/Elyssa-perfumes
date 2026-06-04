@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation'
 import { useTranslations, useLocale } from 'next-intl'
 import { urlFor } from '@/lib/sanity/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, TrendingUp, Gift, BookOpen, ArrowRight, HelpCircle, Mail } from 'lucide-react'
+import { Search, Heart, ShoppingBag, Menu, X, ChevronDown, Sparkles, TrendingUp, Gift, BookOpen, ArrowRight, HelpCircle, Mail, User } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
@@ -52,7 +52,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
   const [mobileOpen, setMobileOpen] = useState(false)
   const [collectionsHovered, setCollectionsHovered] = useState(false)
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false)
+  const [headerHeight, setHeaderHeight] = useState(108)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const { openCart, totalItems: cartTotal } = useCartStore()
@@ -85,6 +87,16 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
     }
   }, [mobileOpen])
 
+  useEffect(() => {
+    if (!headerRef.current) return
+    const ro = new ResizeObserver(() => {
+      if (headerRef.current) setHeaderHeight(headerRef.current.offsetHeight)
+    })
+    ro.observe(headerRef.current)
+    setHeaderHeight(headerRef.current.offsetHeight)
+    return () => ro.disconnect()
+  }, [])
+
   function handleCollectionsEnter() {
     if (dropdownTimerRef.current) clearTimeout(dropdownTimerRef.current)
     setCollectionsHovered(true)
@@ -102,11 +114,11 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
 
   return (
     <>
-      <header className="fixed left-0 right-0 top-0 z-40 bg-ink-950 shadow-none">
+      <header ref={headerRef} className="fixed left-0 right-0 top-0 z-40 bg-ink-950 shadow-none">
         {/* Announcement bar — always visible, camel background */}
         <div className="bg-camel-500 text-center py-2.5">
           <p className="font-body text-[11px] text-white tracking-[0.2em]">
-            Complimentary shipping on all orders over $100
+            {t('announcementText')}
             <span className="mx-3 text-white/50">·</span>
             <Link href={`/${locale}/products`} className="text-white underline underline-offset-2 hover:text-stone-100 transition-colors">
               {t('exploreNow')}
@@ -185,14 +197,14 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                                 {t('allFragrances')}
                               </span>
                               <span className="block text-[9px] text-stone-600 tracking-wide">
-                                Full collection
+                                {t('fullCollection')}
                               </span>
                             </div>
                             <ArrowRight className="h-3 w-3 flex-shrink-0 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-400" />
                           </Link>
 
                           <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
-                            Shop by Category
+                            {t('shopByCategory')}
                           </p>
 
                           <ul className="space-y-0.5">
@@ -206,7 +218,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                                 <li key={cat._id}>
                                   <Link
                                     href={`/${locale}/products?category=${cat.slug}`}
-                                    className="group/item flex items-center gap-3 border-l-2 border-transparent py-2 pl-1 transition-all duration-200 hover:border-camel-500 hover:pl-2"
+                                    className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
                                   >
                                     <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden bg-charcoal-800">
                                       {imgUrl ? (
@@ -225,12 +237,12 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                                         {catName}
                                       </span>
                                       <span className="block text-[9px] tracking-wide text-stone-600 transition-colors group-hover/item:text-stone-500">
-                                        Shop →
+                                        {t('shopArrow')}
                                       </span>
                                     </div>
                                   </Link>
                                   {subs.length > 0 && (
-                                    <ul className="ml-[52px] mb-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                                    <ul className="ml-[52px] rtl:ml-0 rtl:mr-[52px] mb-1 flex flex-wrap gap-x-2 gap-y-0.5">
                                       {subs.map((sub) => {
                                         const subName = locale === 'ar' ? (sub.name_ar || sub.name_en) : sub.name_en
                                         return (
@@ -255,7 +267,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                         {/* ── Col 2: Discover + Fragrance Families ── */}
                         <div className="border-r border-white/[0.06] px-5 py-6">
                           <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
-                            Discover
+                            {t('discover')}
                           </p>
 
                           <ul className="mb-5 space-y-0.5">
@@ -264,9 +276,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                               { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
                               { href: `/${locale}/products?category=gift-sets`,icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
                               { href: `/${locale}/journal`,                    icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
-                              { href: `/${locale}/quiz`,                       icon: Sparkles,   label: t('quiz'),         sub: 'AI fragrance matching', badge: 'AI' },
-                              { href: `/${locale}/faq`,                        icon: HelpCircle, label: t('faq'),          sub: 'Common questions',       badge: null },
-                              { href: `/${locale}/contact`,                    icon: Mail,       label: t('contact'),      sub: 'Get in touch',           badge: null },
+                              { href: `/${locale}/quiz`,                       icon: Sparkles,   label: t('quiz'),         sub: t('aiMatching'),        badge: 'AI' },
+                              { href: `/${locale}/faq`,                        icon: HelpCircle, label: t('faq'),          sub: t('commonQuestions'),    badge: null },
+                              { href: `/${locale}/contact`,                    icon: Mail,       label: t('contact'),      sub: t('getInTouch'),         badge: null },
                             ].map(({ href, icon: Icon, label, sub, badge }) => (
                               <li key={href}>
                                 <Link
@@ -298,16 +310,24 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                           <div className="mb-4 h-px bg-white/[0.06]" />
 
                           <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
-                            Fragrance Family
+                            {t('fragranceFamily')}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
-                            {['Woody', 'Floral', 'Citrus', 'Oriental', 'Fresh', 'Aquatic', 'Gourmand'].map((family) => (
+                            {([
+                              { key: 'woody',    label: t('familyWoody') },
+                              { key: 'floral',   label: t('familyFloral') },
+                              { key: 'citrus',   label: t('familyCitrus') },
+                              { key: 'oriental', label: t('familyOriental') },
+                              { key: 'fresh',    label: t('familyFresh') },
+                              { key: 'aquatic',  label: t('familyAquatic') },
+                              { key: 'gourmand', label: t('familyGourmand') },
+                            ] as const).map(({ key, label }) => (
                               <Link
-                                key={family}
-                                href={`/${locale}/products?family=${family.toLowerCase()}`}
+                                key={key}
+                                href={`/${locale}/products?family=${key}`}
                                 className="border border-white/10 px-2.5 py-1 text-[10px] font-light tracking-[0.15em] text-stone-500 transition-all duration-200 hover:border-camel-500/50 hover:bg-camel-500/8 hover:text-camel-300"
                               >
-                                {family}
+                                {label}
                               </Link>
                             ))}
                           </div>
@@ -326,26 +346,26 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                           {/* Top badge */}
                           <div className="absolute left-4 top-4">
                             <span className="bg-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3em] text-white">
-                              New Season
+                              {t('newSeason')}
                             </span>
                           </div>
 
                           {/* Bottom content */}
                           <div className="absolute bottom-0 left-0 right-0 p-5">
                             <p className="mb-1 text-[9px] uppercase tracking-[0.4em] text-camel-400/80">
-                              Spring / Summer
+                              {t('seasonLabel')}
                             </p>
                             <p className="mb-1 font-display text-xl font-light leading-tight text-stone-100">
-                              Spring Summer Story
+                              {t('seasonHeadline')}
                             </p>
                             <p className="mb-4 text-[10px] leading-relaxed text-stone-500">
-                              Rare fragrances crafted for the discerning soul.
+                              {t('seasonDesc')}
                             </p>
                             <Link
                               href={`/${locale}/products`}
                               className="group/cta inline-flex items-center gap-2 border-b border-camel-500/40 pb-0.5 text-[10px] uppercase tracking-[0.25em] text-camel-400 transition-all duration-200 hover:border-camel-400 hover:text-camel-300"
                             >
-                              Shop Now
+                              {t('shopNow')}
                               <ArrowRight className="h-2.5 w-2.5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
                             </Link>
                           </div>
@@ -433,6 +453,13 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
               <CurrencySwitcher />
             </div>
 
+            <IconButton
+              href={`/${locale}/account`}
+              label="My Account"
+            >
+              <User className="h-5 w-5" />
+            </IconButton>
+
             <IconButton onClick={openSearch} label="Open search">
               <Search className="h-5 w-5" />
             </IconButton>
@@ -458,7 +485,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
-              className="ml-1 rounded-full p-2 transition-colors duration-200 lg:hidden text-stone-200 hover:bg-white/10"
+              className="ml-1 rtl:ml-0 rtl:mr-1 rounded-full p-2 transition-colors duration-200 lg:hidden text-stone-200 hover:bg-white/10"
               whileTap={{ scale: 0.9 }}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -488,6 +515,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
             className="fixed inset-0 z-30 bg-charcoal-900/30 backdrop-blur-sm lg:hidden"
+            style={{ top: headerHeight }}
             aria-hidden="true"
           />
         )}
@@ -502,13 +530,17 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed left-0 right-0 top-[72px] z-40 bg-[#0D0D0D] shadow-2xl shadow-black/50 lg:hidden"
+            className="fixed left-0 right-0 z-40 bg-[#0D0D0D] shadow-2xl shadow-black/50 lg:hidden"
+            style={{ top: headerHeight }}
           >
             {/* Camel gradient top accent */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
             <nav
               className="mx-auto max-w-7xl px-4 pb-8 pt-2 sm:px-6"
               aria-label="Mobile navigation"
+              onClick={(e) => {
+                if ((e.target as HTMLElement).closest('a')) setMobileOpen(false)
+              }}
             >
               <ul className="flex flex-col divide-y divide-white/10">
                 {/* Collections accordion */}
@@ -549,7 +581,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
 
                         {/* Shop by Category */}
                         <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
-                          Shop by Category
+                          {t('shopByCategory')}
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
                           {(categories.length > 0 ? categories : FALLBACK_CATEGORIES).map((cat) => {
@@ -562,7 +594,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                               <li key={cat._id}>
                                 <Link
                                   href={`/${locale}/products?category=${cat.slug}`}
-                                  className="group/item flex items-center gap-3 border-l-2 border-transparent py-2 pl-1 transition-all duration-200 hover:border-camel-500 hover:pl-2"
+                                  className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
                                 >
                                   <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden bg-charcoal-800">
                                     {imgUrl ? (
@@ -580,11 +612,11 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                                     <span className="block text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
                                       {catName}
                                     </span>
-                                    <span className="block text-[9px] text-stone-600">Shop →</span>
+                                    <span className="block text-[9px] text-stone-600">{t('shopArrow')}</span>
                                   </div>
                                 </Link>
                                 {subs.length > 0 && (
-                                  <div className="ml-[52px] mb-1 flex flex-wrap gap-x-3 gap-y-1">
+                                  <div className="ml-[52px] rtl:ml-0 rtl:mr-[52px] mb-1 flex flex-wrap gap-x-3 gap-y-1">
                                     {subs.map((sub) => {
                                       const subName = locale === 'ar' ? (sub.name_ar || sub.name_en) : sub.name_en
                                       return (
@@ -607,7 +639,7 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                         {/* Discover */}
                         <div className="mx-4 mb-3 h-px bg-white/[0.06]" />
                         <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
-                          Discover
+                          {t('discover')}
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
                           {[
@@ -615,9 +647,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                             { href: `/${locale}/products?sort=best_selling`,  icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
                             { href: `/${locale}/products?category=gift-sets`, icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
                             { href: `/${locale}/journal`,                     icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
-                            { href: `/${locale}/quiz`,                        icon: Sparkles,   label: t('quiz'),         sub: 'AI fragrance matching', badge: 'AI' },
-                            { href: `/${locale}/faq`,                         icon: HelpCircle, label: t('faq'),          sub: 'Common questions',       badge: null },
-                            { href: `/${locale}/contact`,                     icon: Mail,       label: t('contact'),      sub: 'Get in touch',           badge: null },
+                            { href: `/${locale}/quiz`,                        icon: Sparkles,   label: t('quiz'),         sub: t('aiMatching'),        badge: 'AI' },
+                            { href: `/${locale}/faq`,                         icon: HelpCircle, label: t('faq'),          sub: t('commonQuestions'),    badge: null },
+                            { href: `/${locale}/contact`,                     icon: Mail,       label: t('contact'),      sub: t('getInTouch'),         badge: null },
                           ].map(({ href, icon: Icon, label, sub, badge }) => (
                             <li key={href}>
                               <Link href={href} className="group/item flex items-center gap-3 py-2 transition-colors">
@@ -643,16 +675,24 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                         {/* Fragrance Family */}
                         <div className="mx-4 mb-3 h-px bg-white/[0.06]" />
                         <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
-                          Fragrance Family
+                          {t('fragranceFamily')}
                         </p>
                         <div className="mb-4 flex flex-wrap gap-1.5 px-4">
-                          {['Woody', 'Floral', 'Citrus', 'Oriental', 'Fresh', 'Aquatic', 'Gourmand'].map((family) => (
+                          {([
+                            { key: 'woody',    label: t('familyWoody') },
+                            { key: 'floral',   label: t('familyFloral') },
+                            { key: 'citrus',   label: t('familyCitrus') },
+                            { key: 'oriental', label: t('familyOriental') },
+                            { key: 'fresh',    label: t('familyFresh') },
+                            { key: 'aquatic',  label: t('familyAquatic') },
+                            { key: 'gourmand', label: t('familyGourmand') },
+                          ] as const).map(({ key, label }) => (
                             <Link
-                              key={family}
-                              href={`/${locale}/products?family=${family.toLowerCase()}`}
+                              key={key}
+                              href={`/${locale}/products?family=${key}`}
                               className="border border-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] text-stone-500 transition-all hover:border-camel-500/50 hover:text-camel-300"
                             >
-                              {family}
+                              {label}
                             </Link>
                           ))}
                         </div>

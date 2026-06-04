@@ -170,7 +170,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         </AnimatePresence>
 
         {/* ── Badges (top-left) ─────────────────────────────────────────── */}
-        <div className="absolute top-0 left-0 flex flex-col z-10">
+        <div className="absolute top-0 left-0 rtl:left-auto rtl:right-0 flex flex-col z-10">
           {product.new && (
             <span className="bg-gold-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white leading-none">
               {t('new')}
@@ -185,7 +185,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
         {/* ── Discount badge (top-right) ────────────────────────────────── */}
         {discount > 0 && (
-          <span className="absolute top-0 right-0 z-10 bg-red-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white leading-none">
+          <span className="absolute top-0 right-0 rtl:right-auto rtl:left-0 z-10 bg-red-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.12em] text-white leading-none">
             -{discount}%
           </span>
         )}
@@ -198,7 +198,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           transition={{ duration: 0.2 }}
           className={cn(
             'absolute z-10',
-            discount > 0 ? 'top-8 right-2.5' : 'top-2.5 right-2.5',
+            discount > 0 ? 'top-8 right-2.5 rtl:right-auto rtl:left-2.5' : 'top-2.5 right-2.5 rtl:right-auto rtl:left-2.5',
             'w-7 h-7 flex items-center justify-center rounded-full',
             'backdrop-blur-sm transition-colors duration-200',
             isWishlisted

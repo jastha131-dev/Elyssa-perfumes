@@ -39,6 +39,7 @@ const cardVariants = {
 
 function EmptyWishlist() {
   const t = useTranslations('wishlist')
+  const locale = useLocale()
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -68,7 +69,7 @@ function EmptyWishlist() {
       </p>
 
       <Link
-        href="/products"
+        href={`/${locale}/products`}
         className={cn(
           'mt-8 inline-flex items-center gap-2 rounded-full bg-gold-500 px-8 py-3',
           'font-body text-sm font-semibold text-white shadow-md',
@@ -131,7 +132,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
       </button>
 
       {/* Product image */}
-      <Link href={`/products/${product.slug}`} className="block">
+      <Link href={`/${locale}/products/${product.slug}`} className="block">
         <div className="relative aspect-[3/4] w-full overflow-hidden bg-cream-100">
           {primaryImage?.url ? (
             <Image
@@ -183,7 +184,7 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
             </p>
           )}
           <Link
-            href={`/products/${product.slug}`}
+            href={`/${locale}/products/${product.slug}`}
             className="font-display text-base font-light text-charcoal-900 transition-colors hover:text-gold-600 line-clamp-2"
           >
             {locale === 'ar' ? product.name_ar : product.name_en}
@@ -324,13 +325,14 @@ function ShareButton() {
 export default function WishlistPage() {
   const { items, totalItems } = useWishlistStore()
   const hydrated = useHydrated()
+  const locale = useLocale()
   const count = hydrated ? totalItems() : 0
   const hasItems = hydrated && items.length > 0
   const t = useTranslations('wishlist')
 
   return (
     <main className="min-h-screen bg-cream-50 pb-20">
-      <div className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 pt-32 sm:px-6 lg:px-8">
         {/* Page header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
@@ -402,7 +404,7 @@ export default function WishlistPage() {
               {t('discoverMore')}
             </p>
             <Link
-              href="/products"
+              href={`/${locale}/products`}
               className={cn(
                 'inline-flex items-center gap-2 border border-charcoal-900 px-10 py-3.5',
                 'font-body text-sm uppercase tracking-[0.2em] text-charcoal-900',

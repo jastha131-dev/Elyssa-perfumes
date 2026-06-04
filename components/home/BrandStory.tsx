@@ -10,6 +10,7 @@ import {
   useInView,
 } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useTranslations } from 'next-intl'
 import { cn } from '@/lib/utils'
 import type { BrandStorySectionBlock } from '@/lib/types'
 
@@ -46,6 +47,7 @@ const fadeUpVariants = {
 }
 
 export default function BrandStory({ data }: BrandStoryProps) {
+  const t = useTranslations('home')
   const sectionRef = useRef<HTMLElement>(null)
   const textRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
@@ -128,7 +130,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
           >
             <div className="h-px w-6 bg-camel-500" />
             <p className="font-body text-[10px] uppercase tracking-[0.4em] text-camel-400">
-              Inspired By
+              {t('inspiredBy')}
             </p>
           </motion.div>
 

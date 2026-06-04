@@ -42,6 +42,14 @@ export const heroSection = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'mobileImage',
+      title: 'Mobile Background Image (optional)',
+      description: 'Shown on phones instead of the main background image. Portrait crop recommended.',
+      type: 'image',
+      options: { hotspot: true },
+      fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' })],
+    }),
+    defineField({
       name: 'bgVideo',
       title: 'Background Video (optional)',
       type: 'object',
@@ -49,6 +57,32 @@ export const heroSection = defineType({
         defineField({ name: 'url', type: 'url', title: 'Video URL' }),
         defineField({ name: 'muxPlaybackId', type: 'string', title: 'Mux Playback ID' }),
       ],
+    }),
+    defineField({
+      name: 'badge_en',
+      title: 'Promo Badge (English)',
+      type: 'string',
+      description: 'e.g. "50% OFF" — leave blank to hide badge',
+      validation: (Rule) => Rule.max(30),
+    }),
+    defineField({
+      name: 'badge_ar',
+      title: 'شارة العرض (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(30),
+    }),
+    defineField({
+      name: 'badgeSub_en',
+      title: 'Badge Sub-text (English)',
+      type: 'string',
+      description: 'e.g. "LIMITED TIME OFFER"',
+      validation: (Rule) => Rule.max(50),
+    }),
+    defineField({
+      name: 'badgeSub_ar',
+      title: 'نص فرعي للشارة (Arabic)',
+      type: 'string',
+      validation: (Rule) => Rule.max(50),
     }),
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
     defineField({

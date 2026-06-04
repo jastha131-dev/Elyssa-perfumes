@@ -66,7 +66,7 @@ export default function AnnouncementBar({ data }: Props) {
       {data.dismissible && (
         <button
           onClick={handleDismiss}
-          className={cn('absolute right-3 top-1/2 -translate-y-1/2 p-1.5 hover:opacity-75 transition-opacity', textClass)}
+          className={cn('absolute right-3 rtl:right-auto rtl:left-3 top-1/2 -translate-y-1/2 p-1.5 hover:opacity-75 transition-opacity', textClass)}
           aria-label="Dismiss announcement"
         >
           <X size={13} strokeWidth={2} />

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { useLocale } from 'next-intl'
+import { useLocale, useTranslations } from 'next-intl'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown, SlidersHorizontal, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
@@ -109,6 +109,26 @@ function FilterPanel({
   activeFilters,
 }: ProductFiltersProps) {
   const locale = useLocale()
+  const t = useTranslations('filters')
+
+  const sortLabels: Record<string, string> = {
+    featured:     t('featured'),
+    newest:       t('newest'),
+    price_asc:    t('priceLow'),
+    price_desc:   t('priceHigh'),
+    best_selling: t('bestSelling'),
+  }
+
+  const familyLabels: Record<string, string> = {
+    Woody:    t('woody'),
+    Floral:   t('floral'),
+    Citrus:   t('citrus'),
+    Oriental: t('oriental'),
+    Fresh:    t('fresh'),
+    Aquatic:  t('aquatic'),
+    Gourmand: t('gourmand'),
+  }
+
   const handleCategoryChange = useCallback(
     (value: string) => {
       onFilterChange({
@@ -171,7 +191,7 @@ function FilterPanel({
   ].reduce((a, b) => a + b, 0)
 
   const categoryOptions = [
-    { value: 'all', label: 'All Fragrances' },
+    { value: 'all', label: t('allFragrances') },
     ...categories.map((c) => ({ value: c.slug, label: locale === 'ar' ? c.name_ar : c.name_en })),
   ]
 
@@ -180,7 +200,7 @@ function FilterPanel({
       {/* Header */}
       <div className="flex items-center justify-between mb-1 pb-4 border-b border-charcoal-100">
         <span className="text-xs font-semibold tracking-[0.15em] uppercase text-charcoal-900">
-          Filters
+          {t('title')}
           {activeCount > 0 && (
             <span className="ml-2 inline-flex items-center justify-center w-4 h-4 rounded-full bg-gold-500 text-white text-[9px] font-bold">
               {activeCount}
@@ -193,7 +213,7 @@ function FilterPanel({
             onClick={handleClearAll}
             className="text-[10px] tracking-[0.1em] uppercase text-charcoal-400 hover:text-gold-500 transition-colors focus-visible:outline-none focus-visible:text-gold-500"
           >
-            Clear All
+            {t('clearAll')}
           </button>
         )}
       </div>
@@ -215,7 +235,7 @@ function FilterPanel({
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
-                {opt.label}
+                {sortLabels[opt.value] ?? opt.label}
               </option>
             ))}
           </select>
@@ -333,7 +353,7 @@ function FilterPanel({
                       : 'text-charcoal-500 group-hover:text-charcoal-800'
                   )}
                 >
-                  {family}
+                  {familyLabels[family] ?? family}
                 </span>
               </label>
             )
@@ -404,6 +424,9 @@ function FilterPanel({
 // ─── Mobile drawer wrapper ─────────────────────────────────────────────────────
 
 export function ProductFilters(props: ProductFiltersProps) {
+  const locale = useLocale()
+  const t = useTranslations('filters')
+  const isRTL = locale === 'ar'
   const [mobileOpen, setMobileOpen] = useState(false)
 
   const activeCount = [
@@ -439,7 +462,7 @@ export function ProductFilters(props: ProductFiltersProps) {
           aria-expanded={mobileOpen}
         >
           <SlidersHorizontal size={13} aria-hidden="true" />
-          Filters
+          {t('title')}
           {activeCount > 0 && (
             <span className="inline-flex items-center justify-center w-4 h-4 rounded-full bg-gold-500 text-white text-[9px] font-bold ml-0.5">
               {activeCount}
@@ -470,12 +493,12 @@ export function ProductFilters(props: ProductFiltersProps) {
               role="dialog"
               aria-modal="true"
               aria-label="Product filters"
-              initial={{ x: '-100%' }}
+              initial={{ x: isRTL ? '100%' : '-100%' }}
               animate={{ x: 0 }}
-              exit={{ x: '-100%' }}
+              exit={{ x: isRTL ? '100%' : '-100%' }}
               transition={{ type: 'spring', stiffness: 340, damping: 36 }}
               className={cn(
-                'fixed inset-y-0 left-0 z-50 w-[min(340px,90vw)]',
+                'fixed inset-y-0 left-0 rtl:left-auto rtl:right-0 z-50 w-[min(340px,90vw)]',
                 'bg-white shadow-2xl overflow-y-auto',
                 'flex flex-col'
               )}
@@ -483,7 +506,7 @@ export function ProductFilters(props: ProductFiltersProps) {
               {/* Drawer header */}
               <div className="flex items-center justify-between px-5 py-4 border-b border-charcoal-100 sticky top-0 bg-white z-10">
                 <span className="text-sm font-semibold tracking-[0.12em] uppercase text-charcoal-900">
-                  Filters
+                  {t('title')}
                 </span>
                 <button
                   type="button"

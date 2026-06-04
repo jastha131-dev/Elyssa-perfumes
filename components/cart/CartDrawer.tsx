@@ -24,6 +24,7 @@ const listVariants = {
 export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const t = useTranslations('cart')
   const locale = useLocale()
+  const isRTL = locale === 'ar'
   const formatPrice = useCurrencyStore((s) => s.format)
   const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart } = useCartStore()
 
@@ -98,12 +99,12 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
           {/* Drawer Panel */}
           <motion.aside
             key="cart-drawer-panel"
-            initial={{ x: '100%' }}
+            initial={{ x: isRTL ? '-100%' : '100%' }}
             animate={{ x: 0 }}
-            exit={{ x: '100%' }}
+            exit={{ x: isRTL ? '-100%' : '100%' }}
             transition={{ type: 'spring', damping: 32, stiffness: 300, mass: 0.8 }}
             className={cn(
-              'fixed right-0 top-0 z-50 flex h-full w-full flex-col bg-white shadow-2xl',
+              'fixed right-0 rtl:right-auto rtl:left-0 top-0 z-50 flex h-full w-full flex-col bg-white shadow-2xl',
               'max-w-sm sm:max-w-md'
             )}
             role="dialog"
