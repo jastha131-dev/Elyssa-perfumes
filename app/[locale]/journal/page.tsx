@@ -64,9 +64,13 @@ export default async function JournalPage({
                   <div className="mt-4">
                     <div className="mb-2 flex items-center gap-3">
                       {article.category && (
-                        <span className="font-body text-[9px] font-semibold uppercase tracking-[0.3em] text-gold-500">
+                        <Link
+                          href={`/${locale}/journal/category/${article.category.toLowerCase().replace(/ /g, '-')}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="font-body text-[9px] font-semibold uppercase tracking-[0.3em] text-gold-500 hover:text-gold-600 transition-colors"
+                        >
                           {article.category}
-                        </span>
+                        </Link>
                       )}
                       {article.readTime && (
                         <span className="font-body text-[9px] text-charcoal-400">{article.readTime}</span>
