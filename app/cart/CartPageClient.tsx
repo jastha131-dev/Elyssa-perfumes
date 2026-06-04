@@ -1,13 +1,16 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ShoppingBag, ChevronRight, ArrowRight, Tag } from 'lucide-react'
+import { ShoppingBag, ChevronRight, ArrowRight, Tag, X } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import { useCartStore } from '@/lib/store/cart-store'
+import { usePromotionsStore } from '@/lib/store/promotions-store'
 import CartItem from '@/components/cart/CartItem'
 import { cn, formatPrice } from '@/lib/utils'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
+import type { Promotion } from '@/lib/types'
 
 const TAX_RATE = 0.08
 const SHIPPING_THRESHOLD = 100
@@ -114,16 +117,135 @@ function EmptyCart() {
   )
 }
 
+function PromoSection({
+  subtotal,
+  onRemoveDiscount,
+  discountAmount,
+  discountLabel,
+}: {
+  subtotal: number
+  onRemoveDiscount?: () => void
+  discountAmount?: number
+  discountLabel?: string
+}) {
+  const { applyCode } = usePromotionsStore()
+  const { items: cartItems } = useCartStore()
+  const [promoOpen, setPromoOpen] = useState(false)
+  const [promoInput, setPromoInput] = useState('')
+  const [promoError, setPromoError] = useState<string | null>(null)
+  const [promoLoading, setPromoLoading] = useState(false)
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const handlePromoSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!promoInput.trim()) return
+    setPromoLoading(true)
+    setPromoError(null)
+    const result = applyCode(promoInput.trim(), cartItems, subtotal, 'en')
+    setPromoLoading(false)
+    if (result.success) {
+      setPromoOpen(false)
+      setPromoInput('')
+    } else {
+      setPromoError(result.message)
+    }
+  }
+
+  useEffect(() => {
+    if (promoOpen) inputRef.current?.focus()
+  }, [promoOpen])
+
+  if (discountAmount && discountAmount > 0) {
+    return (
+      <div className="flex items-center justify-between rounded-lg bg-green-50 border border-green-200 px-4 py-2.5">
+        <div className="flex items-center gap-2">
+          <Tag className="h-3.5 w-3.5 text-green-600" />
+          <span className="font-body text-sm text-green-700">{discountLabel ?? 'Discount applied'}</span>
+        </div>
+        {onRemoveDiscount && (
+          <button
+            onClick={onRemoveDiscount}
+            aria-label="Remove discount"
+            className="rounded-full p-0.5 text-green-400 hover:text-green-700 transition-colors"
+          >
+            <X className="h-3.5 w-3.5" />
+          </button>
+        )}
+      </div>
+    )
+  }
+
+  if (promoOpen) {
+    return (
+      <form onSubmit={handlePromoSubmit} className="flex flex-col gap-2">
+        <div className="flex gap-2">
+          <input
+            ref={inputRef}
+            type="text"
+            value={promoInput}
+            onChange={(e) => { setPromoInput(e.target.value.toUpperCase()); setPromoError(null) }}
+            placeholder="ENTER CODE"
+            maxLength={30}
+            className={cn(
+              'flex-1 rounded-lg border px-3 py-2 font-mono text-sm uppercase tracking-wider outline-none transition-all',
+              promoError
+                ? 'border-red-300 focus:border-red-400 focus:ring-1 focus:ring-red-100'
+                : 'border-charcoal-200 focus:border-gold-400 focus:ring-1 focus:ring-gold-100'
+            )}
+          />
+          <button
+            type="submit"
+            disabled={promoLoading || !promoInput.trim()}
+            className="rounded-lg bg-charcoal-900 px-4 py-2 font-body text-xs font-semibold text-white transition-all hover:bg-charcoal-700 disabled:opacity-50"
+          >
+            {promoLoading ? '…' : 'Apply'}
+          </button>
+          <button
+            type="button"
+            onClick={() => { setPromoOpen(false); setPromoInput(''); setPromoError(null) }}
+            className="rounded-lg border border-charcoal-200 p-2 text-charcoal-400 hover:text-charcoal-700 transition-colors"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+        {promoError && (
+          <p className="font-body text-xs text-red-500">{promoError}</p>
+        )}
+      </form>
+    )
+  }
+
+  return (
+    <button
+      onClick={() => setPromoOpen(true)}
+      className={cn(
+        'flex w-full items-center gap-2 rounded-lg border border-dashed border-charcoal-200 px-4 py-2.5',
+        'font-body text-sm text-charcoal-400 transition-colors hover:border-gold-400 hover:text-gold-600',
+        'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
+      )}
+    >
+      <Tag className="h-4 w-4" />
+      Apply promo code
+    </button>
+  )
+}
+
 function OrderSummary({
   subtotal,
   shipping,
   tax,
   total,
+  discountAmount,
+  discountLabel,
+  onRemoveDiscount,
 }: {
   subtotal: number
   shipping: number
   tax: number
   total: number
+  discountAmount?: number
+  discountLabel?: string
+  onRemoveDiscount?: () => void
 }) {
   const t = useTranslations('cart')
   const tc = useTranslations('checkout')
@@ -146,14 +268,19 @@ function OrderSummary({
           </span>
         </div>
 
+        {discountAmount !== undefined && discountAmount > 0 && (
+          <div className="flex items-center justify-between text-green-600">
+            <span className="font-body text-sm flex items-center gap-1">
+              <Tag className="h-3 w-3" />
+              {discountLabel ?? 'Discount'}
+            </span>
+            <span className="font-body text-sm font-medium">-{formatPrice(discountAmount)}</span>
+          </div>
+        )}
+
         <div className="flex items-center justify-between">
           <span className="font-body text-sm text-charcoal-500">{t('shipping')}</span>
-          <span
-            className={cn(
-              'font-body text-sm font-medium',
-              shipping === 0 ? 'text-green-600' : 'text-charcoal-900'
-            )}
-          >
+          <span className={cn('font-body text-sm font-medium', shipping === 0 ? 'text-green-600' : 'text-charcoal-900')}>
             {shipping === 0 ? t('free') : formatPrice(shipping)}
           </span>
         </div>
@@ -168,33 +295,25 @@ function OrderSummary({
           <span className="font-body text-sm text-charcoal-500">
             {t('tax')} <span className="text-charcoal-400">(est. {TAX_RATE * 100}%)</span>
           </span>
-          <span className="font-body text-sm font-medium text-charcoal-900">
-            {formatPrice(tax)}
-          </span>
+          <span className="font-body text-sm font-medium text-charcoal-900">{formatPrice(tax)}</span>
         </div>
 
         <div className="my-1 border-t border-charcoal-100" />
 
         <div className="flex items-center justify-between">
           <span className="font-display text-base font-semibold text-charcoal-900">{t('total')}</span>
-          <span className="font-display text-lg font-semibold text-charcoal-900">
-            {formatPrice(total)}
-          </span>
+          <span className="font-display text-lg font-semibold text-charcoal-900">{formatPrice(total)}</span>
         </div>
       </div>
 
-      {/* Promo code hint */}
+      {/* Promo code */}
       <div className="mt-5">
-        <button
-          className={cn(
-            'flex w-full items-center gap-2 rounded-lg border border-dashed border-charcoal-200 px-4 py-2.5',
-            'font-body text-sm text-charcoal-400 transition-colors hover:border-gold-400 hover:text-gold-600',
-            'focus:outline-none focus-visible:ring-2 focus-visible:ring-gold-400'
-          )}
-        >
-          <Tag className="h-4 w-4" />
-          {t('applyPromo')}
-        </button>
+        <PromoSection
+          subtotal={subtotal}
+          discountAmount={discountAmount}
+          discountLabel={discountLabel}
+          onRemoveDiscount={onRemoveDiscount}
+        />
       </div>
 
       <Link
@@ -209,7 +328,6 @@ function OrderSummary({
         {t('proceedToCheckout')}
       </Link>
 
-      {/* Trust signals */}
       <div className="mt-5 flex flex-col gap-2">
         {[
           '🔒 ' + t('secureCheckoutBadge'),
@@ -260,16 +378,48 @@ function YouMayAlsoLike() {
   )
 }
 
-export default function CartPageClient() {
+export default function CartPageClient({
+  activePromotions = [],
+  locale = 'en',
+}: {
+  activePromotions?: Promotion[]
+  locale?: string
+}) {
   const t = useTranslations('cart')
   const { items, removeItem, updateQuantity, totalPrice, totalItems } = useCartStore()
   const hydrated = useHydrated()
 
+  const {
+    setAvailablePromotions,
+    removeCode,
+    recalculate,
+    appliedPromotion,
+    discountResult,
+    getEffectiveDiscount,
+    hasFreeShipping,
+  } = usePromotionsStore()
+
+  // Load server-fetched promotions into the store
+  useEffect(() => {
+    if (hydrated && activePromotions.length > 0) {
+      setAvailablePromotions(activePromotions)
+    }
+  }, [hydrated, activePromotions, setAvailablePromotions])
+
   const subtotal = hydrated ? totalPrice() : 0
-  const shipping = subtotal >= SHIPPING_THRESHOLD || subtotal === 0 ? 0 : SHIPPING_COST
-  const tax = subtotal * TAX_RATE
-  const total = subtotal + shipping + tax
+  const baseShipping = subtotal >= SHIPPING_THRESHOLD || subtotal === 0 ? 0 : SHIPPING_COST
+  const discountAmount = hydrated ? getEffectiveDiscount() : 0
+  const freeShip = hydrated && hasFreeShipping()
+  const shipping = freeShip ? 0 : baseShipping
+  const tax = Math.max(0, subtotal - discountAmount) * TAX_RATE
+  const total = subtotal - discountAmount + shipping + tax
   const count = hydrated ? totalItems() : 0
+
+  useEffect(() => {
+    if (hydrated && items.length > 0) {
+      recalculate(items, subtotal, locale)
+    }
+  }, [hydrated, items, subtotal, locale, recalculate])
 
   const hasItems = hydrated && items.length > 0
 
@@ -357,6 +507,9 @@ export default function CartPageClient() {
                 shipping={shipping}
                 tax={tax}
                 total={total}
+                discountAmount={discountAmount > 0 ? discountAmount : undefined}
+                discountLabel={discountResult?.label}
+                onRemoveDiscount={appliedPromotion ? removeCode : undefined}
               />
             </div>
           </div>
