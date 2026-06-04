@@ -96,7 +96,12 @@ export default async function ArticlePage({
         {/* Meta */}
         <div className="mb-6 flex items-center gap-4">
           {article.category && (
-            <span className="font-body text-[9px] font-semibold uppercase tracking-[0.3em] text-gold-500">{article.category}</span>
+            <Link
+              href={`/${locale}/journal/category/${article.category.toLowerCase().replace(/ /g, '-')}`}
+              className="font-body text-[9px] font-semibold uppercase tracking-[0.3em] text-gold-500 hover:text-gold-600 transition-colors"
+            >
+              {article.category}
+            </Link>
           )}
           {article.readTime && <span className="font-body text-[9px] text-charcoal-400">{article.readTime}</span>}
           {article.publishedAt && (
@@ -105,6 +110,37 @@ export default async function ArticlePage({
             </span>
           )}
         </div>
+
+        {article.author && (
+          <div className="mt-3 flex items-center gap-2">
+            {article.author.photoUrl ? (
+              <Image
+                src={article.author.photoUrl}
+                alt={isAr ? (article.author.name_ar || article.author.name_en) : article.author.name_en}
+                width={24}
+                height={24}
+                className="rounded-full object-cover"
+              />
+            ) : (
+              <div className="flex h-6 w-6 items-center justify-center rounded-full bg-charcoal-100">
+                <span className="font-display text-xs text-gold-500">
+                  {(isAr ? (article.author.name_ar || article.author.name_en) : article.author.name_en).charAt(0)}
+                </span>
+              </div>
+            )}
+            <Link
+              href={`/${locale}/journal/author/${article.author.slug}`}
+              className="font-body text-xs text-charcoal-500 hover:text-gold-500 transition-colors"
+            >
+              {isAr ? (article.author.name_ar || article.author.name_en) : article.author.name_en}
+              {(isAr ? (article.author.role_ar || article.author.role_en) : article.author.role_en) && (
+                <span className="ml-1 text-charcoal-300">
+                  · {isAr ? (article.author.role_ar || article.author.role_en) : article.author.role_en}
+                </span>
+              )}
+            </Link>
+          </div>
+        )}
 
         <h1 className="mb-5 font-display text-4xl font-light leading-tight text-charcoal-900 md:text-5xl">{title}</h1>
         {excerpt && <p className="mb-10 border-b border-charcoal-100 pb-10 font-body text-base font-light leading-relaxed text-charcoal-500">{excerpt}</p>}
