@@ -857,6 +857,24 @@ export interface Order {
   placedAt?: string
 }
 
+// ─── Author Types ─────────────────────────────────────────────────────────────
+
+export interface Author {
+  _id: string
+  name_en: string
+  name_ar?: string
+  slug: string
+  role_en?: string
+  role_ar?: string
+  bio_en?: string
+  bio_ar?: string
+  photoUrl?: string
+}
+
+export interface AuthorWithArticles extends Author {
+  articles?: ArticleSummary[]
+}
+
 // ─── Article Types ────────────────────────────────────────────────────────────
 
 export interface ArticleSummary {
@@ -872,6 +890,7 @@ export interface ArticleSummary {
   readTime?: string
   publishedAt?: string
   featured?: boolean
+  author?: Author
 }
 
 export interface ArticleDetail extends ArticleSummary {
@@ -881,4 +900,45 @@ export interface ArticleDetail extends ArticleSummary {
   seoTitle_ar?: string
   seoDescription_en?: string
   seoDescription_ar?: string
+}
+
+// ─── Gift Card Types ──────────────────────────────────────────────────────────
+
+export interface GiftCardDenomination {
+  _key: string
+  label_en: string
+  label_ar?: string
+  amountCents: number
+  popular?: boolean
+}
+
+export interface GiftCardHowItWorksStep {
+  _key: string
+  step: number
+  text_en: string
+  text_ar?: string
+}
+
+export interface GiftCardPageData {
+  _id: string
+  headline_en?: string
+  headline_ar?: string
+  subtext_en?: string
+  subtext_ar?: string
+  denominations?: GiftCardDenomination[]
+  howItWorks?: GiftCardHowItWorksStep[]
+  terms_en?: string
+  terms_ar?: string
+}
+
+export interface GiftCardOrder {
+  _id: string
+  code: string
+  amountCents: number
+  currency: string
+  status: 'pending' | 'paid'
+  stripeSessionId?: string
+  recipientName?: string
+  message?: string
+  createdAt?: string
 }
