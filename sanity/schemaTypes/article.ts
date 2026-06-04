@@ -36,6 +36,13 @@ export const article = defineType({
         layout: 'radio',
       },
     }),
+    defineField({
+      name: 'author',
+      title: 'Author',
+      type: 'reference',
+      to: [{ type: 'author' }],
+      group: 'meta',
+    }),
     defineField({ name: 'excerpt_en', title: 'Excerpt (English)', type: 'text', rows: 3, group: 'content', validation: (Rule) => Rule.max(300) }),
     defineField({ name: 'excerpt_ar', title: 'المقتطف (Arabic)', type: 'text', rows: 3, group: 'content', validation: (Rule) => Rule.max(300) }),
     defineField({
