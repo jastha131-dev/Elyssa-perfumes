@@ -269,7 +269,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <button
                           onClick={handleApplyCode}
                           disabled={applying || !enteredCode.trim()}
-                          className="bg-camel-500 px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-camel-600 disabled:opacity-40"
+                          className="rounded bg-camel-500 px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-camel-600 disabled:opacity-40"
                         >
                           {applying ? '...' : 'Apply'}
                         </button>
@@ -339,7 +339,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <Link
                     href="/checkout"
                     onClick={onClose}
-                    className="mt-5 block w-full rounded-full bg-gold-500 py-3.5 text-center font-body text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-gold-600 hover:shadow-lg active:scale-[0.98]"
+                    className="mt-5 block w-full rounded bg-camel-500 py-3.5 text-center font-body text-sm font-semibold text-white shadow-md transition-all duration-200 hover:bg-camel-600 hover:shadow-lg active:scale-[0.98]"
                   >
                     {t('checkout')}
                   </Link>

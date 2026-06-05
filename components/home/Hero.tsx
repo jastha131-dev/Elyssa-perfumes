@@ -247,7 +247,7 @@ function TextContent({ title, subtitle, ctaLabel, ctaLink, isLight, STATS, badge
       <motion.div variants={itemVariants} className="mb-9">
         <Link
           href={ctaLink ?? '/products'}
-          className="group inline-flex items-center justify-center gap-2.5 bg-camel-500 px-7 py-[11px] font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-camel-600 hover:shadow-xl hover:shadow-camel-500/25"
+          className="group inline-flex items-center justify-center gap-2.5 rounded bg-camel-500 px-7 py-[11px] font-body text-[12px] font-semibold uppercase tracking-[0.2em] text-white transition-all duration-300 hover:bg-camel-600 hover:shadow-xl hover:shadow-camel-500/25"
         >
           {ctaLabel}
           <ArrowRight size={11} strokeWidth={2.5} className="transition-transform duration-300 group-hover:translate-x-1" />

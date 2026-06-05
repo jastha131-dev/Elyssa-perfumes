@@ -377,7 +377,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                     onClick={handleAddToCart}
                     disabled={adding || added}
                     className={cn(
-                      "w-full flex items-center justify-center gap-2 py-3.5 text-sm font-medium uppercase tracking-[0.15em] transition-all duration-300",
+                      "w-full flex items-center justify-center gap-2 rounded py-3.5 text-sm font-medium uppercase tracking-[0.15em] transition-all duration-300",
                       added
                         ? "bg-green-600 text-white"
                         : "bg-camel-500 text-white hover:bg-camel-600"

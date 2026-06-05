@@ -548,12 +548,12 @@ function StickyBar({
           onClick={onAddToCart}
           whileTap={{ scale: 0.97 }}
           className={cn(
-            'flex flex-shrink-0 items-center gap-2 px-5 py-3',
+            'flex flex-shrink-0 items-center gap-2 rounded px-5 py-3',
             'font-body text-xs font-medium uppercase tracking-[0.16em]',
             'transition-all duration-300',
             addedToCart
-              ? 'bg-charcoal-900 text-white'
-              : 'bg-gold-500 text-white hover:bg-gold-600'
+              ? 'bg-charcoal-700 text-white'
+              : 'bg-camel-500 text-white hover:bg-camel-600'
           )}
         >
           <ShoppingBag className="h-3.5 w-3.5 flex-shrink-0" />
@@ -934,11 +934,11 @@ export function ProductDetailClient({
                 whileTap={{ scale: 0.98 }}
                 className={cn(
                   'flex flex-1 items-center justify-center gap-2.5',
-                  'h-13 py-4 px-8 font-body text-sm font-medium uppercase tracking-[0.18em]',
+                  'h-13 rounded py-4 px-8 font-body text-sm font-medium uppercase tracking-[0.18em]',
                   'transition-all duration-300',
                   addedToCart
-                    ? 'bg-charcoal-900 text-white'
-                    : 'bg-gold-500 text-white hover:bg-gold-600'
+                    ? 'bg-charcoal-700 text-white'
+                    : 'bg-camel-500 text-white hover:bg-camel-600'
                 )}
               >
                 <ShoppingBag className="h-4 w-4 flex-shrink-0" />

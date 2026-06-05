@@ -106,7 +106,7 @@ export default function ScentBanner({ data }: ScentBannerProps) {
             >
               <Link
                 href={data?.cta?.link ?? '/products'}
-                className="group inline-flex items-center gap-3 bg-white text-camel-600 px-8 py-3.5 font-body text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-stone-100 border border-white"
+                className="group inline-flex items-center gap-3 rounded bg-white text-camel-600 px-8 py-3.5 font-body text-sm uppercase tracking-[0.2em] transition-all duration-300 hover:bg-stone-100 border border-white"
               >
                 {(locale === 'ar' ? data?.cta?.label_ar : data?.cta?.label_en) ?? 'Browse All Fragrances'}
                 <ArrowRight size={13} strokeWidth={1.5} className="transition-transform duration-300 group-hover:translate-x-1" />

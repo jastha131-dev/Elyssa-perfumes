@@ -173,7 +173,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
             <Link
               href="/products"
               className={cn(
-                'inline-flex items-center gap-3 border border-camel-500 px-7 py-3',
+                'inline-flex items-center gap-3 rounded border border-camel-500 px-7 py-3',
                 'font-body text-[11px] uppercase tracking-[0.25em] text-camel-600',
                 'transition-all duration-300 hover:bg-camel-500 hover:text-white',
               )}

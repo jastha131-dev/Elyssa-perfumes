@@ -65,6 +65,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
   const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(false)
   const [headerHeight, setHeaderHeight] = useState(108)
   const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const hamburgerRef = useRef<HTMLButtonElement>(null)
   const headerRef = useRef<HTMLElement>(null)
   const dropdownTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -80,7 +81,9 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
     function handleClickOutside(e: MouseEvent) {
       if (
         mobileMenuRef.current &&
-        !mobileMenuRef.current.contains(e.target as Node)
+        !mobileMenuRef.current.contains(e.target as Node) &&
+        hamburgerRef.current &&
+        !hamburgerRef.current.contains(e.target as Node)
       ) {
         setMobileOpen(false)
       }
@@ -493,6 +496,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
 
             {/* Mobile hamburger */}
             <motion.button
+              ref={hamburgerRef}
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
