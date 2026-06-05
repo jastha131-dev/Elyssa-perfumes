@@ -404,14 +404,14 @@ function FilterBar({
       {/* Search */}
       <button
         onClick={onOpenSearch}
-        className="flex min-w-[180px] max-w-[280px] flex-1 items-center gap-2 rounded-full border border-charcoal-200 bg-[#FAFAF9] px-4 py-[8px] text-[11px] text-charcoal-400 transition-all duration-200 hover:border-charcoal-400 hover:bg-white hover:shadow-sm"
+        className="flex min-w-[130px] max-w-[280px] flex-1 items-center gap-2 rounded-full border border-charcoal-200 bg-[#FAFAF9] px-4 py-[8px] text-[11px] text-charcoal-400 transition-all duration-200 hover:border-charcoal-400 hover:bg-white hover:shadow-sm sm:min-w-[180px]"
       >
         <Search className="h-3.5 w-3.5 flex-shrink-0 text-charcoal-400" />
         <span className="truncate">Search scents, brands…</span>
       </button>
 
       {/* Pills */}
-      <div className="flex items-center gap-1.5 ml-auto flex-shrink-0">
+      <div className="flex flex-wrap items-center gap-1.5 sm:ml-auto">
 
         {/* Scent family — dynamic from products */}
         {fragranceFamilies.length > 0 && (
