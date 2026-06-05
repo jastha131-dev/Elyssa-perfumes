@@ -285,7 +285,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                             {[
                               { href: `/${locale}/products?filter=new`,       icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
                               { href: `/${locale}/products?filter=bestseller`, icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
-                              { href: `/${locale}/products?category=luxury-collection`,icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
+                              { href: `/${locale}/collections/gift-sets`,icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
                               { href: `/${locale}/journal`,                    icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
                               { href: `/${locale}/quiz`,                       icon: Sparkles,   label: t('quiz'),         sub: t('aiMatching'),        badge: 'AI' },
                               { href: `/${locale}/faq`,                        icon: HelpCircle, label: t('faq'),          sub: t('commonQuestions'),    badge: null },
@@ -656,7 +656,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                           {[
                             { href: `/${locale}/products?filter=new`,        icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
                             { href: `/${locale}/products?filter=bestseller`,  icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
-                            { href: `/${locale}/products?category=luxury-collection`, icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
+                            { href: `/${locale}/collections/gift-sets`, icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
                             { href: `/${locale}/journal`,                     icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
                             { href: `/${locale}/quiz`,                        icon: Sparkles,   label: t('quiz'),         sub: t('aiMatching'),        badge: 'AI' },
                             { href: `/${locale}/faq`,                         icon: HelpCircle, label: t('faq'),          sub: t('commonQuestions'),    badge: null },
