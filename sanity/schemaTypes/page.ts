@@ -57,8 +57,15 @@ export const page = defineType({
         defineArrayMember({ type: 'newsletterSection' }),
         defineArrayMember({ type: 'trustBarSection' }),
         defineArrayMember({ type: 'browseCategoriesSection' }),
+        defineArrayMember({ type: 'richTextSection' }),
+        defineArrayMember({ type: 'imageWithTextSection' }),
+        defineArrayMember({ type: 'faqSection' }),
       ],
     }),
+    defineField({ name: 'seoTitle_en', title: 'SEO Title (English)', type: 'string', validation: (R) => R.max(60) }),
+    defineField({ name: 'seoTitle_ar', title: 'SEO Title (Arabic)', type: 'string', validation: (R) => R.max(60) }),
+    defineField({ name: 'seoDescription_en', title: 'SEO Description (English)', type: 'text', rows: 2, validation: (R) => R.max(160) }),
+    defineField({ name: 'seoDescription_ar', title: 'SEO Description (Arabic)', type: 'text', rows: 2, validation: (R) => R.max(160) }),
   ],
   preview: {
     select: {

@@ -46,6 +46,20 @@ export const quizPromoSection = defineType({
       initialValue: ['5 questions', 'Instant results', 'Expert matching'],
       validation: (Rule) => Rule.max(4),
     }),
+    // ── Preview card (right side mockup) ──
+    defineField({ name: 'previewLabel_en', title: 'Preview Card Label (English)', type: 'string', initialValue: 'Scent Finder', validation: (R) => R.max(40) }),
+    defineField({ name: 'previewLabel_ar', title: 'تسمية البطاقة (Arabic)', type: 'string', validation: (R) => R.max(40) }),
+    defineField({ name: 'previewQuestion_en', title: 'Preview Question (English)', type: 'string', initialValue: "What's your ideal mood?", validation: (R) => R.max(80) }),
+    defineField({ name: 'previewQuestion_ar', title: 'سؤال المعاينة (Arabic)', type: 'string', validation: (R) => R.max(80) }),
+    defineField({
+      name: 'previewOptions', title: 'Preview Options', type: 'array', validation: (R) => R.max(4),
+      of: [{ type: 'object', name: 'opt', fields: [
+        { name: 'label_en', type: 'string', title: 'Label (English)' },
+        { name: 'label_ar', type: 'string', title: 'التسمية (Arabic)' },
+      ], preview: { select: { title: 'label_en' } } }],
+    }),
+    defineField({ name: 'previewProgress_en', title: 'Preview Progress Text (English)', type: 'string', initialValue: 'Question 2 of 5', validation: (R) => R.max(40) }),
+    defineField({ name: 'previewProgress_ar', title: 'نص التقدّم (Arabic)', type: 'string', validation: (R) => R.max(40) }),
   ],
   preview: {
     select: { title: 'headline_en', isVisible: 'isVisible' },

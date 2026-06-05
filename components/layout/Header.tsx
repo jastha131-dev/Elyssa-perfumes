@@ -437,7 +437,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
             {/* Dynamic CMS pages */}
             {navPages.map((p) => {
               const label = locale === 'ar' ? (p.title_ar || p.title_en) : p.title_en
-              const href = `/${locale}/pages/${p.slug}`
+              const href = `/${locale}/${p.slug}`
               const isActive = pathname === href
               return (
                 <Link
@@ -740,7 +740,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                 {/* Dynamic CMS pages */}
                 {navPages.map((p, i) => {
                   const label = locale === 'ar' ? (p.title_ar || p.title_en) : p.title_en
-                  const href = `/${locale}/pages/${p.slug}`
+                  const href = `/${locale}/${p.slug}`
                   return (
                     <motion.li
                       key={p._id}

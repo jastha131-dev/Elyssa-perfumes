@@ -693,6 +693,13 @@ export interface QuizPromoSectionBlock {
   style?: 'dark' | 'light' | 'accent'
   bgImageUrl?: string
   steps?: string[]
+  previewLabel_en?: string
+  previewLabel_ar?: string
+  previewQuestion_en?: string
+  previewQuestion_ar?: string
+  previewOptions?: { label_en?: string; label_ar?: string }[]
+  previewProgress_en?: string
+  previewProgress_ar?: string
 }
 
 // ─── Updated Union ────────────────────────────────────────────────────────────

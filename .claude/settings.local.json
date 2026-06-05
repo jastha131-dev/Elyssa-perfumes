@@ -57,7 +57,15 @@
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test diff --stat HEAD)",
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add app/[locale]/collections/[slug]/page.tsx components/collections/CollectionPageClient.tsx)",
       "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/api/auth/\\\\[...nextauth\\\\])",
-      "Bash(mkdir -p \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/login\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/register\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/forgot-password\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/orders/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/addresses/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/profile/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/api/account/addresses\" \"/Users/californiamediadubai/Desktop/test/p1test/app/api/account/profile\")"
+      "Bash(mkdir -p \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/login\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/register\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/forgot-password\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/orders/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/addresses/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/account/profile/_components\" \"/Users/californiamediadubai/Desktop/test/p1test/app/api/account/addresses\" \"/Users/californiamediadubai/Desktop/test/p1test/app/api/account/profile\")",
+      "Bash(curl -s -m 25 \"http://localhost:3000/en/journal\" -o /tmp/p.html)",
+      "Read(//tmp/**)",
+      "Bash(node -e \"const fs=require\\('fs'\\);const f='components/layout/Header.tsx';let s=fs.readFileSync\\(f,'utf8'\\);const n=\\(s.match\\(/\\\\/pages\\\\/\\\\\\\\\\\\$\\\\{p\\\\.slug\\\\}/g\\)||[]\\).length;s=s.split\\('/pages/\\\\${p.slug}'\\).join\\('/\\\\${p.slug}'\\);fs.writeFileSync\\(f,s\\);console.log\\('updated '+n+' nav hrefs to clean URL'\\)\")",
+      "Bash(curl -s -m 25 -o /tmp/p.html -w '%{http_code}' http://localhost:3000/en/__TRACKED_VAR__)",
+      "Bash(curl -s -m 25 -o /tmp/a.html -w \"%{http_code}\" \"http://localhost:3000/en/about\")",
+      "Bash(curl -s -m 25 \"http://localhost:3000/en/journal/signature-scent\" -o /tmp/a.html)",
+      "Bash(xargs echo \"headings found:\")",
+      "Bash(curl -s \"https://oj84ot95.api.sanity.io/v2024-01-01/data/query/production?query=*%5B_id%3D%3D%22article-signature-scent%22%5D%5B0%5D%7B%22bodyEnBlocks%22%3Acount\\(body_en\\)%2C%22bodyArBlocks%22%3Acount\\(body_ar\\)%2C%22rel%22%3Acount\\(relatedArticles\\)%7D\")"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq",

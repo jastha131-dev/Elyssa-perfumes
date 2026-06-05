@@ -25,6 +25,14 @@ export default function QuizPromo({ data }: Props) {
   const steps = data?.steps ?? ['5 questions', 'Instant results', 'Expert matching']
   const style = data?.style ?? 'dark'
 
+  // Right-side preview card (dynamic from Studio, with fallbacks)
+  const previewLabel = (isAr ? data?.previewLabel_ar || data?.previewLabel_en : data?.previewLabel_en) ?? 'Scent Finder'
+  const previewQuestion = (isAr ? data?.previewQuestion_ar || data?.previewQuestion_en : data?.previewQuestion_en) ?? "What's your ideal mood?"
+  const previewProgress = (isAr ? data?.previewProgress_ar || data?.previewProgress_en : data?.previewProgress_en) ?? 'Question 2 of 5'
+  const previewOptions = data?.previewOptions?.length
+    ? data.previewOptions.map((o) => (isAr ? o.label_ar || o.label_en : o.label_en) || '')
+    : ['Warm & cosy evenings', 'Fresh air & nature', 'Bold & confident', 'Romantic & sensual']
+
   const bgClass = {
     dark: 'bg-charcoal-700',
     light: 'bg-stone-100',
@@ -117,13 +125,13 @@ export default function QuizPromo({ data }: Props) {
               {/* Quiz card mockup */}
               <div className="mb-5 flex items-center gap-2">
                 <Sparkles size={16} className="text-camel-500" />
-                <span className={cn('font-body text-xs font-semibold uppercase tracking-widest', style === 'light' ? 'text-ink-600' : 'text-white/80')}>Scent Finder</span>
+                <span className={cn('font-body text-xs font-semibold uppercase tracking-widest', style === 'light' ? 'text-ink-600' : 'text-white/80')}>{previewLabel}</span>
               </div>
-              <p className={cn('mb-4 font-display text-lg font-light', style === 'light' ? 'text-ink-900' : 'text-white')}>
-                What&apos;s your ideal mood?
+              <p className={cn('mb-4 font-display text-lg font-light', style === 'light' ? 'text-ink-900' : 'text-white')} dir={isAr ? 'rtl' : 'ltr'}>
+                {previewQuestion}
               </p>
-              <div className="space-y-2">
-                {['Warm & cosy evenings', 'Fresh air & nature', 'Bold & confident', 'Romantic & sensual'].map((opt, i) => (
+              <div className="space-y-2" dir={isAr ? 'rtl' : 'ltr'}>
+                {previewOptions.map((opt, i) => (
                   <div
                     key={opt}
                     className={cn(
@@ -143,7 +151,7 @@ export default function QuizPromo({ data }: Props) {
               <div className={cn('mt-4 h-1.5 w-full rounded-full overflow-hidden', style === 'light' ? 'bg-stone-100' : 'bg-white/10')}>
                 <div className="h-full w-2/5 rounded-full bg-camel-500" />
               </div>
-              <p className={cn('mt-1.5 font-body text-[10px]', style === 'light' ? 'text-ink-400' : 'text-white/50')}>Question 2 of 5</p>
+              <p className={cn('mt-1.5 font-body text-[10px]', style === 'light' ? 'text-ink-400' : 'text-white/50')}>{previewProgress}</p>
             </div>
           </motion.div>
 

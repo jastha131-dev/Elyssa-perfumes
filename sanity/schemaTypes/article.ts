@@ -97,6 +97,8 @@ export const article = defineType({
     defineField({ name: 'readTime', title: 'Read Time', type: 'string', group: 'meta', description: 'e.g. 5 min read', validation: (Rule) => Rule.max(20) }),
     defineField({ name: 'publishedAt', title: 'Published At', type: 'datetime', group: 'meta' }),
     defineField({ name: 'featured', title: 'Featured Article', type: 'boolean', group: 'meta', initialValue: false }),
+    defineField({ name: 'tags', title: 'Tags', type: 'array', of: [{ type: 'string' }], options: { layout: 'tags' }, group: 'meta' }),
+    defineField({ name: 'relatedArticles', title: 'Related Articles', type: 'array', of: [defineArrayMember({ type: 'reference', to: [{ type: 'article' }] })], validation: (Rule) => Rule.max(4).unique(), group: 'meta' }),
     defineField({ name: 'seoTitle_en', title: 'SEO Title (English)', type: 'string', group: 'seo', validation: (Rule) => Rule.max(60) }),
     defineField({ name: 'seoTitle_ar', title: 'عنوان SEO (Arabic)', type: 'string', group: 'seo', validation: (Rule) => Rule.max(60) }),
     defineField({ name: 'seoDescription_en', title: 'SEO Description (English)', type: 'text', rows: 2, group: 'seo', validation: (Rule) => Rule.max(160) }),
