@@ -11,6 +11,12 @@ interface CartStore {
   updateQuantity: (productId: string, volumeMl: number, quantity: number) => void
   clearCart: () => void
 
+  // Gift wrap
+  giftWrap: boolean
+  giftMessage: string
+  setGiftWrap: (v: boolean) => void
+  setGiftMessage: (m: string) => void
+
   // Computed
   totalItems: () => number
   totalPrice: () => number
@@ -28,6 +34,10 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       items: [],
       isOpen: false,
+      giftWrap: false,
+      giftMessage: '',
+      setGiftWrap: (v) => set({ giftWrap: v }),
+      setGiftMessage: (m) => set({ giftMessage: m }),
 
       openCart: () => set({ isOpen: true }),
       closeCart: () => set({ isOpen: false }),
@@ -79,7 +89,7 @@ export const useCartStore = create<CartStore>()(
         }))
       },
 
-      clearCart: () => set({ items: [] }),
+      clearCart: () => set({ items: [], giftWrap: false, giftMessage: '' }),
 
       totalItems: () =>
         get().items.reduce((sum, item) => sum + item.quantity, 0),
@@ -98,7 +108,7 @@ export const useCartStore = create<CartStore>()(
     }),
     {
       name: 'luxe-cart',
-      partialize: (state) => ({ items: state.items }),
+      partialize: (state) => ({ items: state.items, giftWrap: state.giftWrap, giftMessage: state.giftMessage }),
     }
   )
 )

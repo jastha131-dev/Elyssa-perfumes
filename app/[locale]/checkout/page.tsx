@@ -23,7 +23,7 @@ export default function CheckoutPage() {
     { emoji: '📦', label: t('premiumPackaging') },
   ]
   const { appliedPromotion } = usePromotionsStore()
-  const { items, clearCart } = useCartStore()
+  const { items, clearCart, giftWrap, giftMessage } = useCartStore()
   const [state, setState] = useState<CheckoutState>('loading')
   const [errorMessage, setErrorMessage] = useState<string>('')
   const [mounted, setMounted] = useState(false)
@@ -43,6 +43,7 @@ export default function CheckoutPage() {
           successUrl: `${origin}/checkout/success`,
           cancelUrl: `${origin}/checkout/cancel`,
           ...(appliedPromotion?.code ? { promoCode: appliedPromotion.code } : {}),
+          ...(giftWrap ? { giftWrap: true, giftMessage } : {}),
         }),
       })
 

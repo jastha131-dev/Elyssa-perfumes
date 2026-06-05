@@ -9,6 +9,7 @@ const _contactPage = defineType({
     defineField({ name: 'heading_ar', title: 'Heading (AR)', type: 'string' }),
     defineField({ name: 'subtext_en', title: 'Subtext (EN)', type: 'text' }),
     defineField({ name: 'subtext_ar', title: 'Subtext (AR)', type: 'text' }),
+    defineField({ name: 'heroImage', title: 'Hero Background Image', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' })] }),
     defineField({ name: 'email', title: 'Contact Email', type: 'string' }),
     defineField({ name: 'phone', title: 'Phone', type: 'string' }),
     defineField({ name: 'address_en', title: 'Address (EN)', type: 'text' }),

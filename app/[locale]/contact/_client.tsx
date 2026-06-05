@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import { Mail, Phone, MapPin, MessageCircle, Clock } from 'lucide-react'
@@ -120,6 +121,13 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
 
       {/* ═══════════════════════ DARK HERO ═══════════════════════ */}
       <section className="relative overflow-hidden bg-charcoal-950 pb-28 pt-24">
+        {/* Hero background image (dynamic, from Studio) */}
+        {data?.heroImageUrl && (
+          <>
+            <Image src={data.heroImageUrl} alt={data.heroImageAlt ?? heading} fill priority className="object-cover object-center opacity-30" />
+            <div className="absolute inset-0 bg-gradient-to-b from-charcoal-950/70 via-charcoal-950/60 to-charcoal-950/90" />
+          </>
+        )}
         {/* Gold ambient glow */}
         <div
           aria-hidden

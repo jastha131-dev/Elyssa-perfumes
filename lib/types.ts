@@ -34,6 +34,8 @@ export interface CollectionDetail {
   subtext_en?: string
   subtext_ar?: string
   cta?: CtaButton
+  ctaSecondary?: CtaButton
+  ctaTertiary?: CtaButton
   filterType?: 'manual' | 'smart'
   smartFilters?: {
     fragranceFamilies?: string[]
@@ -779,6 +781,8 @@ export interface ContactPageData {
   address_ar?: string
   instagramUrl?: string
   whatsappNumber?: string
+  heroImageUrl?: string
+  heroImageAlt?: string
 }
 
 export interface NavItem {

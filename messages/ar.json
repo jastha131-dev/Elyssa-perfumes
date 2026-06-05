@@ -117,7 +117,9 @@
     "youMayAlsoLike": "قد يعجبك أيضاً",
     "each": "للقطعة",
     "itemCount": "{count, plural, one {# منتج} two {# منتجان} few {# منتجات} many {# منتجاً} other {# منتج}}",
-    "viewAll": "عرض الكل"
+    "viewAll": "عرض الكل",
+    "giftWrap": "تغليف الهدية",
+    "giftMessagePlaceholder": "أضف رسالة هدية (اختياري)"
   },
   "checkout": {
     "title": "الدفع",

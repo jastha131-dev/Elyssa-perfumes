@@ -105,7 +105,19 @@ export const collection = defineType({
     }),
     defineField({
       name: 'ctaButton',
-      title: 'CTA Button',
+      title: 'CTA Button (Primary)',
+      type: 'ctaButton',
+      group: 'content',
+    }),
+    defineField({
+      name: 'ctaSecondary',
+      title: 'CTA Button (Secondary)',
+      type: 'ctaButton',
+      group: 'content',
+    }),
+    defineField({
+      name: 'ctaTertiary',
+      title: 'CTA Button (Third)',
       type: 'ctaButton',
       group: 'content',
     }),

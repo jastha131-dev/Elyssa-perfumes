@@ -529,7 +529,8 @@ export const getFaqItemsQuery = `
 export const getContactPageQuery = `
   *[_type == "contactPage"][0] {
     _id, heading_en, heading_ar, subtext_en, subtext_ar,
-    email, phone, address_en, address_ar, instagramUrl, whatsappNumber
+    email, phone, address_en, address_ar, instagramUrl, whatsappNumber,
+    "heroImageUrl": heroImage.asset->url, "heroImageAlt": heroImage.alt
   }
 `
 
@@ -579,6 +580,8 @@ export const getCollectionBySlugQuery = `
     subtext_en,
     subtext_ar,
     "cta": ctaButton,
+    "ctaSecondary": ctaSecondary,
+    "ctaTertiary": ctaTertiary,
     filterType,
     smartFilters,
     defaultSort,

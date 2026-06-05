@@ -26,7 +26,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
   const locale = useLocale()
   const isRTL = locale === 'ar'
   const formatPrice = useCurrencyStore((s) => s.format)
-  const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart } = useCartStore()
+  const { items, removeItem, updateQuantity, totalPrice, totalItems, clearCart, giftWrap, setGiftWrap, giftMessage, setGiftMessage } = useCartStore()
 
   const {
     enteredCode,
@@ -306,6 +306,34 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   </div>
 
                   <p className="mt-1.5 font-body text-xs text-charcoal-400">{t('taxNote')}</p>
+
+                  {/* Gift wrap */}
+                  <div className="mt-4 rounded-xl border border-charcoal-100 bg-cream-50/60 p-3">
+                    <label className="flex cursor-pointer items-center justify-between gap-3">
+                      <span className="flex items-center gap-2 font-body text-sm text-charcoal-800">
+                        <span className="text-base">🎁</span>
+                        {t('giftWrap')} <span className="text-charcoal-400">+$5</span>
+                      </span>
+                      <button
+                        type="button"
+                        aria-label={t('giftWrap')}
+                        onClick={() => setGiftWrap(!giftWrap)}
+                        className={cn('relative h-5 w-9 flex-shrink-0 rounded-full transition-colors', giftWrap ? 'bg-gold-500' : 'bg-charcoal-200')}
+                      >
+                        <span className={cn('absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all', giftWrap ? 'left-[18px]' : 'left-0.5')} />
+                      </button>
+                    </label>
+                    {giftWrap && (
+                      <input
+                        type="text"
+                        value={giftMessage}
+                        onChange={(e) => setGiftMessage(e.target.value)}
+                        maxLength={140}
+                        placeholder={t('giftMessagePlaceholder')}
+                        className="mt-2.5 w-full rounded-lg border border-charcoal-200 bg-white px-3 py-2 font-body text-xs text-charcoal-700 focus:border-gold-500 focus:outline-none"
+                      />
+                    )}
+                  </div>
 
                   {/* Checkout CTA */}
                   <Link

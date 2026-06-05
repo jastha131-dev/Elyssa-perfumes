@@ -10,6 +10,8 @@ interface CheckoutRequestBody {
   successUrl: string
   cancelUrl: string
   promoCode?: string
+  giftWrap?: boolean
+  giftMessage?: string
 }
 
 function calcPromoDiscountAmount(promotion: Promotion, items: CartItem[], subtotal: number): number {
@@ -182,6 +184,22 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    // Gift wrapping — flat $5 add-on line item
+    if (body.giftWrap) {
+      lineItems.push({
+        price_data: {
+          currency: 'usd' as const,
+          unit_amount: 500,
+          product_data: {
+            name: 'Gift Wrapping',
+            images: [],
+            description: body.giftMessage ? `Message: ${body.giftMessage.slice(0, 200)}` : 'Signature gift box with ribbon and card',
+          },
+        },
+        quantity: 1,
+      })
+    }
+
     const shippingOptions: Stripe.Checkout.SessionCreateParams.ShippingOption[] = [
       {
         shipping_rate_data: {
@@ -227,6 +245,7 @@ export async function POST(request: NextRequest) {
           items.map((i) => ({ id: i.product._id, qty: i.quantity, ml: i.selectedVolume.ml }))
         ),
         ...(promoCode ? { promoCode } : {}),
+        ...(body.giftWrap ? { giftWrap: 'yes', giftMessage: (body.giftMessage || '').slice(0, 400) } : {}),
       },
       payment_intent_data: {
         metadata: {

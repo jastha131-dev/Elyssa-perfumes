@@ -117,7 +117,9 @@
     "youMayAlsoLike": "You May Also Like",
     "each": "each",
     "itemCount": "{count, plural, one {# item} other {# items}}",
-    "viewAll": "View all"
+    "viewAll": "View all",
+    "giftWrap": "Gift wrapping",
+    "giftMessagePlaceholder": "Add a gift message (optional)"
   },
   "checkout": {
     "title": "Checkout",

@@ -65,7 +65,12 @@
       "Bash(curl -s -m 25 -o /tmp/a.html -w \"%{http_code}\" \"http://localhost:3000/en/about\")",
       "Bash(curl -s -m 25 \"http://localhost:3000/en/journal/signature-scent\" -o /tmp/a.html)",
       "Bash(xargs echo \"headings found:\")",
-      "Bash(curl -s \"https://oj84ot95.api.sanity.io/v2024-01-01/data/query/production?query=*%5B_id%3D%3D%22article-signature-scent%22%5D%5B0%5D%7B%22bodyEnBlocks%22%3Acount\\(body_en\\)%2C%22bodyArBlocks%22%3Acount\\(body_ar\\)%2C%22rel%22%3Acount\\(relatedArticles\\)%7D\")"
+      "Bash(curl -s \"https://oj84ot95.api.sanity.io/v2024-01-01/data/query/production?query=*%5B_id%3D%3D%22article-signature-scent%22%5D%5B0%5D%7B%22bodyEnBlocks%22%3Acount\\(body_en\\)%2C%22bodyArBlocks%22%3Acount\\(body_ar\\)%2C%22rel%22%3Acount\\(relatedArticles\\)%7D\")",
+      "Bash(curl -s -m 25 \"http://localhost:3000/en/collections/gift-sets\" -o /tmp/g.html)",
+      "Bash(cd \"d:/Astha's  Work/Elyssa-perfumes\" && grep -rln \"api/checkout\" app components 2>/dev/null; echo \"=== api/gift-cards/checkout exists? ===\"; ls \"app/api/gift-cards/checkout/route.ts\" 2>/dev/null && echo \"YES\" || echo \"NO\"; echo \"=== checkout body build ===\"; grep -rn \"api/checkout\" app components 2>/dev/null | head -2)",
+      "Read(//d/Astha's Work/**)",
+      "Bash(node -e \"const m=require\\('./messages/en.json'\\);console.log\\('cart keys sample:',Object.keys\\(m.cart||{}\\).slice\\(0,6\\).join\\(','\\)\\);console.log\\('giftWrap:',m.cart?.giftWrap||'MISSING'\\)\")",
+      "Bash(curl -s -m 40 -o /tmp/p.html -w '%{http_code}' http://localhost:3000/en/__TRACKED_VAR__)"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq",

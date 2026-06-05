@@ -160,6 +160,8 @@ export default function CollectionPageClient({ collection, products }: Props) {
   const headline = isAr ? collection.headline_ar : collection.headline_en
   const subtext = isAr ? collection.subtext_ar : collection.subtext_en
   const ctaLabel = isAr ? collection.cta?.label_ar : collection.cta?.label_en
+  const cta2Label = isAr ? collection.ctaSecondary?.label_ar : collection.ctaSecondary?.label_en
+  const cta3Label = isAr ? collection.ctaTertiary?.label_ar : collection.ctaTertiary?.label_en
 
   return (
     <div className="min-h-screen bg-white">
@@ -178,10 +180,24 @@ export default function CollectionPageClient({ collection, products }: Props) {
             <p className="mb-3 font-body text-xs uppercase tracking-[0.35em] text-white/70">Collection</p>
             <h1 className="font-display font-light text-white text-4xl md:text-6xl leading-tight max-w-2xl">{headline || title}</h1>
             {subtext && <p className="mt-4 font-body text-base font-light text-white/70 max-w-lg leading-relaxed">{subtext}</p>}
-            {collection.cta?.link && ctaLabel && (
-              <Link href={collection.cta.link} className="mt-7 inline-flex items-center gap-2.5 bg-white px-7 py-3.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-ink-900 hover:bg-stone-100 transition-colors">
-                {ctaLabel}<ArrowRight size={11} strokeWidth={2.5} />
-              </Link>
+            {((collection.cta?.link && ctaLabel) || (collection.ctaSecondary?.link && cta2Label)) && (
+              <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+                {collection.cta?.link && ctaLabel && (
+                  <Link href={collection.cta.link} className="inline-flex items-center gap-2.5 bg-white px-7 py-3.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-ink-900 hover:bg-stone-100 transition-colors">
+                    {ctaLabel}<ArrowRight size={11} strokeWidth={2.5} />
+                  </Link>
+                )}
+                {collection.ctaSecondary?.link && cta2Label && (
+                  <Link href={collection.ctaSecondary.link} className="inline-flex items-center gap-2.5 border border-white/70 px-7 py-3.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-white/10 transition-colors">
+                    {cta2Label}<ArrowRight size={11} strokeWidth={2.5} />
+                  </Link>
+                )}
+                {collection.ctaTertiary?.link && cta3Label && (
+                  <Link href={collection.ctaTertiary.link} className="inline-flex items-center gap-2.5 border border-white/70 px-7 py-3.5 font-body text-xs font-semibold uppercase tracking-[0.2em] text-white hover:bg-white/10 transition-colors">
+                    {cta3Label}<ArrowRight size={11} strokeWidth={2.5} />
+                  </Link>
+                )}
+              </div>
             )}
           </motion.div>
         </div>
