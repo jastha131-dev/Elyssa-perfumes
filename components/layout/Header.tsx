@@ -56,8 +56,6 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
 
   const resolvedItems = (navItems.length > 0 ? navItems : FALLBACK_NAV_ITEMS)
     .filter((item) => item.visible !== false)
-    // Products menu button hidden — delete this line to bring it back
-    .filter((item) => item.href !== '/products')
 
   const regularLinks = resolvedItems.filter((item) => !item.highlight)
   const highlightLinks = resolvedItems.filter((item) => item.highlight)
