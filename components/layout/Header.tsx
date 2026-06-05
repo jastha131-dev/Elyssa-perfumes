@@ -12,7 +12,7 @@ import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
-import type { Category, NavPage, NavItem } from '@/lib/types'
+import type { Category, NavPage, NavItem, MenuPromo } from '@/lib/types'
 import LanguageSwitcher from './LanguageSwitcher'
 import CurrencySwitcher from './CurrencySwitcher'
 
@@ -36,12 +36,23 @@ interface HeaderProps {
   categories: Category[]
   navPages?: NavPage[]
   navItems?: NavItem[]
+  menuPromo?: MenuPromo | null
 }
 
-export default function Header({ categories, navPages = [], navItems = [] }: HeaderProps) {
+export default function Header({ categories, navPages = [], navItems = [], menuPromo = null }: HeaderProps) {
   const pathname = usePathname()
   const t = useTranslations('nav')
   const locale = useLocale()
+  const isAr = locale === 'ar'
+  const promo = {
+    badge: menuPromo ? (isAr ? menuPromo.badge_ar || menuPromo.badge_en : menuPromo.badge_en) : undefined,
+    label: menuPromo ? (isAr ? menuPromo.label_ar || menuPromo.label_en : menuPromo.label_en) : undefined,
+    headline: menuPromo ? (isAr ? menuPromo.headline_ar || menuPromo.headline_en : menuPromo.headline_en) : undefined,
+    subtext: menuPromo ? (isAr ? menuPromo.subtext_ar || menuPromo.subtext_en : menuPromo.subtext_en) : undefined,
+    ctaLabel: menuPromo ? (isAr ? menuPromo.ctaLabel_ar || menuPromo.ctaLabel_en : menuPromo.ctaLabel_en) : undefined,
+    image: menuPromo?.imageUrl,
+    link: menuPromo?.ctaLink,
+  }
 
   const resolvedItems = (navItems.length > 0 ? navItems : FALLBACK_NAV_ITEMS)
     .filter((item) => item.visible !== false)
@@ -336,8 +347,8 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                         {/* ── Col 3: Editorial panel ── */}
                         <div className="relative overflow-hidden">
                           <Image
-                            src="/images/categories/I1.webp"
-                            alt="New Season"
+                            src={promo.image || '/images/categories/I1.webp'}
+                            alt={menuPromo?.imageAlt || 'New Season'}
                             fill
                             className="object-cover object-center opacity-35"
                           />
@@ -346,23 +357,23 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                           {/* Top badge */}
                           <div className="absolute left-4 top-4">
                             <span className="bg-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-[0.3em] text-white">
-                              {t('newSeason')}
+                              {promo.badge ?? t('newSeason')}
                             </span>
                           </div>
 
                           {/* Bottom content */}
                           <div className="absolute bottom-0 left-0 right-0 p-5">
                             <p className="mb-1 text-[9px] uppercase tracking-[0.4em] text-camel-400/80">
-                              {t('seasonLabel')}
+                              {promo.label ?? t('seasonLabel')}
                             </p>
                             <p className="mb-1 font-display text-xl font-light leading-tight text-stone-100">
-                              {t('seasonHeadline')}
+                              {promo.headline ?? t('seasonHeadline')}
                             </p>
                             <p className="mb-4 text-[10px] leading-relaxed text-stone-500">
-                              {t('seasonDesc')}
+                              {promo.subtext ?? t('seasonDesc')}
                             </p>
                             <Link
-                              href={`/${locale}/products`}
+                              href={`/${locale}${promo.link ?? '/products'}`}
                               className="group/cta inline-flex items-center gap-2 border-b border-camel-500/40 pb-0.5 text-[10px] uppercase tracking-[0.25em] text-camel-400 transition-all duration-200 hover:border-camel-400 hover:text-camel-300"
                             >
                               {t('shopNow')}

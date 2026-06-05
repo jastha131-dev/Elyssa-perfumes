@@ -44,6 +44,7 @@ import {
 } from './blocks'
 import { announcementBar } from './announcementBar'
 import { promotion } from './promotion'
+import { menuPromo } from './menuPromo'
 import { user } from './user'
 import { address } from './address'
 import { order } from './order'
@@ -89,6 +90,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Global singletons ──────────────────────────────────────────
   announcementBar,
   promotion,
+  menuPromo,
   siteSettings,
 
   // ── Content documents ──────────────────────────────────────────

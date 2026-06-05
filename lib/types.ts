@@ -178,6 +178,16 @@ export interface SanityImageAsset {
 
 // ─── Page Builder Types ───────────────────────────────────────────────────────
 
+export interface MenuPromo {
+  badge_en?: string; badge_ar?: string
+  label_en?: string; label_ar?: string
+  headline_en?: string; headline_ar?: string
+  subtext_en?: string; subtext_ar?: string
+  ctaLabel_en?: string; ctaLabel_ar?: string
+  ctaLink?: string
+  imageUrl?: string; imageAlt?: string
+}
+
 export interface CtaButton {
   label_en?: string
   label_ar?: string

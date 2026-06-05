@@ -22,6 +22,7 @@ import {
   getContactPageQuery,
   getNavConfigQuery,
   getAnnouncementBarQuery,
+  getMenuPromoQuery,
   getCollectionBySlugQuery,
   getSmartCollectionProductsQuery,
   getActivePromotionsQuery,
@@ -34,7 +35,7 @@ import {
   getArticlesByCategoryQuery,
   getGiftCardPageQuery,
 } from './queries'
-import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, MenuPromo, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData } from '../types'
 import type { SiteTypographySettings } from '@/lib/typography'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -193,6 +194,11 @@ export async function getAnnouncementBar(): Promise<AnnouncementBar | null> {
   return client.fetch<AnnouncementBar | null>(
     getAnnouncementBarQuery, {}, { next: { revalidate: 300 } }
   )
+}
+
+export async function getMenuPromo(): Promise<MenuPromo | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<MenuPromo | null>(getMenuPromoQuery, {}, { next: { revalidate: 300 } })
 }
 
 export async function getCollectionBySlug(slug: string): Promise<CollectionDetail | null> {

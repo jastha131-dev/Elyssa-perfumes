@@ -541,6 +541,14 @@ export const getNavConfigQuery = `
   }
 `
 
+export const getMenuPromoQuery = `
+  *[_type == "menuPromo"][0] {
+    badge_en, badge_ar, label_en, label_ar, headline_en, headline_ar,
+    subtext_en, subtext_ar, ctaLabel_en, ctaLabel_ar, ctaLink,
+    "imageUrl": image.asset->url, "imageAlt": image.alt
+  }
+`
+
 export const getAnnouncementBarQuery = `
   *[_type == "announcementBar"][0] {
     _id,
