@@ -41,7 +41,7 @@ export default function Hero({ data }: HeroProps) {
   const isInView   = useInView(textRef, { once: true, margin: '-100px' })
 
   const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start start', 'end start'] })
-  const bgY    = useTransform(scrollYProgress, [0, 1], ['0%', '20%'])
+  const bgY    = useTransform(scrollYProgress, [0, 1], ['0%', '8%'])
   const fadeOp = useTransform(scrollYProgress, [0, 0.65], [1, 0])
 
   const badge     = (isAr ? data?.badge_ar   : data?.badge_en)   ?? null
@@ -67,8 +67,8 @@ export default function Hero({ data }: HeroProps) {
         className="relative w-full overflow-hidden bg-stone-100"
         style={{ height: '100vh', minHeight: '640px' }}
       >
-        {/* Background with parallax */}
-        <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
+        {/* Background with parallax (oversized so it stays centered/covered) */}
+        <motion.div className="absolute inset-x-0 -top-[10%] z-0 h-[120%]" style={{ y: bgY }}>
           <Image
             src={heroImageSrc}
             alt={data?.bgImageAlt || 'Luxury fragrance'}
