@@ -680,6 +680,7 @@ export function ProductsPageClient({ products, categories, collections }: Produc
     ...DEFAULT_FILTER_STATE,
     category: searchParams.get('category') ?? undefined,
     flag: searchParams.get('filter') ?? undefined,
+    fragranceFamily: searchParams.get('family') ? [searchParams.get('family')!] : undefined,
     sortBy: searchParams.get('sort') ?? 'featured',
   }))
 

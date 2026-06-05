@@ -23,7 +23,7 @@ const FALLBACK_CATEGORIES = [
 ]
 
 const FALLBACK_NAV_ITEMS: NavItem[] = [
-  { label_en: 'New Arrivals', label_ar: 'الوافدون الجدد',  href: '/products?sort=newest',    highlight: false, visible: true },
+  { label_en: 'New Arrivals', label_ar: 'الوافدون الجدد',  href: '/products?filter=new',    highlight: false, visible: true },
   { label_en: 'Bestsellers',  label_ar: 'الأكثر مبيعاً',   href: '/products?sort=popular',   highlight: false, visible: true },
   { label_en: 'Journal',      label_ar: 'المجلة',            href: '/journal',                 highlight: false, visible: true },
   { label_en: 'About',        label_ar: 'من نحن',            href: '/about',                   highlight: false, visible: true },
@@ -272,9 +272,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
 
                           <ul className="mb-5 space-y-0.5">
                             {[
-                              { href: `/${locale}/products?sort=newest`,       icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
-                              { href: `/${locale}/products?sort=best_selling`, icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
-                              { href: `/${locale}/products?category=gift-sets`,icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
+                              { href: `/${locale}/products?filter=new`,       icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
+                              { href: `/${locale}/products?filter=bestseller`, icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
+                              { href: `/${locale}/products?category=luxury-collection`,icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
                               { href: `/${locale}/journal`,                    icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
                               { href: `/${locale}/quiz`,                       icon: Sparkles,   label: t('quiz'),         sub: t('aiMatching'),        badge: 'AI' },
                               { href: `/${locale}/faq`,                        icon: HelpCircle, label: t('faq'),          sub: t('commonQuestions'),    badge: null },
@@ -643,9 +643,9 @@ export default function Header({ categories, navPages = [], navItems = [] }: Hea
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
                           {[
-                            { href: `/${locale}/products?sort=newest`,        icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
-                            { href: `/${locale}/products?sort=best_selling`,  icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
-                            { href: `/${locale}/products?category=gift-sets`, icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
+                            { href: `/${locale}/products?filter=new`,        icon: Sparkles,   label: t('newArrivals'),  sub: t('latestReleases'),    badge: 'New' },
+                            { href: `/${locale}/products?filter=bestseller`,  icon: TrendingUp, label: t('bestsellers'),  sub: t('mostLoved'),          badge: null },
+                            { href: `/${locale}/products?category=luxury-collection`, icon: Gift,       label: t('giftSets'),     sub: t('forSomeoneSpecial'),  badge: null },
                             { href: `/${locale}/journal`,                     icon: BookOpen,   label: t('journal'),      sub: t('storiesGuides'),      badge: null },
                             { href: `/${locale}/quiz`,                        icon: Sparkles,   label: t('quiz'),         sub: t('aiMatching'),        badge: 'AI' },
                             { href: `/${locale}/faq`,                         icon: HelpCircle, label: t('faq'),          sub: t('commonQuestions'),    badge: null },
