@@ -79,7 +79,7 @@ export default function OrderSummary({
                   )}
                   {/* Quantity badge */}
                   {item.quantity > 1 && (
-                    <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-charcoal-900 text-[10px] font-bold text-white">
+                    <span className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-camel-500 text-[10px] font-bold text-white">
                       {item.quantity}
                     </span>
                   )}

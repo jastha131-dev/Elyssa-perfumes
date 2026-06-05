@@ -177,7 +177,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             </span>
           )}
           {product.bestSeller && !product.new && (
-            <span className="bg-charcoal-900/90 backdrop-blur-sm px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-cream-200 leading-none">
+            <span className="bg-azure-300/90 backdrop-blur-sm px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-charcoal-800 leading-none">
               {t('bestSeller')}
             </span>
           )}

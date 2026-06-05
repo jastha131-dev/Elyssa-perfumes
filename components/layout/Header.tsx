@@ -125,8 +125,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
 
   return (
     <>
-      <header ref={headerRef} className="fixed left-0 right-0 top-0 z-40 bg-ink-950 shadow-none">
-        {/* Announcement bar — always visible, camel background */}
+      <header ref={headerRef} className="fixed left-0 right-0 top-0 z-40 bg-white shadow-sm border-b border-stone-200">
+        {/* Announcement bar */}
         <div className="bg-camel-500 text-center py-2.5">
           <p className="font-body text-[11px] text-white tracking-[0.2em]">
             {t('announcementText')}
@@ -144,10 +144,10 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
             className="group flex flex-col leading-none"
             aria-label="Luxe Parfum — Home"
           >
-            <span className="font-display text-xl font-bold tracking-[0.18em] uppercase text-stone-50">
+            <span className="font-display text-xl font-bold tracking-[0.18em] uppercase text-charcoal-900">
               LUXE
             </span>
-            <span className="font-display text-[10px] font-medium tracking-[0.35em] uppercase text-camel-400">
+            <span className="font-display text-[10px] font-medium tracking-[0.35em] uppercase text-camel-500">
               PARFUM
             </span>
           </Link>
@@ -163,10 +163,10 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
               <button
                 className={cn(
                   'flex items-center gap-1 text-sm font-medium tracking-wide transition-colors duration-200',
-                  'hover:text-camel-300',
+                  'hover:text-camel-500',
                   pathname.startsWith(`/${locale}/products`) || pathname.startsWith(`/${locale}/collections`)
-                    ? 'text-camel-400'
-                    : 'text-stone-200'
+                    ? 'text-camel-500'
+                    : 'text-charcoal-700'
                 )}
               >
                 {t('collections')}
@@ -191,30 +191,30 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                     onMouseLeave={handleCollectionsLeave}
                   >
                     {/* 3-col luxury mega-menu */}
-                    <div className="w-[700px] overflow-hidden border border-camel-500/20 bg-[#0A0A0A] shadow-2xl shadow-black/70">
+                    <div className="w-[700px] overflow-hidden border border-stone-200 bg-white shadow-2xl shadow-black/10">
                       <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
 
                       <div className="grid grid-cols-[220px_1fr_200px]">
 
                         {/* ── Col 1: Shop All + Categories ── */}
-                        <div className="border-r border-white/[0.06] px-5 py-6">
+                        <div className="border-r border-stone-100 px-5 py-6">
                           {/* Shop All */}
                           <Link
                             href={`/${locale}/products`}
-                            className="group/all mb-5 flex items-center justify-between rounded-sm border border-camel-500/20 bg-camel-500/5 px-3 py-2.5 transition-all duration-200 hover:border-camel-500/50 hover:bg-camel-500/10"
+                            className="group/all mb-5 flex items-center justify-between rounded-sm border border-camel-500/30 bg-camel-50 px-3 py-2.5 transition-all duration-200 hover:border-camel-500/60 hover:bg-camel-100"
                           >
                             <div>
-                              <span className="block text-[10px] font-bold uppercase tracking-[0.25em] text-camel-400 transition-colors group-hover/all:text-camel-300">
+                              <span className="block text-[10px] font-bold uppercase tracking-[0.25em] text-camel-600 transition-colors group-hover/all:text-camel-700">
                                 {t('allFragrances')}
                               </span>
-                              <span className="block text-[9px] text-stone-600 tracking-wide">
+                              <span className="block text-[9px] text-charcoal-400 tracking-wide">
                                 {t('fullCollection')}
                               </span>
                             </div>
-                            <ArrowRight className="h-3 w-3 flex-shrink-0 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-400" />
+                            <ArrowRight className="h-3 w-3 flex-shrink-0 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-500" />
                           </Link>
 
-                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                             {t('shopByCategory')}
                           </p>
 
@@ -231,23 +231,23 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                     href={`/${locale}/products?category=${cat.slug}`}
                                     className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
                                   >
-                                    <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden bg-charcoal-800">
+                                    <div className="relative h-11 w-11 flex-shrink-0 overflow-hidden bg-stone-100">
                                       {imgUrl ? (
                                         <Image
                                           src={imgUrl}
                                           alt={catName ?? ''}
                                           fill
-                                          className="object-cover opacity-50 transition-all duration-400 group-hover/item:opacity-100 group-hover/item:scale-110"
+                                          className="object-cover opacity-70 transition-all duration-400 group-hover/item:opacity-100 group-hover/item:scale-110"
                                         />
                                       ) : (
-                                        <div className="h-full w-full bg-gradient-to-br from-charcoal-700 to-charcoal-900" />
+                                        <div className="h-full w-full bg-gradient-to-br from-stone-100 to-stone-200" />
                                       )}
                                     </div>
                                     <div>
-                                      <span className="block text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
+                                      <span className="block text-sm font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
                                         {catName}
                                       </span>
-                                      <span className="block text-[9px] tracking-wide text-stone-600 transition-colors group-hover/item:text-stone-500">
+                                      <span className="block text-[9px] tracking-wide text-charcoal-400 transition-colors group-hover/item:text-charcoal-500">
                                         {t('shopArrow')}
                                       </span>
                                     </div>
@@ -260,7 +260,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                           <li key={sub._id}>
                                             <Link
                                               href={`/${locale}/products?category=${sub.slug}`}
-                                              className="text-[10px] tracking-wide text-stone-600 transition-colors hover:text-camel-400"
+                                              className="text-[10px] tracking-wide text-charcoal-400 transition-colors hover:text-camel-500"
                                             >
                                               {subName}
                                             </Link>
@@ -276,8 +276,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         </div>
 
                         {/* ── Col 2: Discover + Fragrance Families ── */}
-                        <div className="border-r border-white/[0.06] px-5 py-6">
-                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                        <div className="border-r border-stone-100 px-5 py-6">
+                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                             {t('discover')}
                           </p>
 
@@ -296,11 +296,11 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                   href={href}
                                   className="group/item flex items-center gap-3 py-2.5 transition-colors"
                                 >
-                                  <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/[0.08] bg-white/[0.03] text-camel-400 transition-all duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-500/10 group-hover/item:text-camel-300">
+                                  <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-stone-200 bg-stone-50 text-camel-500 transition-all duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-50 group-hover/item:text-camel-600">
                                     <Icon className="h-3.5 w-3.5" />
                                   </span>
                                   <div className="flex-1">
-                                    <span className="flex items-center gap-2 text-[13px] font-light leading-tight tracking-wide text-cream-200 transition-colors group-hover/item:text-cream-100">
+                                    <span className="flex items-center gap-2 text-[13px] font-light leading-tight tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
                                       {label}
                                       {badge && (
                                         <span className="rounded-full bg-camel-500 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">
@@ -308,19 +308,19 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                         </span>
                                       )}
                                     </span>
-                                    <span className="block text-[10px] tracking-wide text-cream-500/50">
+                                    <span className="block text-[10px] tracking-wide text-charcoal-400">
                                       {sub}
                                     </span>
                                   </div>
-                                  <ArrowRight className="h-3 w-3 flex-shrink-0 text-stone-700 transition-all duration-200 group-hover/item:translate-x-0.5 group-hover/item:text-camel-500" />
+                                  <ArrowRight className="h-3 w-3 flex-shrink-0 text-charcoal-300 transition-all duration-200 group-hover/item:translate-x-0.5 group-hover/item:text-camel-500" />
                                 </Link>
                               </li>
                             ))}
                           </ul>
 
-                          <div className="mb-4 h-px bg-white/[0.06]" />
+                          <div className="mb-4 h-px bg-stone-100" />
 
-                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                          <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                             {t('fragranceFamily')}
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -336,7 +336,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                               <Link
                                 key={key}
                                 href={`/${locale}/products?family=${key}`}
-                                className="border border-white/10 px-2.5 py-1 text-[10px] font-light tracking-[0.15em] text-stone-500 transition-all duration-200 hover:border-camel-500/50 hover:bg-camel-500/8 hover:text-camel-300"
+                                className="border border-azure-300 px-2.5 py-1 text-[10px] font-light tracking-[0.15em] text-charcoal-500 transition-all duration-200 hover:border-camel-500 hover:bg-camel-50 hover:text-camel-600"
                               >
                                 {label}
                               </Link>
@@ -350,9 +350,9 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                             src={promo.image || '/images/categories/I1.webp'}
                             alt={menuPromo?.imageAlt || 'New Season'}
                             fill
-                            className="object-cover object-center opacity-35"
+                            className="object-cover object-center opacity-60"
                           />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/60 to-[#0A0A0A]/20" />
+                          <div className="absolute inset-0 bg-gradient-to-t from-stone-50/95 via-stone-50/50 to-transparent" />
 
                           {/* Top badge */}
                           <div className="absolute left-4 top-4">
@@ -363,18 +363,18 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
 
                           {/* Bottom content */}
                           <div className="absolute bottom-0 left-0 right-0 p-5">
-                            <p className="mb-1 text-[9px] uppercase tracking-[0.4em] text-camel-400/80">
+                            <p className="mb-1 text-[9px] uppercase tracking-[0.4em] text-camel-500">
                               {promo.label ?? t('seasonLabel')}
                             </p>
-                            <p className="mb-1 font-display text-xl font-light leading-tight text-stone-100">
+                            <p className="mb-1 font-display text-xl font-light leading-tight text-charcoal-900">
                               {promo.headline ?? t('seasonHeadline')}
                             </p>
-                            <p className="mb-4 text-[10px] leading-relaxed text-stone-500">
+                            <p className="mb-4 text-[10px] leading-relaxed text-charcoal-500">
                               {promo.subtext ?? t('seasonDesc')}
                             </p>
                             <Link
                               href={`/${locale}${promo.link ?? '/products'}`}
-                              className="group/cta inline-flex items-center gap-2 border-b border-camel-500/40 pb-0.5 text-[10px] uppercase tracking-[0.25em] text-camel-400 transition-all duration-200 hover:border-camel-400 hover:text-camel-300"
+                              className="group/cta inline-flex items-center gap-2 border-b border-camel-500/50 pb-0.5 text-[10px] uppercase tracking-[0.25em] text-camel-600 transition-all duration-200 hover:border-camel-500 hover:text-camel-700"
                             >
                               {t('shopNow')}
                               <ArrowRight className="h-2.5 w-2.5 transition-transform duration-200 group-hover/cta:translate-x-0.5" />
@@ -404,8 +404,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                     'relative text-sm font-medium tracking-wide transition-colors duration-200',
                     'after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full',
                     'after:origin-left after:scale-x-0 after:bg-camel-500 after:transition-transform after:duration-300',
-                    'hover:text-camel-300 hover:after:scale-x-100',
-                    isActive ? 'text-camel-400 after:scale-x-100' : 'text-stone-200'
+                    'hover:text-camel-500 hover:after:scale-x-100',
+                    isActive ? 'text-camel-500 after:scale-x-100' : 'text-charcoal-700'
                   )}
                 >
                   {label}
@@ -424,8 +424,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                   className={cn(
                     'flex items-center gap-1.5 rounded-sm border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-200',
                     pathname === fullHref
-                      ? 'border-camel-400 bg-camel-500/20 text-camel-300'
-                      : 'border-camel-500/40 bg-camel-500/10 text-camel-400 hover:border-camel-400 hover:bg-camel-500/20 hover:text-camel-300'
+                      ? 'border-camel-500 bg-camel-500 text-white'
+                      : 'border-camel-500 bg-camel-50 text-camel-600 hover:bg-camel-500 hover:text-white'
                   )}
                 >
                   <Sparkles className="h-3 w-3" />
@@ -447,8 +447,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                     'relative text-sm font-medium tracking-wide transition-colors duration-200',
                     'after:absolute after:-bottom-0.5 after:left-0 after:h-px after:w-full',
                     'after:origin-left after:scale-x-0 after:bg-camel-500 after:transition-transform after:duration-300',
-                    'hover:text-camel-300 hover:after:scale-x-100',
-                    isActive ? 'text-camel-400 after:scale-x-100' : 'text-stone-200'
+                    'hover:text-camel-500 hover:after:scale-x-100',
+                    isActive ? 'text-camel-500 after:scale-x-100' : 'text-charcoal-700'
                   )}
                 >
                   {label}
@@ -496,7 +496,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
               onClick={() => setMobileOpen((v) => !v)}
               aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
               aria-expanded={mobileOpen}
-              className="ml-1 rtl:ml-0 rtl:mr-1 rounded-full p-2 transition-colors duration-200 lg:hidden text-stone-200 hover:bg-white/10"
+              className="ml-1 rtl:ml-0 rtl:mr-1 rounded-full p-2 transition-colors duration-200 lg:hidden text-charcoal-700 hover:bg-stone-100"
               whileTap={{ scale: 0.9 }}
             >
               <AnimatePresence mode="wait" initial={false}>
@@ -525,7 +525,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-30 bg-charcoal-900/30 backdrop-blur-sm lg:hidden"
+            className="fixed inset-0 z-30 bg-charcoal-700/15 backdrop-blur-sm lg:hidden"
             style={{ top: headerHeight }}
             aria-hidden="true"
           />
@@ -541,7 +541,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -12 }}
             transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed left-0 right-0 z-40 bg-[#0D0D0D] shadow-2xl shadow-black/50 lg:hidden"
+            className="fixed left-0 right-0 z-40 bg-white shadow-2xl shadow-black/10 border-b border-stone-200 lg:hidden"
             style={{ top: headerHeight }}
           >
             {/* Camel gradient top accent */}
@@ -553,12 +553,12 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                 if ((e.target as HTMLElement).closest('a')) setMobileOpen(false)
               }}
             >
-              <ul className="flex flex-col divide-y divide-white/10">
+              <ul className="flex flex-col divide-y divide-stone-100">
                 {/* Collections accordion */}
                 <li>
                   <button
                     onClick={() => setMobileCollectionsOpen((v) => !v)}
-                    className="flex w-full items-center justify-between py-4 text-base font-medium tracking-wide text-cream-100 hover:text-camel-400 transition-colors"
+                    className="flex w-full items-center justify-between py-4 text-base font-medium tracking-wide text-charcoal-800 hover:text-camel-500 transition-colors"
                   >
                     {t('collections')}
                     <motion.span
@@ -582,16 +582,16 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         {/* All Fragrances */}
                         <Link
                           href={`/${locale}/products`}
-                          className="group/all mx-4 mt-2 mb-4 flex items-center justify-between border border-camel-500/20 bg-camel-500/5 px-3 py-2.5 transition-all hover:border-camel-500/40"
+                          className="group/all mx-4 mt-2 mb-4 flex items-center justify-between border border-camel-500/30 bg-camel-50 px-3 py-2.5 transition-all hover:border-camel-500/60 hover:bg-camel-100"
                         >
-                          <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-camel-400 group-hover/all:text-camel-300 transition-colors">
+                          <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-camel-600 group-hover/all:text-camel-700 transition-colors">
                             {t('allFragrances')}
                           </span>
-                          <ArrowRight className="h-3 w-3 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-400" />
+                          <ArrowRight className="h-3 w-3 text-camel-500/60 transition-all duration-200 group-hover/all:translate-x-0.5 group-hover/all:text-camel-500" />
                         </Link>
 
                         {/* Shop by Category */}
-                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                           {t('shopByCategory')}
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
@@ -607,23 +607,23 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                   href={`/${locale}/products?category=${cat.slug}`}
                                   className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
                                 >
-                                  <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden bg-charcoal-800">
+                                  <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden bg-stone-100">
                                     {imgUrl ? (
                                       <Image
                                         src={imgUrl}
                                         alt={catName ?? ''}
                                         fill
-                                        className="object-cover opacity-60 transition-all duration-300 group-hover/item:opacity-100"
+                                        className="object-cover opacity-80 transition-all duration-300 group-hover/item:opacity-100"
                                       />
                                     ) : (
-                                      <div className="h-full w-full bg-charcoal-700" />
+                                      <div className="h-full w-full bg-stone-100" />
                                     )}
                                   </div>
                                   <div>
-                                    <span className="block text-sm font-light tracking-wide text-cream-300 transition-colors group-hover/item:text-cream-100">
+                                    <span className="block text-sm font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
                                       {catName}
                                     </span>
-                                    <span className="block text-[9px] text-stone-600">{t('shopArrow')}</span>
+                                    <span className="block text-[9px] text-charcoal-400">{t('shopArrow')}</span>
                                   </div>
                                 </Link>
                                 {subs.length > 0 && (
@@ -634,7 +634,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                         <Link
                                           key={sub._id}
                                           href={`/${locale}/products?category=${sub.slug}`}
-                                          className="text-[11px] tracking-wide text-stone-600 transition-colors hover:text-camel-400"
+                                          className="text-[11px] tracking-wide text-charcoal-400 transition-colors hover:text-camel-500"
                                         >
                                           {subName}
                                         </Link>
@@ -648,8 +648,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         </ul>
 
                         {/* Discover */}
-                        <div className="mx-4 mb-3 h-px bg-white/[0.06]" />
-                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                        <div className="mx-4 mb-3 h-px bg-stone-100" />
+                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                           {t('discover')}
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
@@ -664,11 +664,11 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                           ].map(({ href, icon: Icon, label, sub, badge }) => (
                             <li key={href}>
                               <Link href={href} className="group/item flex items-center gap-3 py-2 transition-colors">
-                                <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-white/[0.08] bg-white/[0.03] text-camel-400 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:text-camel-300">
+                                <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-stone-200 bg-stone-50 text-camel-500 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:text-camel-600">
                                   <Icon className="h-3.5 w-3.5" />
                                 </span>
                                 <div>
-                                  <span className="flex items-center gap-1.5 text-[13px] font-light tracking-wide text-cream-200 transition-colors group-hover/item:text-cream-100">
+                                  <span className="flex items-center gap-1.5 text-[13px] font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
                                     {label}
                                     {badge && (
                                       <span className="rounded-full bg-camel-500 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">
@@ -676,7 +676,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                                       </span>
                                     )}
                                   </span>
-                                  <span className="block text-[10px] tracking-wide text-cream-500/50">{sub}</span>
+                                  <span className="block text-[10px] tracking-wide text-charcoal-400">{sub}</span>
                                 </div>
                               </Link>
                             </li>
@@ -684,8 +684,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         </ul>
 
                         {/* Fragrance Family */}
-                        <div className="mx-4 mb-3 h-px bg-white/[0.06]" />
-                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500/40">
+                        <div className="mx-4 mb-3 h-px bg-stone-100" />
+                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                           {t('fragranceFamily')}
                         </p>
                         <div className="mb-4 flex flex-wrap gap-1.5 px-4">
@@ -701,7 +701,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                             <Link
                               key={key}
                               href={`/${locale}/products?family=${key}`}
-                              className="border border-white/10 px-2.5 py-1 text-[10px] tracking-[0.15em] text-stone-500 transition-all hover:border-camel-500/50 hover:text-camel-300"
+                              className="border border-azure-300 px-2.5 py-1 text-[10px] tracking-[0.15em] text-charcoal-500 transition-all hover:border-camel-500 hover:bg-camel-50 hover:text-camel-600"
                             >
                               {label}
                             </Link>
@@ -727,8 +727,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         href={fullHref}
                         className={cn(
                           'block py-4 text-base font-medium tracking-wide transition-colors',
-                          'hover:text-camel-300',
-                          pathname === fullHref.split('?')[0] ? 'text-camel-400' : 'text-stone-200'
+                          'hover:text-camel-500',
+                          pathname === fullHref.split('?')[0] ? 'text-camel-500' : 'text-charcoal-700'
                         )}
                       >
                         {label}
@@ -752,8 +752,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         href={href}
                         className={cn(
                           'block py-4 text-base font-medium tracking-wide transition-colors',
-                          'hover:text-camel-300',
-                          pathname === href ? 'text-camel-400' : 'text-stone-200'
+                          'hover:text-camel-500',
+                          pathname === href ? 'text-camel-500' : 'text-charcoal-700'
                         )}
                       >
                         {label}
@@ -778,20 +778,20 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                     <Link
                       key={item._key ?? item.href}
                       href={fullHref}
-                      className="flex items-center justify-between border border-camel-500/30 bg-camel-500/10 px-4 py-3 transition-all hover:border-camel-500/60 hover:bg-camel-500/15"
+                      className="flex items-center justify-between border border-camel-500 bg-camel-50 px-4 py-3 transition-all hover:bg-camel-500 hover:text-white group"
                     >
                       <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-camel-400" />
-                        <span className="text-sm font-medium tracking-wide text-camel-300">{label}</span>
+                        <Sparkles className="h-4 w-4 text-camel-500 group-hover:text-white transition-colors" />
+                        <span className="text-sm font-medium tracking-wide text-camel-600 group-hover:text-white transition-colors">{label}</span>
                       </div>
-                      <span className="rounded-full bg-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">AI</span>
+                      <span className="rounded-full bg-camel-500 group-hover:bg-white group-hover:text-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white transition-colors">AI</span>
                     </Link>
                   )
                 })}
 
                 <Link
                   href={`/${locale}/wishlist`}
-                  className="flex items-center gap-2 text-sm text-cream-300 hover:text-camel-400 transition-colors"
+                  className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-camel-500 transition-colors"
                 >
                   <Heart className="h-4 w-4" />
                   {t('wishlist')}
@@ -828,7 +828,7 @@ interface IconButtonProps {
 function IconButton({ children, label, badge, onClick, href }: IconButtonProps) {
   const baseClass = cn(
     'relative rounded-full p-2 transition-colors duration-200',
-    'text-stone-200 hover:bg-white/10 hover:text-white'
+    'text-charcoal-600 hover:bg-stone-100 hover:text-charcoal-900'
   )
 
   const badgeEl =

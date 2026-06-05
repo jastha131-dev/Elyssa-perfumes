@@ -69,7 +69,7 @@ function FilterPill({ icon, label, activeCount, children }: {
         className={cn(
           'flex items-center gap-1.5 rounded-full border px-3.5 py-[8px] text-[11px] font-medium transition-all duration-200',
           open || hasActive
-            ? 'border-ink-900 bg-ink-900 text-white'
+            ? 'border-camel-500 bg-camel-500 text-white'
             : 'border-stone-200 bg-white text-ink-700 hover:border-stone-400'
         )}
       >
@@ -212,7 +212,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
               onClick={() => setShowSort(v => !v)}
               className={cn(
                 'flex items-center gap-2 rounded-full border-2 px-4 py-[8px] text-[11px] font-bold uppercase tracking-[0.1em] transition-all',
-                showSort ? 'border-ink-900 bg-ink-900 text-white' : 'border-ink-900 bg-white text-ink-900 hover:bg-ink-900 hover:text-white'
+                showSort ? 'border-camel-500 bg-camel-500 text-white' : 'border-camel-500 bg-white text-camel-600 hover:bg-camel-500 hover:text-white'
               )}
             >
               <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -234,7 +234,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
                     <p className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-ink-400">Sort by</p>
                     {SORT_OPTIONS.map(opt => (
                       <button key={opt.value} onClick={() => { setSort(opt.value); setShowSort(false) }}
-                        className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', sort === opt.value ? 'bg-ink-900 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
+                        className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', sort === opt.value ? 'bg-camel-500 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
                       >
                         {opt.label}
                         {sort === opt.value && <span className="text-camel-400 text-[10px]">✓</span>}
@@ -256,7 +256,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
                     const active = fragranceFamily.map(norm).includes(norm(f))
                     return (
                       <button key={f} onClick={() => toggleFamily(f)}
-                        className={cn('rounded-full border px-3 py-1.5 text-[10.5px] font-medium transition-all', active ? 'border-ink-900 bg-ink-900 text-white' : 'border-stone-200 text-ink-600 hover:border-stone-400')}
+                        className={cn('rounded-full border px-3 py-1.5 text-[10.5px] font-medium transition-all', active ? 'border-camel-500 bg-camel-500 text-white' : 'border-stone-200 text-ink-600 hover:border-stone-400')}
                       >{f}</button>
                     )
                   })}
@@ -274,7 +274,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
                   const active = intensity.map(norm).includes(norm(level))
                   return (
                     <button key={level} onClick={() => toggleIntensity(level)}
-                      className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', active ? 'bg-ink-900 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
+                      className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', active ? 'bg-camel-500 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
                     >
                       {level}{active && <span className="text-camel-400 text-[10px]">✓</span>}
                     </button>
@@ -288,13 +288,13 @@ export default function CollectionPageClient({ collection, products }: Props) {
           <FilterPill icon={<DollarSign className="h-3 w-3" />} label="Price" activeCount={priceRange[0] !== 0 || priceRange[1] !== 99999 ? 1 : 0}>
             <div className="p-1.5">
               <button onClick={() => setPriceRange([0, 99999])}
-                className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', priceRange[0] === 0 && priceRange[1] === 99999 ? 'bg-ink-900 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
+                className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', priceRange[0] === 0 && priceRange[1] === 99999 ? 'bg-camel-500 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
               >Any Price</button>
               {PRICE_PRESETS.map(p => {
                 const active = priceRange[0] === p.range[0] && priceRange[1] === p.range[1]
                 return (
                   <button key={p.label} onClick={() => setPriceRange(p.range)}
-                    className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', active ? 'bg-ink-900 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
+                    className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors', active ? 'bg-camel-500 font-semibold text-white' : 'text-ink-700 hover:bg-stone-50')}
                   >{p.label}</button>
                 )
               })}
@@ -345,7 +345,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
         {filtered.length === 0 ? (
           <div className="py-24 text-center">
             <p className="font-body text-sm text-ink-400 mb-4">No fragrances match your filters.</p>
-            <button onClick={clearAll} className="rounded-full border-2 border-ink-900 px-6 py-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-ink-900 hover:bg-ink-900 hover:text-white transition-all">
+            <button onClick={clearAll} className="rounded-full border-2 border-camel-500 px-6 py-2 text-[10.5px] font-bold uppercase tracking-[0.18em] text-camel-600 hover:bg-camel-500 hover:text-white transition-all">
               {t('clearFilters')}
             </button>
           </div>
@@ -361,7 +361,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
                     <div className="relative w-full overflow-hidden bg-stone-200" style={{ aspectRatio: '3/4' }}>
                       <Image src={imageUrl} alt={product.images?.[0]?.alt || name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" sizes="(max-width: 768px) 50vw, 25vw" />
                       {product.new && <span className="absolute left-3 top-3 bg-camel-500 px-2.5 py-1 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-white">New</span>}
-                      {product.bestSeller && !product.new && <span className="absolute left-3 top-3 bg-ink-900 px-2.5 py-1 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-camel-400">Best Seller</span>}
+                      {product.bestSeller && !product.new && <span className="absolute left-3 top-3 bg-azure-300 px-2.5 py-1 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-charcoal-800">Best Seller</span>}
                     </div>
                     <div className="mt-3">
                       {product.fragranceFamily && <p className="font-body text-[10px] uppercase tracking-[0.22em] text-camel-500 mb-0.5">{product.fragranceFamily}</p>}

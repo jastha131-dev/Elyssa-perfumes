@@ -17,13 +17,13 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary:
-    'bg-gold-500 text-white hover:bg-gold-600 active:bg-gold-700 border border-gold-500 hover:border-gold-600 focus-visible:ring-gold-500',
+    'bg-camel-500 text-white hover:bg-camel-600 active:bg-camel-700 border border-camel-500 hover:border-camel-600 focus-visible:ring-camel-500',
   secondary:
-    'bg-charcoal-900 text-white hover:bg-charcoal-800 active:bg-charcoal-700 border border-charcoal-900 hover:border-charcoal-800 focus-visible:ring-charcoal-700',
+    'bg-azure-50 text-azure-700 hover:bg-azure-100 active:bg-azure-200 border border-azure-300 hover:border-azure-400 focus-visible:ring-azure-300',
   ghost:
-    'bg-transparent text-charcoal-900 hover:text-gold-500 border border-transparent hover:border-transparent underline-offset-4 hover:underline focus-visible:ring-charcoal-400',
+    'bg-transparent text-charcoal-700 hover:text-camel-500 border border-transparent hover:border-transparent underline-offset-4 hover:underline focus-visible:ring-charcoal-400',
   outline:
-    'bg-transparent text-gold-500 hover:bg-gold-50 active:bg-gold-100 border border-gold-500 hover:border-gold-600 focus-visible:ring-gold-500',
+    'bg-transparent text-camel-600 hover:bg-camel-50 active:bg-camel-100 border border-camel-500 hover:border-camel-600 focus-visible:ring-camel-500',
 }
 
 const sizeStyles: Record<ButtonSize, string> = {

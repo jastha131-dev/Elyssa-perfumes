@@ -9,8 +9,8 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<NonNullable<BadgeProps['variant']>, string> = {
-  new: 'bg-gold-500 text-white border-transparent',
-  bestseller: 'bg-charcoal-900 text-cream-100 border-transparent',
+  new: 'bg-camel-500 text-white border-transparent',
+  bestseller: 'bg-azure-300 text-charcoal-800 border-transparent',
   sale: 'bg-red-600 text-white border-transparent',
   default: 'bg-transparent text-charcoal-700 border-charcoal-300',
 }

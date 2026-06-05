@@ -52,7 +52,6 @@ export default function SearchOverlay() {
   const inputRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Load recent searches when overlay opens
   useEffect(() => {
     if (isSearchOpen) {
       setRecentSearches(getRecentSearches())
@@ -65,7 +64,6 @@ export default function SearchOverlay() {
     }
   }, [isSearchOpen])
 
-  // Debounced live search
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     const trimmed = query.trim()
@@ -89,7 +87,6 @@ export default function SearchOverlay() {
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current) }
   }, [query])
 
-  // Close on Escape
   useEffect(() => {
     function onKeyDown(e: KeyboardEvent) {
       if (e.key === 'Escape') closeSearch()
@@ -98,7 +95,6 @@ export default function SearchOverlay() {
     return () => window.removeEventListener('keydown', onKeyDown)
   }, [isSearchOpen, closeSearch])
 
-  // Prevent body scroll
   useEffect(() => {
     document.body.style.overflow = isSearchOpen ? 'hidden' : ''
     return () => { document.body.style.overflow = '' }
@@ -145,12 +141,12 @@ export default function SearchOverlay() {
           aria-modal="true"
           aria-label="Search"
         >
-          {/* Backdrop */}
+          {/* Backdrop — keep dark for focus */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-charcoal-950/85 backdrop-blur-md"
+            className="absolute inset-0 bg-charcoal-900/60 backdrop-blur-md"
             onClick={closeSearch}
             aria-hidden="true"
           />
@@ -169,12 +165,12 @@ export default function SearchOverlay() {
                 <div
                   className={cn(
                     'flex items-center gap-4 rounded-2xl',
-                    'border border-charcoal-700 bg-charcoal-900/90',
+                    'border border-stone-200 bg-white',
                     'px-5 py-4 shadow-2xl',
-                    'focus-within:border-gold-500 transition-colors duration-200'
+                    'focus-within:border-camel-500 transition-colors duration-200'
                   )}
                 >
-                  <Search className="h-5 w-5 flex-shrink-0 text-gold-500" aria-hidden="true" />
+                  <Search className="h-5 w-5 flex-shrink-0 text-camel-500" aria-hidden="true" />
                   <input
                     ref={inputRef}
                     type="search"
@@ -183,11 +179,11 @@ export default function SearchOverlay() {
                     placeholder={t('placeholder')}
                     autoComplete="off"
                     spellCheck={false}
-                    className="flex-1 bg-transparent font-display text-lg text-cream-100 placeholder:text-charcoal-500 outline-none caret-gold-500"
+                    className="flex-1 bg-transparent font-display text-lg text-charcoal-900 placeholder:text-charcoal-400 outline-none caret-camel-500"
                     aria-label="Search"
                   />
                   {isSearching && (
-                    <span className="flex-shrink-0 h-4 w-4 rounded-full border-2 border-charcoal-600 border-t-gold-500 animate-spin" />
+                    <span className="flex-shrink-0 h-4 w-4 rounded-full border-2 border-stone-200 border-t-camel-500 animate-spin" />
                   )}
                   {query && !isSearching && (
                     <motion.button
@@ -197,7 +193,7 @@ export default function SearchOverlay() {
                       initial={{ scale: 0 }}
                       animate={{ scale: 1 }}
                       whileTap={{ scale: 0.85 }}
-                      className="flex-shrink-0 rounded-full p-1 text-charcoal-400 transition-colors hover:text-cream-100"
+                      className="flex-shrink-0 rounded-full p-1 text-charcoal-400 transition-colors hover:text-charcoal-700"
                     >
                       <X className="h-4 w-4" />
                     </motion.button>
@@ -207,7 +203,7 @@ export default function SearchOverlay() {
                       type="submit"
                       aria-label="Submit search"
                       whileTap={{ scale: 0.9 }}
-                      className="flex-shrink-0 rounded-full bg-gold-500 p-2 text-white transition-colors hover:bg-gold-400"
+                      className="flex-shrink-0 rounded-full bg-camel-500 p-2 text-white transition-colors hover:bg-camel-400"
                     >
                       <ArrowRight className="h-4 w-4" />
                     </motion.button>
@@ -223,14 +219,14 @@ export default function SearchOverlay() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 4 }}
                     transition={{ duration: 0.2 }}
-                    className="mt-3 overflow-hidden rounded-2xl border border-charcoal-800 bg-charcoal-900/95 shadow-2xl max-h-[60vh] overflow-y-auto"
+                    className="mt-3 overflow-hidden rounded-2xl border border-stone-200 bg-white shadow-2xl max-h-[60vh] overflow-y-auto"
                   >
                     {/* Live search results */}
                     {showResults && (
                       <div className="px-3 py-3">
                         {results.length > 0 ? (
                           <>
-                            <p className="px-2 mb-2 text-[10px] font-medium uppercase tracking-[0.25em] text-charcoal-500">
+                            <p className="px-2 mb-2 text-[10px] font-medium uppercase tracking-[0.25em] text-charcoal-400">
                               {results.length} result{results.length !== 1 ? 's' : ''}
                             </p>
                             <ul className="space-y-1">
@@ -239,10 +235,10 @@ export default function SearchOverlay() {
                                   <Link
                                     href={`/${locale}/products/${product.slug}`}
                                     onClick={() => { saveRecentSearch(query); closeSearch() }}
-                                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-charcoal-800 transition-colors group"
+                                    className="flex items-center gap-3 rounded-xl px-3 py-2.5 hover:bg-stone-50 transition-colors group"
                                   >
                                     {/* Thumbnail */}
-                                    <div className="relative h-12 w-10 flex-shrink-0 overflow-hidden bg-charcoal-800 rounded">
+                                    <div className="relative h-12 w-10 flex-shrink-0 overflow-hidden bg-stone-100 rounded">
                                       {product.images?.[0]?.url ? (
                                         <Image
                                           src={product.images[0].url}
@@ -253,7 +249,7 @@ export default function SearchOverlay() {
                                         />
                                       ) : (
                                         <div className="h-full w-full flex items-center justify-center">
-                                          <span className="font-display text-xs italic text-charcoal-500">
+                                          <span className="font-display text-xs italic text-charcoal-400">
                                             {(locale === 'ar' ? product.name_ar : product.name_en).split(' ').map((w: string) => w[0]).join('').slice(0, 2)}
                                           </span>
                                         </div>
@@ -262,16 +258,16 @@ export default function SearchOverlay() {
 
                                     {/* Info */}
                                     <div className="flex-1 min-w-0">
-                                      <p className="font-display text-sm font-light text-cream-100 truncate group-hover:text-gold-400 transition-colors">
+                                      <p className="font-display text-sm font-light text-charcoal-800 truncate group-hover:text-camel-500 transition-colors">
                                         {locale === 'ar' ? product.name_ar : product.name_en}
                                       </p>
-                                      <p className="text-[11px] text-charcoal-500 truncate">
+                                      <p className="text-[11px] text-charcoal-400 truncate">
                                         {locale === 'ar' ? product.category?.name_ar : product.category?.name_en} · {product.fragranceFamily}
                                       </p>
                                     </div>
 
                                     {/* Price */}
-                                    <span className="flex-shrink-0 text-sm font-medium text-cream-200">
+                                    <span className="flex-shrink-0 text-sm font-medium text-charcoal-700">
                                       {formatPrice(product.volume?.[0]?.price ?? product.price)}
                                     </span>
                                   </Link>
@@ -281,7 +277,7 @@ export default function SearchOverlay() {
                             {results.length > 6 && (
                               <button
                                 onClick={() => handleSearch(query)}
-                                className="mt-2 w-full rounded-xl py-2.5 text-center text-xs text-charcoal-400 hover:text-gold-400 hover:bg-charcoal-800 transition-colors"
+                                className="mt-2 w-full rounded-xl py-2.5 text-center text-xs text-charcoal-500 hover:text-camel-500 hover:bg-stone-50 transition-colors"
                               >
                                 See all {results.length} results →
                               </button>
@@ -289,7 +285,7 @@ export default function SearchOverlay() {
                           </>
                         ) : !isSearching ? (
                           <p className="px-3 py-6 text-center text-sm text-charcoal-500">
-                            {t('noResults')} <span className="text-cream-300">&ldquo;{query}&rdquo;</span>
+                            {t('noResults')} <span className="text-camel-500">&ldquo;{query}&rdquo;</span>
                           </p>
                         ) : null}
                       </div>
@@ -297,15 +293,15 @@ export default function SearchOverlay() {
 
                     {/* Recent searches */}
                     {showRecent && (
-                      <div className={cn('px-5 py-4', showTrending && 'border-b border-charcoal-800')}>
+                      <div className={cn('px-5 py-4', showTrending && 'border-b border-stone-100')}>
                         <div className="mb-3 flex items-center justify-between">
-                          <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-widest text-charcoal-500">
+                          <span className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-widest text-charcoal-400">
                             <Clock className="h-3 w-3" />
                             {t('recent')}
                           </span>
                           <button
                             onClick={() => { clearRecentSearches(); setRecentSearches([]) }}
-                            className="text-[11px] text-charcoal-500 transition-colors hover:text-cream-100"
+                            className="text-[11px] text-charcoal-400 transition-colors hover:text-charcoal-700"
                           >
                             {t('clearAll')}
                           </button>
@@ -315,15 +311,15 @@ export default function SearchOverlay() {
                             <li key={term} className="group flex items-center gap-2">
                               <button
                                 onClick={() => handleSearch(term)}
-                                className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-left rtl:text-right text-sm text-charcoal-300 transition-colors hover:bg-charcoal-800 hover:text-cream-100"
+                                className="flex flex-1 items-center gap-3 rounded-lg px-3 py-2 text-left rtl:text-right text-sm text-charcoal-600 transition-colors hover:bg-stone-50 hover:text-charcoal-900"
                               >
-                                <Clock className="h-3.5 w-3.5 flex-shrink-0 text-charcoal-600" />
+                                <Clock className="h-3.5 w-3.5 flex-shrink-0 text-charcoal-300" />
                                 {term}
                               </button>
                               <button
                                 onClick={() => handleRemoveRecent(term)}
                                 aria-label={`Remove ${term}`}
-                                className="rounded-full p-1 text-charcoal-600 opacity-0 transition-all group-hover:opacity-100 hover:text-cream-100"
+                                className="rounded-full p-1 text-charcoal-300 opacity-0 transition-all group-hover:opacity-100 hover:text-charcoal-600"
                               >
                                 <X className="h-3 w-3" />
                               </button>
@@ -336,7 +332,7 @@ export default function SearchOverlay() {
                     {/* Trending */}
                     {showTrending && (
                       <div className="px-5 py-4">
-                        <p className="mb-3 flex items-center gap-2 text-[11px] font-medium uppercase tracking-widest text-charcoal-500">
+                        <p className="mb-3 flex items-center gap-2 text-[11px] font-medium uppercase tracking-widest text-charcoal-400">
                           <TrendingUp className="h-3 w-3" />
                           {t('trending')}
                         </p>
@@ -347,7 +343,7 @@ export default function SearchOverlay() {
                               onClick={() => handleSearch(term)}
                               whileHover={{ scale: 1.04 }}
                               whileTap={{ scale: 0.96 }}
-                              className="rounded-full border border-charcoal-700 px-4 py-1.5 text-xs text-charcoal-300 transition-all hover:border-gold-500 hover:text-gold-400"
+                              className="rounded-full border border-azure-300 px-4 py-1.5 text-xs text-charcoal-600 transition-all hover:border-camel-500 hover:bg-camel-50 hover:text-camel-600"
                             >
                               {term}
                             </motion.button>
@@ -370,7 +366,7 @@ export default function SearchOverlay() {
             exit={{ opacity: 0, scale: 0.8 }}
             transition={{ delay: 0.1 }}
             whileTap={{ scale: 0.88 }}
-            className="absolute right-4 rtl:right-auto rtl:left-4 top-4 z-10 rounded-full p-2 sm:right-8 rtl:sm:right-auto rtl:sm:left-8 sm:top-8 border border-charcoal-700 bg-charcoal-900/80 text-charcoal-300 transition-all hover:border-charcoal-500 hover:text-cream-100"
+            className="absolute right-4 rtl:right-auto rtl:left-4 top-4 z-10 rounded-full p-2 sm:right-8 rtl:sm:right-auto rtl:sm:left-8 sm:top-8 border border-stone-200 bg-white text-charcoal-600 transition-all hover:border-stone-300 hover:text-charcoal-900"
           >
             <X className="h-5 w-5" />
           </motion.button>

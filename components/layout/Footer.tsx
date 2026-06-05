@@ -40,7 +40,7 @@ function FooterColumn({ titleKey, links }: FooterColumnProps) {
 
   return (
     <motion.div variants={itemVariants}>
-      <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-400">
+      <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-600">
         {t(titleKey)}
       </h3>
       <ul className="flex flex-col gap-3">
@@ -48,7 +48,7 @@ function FooterColumn({ titleKey, links }: FooterColumnProps) {
           <li key={link.href}>
             <Link
               href={`/${locale}${link.href}`}
-              className="font-body text-sm text-charcoal-400 transition-colors duration-200 hover:text-stone-100"
+              className="font-body text-sm text-charcoal-500 transition-colors duration-200 hover:text-camel-500"
             >
               {t(link.labelKey)}
             </Link>
@@ -78,7 +78,6 @@ export default function Footer() {
     setEmail('')
   }
 
-  // Link definitions with translation keys
   const SHOP_LINKS = [
     { labelKey: 'allFragrances', href: '/products' },
     { labelKey: 'men', href: '/products?category=men' },
@@ -103,10 +102,10 @@ export default function Footer() {
   ]
 
   return (
-    <footer className="bg-charcoal-950 text-charcoal-100">
+    <footer className="bg-stone-100 text-charcoal-700 border-t border-stone-200">
 
       {/* Camel gradient accent */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/35 to-transparent" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500/50 to-transparent" />
 
       {/* ── Main footer grid ── */}
       <motion.div
@@ -119,19 +118,19 @@ export default function Footer() {
         {/* Brand column */}
         <motion.div variants={itemVariants} className="sm:col-span-2 lg:col-span-1">
           <Link href={`/${locale}`} className="inline-flex flex-col leading-none" aria-label="Luxe Parfum">
-            <span className="font-display text-xl font-bold uppercase tracking-[0.18em] text-cream-100">
+            <span className="font-display text-xl font-bold uppercase tracking-[0.18em] text-charcoal-900">
               LUXE
             </span>
-            <span className="font-display text-[10px] font-medium uppercase tracking-[0.35em] text-gold-500">
+            <span className="font-display text-[10px] font-medium uppercase tracking-[0.35em] text-camel-500">
               PARFUM
             </span>
           </Link>
 
-          <p className="mt-4 font-body text-sm italic leading-relaxed text-charcoal-400">
+          <p className="mt-4 font-body text-sm italic leading-relaxed text-charcoal-500">
             {t('taglineShort')}
           </p>
 
-          <p className="mt-3 max-w-xs font-body text-xs leading-relaxed text-charcoal-500">
+          <p className="mt-3 max-w-xs font-body text-xs leading-relaxed text-charcoal-400">
             {t('description')}
           </p>
 
@@ -146,8 +145,8 @@ export default function Footer() {
                 aria-label={label}
                 className={cn(
                   'flex h-8 w-8 items-center justify-center',
-                  'border border-charcoal-700 text-charcoal-500',
-                  'transition-all duration-200 hover:border-camel-500 hover:text-camel-400'
+                  'border border-stone-300 text-charcoal-400',
+                  'transition-all duration-200 hover:border-camel-500 hover:text-camel-500 hover:bg-camel-50'
                 )}
                 whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.93 }}
@@ -165,10 +164,10 @@ export default function Footer() {
 
         {/* Newsletter */}
         <motion.div variants={itemVariants}>
-          <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-400">
+          <h3 className="mb-5 font-display text-xs font-semibold uppercase tracking-[0.2em] text-camel-600">
             {t('stayConnected')}
           </h3>
-          <p className="mb-4 font-body text-xs leading-relaxed text-charcoal-400">
+          <p className="mb-4 font-body text-xs leading-relaxed text-charcoal-500">
             {t('tagline')}
           </p>
 
@@ -176,16 +175,15 @@ export default function Footer() {
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="border border-camel-500/30 bg-camel-500/8 px-4 py-3"
+              className="border border-camel-500/30 bg-camel-50 px-4 py-3"
             >
-              <p className="font-body text-xs text-camel-400">
+              <p className="font-body text-xs text-camel-600">
                 {t('thanksForSubscribing')}
               </p>
             </motion.div>
           ) : (
             <form onSubmit={handleSubscribe} className="flex flex-col gap-2" noValidate>
-              {/* Sharp rectangle — matches brand aesthetic */}
-              <div className="flex border border-charcoal-700 transition-colors duration-200 focus-within:border-camel-500/70">
+              <div className="flex border border-stone-300 transition-colors duration-200 focus-within:border-camel-500/70">
                 <input
                   type="email"
                   value={email}
@@ -194,8 +192,8 @@ export default function Footer() {
                   aria-label="Email address for newsletter"
                   required
                   className={cn(
-                    'flex-1 bg-transparent px-4 py-2.5 font-body text-xs text-charcoal-100',
-                    'placeholder:text-charcoal-600 outline-none'
+                    'flex-1 bg-white px-4 py-2.5 font-body text-xs text-charcoal-800',
+                    'placeholder:text-charcoal-400 outline-none'
                   )}
                 />
                 <motion.button
@@ -210,13 +208,13 @@ export default function Footer() {
                   )}
                 >
                   {loading ? (
-                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-charcoal-950 border-t-transparent" />
+                    <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
                   ) : (
                     <ArrowRight className="h-3.5 w-3.5" />
                   )}
                 </motion.button>
               </div>
-              <p className="font-body text-[10px] text-charcoal-600">
+              <p className="font-body text-[10px] text-charcoal-400">
                 {t('noSpam')}
               </p>
             </form>
@@ -232,17 +230,17 @@ export default function Footer() {
         whileInView={{ opacity: 1 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-charcoal-600 sm:flex-row sm:px-6 lg:px-8"
+        className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-6 text-xs text-charcoal-400 sm:flex-row sm:px-6 lg:px-8"
       >
         <p>&copy; {new Date().getFullYear()} Luxe Parfum. All rights reserved.</p>
         <div className="flex items-center gap-6">
-          <Link href={`/${locale}/privacy-policy`} className="transition-colors hover:text-charcoal-300">
+          <Link href={`/${locale}/privacy-policy`} className="transition-colors hover:text-charcoal-700">
             {t('privacyPolicy')}
           </Link>
-          <Link href={`/${locale}/terms`} className="transition-colors hover:text-charcoal-300">
+          <Link href={`/${locale}/terms`} className="transition-colors hover:text-charcoal-700">
             {t('termsOfService')}
           </Link>
-          <Link href={`/${locale}/cookies`} className="transition-colors hover:text-charcoal-300">
+          <Link href={`/${locale}/cookies`} className="transition-colors hover:text-charcoal-700">
             {t('cookiePolicy')}
           </Link>
         </div>

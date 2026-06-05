@@ -29,7 +29,7 @@ html {
 
 body {
   font-family: var(--font-body);
-  background-color: var(--stone);
+  background-color: var(--cream);
   color: var(--charcoal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -90,7 +90,7 @@ body {
 
 /* Gradient text */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #e6b330, #d99a1b, #c07a13);
+  background: linear-gradient(135deg, #E9631A, #C25015, #9B3E10);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;

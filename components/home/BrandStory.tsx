@@ -68,7 +68,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
   return (
     <section
       ref={sectionRef}
-      className="overflow-hidden bg-ink-950"
+      className="overflow-hidden bg-stone-100"
       style={{ minHeight: 'clamp(600px, 80vh, 700px)' }}
     >
       {/* Outer flex: image top on mobile, side-by-side at lg */}
@@ -101,7 +101,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
           {/* Warm tint overlay */}
           <div className="pointer-events-none absolute inset-0 bg-camel-500/5" />
           {/* Left fade to dark for blending */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-ink-950/60 via-transparent to-transparent lg:from-ink-950/40" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-stone-100/70 via-transparent to-transparent lg:from-stone-100/50" />
         </div>
 
         {/* ── Left column (text) ── */}
@@ -115,7 +115,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
             className={cn(
               'pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 select-none',
               'font-headline text-[10rem] font-bold uppercase leading-none',
-              'text-stone-100/[0.04] lg:text-[14rem]',
+              'text-charcoal-900/[0.04] lg:text-[14rem]',
             )}
           >
             ICONS
@@ -143,7 +143,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
               initial="hidden"
               animate={isTextInView ? 'visible' : 'hidden'}
               className={cn(
-                'relative z-10 font-display font-light leading-tight text-stone-100',
+                'relative z-10 font-display font-light leading-tight text-charcoal-900',
                 'text-5xl md:text-6xl lg:text-7xl',
               )}
             >
@@ -157,7 +157,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
             variants={fadeUpVariants}
             initial="hidden"
             animate={isTextInView ? 'visible' : 'hidden'}
-            className="relative z-10 mt-8 max-w-sm font-body text-base leading-relaxed text-stone-400"
+            className="relative z-10 mt-8 max-w-sm font-body text-base leading-relaxed text-charcoal-500"
           >
             Inspired by the greats. Crafted for you. Our collection echoes the world&apos;s finest maisons at a fraction of the price.
           </motion.p>
@@ -173,9 +173,9 @@ export default function BrandStory({ data }: BrandStoryProps) {
             <Link
               href="/products"
               className={cn(
-                'inline-flex items-center gap-3 border border-camel-500/50 px-7 py-3',
-                'font-body text-[11px] uppercase tracking-[0.25em] text-camel-300',
-                'transition-all duration-300 hover:border-camel-400 hover:bg-camel-500/10 hover:text-camel-200',
+                'inline-flex items-center gap-3 border border-camel-500 px-7 py-3',
+                'font-body text-[11px] uppercase tracking-[0.25em] text-camel-600',
+                'transition-all duration-300 hover:bg-camel-500 hover:text-white',
               )}
             >
               Shop Now

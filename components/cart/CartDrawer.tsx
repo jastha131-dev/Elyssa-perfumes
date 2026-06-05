@@ -269,7 +269,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                         <button
                           onClick={handleApplyCode}
                           disabled={applying || !enteredCode.trim()}
-                          className="bg-charcoal-900 px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-charcoal-700 disabled:opacity-40"
+                          className="bg-camel-500 px-4 py-2 font-body text-xs font-semibold uppercase tracking-[0.15em] text-white transition-colors hover:bg-camel-600 disabled:opacity-40"
                         >
                           {applying ? '...' : 'Apply'}
                         </button>

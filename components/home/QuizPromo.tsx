@@ -48,7 +48,7 @@ export default function QuizPromo({ data }: Props) {
     ? 'bg-white/20 text-white'
     : 'bg-white/10 text-white/80'
   const btnClass = style === 'accent'
-    ? 'bg-ink-900 text-white hover:bg-ink-800'
+    ? 'bg-white text-camel-600 hover:bg-stone-100 border border-white'
     : style === 'light'
     ? 'bg-camel-500 text-white hover:bg-camel-600'
     : 'bg-camel-500 text-white hover:bg-camel-600'

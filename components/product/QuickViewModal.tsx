@@ -167,7 +167,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                 {/* Badges */}
                 <div className="absolute left-3 top-3 rtl:left-auto rtl:right-3 flex flex-col gap-1.5">
                   {product.new && (
-                    <span className="bg-charcoal-900 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
+                    <span className="bg-camel-500 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
                       {t('new')}
                     </span>
                   )}
@@ -380,7 +380,7 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                       "w-full flex items-center justify-center gap-2 py-3.5 text-sm font-medium uppercase tracking-[0.15em] transition-all duration-300",
                       added
                         ? "bg-green-600 text-white"
-                        : "bg-charcoal-900 text-white hover:bg-gold-500"
+                        : "bg-camel-500 text-white hover:bg-camel-600"
                     )}
                   >
                     {adding ? (

@@ -20,20 +20,20 @@ export default function LanguageSwitcher() {
         href={getLocalePath('en')}
         className={`px-2 py-1 transition-colors ${
           locale === 'en'
-            ? 'text-foreground font-semibold'
-            : 'text-muted-foreground hover:text-foreground'
+            ? 'text-camel-600 font-semibold'
+            : 'text-charcoal-500 hover:text-charcoal-900'
         }`}
         aria-label="Switch to English"
       >
         EN
       </Link>
-      <span className="text-muted-foreground">|</span>
+      <span className="text-charcoal-300">|</span>
       <Link
         href={getLocalePath('ar')}
         className={`px-2 py-1 transition-colors ${
           locale === 'ar'
-            ? 'text-foreground font-semibold'
-            : 'text-muted-foreground hover:text-foreground'
+            ? 'text-camel-600 font-semibold'
+            : 'text-charcoal-500 hover:text-charcoal-900'
         }`}
         aria-label="Switch to Arabic"
       >

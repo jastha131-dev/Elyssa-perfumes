@@ -53,7 +53,7 @@ export default function CorporateForm() {
             <input value={form.phone} onChange={upd('phone')} placeholder={L.phone} className="rounded-lg border border-charcoal-200 bg-white px-4 py-3 font-body text-sm focus:border-gold-500 focus:outline-none" />
             <textarea required value={form.message} onChange={upd('message')} placeholder={L.message} rows={4} className="rounded-lg border border-charcoal-200 bg-white px-4 py-3 font-body text-sm focus:border-gold-500 focus:outline-none sm:col-span-2" />
             {status === 'error' && <p className="font-body text-xs text-red-600 sm:col-span-2">{L.err}</p>}
-            <button type="submit" disabled={status === 'sending'} className="rounded-full bg-charcoal-900 px-8 py-3.5 font-body text-sm font-semibold text-white transition-colors hover:bg-gold-500 disabled:opacity-60 sm:col-span-2">
+            <button type="submit" disabled={status === 'sending'} className="rounded-full bg-camel-500 px-8 py-3.5 font-body text-sm font-semibold text-white transition-colors hover:bg-camel-600 disabled:opacity-60 sm:col-span-2">
               {status === 'sending' ? L.sending : L.send}
             </button>
           </form>
