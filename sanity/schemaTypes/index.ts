@@ -42,6 +42,7 @@ import {
   browseCategoriesSection,
   quizPromoSection,
 } from './blocks'
+import { sectionTheme } from './objects/sectionTheme'
 import { announcementBar } from './announcementBar'
 import { promotion } from './promotion'
 import { menuPromo } from './menuPromo'
@@ -52,10 +53,12 @@ import { siteSettings } from './siteSettings'
 import { author } from './author'
 import { giftCardPage } from './giftCardPage'
 import { giftCardOrder } from './giftCardOrder'
+import { productsPage } from './productsPage'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
   ctaButton,
+  sectionTheme,
 
   // ── Block types ────────────────────────────────────────────────
   heroSection,
@@ -92,6 +95,7 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   promotion,
   menuPromo,
   siteSettings,
+  productsPage,
 
   // ── Content documents ──────────────────────────────────────────
   author,

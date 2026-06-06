@@ -60,6 +60,12 @@ export const quizPromoSection = defineType({
     }),
     defineField({ name: 'previewProgress_en', title: 'Preview Progress Text (English)', type: 'string', initialValue: 'Question 2 of 5', validation: (R) => R.max(40) }),
     defineField({ name: 'previewProgress_ar', title: 'نص التقدّم (Arabic)', type: 'string', validation: (R) => R.max(40) }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'headline_en', isVisible: 'isVisible' },

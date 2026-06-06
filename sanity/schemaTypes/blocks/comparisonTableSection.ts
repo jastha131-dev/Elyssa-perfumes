@@ -19,6 +19,12 @@ export const comparisonTableSection = defineType({
     }),
     defineField({ name: 'highlightProductIndex', title: 'Highlight Column (0-based index)', type: 'number', description: '0 = first product, 1 = second, etc.', initialValue: 0, validation: (Rule) => Rule.min(0).max(3) }),
     defineField({ name: 'showAddToCart', title: 'Show Add to Cart Buttons', type: 'boolean', initialValue: true }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'title_en', isVisible: 'isVisible' },

@@ -28,6 +28,12 @@ export const marqueeSection = defineType({
       initialValue: 30,
       validation: (Rule) => Rule.min(5).max(120),
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: {

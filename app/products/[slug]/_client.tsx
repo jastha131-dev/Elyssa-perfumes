@@ -28,6 +28,8 @@ import { useCartDrawerStore } from '@/lib/store/cart-drawer-store'
 import { ImageGallery } from '@/components/product/ImageGallery'
 import { FragranceNotes } from '@/components/product/FragranceNotes'
 import { RelatedProducts } from '@/components/product/RelatedProducts'
+import { PromoBanner } from '@/components/product/PromoBanner'
+import type { PromoBannerData } from '@/components/product/PromoBanner'
 import type { Product, VolumeOption, ProductReview } from '@/lib/types'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -35,6 +37,7 @@ import type { Product, VolumeOption, ProductReview } from '@/lib/types'
 export interface ProductDetailClientProps {
   product: Product
   relatedProducts: Product[]
+  promoBanner?: PromoBannerData
 }
 
 // ─── PortableText components ──────────────────────────────────────────────────
@@ -42,7 +45,7 @@ export interface ProductDetailClientProps {
 const portableTextComponents = {
   block: {
     normal: ({ children }: { children?: React.ReactNode }) => (
-      <p className="font-body text-sm text-charcoal-600 leading-relaxed mb-3 last:mb-0">
+      <p className="font-body text-charcoal-600 leading-relaxed mb-3 last:mb-0" style={{ fontSize: 'var(--pdp-body-size, 14px)' }}>
         {children}
       </p>
     ),
@@ -302,12 +305,12 @@ function FrequentlyBoughtTogether({
       </motion.div>
 
       {/* Product row */}
-      <div className="flex items-center gap-3 overflow-x-auto pb-2">
+      <div className="flex items-center gap-3 overflow-x-auto pb-4 scrollbar-none" style={{ WebkitOverflowScrolling: 'touch' } as React.CSSProperties}>
         {allProducts.map((p, idx) => {
           const name = isAr ? p.name_ar : p.name_en
           const price = p.volume?.[0]?.price ?? p.price
           return (
-            <div key={p._id} className="flex items-center gap-3">
+            <div key={p._id} className="flex flex-shrink-0 items-center gap-3">
               <div className="flex-shrink-0 w-[120px] text-center">
                 <Link href={`/${locale}/products/${p.slug}`} className="group block">
                   <div className="relative mx-auto h-[150px] w-[100px] overflow-hidden bg-cream-50 border border-charcoal-100">
@@ -657,6 +660,7 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
 export function ProductDetailClient({
   product,
   relatedProducts,
+  promoBanner,
 }: ProductDetailClientProps) {
   const locale = useLocale()
   const isAr = locale === 'ar'
@@ -836,7 +840,7 @@ export function ProductDetailClient({
 
             {/* Description */}
             {description && (
-              <p className="mt-5 font-body text-[15px] text-charcoal-600 leading-relaxed">
+              <p className="mt-5 font-body text-charcoal-600 leading-relaxed" style={{ fontSize: 'var(--pdp-desc-size, 15px)' }}>
                 {description}
               </p>
             )}
@@ -859,6 +863,9 @@ export function ProductDetailClient({
                 </>
               )}
             </div>
+
+            {/* Promo banner */}
+            {promoBanner && <PromoBanner data={promoBanner} />}
 
             {/* Volume selector */}
             {volumes.length > 0 && (
@@ -892,41 +899,15 @@ export function ProductDetailClient({
               </div>
             )}
 
-            {/* Quantity stepper */}
-            <div className="mt-5">
-              <p className="mb-3 font-body text-[10px] uppercase tracking-[0.22em] text-charcoal-500">
-                {isAr ? 'الكمية' : 'Quantity'}
-              </p>
-              <div className="inline-flex items-center border border-charcoal-200">
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-                  disabled={quantity <= 1}
-                  className="flex h-11 w-11 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed"
-                  aria-label="Decrease quantity"
-                >
-                  <Minus className="h-3.5 w-3.5" />
-                </button>
-                <span
-                  className="flex h-11 w-14 items-center justify-center border-x border-charcoal-200 font-body text-sm font-medium text-charcoal-900"
-                  aria-live="polite"
-                >
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity((q) => Math.min(10, q + 1))}
-                  disabled={quantity >= 10}
-                  className="flex h-11 w-11 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed"
-                  aria-label="Increase quantity"
-                >
-                  <Plus className="h-3.5 w-3.5" />
-                </button>
+            {/* Quantity + CTA — single inline row */}
+            <div className="mt-6 flex items-stretch gap-2">
+              {/* Stepper */}
+              <div className="inline-flex flex-shrink-0 items-center border border-charcoal-200">
+                <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={quantity <= 1} className="flex h-13 w-11 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Decrease quantity"><Minus className="h-3.5 w-3.5" /></button>
+                <span className="flex h-13 w-12 items-center justify-center border-x border-charcoal-200 font-body text-sm font-medium text-charcoal-900" aria-live="polite">{quantity}</span>
+                <button type="button" onClick={() => setQuantity((q) => Math.min(10, q + 1))} disabled={quantity >= 10} className="flex h-13 w-11 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Increase quantity"><Plus className="h-3.5 w-3.5" /></button>
               </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="mt-6 flex gap-3">
+              {/* Add to bag */}
               <motion.button
                 ref={mainCtaRef}
                 type="button"
@@ -934,28 +915,22 @@ export function ProductDetailClient({
                 whileTap={{ scale: 0.98 }}
                 className={cn(
                   'flex flex-1 items-center justify-center gap-2.5',
-                  'h-13 rounded py-4 px-8 font-body text-sm font-medium uppercase tracking-[0.18em]',
+                  'h-13 rounded py-4 px-6 font-body text-sm font-medium uppercase tracking-[0.18em]',
                   'transition-all duration-300',
-                  addedToCart
-                    ? 'bg-charcoal-700 text-white'
-                    : 'bg-camel-500 text-white hover:bg-camel-600'
+                  addedToCart ? 'bg-charcoal-700 text-white' : 'bg-camel-500 text-white hover:bg-camel-600'
                 )}
               >
                 <ShoppingBag className="h-4 w-4 flex-shrink-0" />
-                {addedToCart
-                  ? (isAr ? 'تمت الإضافة ✓' : 'Added to Bag ✓')
-                  : (isAr ? 'أضف إلى الحقيبة' : 'Add to Bag')}
+                {addedToCart ? (isAr ? 'تمت الإضافة ✓' : 'Added to Bag ✓') : (isAr ? 'أضف إلى الحقيبة' : 'Add to Bag')}
               </motion.button>
-
+              {/* Wishlist */}
               <motion.button
                 type="button"
                 onClick={handleWishlist}
                 whileTap={{ scale: 0.92 }}
                 className={cn(
-                  'flex h-13 py-4 w-14 flex-shrink-0 items-center justify-center border-2 transition-all duration-200',
-                  wishlisted
-                    ? 'border-gold-500 bg-gold-50 text-gold-600'
-                    : 'border-charcoal-200 text-charcoal-400 hover:border-charcoal-400 hover:text-charcoal-700'
+                  'flex h-13 w-14 flex-shrink-0 items-center justify-center border-2 transition-all duration-200',
+                  wishlisted ? 'border-gold-500 bg-gold-50 text-gold-600' : 'border-charcoal-200 text-charcoal-400 hover:border-charcoal-400 hover:text-charcoal-700'
                 )}
                 aria-label={wishlisted ? `Remove ${productName} from wishlist` : `Add ${productName} to wishlist`}
                 aria-pressed={wishlisted}

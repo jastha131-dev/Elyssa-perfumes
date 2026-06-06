@@ -16,6 +16,12 @@ export const testimonialsSection = defineType({
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'testimonial' }] })],
       validation: (Rule) => Rule.required().min(1).unique(),
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: {

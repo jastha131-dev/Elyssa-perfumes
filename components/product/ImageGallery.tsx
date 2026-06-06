@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn } from 'lucide-react'
@@ -24,6 +24,21 @@ export function ImageGallery({ images }: ImageGalleryProps) {
   const [isHovered, setIsHovered] = useState(false)
 
   const safeImages = images.length > 0 ? images : []
+
+  // Touch swipe on main image
+  const touchStartX = useRef<number | null>(null)
+  const handleMainTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX
+  }
+  const handleMainTouchEnd = (e: React.TouchEvent) => {
+    if (touchStartX.current === null || safeImages.length < 2) return
+    const dx = e.changedTouches[0].clientX - touchStartX.current
+    if (Math.abs(dx) > 35) {
+      if (dx < 0) setActiveIndex((i) => (i + 1) % safeImages.length)
+      else setActiveIndex((i) => (i - 1 + safeImages.length) % safeImages.length)
+    }
+    touchStartX.current = null
+  }
 
   // ── Lightbox keyboard navigation ──────────────────────────────────────────
   const handleKeyDown = useCallback(
@@ -77,13 +92,16 @@ export function ImageGallery({ images }: ImageGalleryProps) {
   return (
     <>
       {/* ── Main gallery ──────────────────────────────────────────────────── */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-3">
         {/* Large image */}
         <div
-          className="relative aspect-[3/4] overflow-hidden bg-cream-100 cursor-zoom-in group select-none"
+          className="relative aspect-[3/4] overflow-hidden bg-cream-100 cursor-zoom-in group select-none flex-1"
+          style={{ touchAction: 'pan-y' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={() => openLightbox(activeIndex)}
+          onTouchStart={handleMainTouchStart}
+          onTouchEnd={handleMainTouchEnd}
           role="button"
           tabIndex={0}
           aria-label={`View ${safeImages[activeIndex]?.alt || 'product image'} in full screen`}
@@ -201,10 +219,10 @@ export function ImageGallery({ images }: ImageGalleryProps) {
           )}
         </div>
 
-        {/* Thumbnail strip */}
+        {/* Thumbnail strip — horizontal on mobile, vertical on right on desktop */}
         {safeImages.length > 1 && (
           <div
-            className="flex gap-2 overflow-x-auto pb-1 scrollbar-none"
+            className="flex gap-2 overflow-x-auto pb-1 scrollbar-none lg:flex-col lg:overflow-y-auto lg:overflow-x-visible lg:pb-0 lg:w-[68px] lg:flex-shrink-0 lg:max-h-[480px]"
             role="tablist"
             aria-label="Product images"
           >
@@ -217,7 +235,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                 aria-label={img.alt || `Product image ${i + 1}`}
                 onClick={() => setActiveIndex(i)}
                 className={cn(
-                  'relative w-16 h-16 shrink-0 overflow-hidden bg-cream-100',
+                  'relative w-16 h-16 lg:h-20 shrink-0 overflow-hidden bg-cream-100',
                   'transition-all duration-200',
                   'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-500',
                   i === activeIndex
@@ -229,19 +247,12 @@ export function ImageGallery({ images }: ImageGalleryProps) {
                   src={img.url}
                   alt={img.alt || ''}
                   fill
-                  sizes="64px"
+                  sizes="68px"
                   className="object-cover"
                 />
               </button>
             ))}
           </div>
-        )}
-
-        {/* Mobile swipe hint */}
-        {safeImages.length > 1 && (
-          <p className="text-[10px] text-center text-charcoal-300 tracking-wide md:hidden" aria-hidden="true">
-            Swipe thumbnails to see more
-          </p>
         )}
       </div>
 

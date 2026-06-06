@@ -5,11 +5,17 @@ export const FONT_PAIRINGS: Record<string, {
   bodyFont: string
   googleFontsUrl: string // empty string = local font, no Google Fonts link needed
 }> = {
-  // ── Local font (no Google Fonts request) ─────────────────────────────────
+  // ── Local fonts (no Google Fonts request) ────────────────────────────────
   'satoshi': {
     displayFont: "var(--font-satoshi), system-ui, sans-serif",
     headlineFont: "var(--font-satoshi), system-ui, sans-serif",
     bodyFont: "var(--font-satoshi), system-ui, sans-serif",
+    googleFontsUrl: '',
+  },
+  'fixel': {
+    displayFont: "var(--font-fixel), system-ui, sans-serif",
+    headlineFont: "var(--font-fixel), system-ui, sans-serif",
+    bodyFont: "var(--font-fixel), system-ui, sans-serif",
     googleFontsUrl: '',
   },
   'modern-luxury': {
@@ -117,6 +123,27 @@ export interface SiteTypographySettings {
   headingLetterSpacing?: string
   bodyLineHeight?: string
   headingWeight?: string
+  cardStyle?: string
+  cardTextAlign?: string
+  cardBadgePosition?: string
+  cardBadgeOffsetTop?: number
+  cardBadgeOffsetSide?: number
+  cardBadgeBg?: string
+  cardBadgeText?: string
+  cardImageRatio?: string
+  cardFontSize?: string
+  collectionColumns?: string
+  pdpTextSize?: string
+  promoBanner?: {
+    isEnabled?: boolean
+    headline_en?: string
+    headline_ar?: string
+    subtitle_en?: string
+    subtitle_ar?: string
+    imageUrl?: string
+    countdownEndDate?: string
+    minOrderAmount?: number
+  }
   colorPalette?: string
   defaultCurrency?: string
   currencies?: Array<{
@@ -142,6 +169,37 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
   const headingWeight = settings?.headingWeight ?? '400'
   const colorCss = buildColorCss(settings?.colorPalette)
 
+  const cardStyle = settings?.cardStyle ?? 'clean'
+  const CARD_VARS: Record<string, { radius: string; borderW: string; borderC: string; bg: string; infoX: string; infoT: string; infoB: string }> = {
+    'clean':            { radius: '0px',  borderW: '0px', borderC: 'transparent', bg: 'transparent', infoX: '2px',  infoT: '12px', infoB: '0px'  },
+    'bordered-square':  { radius: '0px',  borderW: '1px', borderC: '#e2ddd5',    bg: '#ffffff',     infoX: '14px', infoT: '14px', infoB: '16px' },
+    'bordered-rounded': { radius: '16px', borderW: '1px', borderC: '#e2ddd5',    bg: '#ffffff',     infoX: '14px', infoT: '14px', infoB: '16px' },
+  }
+  const cv = CARD_VARS[cardStyle] ?? CARD_VARS['clean']
+
+  const textAlign = settings?.cardTextAlign ?? 'left'
+  const priceJustify = textAlign === 'center' ? 'center' : textAlign === 'right' ? 'flex-end' : 'flex-start'
+
+  const badgePos = settings?.cardBadgePosition ?? 'left'
+  const badgeTop = `${settings?.cardBadgeOffsetTop ?? 12}px`
+  const badgeSide = `${settings?.cardBadgeOffsetSide ?? 12}px`
+  const badgeL = badgePos === 'right' ? 'auto' : badgeSide
+  const badgeR = badgePos === 'right' ? badgeSide : 'auto'
+  const badgeBg = settings?.cardBadgeBg ?? '#1a1a1a'
+  const badgeTextColor = settings?.cardBadgeText ?? '#ffffff'
+
+  const imgRatioMap: Record<string, string> = { portrait: '3/4', square: '1/1', wide: '4/3' }
+  const imgRatio = imgRatioMap[settings?.cardImageRatio ?? 'portrait'] ?? '3/4'
+
+  const fontSizeMap: Record<string, { name: string; cat: string; price: string }> = {
+    sm: { name: '13px', cat: '8px',  price: '12px' },
+    md: { name: '15px', cat: '9px',  price: '13px' },
+    lg: { name: '17px', cat: '10px', price: '15px' },
+  }
+  const fs = fontSizeMap[settings?.cardFontSize ?? 'md'] ?? fontSizeMap['md']
+
+  const cols = settings?.collectionColumns ?? '4'
+
   return `
     ${colorCss}
     :root {
@@ -151,6 +209,28 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
       --heading-letter-spacing: ${headingSpacing};
       --body-line-height: ${lineHeight};
       --heading-weight: ${headingWeight};
+      --card-radius: ${cv.radius};
+      --card-border-w: ${cv.borderW};
+      --card-border-c: ${cv.borderC};
+      --card-bg: ${cv.bg};
+      --card-info-px: ${cv.infoX};
+      --card-info-pt: ${cv.infoT};
+      --card-info-pb: ${cv.infoB};
+      --card-text-align: ${textAlign};
+      --card-price-justify: ${priceJustify};
+      --card-badge-l: ${badgeL};
+      --card-badge-r: ${badgeR};
+      --card-badge-top: ${badgeTop};
+      --card-badge-side: ${badgeSide};
+      --card-badge-bg: ${badgeBg};
+      --card-badge-text: ${badgeTextColor};
+      --card-img-ratio: ${imgRatio};
+      --card-name-size: ${fs.name};
+      --card-cat-size: ${fs.cat};
+      --card-price-size: ${fs.price};
+      --collection-cols: ${cols};
+      --pdp-desc-size: ${{ sm: '13px', md: '15px', lg: '17px' }[settings?.pdpTextSize ?? 'md'] ?? '15px'};
+      --pdp-body-size: ${{ sm: '12px', md: '14px', lg: '16px' }[settings?.pdpTextSize ?? 'md'] ?? '14px'};
     }
     html { font-size: ${fontSize}px; }
     body { line-height: var(--body-line-height); }

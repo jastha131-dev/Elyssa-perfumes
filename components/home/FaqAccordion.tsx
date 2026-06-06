@@ -66,7 +66,8 @@ export default function FaqAccordion({ data }: Props) {
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : {}}
       transition={{ duration: 0.6 }}
-      className="bg-white py-20 md:py-28"
+      className="py-20 md:py-28"
+      style={{ backgroundColor: 'var(--section-bg, #ffffff)' }}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {(title || subtitle) && (

@@ -34,8 +34,9 @@ import {
   getAuthorBySlugQuery,
   getArticlesByCategoryQuery,
   getGiftCardPageQuery,
+  getProductsPageQuery,
 } from './queries'
-import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, MenuPromo, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, MenuPromo, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData, ProductsPageData } from '../types'
 import type { SiteTypographySettings } from '@/lib/typography'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -150,6 +151,11 @@ export async function getHomePage(): Promise<HomePage | null> {
     if (process.env.NODE_ENV === 'development') console.debug('[draft-mode]', e)
   }
   return useClient.fetch<HomePage>(getHomePageQuery, {}, fetchOptions)
+}
+
+export async function getProductsPage(): Promise<ProductsPageData | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<ProductsPageData | null>(getProductsPageQuery, {}, { next: { revalidate: 60 } })
 }
 
 export async function getNavPages(): Promise<NavPage[]> {
@@ -296,6 +302,12 @@ export async function getGiftCardPage(): Promise<GiftCardPageData | null> {
 export async function getSiteSettings(): Promise<SiteTypographySettings | null> {
   if (!isSanityConfigured) return null
   return client.fetch<SiteTypographySettings | null>(
-    getSiteSettingsQuery, {}, { next: { revalidate: 300 } }
+    getSiteSettingsQuery, {}, { next: { revalidate: 60 } }
   )
+}
+
+export async function getPromoBanner(): Promise<SiteTypographySettings['promoBanner'] | null> {
+  if (!isSanityConfigured) return null
+  const query = `*[_type == "siteSettings"][0].promoBanner { isEnabled, headline_en, headline_ar, subtitle_en, subtitle_ar, "imageUrl": image.asset->url, countdownEndDate, minOrderAmount }`
+  return client.fetch(query, {}, { next: { revalidate: 60 } })
 }

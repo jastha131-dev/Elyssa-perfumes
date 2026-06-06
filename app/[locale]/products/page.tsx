@@ -1,6 +1,7 @@
 import { Suspense } from 'react'
-import { getAllProducts, getAllCategories, getCollections } from '@/lib/sanity/fetch'
+import { getAllProducts, getAllCategories, getCollections, getProductsPage } from '@/lib/sanity/fetch'
 import { ProductsPageClient } from '@/app/products/_client'
+import PageBuilder from '@/components/PageBuilder'
 
 export const revalidate = 3600
 
@@ -11,26 +12,35 @@ export const metadata = {
 }
 
 export default async function ProductsPage() {
-  const [products, categories, collections] = await Promise.all([
+  const [products, categories, collections, pageData] = await Promise.all([
     getAllProducts(),
     getAllCategories(),
     getCollections(),
+    getProductsPage(),
   ])
 
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-white pt-24 flex items-center justify-center">
-          <div className="flex flex-col items-center gap-4">
-            <div className="h-8 w-8 rounded-full border-2 border-gold-500 border-t-transparent animate-spin" />
-            <p className="font-body text-sm tracking-widest uppercase text-charcoal-400">
-              Loading fragrances…
-            </p>
+    <>
+      {pageData?.sectionsAbove && pageData.sectionsAbove.length > 0 && (
+        <PageBuilder sections={pageData.sectionsAbove} />
+      )}
+      <Suspense
+        fallback={
+          <div className="min-h-screen bg-white pt-24 flex items-center justify-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="h-8 w-8 rounded-full border-2 border-gold-500 border-t-transparent animate-spin" />
+              <p className="font-body text-sm tracking-widest uppercase text-charcoal-400">
+                Loading fragrances…
+              </p>
+            </div>
           </div>
-        </div>
-      }
-    >
-      <ProductsPageClient products={products} categories={categories} collections={collections} />
-    </Suspense>
+        }
+      >
+        <ProductsPageClient products={products} categories={categories} collections={collections} />
+      </Suspense>
+      {pageData?.sectionsBelow && pageData.sectionsBelow.length > 0 && (
+        <PageBuilder sections={pageData.sectionsBelow} />
+      )}
+    </>
   )
 }

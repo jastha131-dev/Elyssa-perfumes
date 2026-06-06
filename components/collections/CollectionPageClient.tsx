@@ -350,7 +350,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
             </button>
           </div>
         ) : (
-          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4">
+          <motion.div variants={containerVariants} initial="hidden" animate="visible" className="grid grid-cols-2 gap-4 md:grid-cols-3 collection-grid">
             {filtered.map((product, idx) => {
               const name = isAr ? product.name_ar : product.name_en
               const imageUrl = product.images?.[0]?.url || LOCAL_IMAGES[idx % LOCAL_IMAGES.length]

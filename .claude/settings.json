@@ -14,11 +14,43 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code} total_time=%{time_total}s\\\\n\" http://localhost:3000/en)",
       "Bash(timeout 15 curl -s -o /dev/null -w \"%{http_code} time=%{time_total}s\\\\n\" http://localhost:3002/en)",
       "Bash(curl -s -m 20 -o /dev/null -w \"%{http_code} time=%{time_total}s\\\\n\" http://localhost:3002/en)",
-      "Bash(kill 35655)"
+      "Bash(kill 35655)",
+      "Read(//Users/californiamediadubai/.claude/plugins/cache/claude-plugins-official/superpowers/5.1.0/skills/subagent-driven-development/**)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(echo \"exit: $?\")",
+      "Bash(tee /tmp/tsc_out.txt)",
+      "Bash(echo \"Exit: $?\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add sanity/schemaTypes/author.ts sanity/schemaTypes/giftCardPage.ts sanity/schemaTypes/giftCardOrder.ts sanity/schemaTypes/index.ts)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m ' *)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add lib/types.ts)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m \"feat\\(types\\): add Author, AuthorWithArticles, GiftCard types; extend ArticleSummary\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add lib/sanity/queries.ts)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m \"feat\\(queries\\): add author projection, category filter, gift card queries\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add lib/sanity/fetch.ts)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m \"feat\\(fetch\\): add getAuthors, getAuthorBySlug, getArticlesByCategory, getGiftCardPage\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test log --oneline -6)",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/journal/author/\\\\[slug\\\\])",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/journal/category/\\\\[slug\\\\])",
+      "Bash(echo \"EXIT:$?\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add \"app/[locale]/journal/[slug]/page.tsx\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m \"feat: add linked author + linked category on article detail page\")",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/gift-cards/success)",
+      "Bash(awk 'NR<=20')",
+      "Bash(awk 'NR<=30')",
+      "Bash(awk 'NR<=10')",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add \"app/[locale]/cart/page.tsx\" \"app/[locale]/checkout/page.tsx\")",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add app/cart/CartPageClient.tsx)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m 'feat\\(cart\\): wire promo code input and discount display to promotions-store')",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add app/api/checkout/route.ts)",
+      "Bash(npm list *)",
+      "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/admin/_components)",
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add \"app/[locale]/admin/\")"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/journal",
-      "/tmp"
+      "/tmp",
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/gift-cards",
+      "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/admin"
     ]
   }
 }

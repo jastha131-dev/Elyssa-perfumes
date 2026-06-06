@@ -357,6 +357,51 @@ export const getHomePageQuery = `
   }
 `
 
+// ─── Products Page Query ──────────────────────────────────────────────────────
+
+const SECTION_FRAGMENT = `
+  ...,
+  "bgImageUrl": bgImage.asset->url,
+  "bgImageAlt": bgImage.alt,
+  "mobileImageUrl": mobileImage.asset->url,
+  "mobileImageAlt": mobileImage.alt,
+  "imageUrl": image.asset->url,
+  "imageAlt": image.alt,
+  "posterImageUrl": posterImage.asset->url,
+  "videoFileUrl": videoFile.asset->url,
+  "photos": photos[]{"imageUrl": image.asset->url, "imageAlt": image.alt, caption_en, caption_ar, link},
+  "tiles": tiles[]{_key, "imageUrl": image.asset->url, "imageAlt": image.alt, label_en, label_ar, href},
+  "beforeImageUrl": beforeImage.asset->url,
+  "beforeImageAlt": beforeImage.alt,
+  "afterImageUrl": afterImage.asset->url,
+  "afterImageAlt": afterImage.alt,
+  "products": products[]->{
+    _id, "id": _id, name_en, name_ar, "slug": slug.current, price, compareAtPrice,
+    "images": images[]{"url": asset->url, alt},
+    "category": category->{ _id, name_en, name_ar, "slug": slug.current },
+    stock, featured, bestSeller, "new": new, fragranceFamily, intensity, sillage, longevity, volume
+  },
+  "categories": categories[]->{
+    _id, name_en, name_ar, "slug": slug.current, description_en, description_ar, image, order
+  },
+  "testimonials": testimonials[]->{
+    _id, name_en, name_ar, location_en, location_ar, rating, review_en, review_ar,
+    "product": product->{ _id, name_en, name_ar, "slug": slug.current }
+  },
+  "collections": collections[]->{
+    _id, title_en, title_ar, "slug": slug.current, "imageUrl": image.asset->url, filterParam, order
+  },
+  "faqs": faqs[]->{ _id, question_en, question_ar, answer_en, answer_ar, category, order }
+`
+
+export const getProductsPageQuery = `
+  *[_type == "productsPage"][0] {
+    _id,
+    "sectionsAbove": sectionsAbove[] { ${SECTION_FRAGMENT} },
+    "sectionsBelow": sectionsBelow[] { ${SECTION_FRAGMENT} }
+  }
+`
+
 // ─── Dynamic Page Queries ─────────────────────────────────────────────────────
 
 export const getNavPagesQuery = `
@@ -744,6 +789,25 @@ export const getSiteSettingsQuery = `
     headingLetterSpacing,
     bodyLineHeight,
     headingWeight,
+    cardStyle,
+    cardTextAlign,
+    cardBadgePosition,
+    cardBadgeOffsetTop,
+    cardBadgeOffsetSide,
+    cardBadgeBg,
+    cardBadgeText,
+    cardImageRatio,
+    cardFontSize,
+    collectionColumns,
+    pdpTextSize,
+    "promoBanner": promoBanner {
+      isEnabled,
+      headline_en, headline_ar,
+      subtitle_en, subtitle_ar,
+      "imageUrl": image.asset->url,
+      countdownEndDate,
+      minOrderAmount
+    },
     colorPalette,
     defaultCurrency,
     "currencies": currencies[isEnabled == true]{

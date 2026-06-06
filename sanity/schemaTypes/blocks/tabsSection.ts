@@ -28,6 +28,12 @@ export const tabsSection = defineType({
       ],
       validation: (Rule) => Rule.required().min(2).max(8),
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'title_en', isVisible: 'isVisible' },

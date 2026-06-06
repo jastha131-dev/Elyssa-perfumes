@@ -27,7 +27,7 @@ export default function ImageWithText({ data }: Props) {
   const body = locale === 'ar' ? body_ar : body_en
   const ctaLabel = locale === 'ar' ? cta?.label_ar : cta?.label_en
 
-  const bgClass = { white: 'bg-white', cream: 'bg-stone-50', black: 'bg-ink-900' }[bgColor]
+  const bgStyle = ({ white: '#ffffff', cream: '#fafaf9', black: '#1a1a1a' } as Record<string, string>)[bgColor] ?? '#ffffff'
   const textClass = bgColor === 'black' ? 'text-white' : 'text-ink-900'
   const subtextClass = bgColor === 'black' ? 'text-white/60' : 'text-ink-500'
 
@@ -82,7 +82,7 @@ export default function ImageWithText({ data }: Props) {
   )
 
   return (
-    <section ref={ref} className={cn('overflow-hidden', bgClass)}>
+    <section ref={ref} className="overflow-hidden" style={{ backgroundColor: `var(--section-bg, ${bgStyle})` }}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8 py-20 md:py-28">
         <div className={cn(
           'grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-0 lg:items-stretch'

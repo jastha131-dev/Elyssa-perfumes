@@ -18,6 +18,30 @@ const satoshi = localFont({
   weight: "300 900",
 });
 
+// Fixel Text — loaded locally (individual weight files)
+const fixel = localFont({
+  src: [
+    { path: "../public/fonts/FixelText-Thin.woff2", weight: "100", style: "normal" },
+    { path: "../public/fonts/FixelText-ThinItalic.woff2", weight: "100", style: "italic" },
+    { path: "../public/fonts/FixelText-ExtraLight.woff2", weight: "200", style: "normal" },
+    { path: "../public/fonts/FixelText-ExtraLightItalic.woff2", weight: "200", style: "italic" },
+    { path: "../public/fonts/FixelText-Light.woff2", weight: "300", style: "normal" },
+    { path: "../public/fonts/FixelText-LightItalic.woff2", weight: "300", style: "italic" },
+    { path: "../public/fonts/FixelText-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../public/fonts/FixelText-RegularItalic.woff2", weight: "400", style: "italic" },
+    { path: "../public/fonts/FixelText-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../public/fonts/FixelText-MediumItalic.woff2", weight: "500", style: "italic" },
+    { path: "../public/fonts/FixelText-SemiBold.woff2", weight: "600", style: "normal" },
+    { path: "../public/fonts/FixelText-SemiBoldItalic.woff2", weight: "600", style: "italic" },
+    { path: "../public/fonts/FixelText-ExtraBold.woff2", weight: "800", style: "normal" },
+    { path: "../public/fonts/FixelText-ExtraBoldItalic.woff2", weight: "800", style: "italic" },
+    { path: "../public/fonts/FixelText-Black.woff2", weight: "900", style: "normal" },
+    { path: "../public/fonts/FixelText-BlackItalic.woff2", weight: "900", style: "italic" },
+  ],
+  variable: "--font-fixel",
+  display: "swap",
+});
+
 const cairo = Cairo({
   subsets: ["arabic", "latin"],
   variable: "--font-cairo",
@@ -97,7 +121,7 @@ export default async function RootLayout({
     <html
       lang={locale}
       dir={isArabic ? "rtl" : "ltr"}
-      className={`${satoshi.variable} ${isArabic ? cairo.variable : ""}`.trim()}
+      className={`${satoshi.variable} ${fixel.variable} ${isArabic ? cairo.variable : ""}`.trim()}
     >
       <head>
         {/* Only load Google Fonts when NOT using local Satoshi pairing */}

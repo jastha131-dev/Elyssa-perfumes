@@ -74,7 +74,8 @@ export default function RichText({ data }: Props) {
       initial={{ opacity: 0, y: 24 }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-      className="bg-white py-16 md:py-24"
+      className="py-16 md:py-24"
+      style={{ backgroundColor: 'var(--section-bg, #ffffff)' }}
     >
       <div className={cn('mx-auto px-6 lg:px-8', maxWidth, alignClass)}>
         <PortableText value={content} components={ptComponents as any} />

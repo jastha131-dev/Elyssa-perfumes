@@ -31,6 +31,7 @@ export default function MultiColumn({ data }: Props) {
   const bgColor = data?.bgColor ?? 'white'
   const colCount = data?.columnCount ?? 3
 
+  const bgStyle = ({ white: '#ffffff', cream: '#fafaf9', black: '#1a1a1a' } as Record<string, string>)[bgColor] ?? '#ffffff'
   const bgClass = { white: 'bg-white', cream: 'bg-stone-50', black: 'bg-ink-900' }[bgColor]
   const textClass = bgColor === 'black' ? 'text-white' : 'text-ink-900'
   const subtextClass = bgColor === 'black' ? 'text-white/60' : 'text-ink-500'
@@ -50,7 +51,8 @@ export default function MultiColumn({ data }: Props) {
       initial={{ opacity: 0 }}
       animate={isInView ? { opacity: 1 } : {}}
       transition={{ duration: 0.6 }}
-      className={cn('py-20 md:py-28', bgClass)}
+      className="py-20 md:py-28"
+      style={{ backgroundColor: `var(--section-bg, ${bgStyle})` }}
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {(title || subtitle) && (

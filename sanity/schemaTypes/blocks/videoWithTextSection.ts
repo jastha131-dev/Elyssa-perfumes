@@ -39,6 +39,12 @@ export const videoWithTextSection = defineType({
       initialValue: 'white',
     }),
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'headline_en', isVisible: 'isVisible', image: 'posterImage' },

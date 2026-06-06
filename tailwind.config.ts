@@ -9,30 +9,30 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // ── Electric Ginger palette (accent) ──────────────────────────────
+        // ── Accent palette — driven by CSS var so palette switching works ──
         camel: {
-          50:  "#FEF3EC",
+          50:  "var(--camel-light, #FEF3EC)",
           100: "#FDDFCB",
           300: "#F2956A",
           400: "#EE7B44",
-          500: "#E9631A",
-          600: "#C25015",
+          500: "var(--camel, #E9631A)",
+          600: "var(--camel-dark, #C25015)",
           700: "#9B3E10",
         },
         gold: {
-          50:  "#FEF3EC",
+          50:  "var(--camel-light, #FEF3EC)",
           100: "#FDDFCB",
           200: "#FBC4A0",
           300: "#F49C6A",
           400: "#EF7C40",
-          500: "#E9631A",
-          600: "#C25015",
+          500: "var(--camel, #E9631A)",
+          600: "var(--camel-dark, #C25015)",
           700: "#9B3E10",
           800: "#7A3210",
           900: "#5C240A",
           950: "#3B1505",
         },
-        // ── Deep Charcoal palette (dark / text) ────────────────────────────
+        // ── Dark / text palette — driven by CSS var ────────────────────────
         ink: {
           50:  "#F5F5F5",
           100: "#EBEBEB",
@@ -41,7 +41,7 @@ const config: Config = {
           400: "#848484",
           500: "#5E5E5E",
           600: "#424242",
-          700: "#323232",
+          700: "var(--ink, #323232)",
           800: "#1E1E1E",
           900: "#121212",
           950: "#080808",
@@ -54,33 +54,33 @@ const config: Config = {
           400: "#828282",
           500: "#626262",
           600: "#494949",
-          700: "#323232",
+          700: "var(--charcoal, #323232)",
           800: "#202020",
           900: "#141414",
           950: "#0A0A0A",
         },
-        // ── Parchment palette (background / soft) ─────────────────────────
+        // ── Background palette — driven by CSS var ─────────────────────────
         stone: {
           50:  "#F8F8F4",
-          100: "#F4F4EE",
-          200: "#EBEBDF",
+          100: "var(--stone, #F4F4EE)",
+          200: "var(--cream, #EBEBDF)",
           300: "#DDDDD1",
           400: "#CBCBBA",
         },
         cream: {
           50:  "#FAFAF7",
-          100: "#F4F4EE",
-          200: "#EBEBDF",
+          100: "var(--stone, #F4F4EE)",
+          200: "var(--cream, #EBEBDF)",
           300: "#DDDDD0",
           400: "#CACAB6",
           500: "#B5B59E",
         },
-        // ── Azure Mist palette (secondary accent) ─────────────────────────
+        // ── Secondary accent — driven by CSS var ───────────────────────────
         azure: {
           50:  "#EFF5FB",
           100: "#D8E8F5",
           200: "#C0D6EC",
-          300: "#A9C2E0",
+          300: "var(--azure, #A9C2E0)",
           400: "#8AAECE",
           500: "#6A98BB",
           600: "#4E7EA3",

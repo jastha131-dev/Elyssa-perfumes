@@ -17,6 +17,12 @@ export const bestSellersSection = defineType({
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
       validation: (Rule) => Rule.required().min(1).max(12).unique(),
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: {

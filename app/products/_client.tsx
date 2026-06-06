@@ -782,7 +782,7 @@ export function ProductsPageClient({ products, categories, collections }: Produc
             transition={{ duration: 0.22 }}
           >
             {processedProducts.length > 0 ? (
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-5 gap-y-10">
+              <div className="grid grid-cols-2 sm:grid-cols-3 collection-grid gap-x-5 gap-y-10">
                 {showEditorial && (
                   <EditorialCard collection={collections[0]} locale={locale} />
                 )}

@@ -25,6 +25,12 @@ export const faqSection = defineType({
       options: { list: [{ title: 'Single Column', value: 'single-column' }, { title: 'Two Columns', value: 'two-column' }], layout: 'radio' },
       initialValue: 'single-column',
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'title_en', isVisible: 'isVisible' },

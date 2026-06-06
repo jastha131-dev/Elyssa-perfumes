@@ -1,3 +1,4 @@
+import React from 'react'
 import Hero from '@/components/home/Hero'
 import TrustBar from '@/components/home/TrustBar'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
@@ -26,7 +27,40 @@ import UpsellProducts from '@/components/home/UpsellProducts'
 import CategoryTilesSection from '@/components/home/CategoryTilesSection'
 import BrowseCategories from '@/components/home/BrowseCategories'
 import QuizPromo from '@/components/home/QuizPromo'
+import { cn } from '@/lib/utils'
 import type { HomePageSection } from '@/lib/types'
+
+const BG_MAP: Record<string, string> = {
+  white: '#ffffff',
+  cream: 'var(--stone, #F4F4EE)',
+  'cream-soft': 'var(--cream, #EBEBDF)',
+  'accent-light': 'var(--camel-light, #FEF3EC)',
+  accent: 'var(--camel, #E9631A)',
+  dark: 'var(--ink, #323232)',
+  black: '#000000',
+}
+
+const BADGE_MAP: Record<string, string> = {
+  gold: 'var(--camel, #E9631A)',
+  white: '#ffffff',
+  black: '#000000',
+  rose: '#C0476A',
+  sage: '#4A7C59',
+}
+
+const RADIUS_MAP: Record<string, string> = {
+  sm: '4px',
+  md: '12px',
+  lg: '24px',
+  xl: '40px',
+}
+
+const PAD_MAP: Record<string, string> = {
+  none: '0px',
+  sm: '32px',
+  lg: '96px',
+  xl: '128px',
+}
 
 const blockMap: Record<string, React.ComponentType<{ data: any }>> = {
   heroSection: Hero,
@@ -72,7 +106,28 @@ export default function PageBuilder({ sections }: PageBuilderProps) {
         .filter((s) => s.isVisible !== false)
         .map((s) => {
           const Block = blockMap[s._type]
-          return Block ? <Block key={s._key} data={s as any} /> : null
+          if (!Block) return null
+
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const theme = (s as any).theme
+          if (!theme || (theme.bgColor === 'default' && theme.cornerRadius === 'none' && theme.paddingY === 'md' && !theme.badgeColor)) {
+            return <Block key={s._key} data={s as any} />
+          }
+
+          const wrapStyle: React.CSSProperties = {
+            ...(theme.bgColor && theme.bgColor !== 'default' && { '--section-bg': BG_MAP[theme.bgColor] }),
+            ...(theme.badgeColor && theme.badgeColor !== 'default' && { '--section-badge': BADGE_MAP[theme.badgeColor] }),
+            ...(theme.cornerRadius && theme.cornerRadius !== 'none' && { borderRadius: RADIUS_MAP[theme.cornerRadius], overflow: 'hidden' }),
+            ...(theme.paddingY && theme.paddingY !== 'md' && theme.paddingY !== 'none' && { paddingTop: PAD_MAP[theme.paddingY] ?? undefined, paddingBottom: PAD_MAP[theme.paddingY] ?? undefined }),
+            ...(theme.paddingY === 'none' && { paddingTop: '0', paddingBottom: '0' }),
+            ...(theme.bgColor && theme.bgColor !== 'default' && { backgroundColor: BG_MAP[theme.bgColor] }),
+          }
+
+          return (
+            <div key={s._key} style={wrapStyle} className={cn(theme.cornerRadius && theme.cornerRadius !== 'none' && 'overflow-hidden')}>
+              <Block data={s as any} />
+            </div>
+          )
         })}
     </>
   )

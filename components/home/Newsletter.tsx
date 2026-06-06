@@ -86,8 +86,8 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
 
   return (
     <section
-      className="relative overflow-hidden bg-stone-100"
-      style={safeBgImageUrl ? { backgroundImage: `url(${safeBgImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : undefined}
+      className="relative overflow-hidden"
+      style={safeBgImageUrl ? { backgroundColor: 'var(--section-bg, #f5f5f4)', backgroundImage: `url(${safeBgImageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' } : { backgroundColor: 'var(--section-bg, #f5f5f4)' }}
     >
       {/* Light warm overlay when bg image is present */}
       {safeBgImageUrl && (

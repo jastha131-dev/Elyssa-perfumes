@@ -4,6 +4,7 @@ import { presentationTool } from 'sanity/presentation'
 import { assist } from '@sanity/assist'
 import { schemaTypes } from './sanity/schemaTypes'
 import { StudioLogo } from './sanity/components/StudioLogo'
+import { StudioLayout } from './sanity/components/StudioLayout'
 import { translateToArabicAction } from './sanity/actions/translateToArabic'
 import { aiFillAction } from './sanity/actions/aiFill'
 
@@ -32,6 +33,7 @@ export default defineConfig({
   studio: {
     components: {
       logo: StudioLogo,
+      layout: StudioLayout,
     },
   },
 })

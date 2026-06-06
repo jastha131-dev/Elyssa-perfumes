@@ -33,7 +33,7 @@ export const categoryTilesSection = defineType({
           },
         }),
       ],
-      validation: (Rule) => Rule.required().min(1).max(12),
+      validation: (Rule) => Rule.max(12),
     }),
     defineField({
       name: 'bgColor',
@@ -49,6 +49,12 @@ export const categoryTilesSection = defineType({
         layout: 'radio',
       },
       initialValue: '#EDE8E0',
+    }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
     }),
   ],
   preview: {

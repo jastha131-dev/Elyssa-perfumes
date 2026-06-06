@@ -45,6 +45,12 @@ export const multiColumnSection = defineType({
       options: { list: [{ title: 'White', value: 'white' }, { title: 'Cream', value: 'cream' }, { title: 'Black', value: 'black' }], layout: 'radio' },
       initialValue: 'white',
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'title_en', isVisible: 'isVisible' },

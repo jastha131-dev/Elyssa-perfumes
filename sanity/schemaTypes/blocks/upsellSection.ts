@@ -26,6 +26,12 @@ export const upsellSection = defineType({
       initialValue: 'grid',
     }),
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'title_en', isVisible: 'isVisible' },

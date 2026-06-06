@@ -47,6 +47,12 @@ export const brandStorySection = defineType({
       initialValue: 'right',
     }),
     defineField({ name: 'cta', title: 'CTA Button (optional)', type: 'ctaButton' }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: {

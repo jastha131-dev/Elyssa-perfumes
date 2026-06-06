@@ -214,10 +214,18 @@ export interface Testimonial {
   }
 }
 
+export interface SectionTheme {
+  bgColor?: 'default' | 'white' | 'cream' | 'cream-soft' | 'accent-light' | 'accent' | 'dark' | 'black'
+  badgeColor?: 'default' | 'gold' | 'white' | 'black' | 'rose' | 'sage'
+  cornerRadius?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+  paddingY?: 'none' | 'sm' | 'md' | 'lg' | 'xl'
+}
+
 export interface HeroSectionBlock {
   _type: 'heroSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   headline_en?: string
   headline_ar?: string
   subheadline_en?: string
@@ -242,6 +250,7 @@ export interface CustomBannerSectionBlock {
   _type: 'customBannerSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   imageUrl?: string
   imageAlt?: string
   headline_en?: string
@@ -257,6 +266,7 @@ export interface FeaturedProductsSectionBlock {
   _type: 'featuredProductsSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -269,6 +279,7 @@ export interface BestSellersSectionBlock {
   _type: 'bestSellersSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   products?: Product[]
@@ -278,6 +289,7 @@ export interface CategoriesSectionBlock {
   _type: 'categoriesSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   categories?: Category[]
@@ -287,6 +299,7 @@ export interface MarqueeSectionBlock {
   _type: 'marqueeSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   text_en?: string
   text_ar?: string
   speed?: number
@@ -296,6 +309,7 @@ export interface ScentBannerSectionBlock {
   _type: 'scentBannerSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   eyebrow_en?: string
   eyebrow_ar?: string
   headline_en?: string
@@ -312,6 +326,7 @@ export interface BrandStorySectionBlock {
   _type: 'brandStorySection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   eyebrow_en?: string
   eyebrow_ar?: string
   headline_en?: string
@@ -328,6 +343,7 @@ export interface TestimonialsSectionBlock {
   _type: 'testimonialsSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   testimonials?: Testimonial[]
@@ -337,6 +353,7 @@ export interface NewsletterSectionBlock {
   _type: 'newsletterSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   headline_en?: string
   headline_ar?: string
   subtext_en?: string
@@ -350,6 +367,7 @@ export interface TrustBarSectionBlock {
   _type: 'trustBarSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   items?: Array<{ icon?: string; label_en?: string; label_ar?: string; value?: string }>
 }
 
@@ -359,6 +377,7 @@ export interface VideoBannerSectionBlock {
   _type: 'videoBannerSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   videoUrl?: string
   muxPlaybackId?: string
   videoFileUrl?: string
@@ -380,6 +399,7 @@ export interface NewArrivalsSectionBlock {
   _type: 'newArrivalsSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -394,6 +414,7 @@ export interface CollectionsGridSectionBlock {
   _type: 'collectionsGridSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -407,6 +428,7 @@ export interface FaqSectionBlock {
   _type: 'faqSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -419,6 +441,7 @@ export interface ImageWithTextSectionBlock {
   _type: 'imageWithTextSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   imageUrl?: string
   imageAlt?: string
   headline_en?: string
@@ -437,6 +460,7 @@ export interface VideoWithTextSectionBlock {
   _type: 'videoWithTextSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   videoUrl?: string
   muxPlaybackId?: string
   videoFileUrl?: string
@@ -465,6 +489,7 @@ export interface InstagramFeedSectionBlock {
   _type: 'instagramFeedSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   handle?: string
@@ -477,6 +502,7 @@ export interface CountdownTimerSectionBlock {
   _type: 'countdownTimerSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   headline_en?: string
   headline_ar?: string
   subtext_en?: string
@@ -493,6 +519,7 @@ export interface RichTextSectionBlock {
   _type: 'richTextSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   content_en?: PortableTextBlock[]
   content_ar?: PortableTextBlock[]
   maxWidth?: 'narrow' | 'normal' | 'wide'
@@ -513,6 +540,7 @@ export interface MultiColumnSectionBlock {
   _type: 'multiColumnSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -528,6 +556,7 @@ export interface BeforeAfterSectionBlock {
   _type: 'beforeAfterSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -547,6 +576,7 @@ export interface ComparisonTableSectionBlock {
   _type: 'comparisonTableSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   products?: Product[]
@@ -567,6 +597,7 @@ export interface TabsSectionBlock {
   _type: 'tabsSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   tabs?: TabItem[]
@@ -576,6 +607,7 @@ export interface UpsellSectionBlock {
   _type: 'upsellSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   subtitle_en?: string
@@ -649,6 +681,7 @@ export interface CategoryTilesSectionBlock {
   _type: 'categoryTilesSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   tiles?: CategoryTileItem[]
@@ -659,6 +692,7 @@ export interface BrowseCategoriesSectionBlock {
   _type: 'browseCategoriesSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   title_en?: string
   title_ar?: string
   categories?: Array<{
@@ -683,6 +717,7 @@ export interface QuizPromoSectionBlock {
   _type: 'quizPromoSection'
   _key: string
   isVisible?: boolean
+  theme?: SectionTheme
   eyebrow_en?: string
   eyebrow_ar?: string
   headline_en?: string
@@ -739,6 +774,12 @@ export type HomePageSection =
 export interface HomePage {
   _id: string
   sections: HomePageSection[]
+}
+
+export interface ProductsPageData {
+  _id: string
+  sectionsAbove?: HomePageSection[]
+  sectionsBelow?: HomePageSection[]
 }
 
 export interface NavPage {

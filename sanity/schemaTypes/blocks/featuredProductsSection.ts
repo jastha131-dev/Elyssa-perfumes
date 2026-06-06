@@ -31,6 +31,12 @@ export const featuredProductsSection = defineType({
       },
       initialValue: 'grid',
     }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: {

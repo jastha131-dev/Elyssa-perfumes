@@ -32,6 +32,12 @@ export const beforeAfterSection = defineType({
     defineField({ name: 'afterLabel_en', title: 'After Label (English)', type: 'string', initialValue: 'After', validation: (Rule) => Rule.max(30) }),
     defineField({ name: 'afterLabel_ar', title: 'تسمية بعد (Arabic)', type: 'string', validation: (Rule) => Rule.max(30) }),
     defineField({ name: 'initialPosition', title: 'Initial Slider Position (%)', type: 'number', initialValue: 50, validation: (Rule) => Rule.min(10).max(90) }),
+    defineField({
+      name: 'theme',
+      title: 'Section Styling',
+      type: 'sectionTheme',
+      description: 'Override background, badge color, corner radius and padding for this section.',
+    }),
   ],
   preview: {
     select: { title: 'title_en', isVisible: 'isVisible', image: 'beforeImage' },

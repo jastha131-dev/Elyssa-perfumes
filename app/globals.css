@@ -88,12 +88,28 @@ body {
   display: none;
 }
 
+/* Alias — used in FrequentlyBoughtTogether scroll row */
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+
 /* Gradient text */
 .text-gold-gradient {
-  background: linear-gradient(135deg, #E9631A, #C25015, #9B3E10);
+  background: linear-gradient(135deg, var(--camel, #E9631A), var(--camel-dark, #C25015), #9B3E10);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+/* Collection grid — columns driven by --collection-cols CSS var */
+@media (min-width: 1024px) {
+  .collection-grid {
+    grid-template-columns: repeat(var(--collection-cols, 4), minmax(0, 1fr)) !important;
+  }
 }
 
 /* Backdrop blur support fallback */

@@ -89,7 +89,7 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
   const display = items.slice(0, 3)
 
   return (
-    <section className="relative overflow-hidden bg-stone-50 py-24 md:py-32">
+    <section className="relative overflow-hidden py-24 md:py-32" style={{ backgroundColor: 'var(--section-bg, #fafaf9)' }}>
       {/* Subtle dot texture */}
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.025]"

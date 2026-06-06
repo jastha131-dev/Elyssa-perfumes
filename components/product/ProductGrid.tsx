@@ -29,7 +29,7 @@ export function ProductGrid({ products, loading = false }: ProductGridProps) {
       <div
         aria-busy="true"
         aria-label="Loading fragrances"
-        className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10"
+        className="grid grid-cols-1 sm:grid-cols-2 collection-grid gap-x-5 gap-y-10"
       >
         {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
           <ProductCardSkeleton key={i} />
@@ -68,7 +68,7 @@ export function ProductGrid({ products, loading = false }: ProductGridProps) {
       variants={containerVariants}
       initial="hidden"
       animate="visible"
-      className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-10"
+      className="grid grid-cols-1 sm:grid-cols-2 collection-grid gap-x-5 gap-y-10"
     >
       {products.map((product, index) => (
         <ProductCard
