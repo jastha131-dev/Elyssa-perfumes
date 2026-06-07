@@ -6,7 +6,11 @@ import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCurrencyStore } from '@/lib/store/currency-store'
 
-export default function CurrencySwitcher() {
+interface CurrencySwitcherProps {
+  align?: 'left' | 'right'
+}
+
+export default function CurrencySwitcher({ align = 'right' }: CurrencySwitcherProps) {
   const { selected, currencies, setSelected } = useCurrencyStore()
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
@@ -45,7 +49,12 @@ export default function CurrencySwitcher() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 6, scale: 0.97 }}
             transition={{ duration: 0.14 }}
-            className="absolute right-0 rtl:right-auto rtl:left-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-stone-100 bg-white shadow-xl"
+            className={cn(
+              'absolute top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-stone-100 bg-white shadow-xl',
+              align === 'left'
+                ? 'left-0 rtl:left-auto rtl:right-0'
+                : 'right-0 rtl:right-auto rtl:left-0'
+            )}
           >
             {currencies.map((c) => (
               <button

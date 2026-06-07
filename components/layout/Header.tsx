@@ -77,6 +77,8 @@ export default function Header({ categories, collections = [], navPages = [], na
 
   useEffect(() => {
     setMobileOpen(false)
+    setCollectionsHovered(false)
+    if (dropdownTimerRef.current) clearTimeout(dropdownTimerRef.current)
   }, [pathname])
 
   useEffect(() => {
@@ -199,7 +201,7 @@ export default function Header({ categories, collections = [], navPages = [], na
             <IconButton href={`/${locale}/account`} label="My Account">
               <User className="h-5 w-5" />
             </IconButton>
-            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount}>
+            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount} badgeSide="left">
               <Heart className="h-5 w-5" />
             </IconButton>
             <IconButton onClick={() => openCart()} label={`Open cart (${cartCount} items)`} badge={cartCount}>
@@ -569,7 +571,7 @@ export default function Header({ categories, collections = [], navPages = [], na
             </IconButton>
           </div>
           <div style={{ order: orderOf('wishlist') }}>
-            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount}>
+            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount} badgeSide="left">
               <Heart className="h-5 w-5" />
             </IconButton>
           </div>
@@ -619,6 +621,19 @@ export default function Header({ categories, collections = [], navPages = [], na
             </div>
             {/* Camel gradient accent */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
+
+            {/* Search — top of drawer */}
+            <div className="px-4 pt-4 pb-2 sm:px-6">
+              <button
+                type="button"
+                onClick={() => { setMobileOpen(false); openSearch() }}
+                className="flex w-full items-center gap-3 rounded-full border border-stone-200 bg-stone-50 px-4 py-2.5 text-sm text-charcoal-500 hover:border-camel-400 hover:bg-camel-50 hover:text-camel-600 transition-all duration-200"
+              >
+                <Search className="h-4 w-4 flex-shrink-0" />
+                <span className="font-body tracking-wide">{t('search')}</span>
+              </button>
+            </div>
+
             <nav
               className="px-4 pb-8 pt-2 sm:px-6"
               aria-label="Mobile navigation"
@@ -862,16 +877,6 @@ export default function Header({ categories, collections = [], navPages = [], na
                   )
                 })}
 
-                {/* Search — lives inside the menu on mobile/tablet */}
-                <button
-                  type="button"
-                  onClick={() => { setMobileOpen(false); openSearch() }}
-                  className="flex w-full items-center gap-2 text-sm text-charcoal-600 hover:text-camel-500 transition-colors"
-                >
-                  <Search className="h-4 w-4" />
-                  {t('search')}
-                </button>
-
                 <Link
                   href={`/${locale}/wishlist`}
                   className="flex items-center gap-2 text-sm text-charcoal-600 hover:text-camel-500 transition-colors"
@@ -887,7 +892,7 @@ export default function Header({ categories, collections = [], navPages = [], na
 
                 <div className="pt-2 flex items-center gap-3">
                   <LanguageSwitcher />
-                  <CurrencySwitcher />
+                  <CurrencySwitcher align="left" />
                 </div>
               </motion.div>
             </nav>
@@ -906,9 +911,10 @@ interface IconButtonProps {
   badge?: number
   onClick?: () => void
   href?: string
+  badgeSide?: 'left' | 'right'
 }
 
-function IconButton({ children, label, badge, onClick, href }: IconButtonProps) {
+function IconButton({ children, label, badge, onClick, href, badgeSide = 'right' }: IconButtonProps) {
   const baseClass = cn(
     'relative rounded-full p-2 transition-colors duration-200',
     'text-charcoal-600 hover:bg-stone-100 hover:text-charcoal-900'
@@ -920,7 +926,10 @@ function IconButton({ children, label, badge, onClick, href }: IconButtonProps) 
         key={badge}
         initial={{ scale: 0.6, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-camel-500 text-[10px] font-semibold text-white"
+        className={cn(
+          'absolute -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-camel-500 text-[10px] font-semibold text-white',
+          badgeSide === 'left' ? '-left-0.5' : '-right-0.5'
+        )}
       >
         {badge > 99 ? '99+' : badge}
       </motion.span>

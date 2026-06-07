@@ -764,7 +764,7 @@ export function ProductDetailClient({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-white pt-20"
+      className="min-h-screen bg-white pt-16"
     >
       {/* ── Top promo strip (JUST LANDED) ───────────────────────────────── */}
       {promoBanner?.isEnabled && (
@@ -801,11 +801,11 @@ export function ProductDetailClient({
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
 
         {/* Breadcrumb bar */}
-        <div className="py-5 border-b border-charcoal-100">
+        <div className="py-3 border-b border-charcoal-100">
           <Breadcrumb product={product} />
         </div>
 
-        <div className="lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 xl:gap-24 py-10">
+        <div className="lg:grid lg:grid-cols-[1.1fr_0.9fr] lg:gap-16 xl:gap-24 pt-6 pb-10">
 
           {/* ── Left — Image Gallery ──────────────────────────────────────── */}
           <div className="lg:sticky lg:top-24 lg:self-start">
@@ -856,11 +856,6 @@ export function ProductDetailClient({
               {product.new && (
                 <span className="ml-auto bg-gold-500 px-2.5 py-0.5 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-white">
                   New
-                </span>
-              )}
-              {product.bestSeller && !product.new && (
-                <span className="ml-auto bg-charcoal-900 px-2.5 py-0.5 font-body text-[9px] font-semibold uppercase tracking-[0.2em] text-gold-400">
-                  Best Seller
                 </span>
               )}
             </div>
@@ -938,16 +933,13 @@ export function ProductDetailClient({
                         type="button"
                         onClick={() => setSelectedVolume(vol)}
                         className={cn(
-                          'flex flex-col items-center px-5 py-3 font-body transition-all duration-200 border',
+                          'flex items-center justify-center px-5 py-3 font-body transition-all duration-200 border',
                           isSelected
                             ? 'bg-charcoal-900 border-charcoal-900 text-white'
                             : 'bg-white border-charcoal-200 text-charcoal-700 hover:border-charcoal-500'
                         )}
                       >
                         <span className="text-sm font-medium">{vol.ml}ml</span>
-                        <span className={cn('text-[11px] mt-0.5', isSelected ? 'text-charcoal-400' : 'text-charcoal-400')}>
-                          {formatPrice(vol.price)}
-                        </span>
                       </button>
                     )
                   })}
