@@ -12,7 +12,7 @@ import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
-import type { Category, NavPage, NavItem, MenuPromo } from '@/lib/types'
+import type { Category, NavPage, NavItem, MenuPromo, SiteLogo, Collection } from '@/lib/types'
 import LanguageSwitcher from './LanguageSwitcher'
 import CurrencySwitcher from './CurrencySwitcher'
 
@@ -34,12 +34,14 @@ const FALLBACK_NAV_ITEMS: NavItem[] = [
 
 interface HeaderProps {
   categories: Category[]
+  collections?: Collection[]
   navPages?: NavPage[]
   navItems?: NavItem[]
   menuPromo?: MenuPromo | null
+  siteLogo?: SiteLogo | null
 }
 
-export default function Header({ categories, navPages = [], navItems = [], menuPromo = null }: HeaderProps) {
+export default function Header({ categories, collections = [], navPages = [], navItems = [], menuPromo = null, siteLogo = null }: HeaderProps) {
   const pathname = usePathname()
   const t = useTranslations('nav')
   const locale = useLocale()
@@ -126,11 +128,38 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
   const cartCount = mounted ? cartTotal() : 0
   const wishlistCount = mounted ? wishlistTotal() : 0
 
+  // ── Desktop header item order (admin-controlled via Site Settings) ──
+  const DEFAULT_HEADER_ORDER = ['logo', 'spacer', 'nav', 'spacer', 'language', 'currency', 'account', 'search', 'wishlist', 'cart']
+  const headerOrder = siteLogo?.desktopHeaderOrder && siteLogo.desktopHeaderOrder.length > 0
+    ? siteLogo.desktopHeaderOrder
+    : DEFAULT_HEADER_ORDER
+  const orderOf = (token: string) => {
+    const i = headerOrder.indexOf(token)
+    return i < 0 ? 99 : i
+  }
+
+  const logoEl = (
+    <Link href={`/${locale}`} className="group flex items-center leading-none" aria-label="Home">
+      {siteLogo?.logoUrl ? (
+        <Image src={siteLogo.logoUrl} alt={siteLogo.logoAlt || 'Logo'} width={130} height={32} className="h-6 w-auto object-contain" priority />
+      ) : (
+        <span className="flex flex-col">
+          <span className="font-display text-base font-bold tracking-[0.18em] uppercase leading-none text-charcoal-900">
+            {(isAr ? siteLogo?.logoText_ar || siteLogo?.logoText_en : siteLogo?.logoText_en) || 'LUXE'}
+          </span>
+          <span className="font-display text-[9px] font-medium tracking-[0.35em] uppercase text-camel-500">
+            {(isAr ? siteLogo?.logoSubtext_ar || siteLogo?.logoSubtext_en : siteLogo?.logoSubtext_en) || 'PARFUM'}
+          </span>
+        </span>
+      )}
+    </Link>
+  )
+
   return (
     <>
       <header ref={headerRef} className="fixed left-0 right-0 top-0 z-40 bg-white shadow-sm border-b border-stone-200">
         {/* Announcement bar */}
-        <div className="bg-camel-500 text-center py-2.5">
+        <div className="bg-camel-500 text-center py-1">
           <p className="font-body text-[11px] text-white tracking-[0.2em]">
             {t('announcementText')}
             <span className="mx-3 text-white/50">·</span>
@@ -140,23 +169,52 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
           </p>
         </div>
 
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
-          {/* Logo */}
-          <Link
-            href={`/${locale}`}
-            className="group flex flex-col leading-none"
-            aria-label="Luxe Parfum — Home"
-          >
-            <span className="font-display text-xl font-bold tracking-[0.18em] uppercase text-charcoal-900">
-              LUXE
-            </span>
-            <span className="font-display text-[10px] font-medium tracking-[0.35em] uppercase text-camel-500">
-              PARFUM
-            </span>
-          </Link>
+        {/* ── Mobile / tablet bar ── */}
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:px-6 lg:hidden">
+          <div className="flex items-center gap-2">
+            <motion.button
+              ref={hamburgerRef}
+              onClick={() => setMobileOpen((v) => !v)}
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
+              className="-ml-1 rounded-full p-2 text-charcoal-700 transition-colors duration-200 hover:bg-stone-100 rtl:-ml-0 rtl:-mr-1"
+              whileTap={{ scale: 0.9 }}
+            >
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={mobileOpen ? 'close' : 'open'}
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                  className="flex"
+                >
+                  {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+                </motion.span>
+              </AnimatePresence>
+            </motion.button>
+            {logoEl}
+          </div>
+          <div className="flex items-center gap-1">
+            <IconButton href={`/${locale}/account`} label="My Account">
+              <User className="h-5 w-5" />
+            </IconButton>
+            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount}>
+              <Heart className="h-5 w-5" />
+            </IconButton>
+            <IconButton onClick={() => openCart()} label={`Open cart (${cartCount} items)`} badge={cartCount}>
+              <ShoppingBag className="h-5 w-5" />
+            </IconButton>
+          </div>
+        </div>
+
+        {/* ── Desktop bar (admin-ordered, left → right) ── */}
+        <div className="mx-auto hidden max-w-7xl items-center gap-x-3 px-4 py-1 sm:px-6 lg:flex lg:px-8">
+          {headerOrder.map((tok, i) => (tok === 'spacer' ? <div key={`sp-${i}`} className="flex-1" style={{ order: i }} /> : null))}
+          <div style={{ order: orderOf('logo') }}>{logoEl}</div>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-8 lg:flex" aria-label="Main navigation">
+          <nav className="flex items-center gap-8" style={{ order: orderOf('nav') }} aria-label="Main navigation">
             {/* Collections with dropdown */}
             <div
               className="relative"
@@ -189,18 +247,19 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 8 }}
                     transition={{ duration: 0.18, ease: 'easeOut' }}
-                    className="absolute left-1/2 top-full -translate-x-1/2 pt-4"
+                    className="fixed left-0 right-0 flex justify-center"
+                    style={{ top: headerHeight }}
                     onMouseEnter={handleCollectionsEnter}
                     onMouseLeave={handleCollectionsLeave}
                   >
-                    {/* 3-col luxury mega-menu */}
-                    <div className="w-[700px] overflow-hidden border border-stone-200 bg-white shadow-2xl shadow-black/10">
+                    {/* 4-col luxury mega-menu */}
+                    <div className="w-[1080px] overflow-hidden rounded-b-xl border border-stone-200 bg-white shadow-2xl shadow-black/15">
                       <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
 
-                      <div className="grid grid-cols-[220px_1fr_200px]">
+                      <div className="grid min-h-[460px] grid-cols-[250px_1fr_210px_280px]">
 
                         {/* ── Col 1: Shop All + Categories ── */}
-                        <div className="border-r border-stone-100 px-5 py-6">
+                        <div className="flex flex-col justify-center border-r border-stone-100 px-5 py-8">
                           {/* Shop All */}
                           <Link
                             href={`/${locale}/products`}
@@ -279,7 +338,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                         </div>
 
                         {/* ── Col 2: Discover + Fragrance Families ── */}
-                        <div className="border-r border-stone-100 px-5 py-6">
+                        <div className="flex flex-col justify-center border-r border-stone-100 px-5 py-8">
                           <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                             {t('discover')}
                           </p>
@@ -297,7 +356,7 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                               <li key={href}>
                                 <Link
                                   href={href}
-                                  className="group/item flex items-center gap-3 py-2.5 transition-colors"
+                                  className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2.5 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
                                 >
                                   <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-stone-200 bg-stone-50 text-camel-500 transition-all duration-200 group-hover/item:border-camel-500/40 group-hover/item:bg-camel-50 group-hover/item:text-camel-600">
                                     <Icon className="h-3.5 w-3.5" />
@@ -321,33 +380,65 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                             ))}
                           </ul>
 
-                          <div className="mb-4 h-px bg-stone-100" />
+                        </div>
 
+                        {/* ── Col 3: Fragrance Family (own column) + Featured Collections ── */}
+                        <div className="flex flex-col justify-center border-r border-stone-100 px-5 py-8">
                           <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
                             {t('fragranceFamily')}
                           </p>
-                          <div className="flex flex-wrap gap-1.5">
+                          <ul className="space-y-0.5">
                             {([
-                              { key: 'woody',    label: t('familyWoody') },
-                              { key: 'floral',   label: t('familyFloral') },
-                              { key: 'citrus',   label: t('familyCitrus') },
-                              { key: 'oriental', label: t('familyOriental') },
-                              { key: 'fresh',    label: t('familyFresh') },
-                              { key: 'aquatic',  label: t('familyAquatic') },
-                              { key: 'gourmand', label: t('familyGourmand') },
-                            ] as const).map(({ key, label }) => (
-                              <Link
-                                key={key}
-                                href={`/${locale}/products?family=${key}`}
-                                className="border border-azure-300 px-2.5 py-1 text-[10px] font-light tracking-[0.15em] text-charcoal-500 transition-all duration-200 hover:border-camel-500 hover:bg-camel-50 hover:text-camel-600"
-                              >
-                                {label}
-                              </Link>
+                              { key: 'woody',    label: t('familyWoody'),    dot: '#9C6B3F' },
+                              { key: 'floral',   label: t('familyFloral'),   dot: '#D98AA8' },
+                              { key: 'citrus',   label: t('familyCitrus'),   dot: '#E3B23C' },
+                              { key: 'oriental', label: t('familyOriental'), dot: '#B5562E' },
+                              { key: 'fresh',    label: t('familyFresh'),    dot: '#6FA8A0' },
+                              { key: 'aquatic',  label: t('familyAquatic'),  dot: '#5B8FB5' },
+                              { key: 'gourmand', label: t('familyGourmand'), dot: '#C08552' },
+                            ] as const).map(({ key, label, dot }) => (
+                              <li key={key}>
+                                <Link
+                                  href={`/${locale}/products?family=${key}`}
+                                  className="group/fam flex items-center gap-2.5 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-1.5 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
+                                >
+                                  <span className="h-2 w-2 flex-shrink-0 rounded-full ring-1 ring-black/5" style={{ backgroundColor: dot }} />
+                                  <span className="flex-1 text-[12px] font-light tracking-wide text-charcoal-600 transition-colors group-hover/fam:text-charcoal-900">
+                                    {label}
+                                  </span>
+                                  <ArrowRight className="h-2.5 w-2.5 flex-shrink-0 text-charcoal-300 transition-all duration-200 group-hover/fam:translate-x-0.5 group-hover/fam:text-camel-500" />
+                                </Link>
+                              </li>
                             ))}
-                          </div>
+                          </ul>
+
+                          {collections && collections.length > 0 && (
+                            <>
+                              <div className="my-4 h-px bg-stone-100" />
+                              <p className="mb-3 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
+                                {t('collections')}
+                              </p>
+                              <ul className="space-y-0.5">
+                                {collections.slice(0, 5).map((col) => {
+                                  const cName = locale === 'ar' ? (col.title_ar || col.title_en) : col.title_en
+                                  return (
+                                    <li key={col._id}>
+                                      <Link
+                                        href={`/${locale}/collections/${col.slug}`}
+                                        className="group/col flex items-center justify-between border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-1.5 pl-1 rtl:pl-0 rtl:pr-1 text-[12px] font-light tracking-wide text-charcoal-600 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2 hover:text-camel-600"
+                                      >
+                                        <span>{cName}</span>
+                                        <ArrowRight className="h-2.5 w-2.5 flex-shrink-0 text-charcoal-300 transition-all duration-200 group-hover/col:translate-x-0.5 group-hover/col:text-camel-500" />
+                                      </Link>
+                                    </li>
+                                  )
+                                })}
+                              </ul>
+                            </>
+                          )}
                         </div>
 
-                        {/* ── Col 3: Editorial panel ── */}
+                        {/* ── Col 4: Editorial panel ── */}
                         <div className="relative overflow-hidden">
                           <Image
                             src={promo.image || '/images/categories/I1.webp'}
@@ -460,67 +551,37 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
             })}
           </nav>
 
-          {/* Right icons */}
-          <div className="flex items-center gap-1">
-            <div className="hidden lg:flex items-center gap-2">
-              <LanguageSwitcher />
-              <CurrencySwitcher />
-            </div>
-
-            <IconButton
-              href={`/${locale}/account`}
-              label="My Account"
-            >
+          {/* Right-side items — each an individually orderable flex child */}
+          <div style={{ order: orderOf('language') }} className="flex items-center">
+            <LanguageSwitcher />
+          </div>
+          <div style={{ order: orderOf('currency') }} className="flex items-center">
+            <CurrencySwitcher />
+          </div>
+          <div style={{ order: orderOf('account') }}>
+            <IconButton href={`/${locale}/account`} label="My Account">
               <User className="h-5 w-5" />
             </IconButton>
-
+          </div>
+          <div style={{ order: orderOf('search') }}>
             <IconButton onClick={openSearch} label="Open search">
               <Search className="h-5 w-5" />
             </IconButton>
-
-            <IconButton
-              href={`/${locale}/wishlist`}
-              label={`Wishlist (${wishlistCount} items)`}
-              badge={wishlistCount}
-            >
+          </div>
+          <div style={{ order: orderOf('wishlist') }}>
+            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount}>
               <Heart className="h-5 w-5" />
             </IconButton>
-
-            <IconButton
-              onClick={() => openCart()}
-              label={`Open cart (${cartCount} items)`}
-              badge={cartCount}
-            >
+          </div>
+          <div style={{ order: orderOf('cart') }}>
+            <IconButton onClick={() => openCart()} label={`Open cart (${cartCount} items)`} badge={cartCount}>
               <ShoppingBag className="h-5 w-5" />
             </IconButton>
-
-            {/* Mobile hamburger */}
-            <motion.button
-              ref={hamburgerRef}
-              onClick={() => setMobileOpen((v) => !v)}
-              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-              aria-expanded={mobileOpen}
-              className="ml-1 rtl:ml-0 rtl:mr-1 rounded-full p-2 transition-colors duration-200 lg:hidden text-charcoal-700 hover:bg-stone-100"
-              whileTap={{ scale: 0.9 }}
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={mobileOpen ? 'close' : 'open'}
-                  initial={{ rotate: -90, opacity: 0 }}
-                  animate={{ rotate: 0, opacity: 1 }}
-                  exit={{ rotate: 90, opacity: 0 }}
-                  transition={{ duration: 0.15 }}
-                  className="flex"
-                >
-                  {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                </motion.span>
-              </AnimatePresence>
-            </motion.button>
           </div>
         </div>
       </header>
 
-      {/* Mobile menu overlay */}
+      {/* Menu overlay backdrop */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
@@ -529,8 +590,8 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-30 bg-charcoal-700/15 backdrop-blur-sm lg:hidden"
-            style={{ top: headerHeight }}
+            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 z-40 bg-charcoal-900/30 backdrop-blur-sm lg:hidden"
             aria-hidden="true"
           />
         )}
@@ -541,17 +602,25 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
           <motion.div
             ref={mobileMenuRef}
             key="mobile-menu"
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.25, ease: 'easeOut' }}
-            className="fixed left-0 right-0 z-40 bg-white shadow-2xl shadow-black/10 border-b border-stone-200 lg:hidden"
-            style={{ top: headerHeight }}
+            initial={{ x: isAr ? '100%' : '-100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: isAr ? '100%' : '-100%' }}
+            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed bottom-0 top-0 z-50 flex w-[86%] max-w-sm flex-col overflow-y-auto overscroll-contain bg-white shadow-2xl shadow-black/20 lg:hidden ltr:left-0 rtl:right-0"
           >
-            {/* Camel gradient top accent */}
+            {/* Drawer header: brand + close */}
+            <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-100 bg-white px-4 py-4">
+              <span className="font-display text-lg font-bold uppercase tracking-[0.18em] text-charcoal-900">
+                {(isAr ? siteLogo?.logoText_ar || siteLogo?.logoText_en : siteLogo?.logoText_en) || 'LUXE'}
+              </span>
+              <button type="button" onClick={() => setMobileOpen(false)} aria-label="Close menu" className="rounded-full p-1.5 text-charcoal-500 transition-colors hover:bg-stone-100">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            {/* Camel gradient accent */}
             <div className="h-px w-full bg-gradient-to-r from-transparent via-camel-500 to-transparent" />
             <nav
-              className="mx-auto max-w-7xl px-4 pb-8 pt-2 sm:px-6"
+              className="px-4 pb-8 pt-2 sm:px-6"
               aria-label="Mobile navigation"
               onClick={(e) => {
                 if ((e.target as HTMLElement).closest('a')) setMobileOpen(false)
@@ -792,6 +861,16 @@ export default function Header({ categories, navPages = [], navItems = [], menuP
                     </Link>
                   )
                 })}
+
+                {/* Search — lives inside the menu on mobile/tablet */}
+                <button
+                  type="button"
+                  onClick={() => { setMobileOpen(false); openSearch() }}
+                  className="flex w-full items-center gap-2 text-sm text-charcoal-600 hover:text-camel-500 transition-colors"
+                >
+                  <Search className="h-4 w-4" />
+                  {t('search')}
+                </button>
 
                 <Link
                   href={`/${locale}/wishlist`}

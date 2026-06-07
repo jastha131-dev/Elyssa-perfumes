@@ -114,6 +114,11 @@ export interface Product {
   stock: number
   featured: boolean
   bestSeller: boolean
+  badgeColor?: string
+  badgeText_en?: string
+  badgeText_ar?: string
+  hideThumbnails?: boolean
+  hideReviews?: boolean
   new: boolean
   tags: string[]
   seoTitle_en?: string
@@ -137,6 +142,8 @@ export interface Product {
   layeringProducts?: Product[]
   frequentlyBoughtTogether?: Product[]
   reviews?: ProductReview[]
+  reviewCount?: number
+  reviewSum?: number
 }
 
 export interface ProductVideo {
@@ -179,6 +186,16 @@ export interface SanityImageAsset {
 }
 
 // ─── Page Builder Types ───────────────────────────────────────────────────────
+
+export interface SiteLogo {
+  logoUrl?: string
+  logoAlt?: string
+  logoText_en?: string
+  logoText_ar?: string
+  logoSubtext_en?: string
+  logoSubtext_ar?: string
+  desktopHeaderOrder?: string[]
+}
 
 export interface MenuPromo {
   badge_en?: string; badge_ar?: string

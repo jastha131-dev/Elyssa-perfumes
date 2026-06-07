@@ -30,6 +30,8 @@ import { FragranceNotes } from '@/components/product/FragranceNotes'
 import { RelatedProducts } from '@/components/product/RelatedProducts'
 import { PromoBanner } from '@/components/product/PromoBanner'
 import type { PromoBannerData } from '@/components/product/PromoBanner'
+import ReviewsQa from '@/components/product/ReviewsQa'
+import type { ReviewItem, QuestionItem } from '@/components/product/ReviewsQa'
 import type { Product, VolumeOption, ProductReview } from '@/lib/types'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -38,6 +40,8 @@ export interface ProductDetailClientProps {
   product: Product
   relatedProducts: Product[]
   promoBanner?: PromoBannerData
+  reviewDocs?: ReviewItem[]
+  questions?: QuestionItem[]
 }
 
 // ─── PortableText components ──────────────────────────────────────────────────
@@ -661,10 +665,26 @@ export function ProductDetailClient({
   product,
   relatedProducts,
   promoBanner,
+  reviewDocs = [],
+  questions = [],
 }: ProductDetailClientProps) {
   const locale = useLocale()
   const isAr = locale === 'ar'
   const productName = isAr ? product.name_ar : product.name_en
+
+  // Merge manually-curated reviews (product.reviews) with user-submitted review docs
+  const mergedReviews: ReviewItem[] = [
+    ...reviewDocs,
+    ...(product.reviews ?? []).map((r) => ({
+      _id: r._key,
+      name: r.name,
+      location: r.location,
+      rating: r.rating,
+      body: isAr ? (r.review_ar || r.review_en) : r.review_en,
+      verified: r.verified,
+      createdAt: r.date,
+    })),
+  ]
   const categoryName = product.category
     ? (isAr ? product.category.name_ar : product.category.name_en)
     : undefined
@@ -746,6 +766,17 @@ export function ProductDetailClient({
       transition={{ duration: 0.5 }}
       className="min-h-screen bg-white pt-20"
     >
+      {/* ── Top promo strip (JUST LANDED) ───────────────────────────────── */}
+      {promoBanner?.isEnabled && (
+        <div className="bg-camel-400 px-4 py-2 text-center">
+          <p className="font-headline text-[11px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+            {isAr ? 'وصل حديثاً' : 'Just Landed'}
+            {' · '}
+            {(isAr ? promoBanner.headline_ar : promoBanner.headline_en) || (isAr ? 'هديتنا الأكثر تميّزاً' : 'Our Most Exclusive Gift')}
+          </p>
+        </div>
+      )}
+
       {/* ── Sticky Add-to-Cart Bar ───────────────────────────────────────── */}
       <AnimatePresence>
         {stickyVisible && (
@@ -779,7 +810,7 @@ export function ProductDetailClient({
           {/* ── Left — Image Gallery ──────────────────────────────────────── */}
           <div className="lg:sticky lg:top-24 lg:self-start">
             {safeImages.length > 0 ? (
-              <ImageGallery images={safeImages} />
+              <ImageGallery images={safeImages} hideThumbnails={product.hideThumbnails} />
             ) : (
               <div className="aspect-[3/4] w-full bg-gradient-to-br from-cream-100 to-cream-200 flex flex-col items-center justify-center gap-4">
                 <div className="h-px w-16 bg-gold-300/50" />
@@ -793,6 +824,16 @@ export function ProductDetailClient({
 
           {/* ── Right — Product Details ───────────────────────────────────── */}
           <div className="mt-10 lg:mt-0 flex flex-col">
+
+            {/* Top badge bar */}
+            {(product.new || product.bestSeller || product.badgeText_en) && (
+              <span className={cn(
+                'mb-3 self-start py-1.5 pl-3 pr-7 font-body text-[9px] font-bold uppercase tracking-[0.22em] text-white [clip-path:polygon(0_0,100%_0,calc(100%-9px)_50%,100%_100%,0_100%)]',
+                { gold: 'bg-camel-500', black: 'bg-charcoal-900', red: 'bg-red-500', green: 'bg-green-600', blue: 'bg-blue-600', pink: 'bg-pink-500' }[product.badgeColor || 'gold'] || 'bg-camel-500'
+              )}>
+                {(isAr ? product.badgeText_ar : product.badgeText_en) || (product.new ? (isAr ? 'جديد · إصدار محدود' : 'New & Limited Edition') : (isAr ? 'الأكثر مبيعاً' : 'Best Seller'))}
+              </span>
+            )}
 
             {/* Category + status row */}
             <div className="flex items-center gap-3 flex-wrap mb-4">
@@ -831,6 +872,21 @@ export function ProductDetailClient({
             <p className="mt-2 font-body text-xs tracking-[0.22em] uppercase text-charcoal-400">
               {product.concentration ?? 'Eau de Parfum'}
             </p>
+
+            {/* Rating + reviews count (real-time: manual + submitted) */}
+            {mergedReviews.length > 0 && (() => {
+              const avg = mergedReviews.reduce((s, r) => s + (r.rating || 0), 0) / mergedReviews.length
+              return (
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="flex gap-0.5">
+                    {[1, 2, 3, 4, 5].map((i) => (
+                      <Star key={i} className={cn('h-3.5 w-3.5', i <= Math.round(avg) ? 'fill-gold-500 text-gold-500' : 'fill-charcoal-200 text-charcoal-200')} />
+                    ))}
+                  </div>
+                  <span className="font-body text-xs text-charcoal-500">{mergedReviews.length} {isAr ? 'تقييم' : 'Reviews'}</span>
+                </div>
+              )
+            })()}
 
             {/* Gold accent divider */}
             <div className="mt-5 flex items-center gap-3">
@@ -902,10 +958,10 @@ export function ProductDetailClient({
             {/* Quantity + CTA — single inline row */}
             <div className="mt-6 flex items-stretch gap-2">
               {/* Stepper */}
-              <div className="inline-flex flex-shrink-0 items-center border border-charcoal-200">
-                <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={quantity <= 1} className="flex h-13 w-11 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Decrease quantity"><Minus className="h-3.5 w-3.5" /></button>
-                <span className="flex h-13 w-12 items-center justify-center border-x border-charcoal-200 font-body text-sm font-medium text-charcoal-900" aria-live="polite">{quantity}</span>
-                <button type="button" onClick={() => setQuantity((q) => Math.min(10, q + 1))} disabled={quantity >= 10} className="flex h-13 w-11 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Increase quantity"><Plus className="h-3.5 w-3.5" /></button>
+              <div className="inline-flex flex-shrink-0 items-center rounded-full border border-charcoal-200">
+                <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={quantity <= 1} className="flex h-11 w-9 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Decrease quantity"><Minus className="h-3.5 w-3.5" /></button>
+                <span className="flex h-11 w-10 items-center justify-center border-charcoal-200 font-body text-sm font-medium text-charcoal-900" aria-live="polite">{quantity}</span>
+                <button type="button" onClick={() => setQuantity((q) => Math.min(10, q + 1))} disabled={quantity >= 10} className="flex h-11 w-9 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Increase quantity"><Plus className="h-3.5 w-3.5" /></button>
               </div>
               {/* Add to bag */}
               <motion.button
@@ -915,13 +971,20 @@ export function ProductDetailClient({
                 whileTap={{ scale: 0.98 }}
                 className={cn(
                   'flex flex-1 items-center justify-center gap-2.5',
-                  'h-13 rounded py-4 px-6 font-body text-sm font-medium uppercase tracking-[0.18em]',
+                  'h-13 rounded-full py-4 px-6 font-body text-sm font-semibold uppercase tracking-[0.16em]',
                   'transition-all duration-300',
                   addedToCart ? 'bg-charcoal-700 text-white' : 'bg-camel-500 text-white hover:bg-camel-600'
                 )}
               >
-                <ShoppingBag className="h-4 w-4 flex-shrink-0" />
-                {addedToCart ? (isAr ? 'تمت الإضافة ✓' : 'Added to Bag ✓') : (isAr ? 'أضف إلى الحقيبة' : 'Add to Bag')}
+                {addedToCart ? (
+                  <>{isAr ? 'تمت الإضافة ✓' : 'Added ✓'}</>
+                ) : (
+                  <>
+                    <span>{formatPrice(displayPrice)}</span>
+                    <span className="opacity-50">|</span>
+                    <span>{isAr ? 'أضف إلى السلة' : 'Add to Cart'}</span>
+                  </>
+                )}
               </motion.button>
               {/* Wishlist */}
               <motion.button
@@ -939,8 +1002,20 @@ export function ProductDetailClient({
               </motion.button>
             </div>
 
+            {/* Secure checkout + payment methods */}
+            <div className="mt-3 flex flex-wrap items-center gap-2.5 border border-charcoal-100 bg-cream-50/50 px-4 py-2.5">
+              <span className="font-body text-[11px] text-charcoal-500">{isAr ? 'دفع آمن عند الإتمام' : 'Available at checkout'}</span>
+              <div className="ml-auto flex items-center gap-1.5">
+                <span className="flex h-6 items-center rounded-md bg-black px-2 font-body text-[10px] font-semibold text-white">Pay</span>
+                <span className="flex h-6 items-center rounded-md border border-charcoal-200 bg-white px-2 font-body text-[10px] font-semibold text-charcoal-800">G Pay</span>
+                <span className="flex h-6 items-center rounded-md bg-[#003087] px-2 font-body text-[10px] font-bold italic text-white">PayPal</span>
+                <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#00D632] font-body text-[13px] font-bold text-white">$</span>
+                <span className="flex h-5 w-5 items-center justify-center rounded-full border border-charcoal-300 font-body text-[9px] text-charcoal-400">i</span>
+              </div>
+            </div>
+
             {/* Trust strip */}
-            <div className="mt-6 grid grid-cols-2 gap-3">
+            <div className="mt-3 grid grid-cols-2 gap-3">
               {[
                 { icon: Truck, label: isAr ? 'شحن مجاني' : 'Free shipping', sub: isAr ? 'للطلبات فوق $150' : 'Orders over $150' },
                 { icon: RotateCcw, label: isAr ? 'إرجاع 30 يوم' : '30-day returns', sub: isAr ? 'بدون متاعب' : 'Hassle-free' },
@@ -1069,12 +1144,19 @@ export function ProductDetailClient({
             />
           )}
           <RelatedProducts products={relatedProducts} />
-          {product.reviews && product.reviews.length > 0 && (
-            <ReviewsSection reviews={product.reviews} />
-          )}
           <RecentlyViewed excludeId={product._id} />
         </div>
       </div>
+
+      {/* ── Reviews & Q&A module (dynamic, toggle via product "Hide Reviews") ── */}
+      {!product.hideReviews && (
+        <ReviewsQa
+          productId={product._id}
+          productName={productName}
+          initialReviews={mergedReviews}
+          initialQuestions={questions}
+        />
+      )}
 
       {/* Bottom padding on mobile to prevent content hidden behind sticky bar */}
       <div className="h-20 lg:hidden" aria-hidden="true" />

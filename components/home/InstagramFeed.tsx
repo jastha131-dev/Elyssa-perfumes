@@ -50,9 +50,14 @@ export default function InstagramFeed({ data }: Props) {
         >
           <div>
             {data?.handle && (
-              <p className="mb-1 flex items-center gap-1.5 font-body text-xs uppercase tracking-widest text-camel-500">
+              <a
+                href={`https://instagram.com/${data.handle.replace(/^@/, '')}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mb-1 inline-flex items-center gap-1.5 font-body text-xs uppercase tracking-widest text-camel-500 transition-colors hover:text-camel-600"
+              >
                 <Instagram size={12} /> {data.handle}
-              </p>
+              </a>
             )}
             {title && <h2 className="font-headline font-bold uppercase text-ink-900 text-3xl md:text-4xl">{title}</h2>}
           </div>

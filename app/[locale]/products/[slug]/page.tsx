@@ -6,6 +6,8 @@ import {
   getProductBySlug,
   getRelatedProducts,
   getPromoBanner,
+  getProductReviews,
+  getProductQuestions,
 } from '@/lib/sanity/fetch'
 import type { Product } from '@/lib/types'
 import { ProductDetailClient } from '@/app/products/[slug]/_client'
@@ -84,9 +86,11 @@ export default async function ProductDetailPage({
   const product = await getProduct(slug)
   if (!product) notFound()
 
-  const [related, promoBanner] = await Promise.all([
+  const [related, promoBanner, reviewDocs, questions] = await Promise.all([
     getRelatedProducts(product._id, product.category?.slug ?? '', 4),
     getPromoBanner(),
+    getProductReviews(product._id),
+    getProductQuestions(product._id),
   ])
 
   return (
@@ -102,7 +106,7 @@ export default async function ProductDetailPage({
         </div>
       }
     >
-      <ProductDetailClient product={product} relatedProducts={related} promoBanner={promoBanner ?? undefined} />
+      <ProductDetailClient product={product} relatedProducts={related} promoBanner={promoBanner ?? undefined} reviewDocs={reviewDocs} questions={questions} />
       {product.sections && product.sections.length > 0 && (
         <PageBuilder sections={product.sections} />
       )}

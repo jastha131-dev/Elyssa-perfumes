@@ -23,6 +23,7 @@ import {
   getNavConfigQuery,
   getAnnouncementBarQuery,
   getMenuPromoQuery,
+  getSiteLogoQuery,
   getCollectionBySlugQuery,
   getSmartCollectionProductsQuery,
   getActivePromotionsQuery,
@@ -36,7 +37,7 @@ import {
   getGiftCardPageQuery,
   getProductsPageQuery,
 } from './queries'
-import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, MenuPromo, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData, ProductsPageData } from '../types'
+import type { Product, Category, Collection, CollectionDetail, HomePage, Testimonial, NavPage, Page, FaqItem, ContactPageData, NavItem, AnnouncementBar, MenuPromo, SiteLogo, Promotion, AboutPageData, ArticleSummary, ArticleDetail, Author, AuthorWithArticles, GiftCardPageData, ProductsPageData } from '../types'
 import type { SiteTypographySettings } from '@/lib/typography'
 
 // ─── Products ─────────────────────────────────────────────────────────────────
@@ -52,6 +53,28 @@ export async function getProductBySlug(slug: string): Promise<Product | null> {
     getProductBySlugQuery,
     { slug },
     { next: { revalidate: 3600 } }
+  )
+}
+
+export async function getProductReviews(productId: string) {
+  if (!isSanityConfigured) return []
+  return client.fetch(
+    `*[_type == "productReview" && product._ref == $productId && approved == true] | order(createdAt desc){
+      _id, name, location, rating, title, body, ratingScent, ratingLongevity, ratingValue, verified, createdAt
+    }`,
+    { productId },
+    { next: { revalidate: 30 } }
+  )
+}
+
+export async function getProductQuestions(productId: string) {
+  if (!isSanityConfigured) return []
+  return client.fetch(
+    `*[_type == "productQuestion" && product._ref == $productId && approved == true] | order(createdAt desc){
+      _id, name, question, answer, createdAt
+    }`,
+    { productId },
+    { next: { revalidate: 30 } }
   )
 }
 
@@ -205,6 +228,11 @@ export async function getAnnouncementBar(): Promise<AnnouncementBar | null> {
 export async function getMenuPromo(): Promise<MenuPromo | null> {
   if (!isSanityConfigured) return null
   return client.fetch<MenuPromo | null>(getMenuPromoQuery, {}, { next: { revalidate: 300 } })
+}
+
+export async function getSiteLogo(): Promise<SiteLogo | null> {
+  if (!isSanityConfigured) return null
+  return client.fetch<SiteLogo | null>(getSiteLogoQuery, {}, { next: { revalidate: 300 } })
 }
 
 export async function getCollectionBySlug(slug: string): Promise<CollectionDetail | null> {

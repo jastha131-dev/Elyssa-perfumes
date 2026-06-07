@@ -14,9 +14,10 @@ interface GalleryImage {
 
 interface ImageGalleryProps {
   images: GalleryImage[]
+  hideThumbnails?: boolean
 }
 
-export function ImageGallery({ images }: ImageGalleryProps) {
+export function ImageGallery({ images, hideThumbnails }: ImageGalleryProps) {
   const t = useTranslations('product')
   const [activeIndex, setActiveIndex] = useState(0)
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -220,7 +221,7 @@ export function ImageGallery({ images }: ImageGalleryProps) {
         </div>
 
         {/* Thumbnail strip — horizontal on mobile, vertical on right on desktop */}
-        {safeImages.length > 1 && (
+        {safeImages.length > 1 && !hideThumbnails && (
           <div
             className="flex gap-2 overflow-x-auto pb-1 scrollbar-none lg:flex-col lg:overflow-y-auto lg:overflow-x-visible lg:pb-0 lg:w-[68px] lg:flex-shrink-0 lg:max-h-[480px]"
             role="tablist"

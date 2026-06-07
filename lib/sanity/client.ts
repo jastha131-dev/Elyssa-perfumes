@@ -17,3 +17,10 @@ export const draftModeClient = createClient({
   token: process.env.SANITY_API_READ_TOKEN,
   perspective: 'previewDrafts',
 })
+
+// Server-only client with write access (review & Q&A submissions)
+export const writeClient = createClient({
+  ...config,
+  useCdn: false,
+  token: process.env.SANITY_API_TOKEN,
+})

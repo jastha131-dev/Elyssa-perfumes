@@ -19,6 +19,8 @@ export interface ProductsPageClientProps {
   products: Product[]
   categories: Category[]
   collections: Collection[]
+  /** When the CMS Products Page renders its own category strip, hide the built-in one. */
+  hideCategoryStrip?: boolean
 }
 
 export interface FilterState {
@@ -276,15 +278,38 @@ function FilterPill({
 
       <AnimatePresence>
         {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 8, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.96 }}
-            transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-            className="absolute left-0 top-full z-50 mt-2.5 min-w-[220px] overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-2xl shadow-black/15"
-          >
-            {children}
-          </motion.div>
+          <>
+            {/* Mobile backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setOpen(false)}
+              className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1px] sm:hidden"
+            />
+            {/* Panel: bottom-sheet on mobile, dropdown on desktop */}
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.96 }}
+              transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[72vh] overflow-y-auto overscroll-contain rounded-t-3xl border-t border-charcoal-100 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl shadow-black/25 sm:absolute sm:inset-x-auto sm:bottom-auto sm:left-0 sm:top-full sm:mt-2.5 sm:max-h-none sm:min-w-[220px] sm:overflow-hidden sm:rounded-2xl sm:border sm:pb-0 sm:shadow-black/15"
+            >
+              {/* Mobile grabber + header */}
+              <div className="sm:hidden">
+                <div className="flex justify-center pt-2.5">
+                  <span className="h-1 w-10 rounded-full bg-charcoal-200" />
+                </div>
+                <div className="flex items-center justify-between px-4 pb-2 pt-2.5">
+                  <span className="text-[13px] font-semibold text-charcoal-900">{label}</span>
+                  <button type="button" onClick={() => setOpen(false)} aria-label="Close" className="rounded-full p-1 text-charcoal-400 hover:bg-charcoal-50">
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
+              {children}
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
@@ -371,19 +396,38 @@ function FilterBar({
         </button>
         <AnimatePresence>
           {sortOpen && (
+            <>
+              <motion.div
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+                onClick={() => setSortOpen(false)}
+                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1px] xl:hidden"
+              />
             <motion.div
-              initial={{ opacity: 0, y: 8, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.96 }}
-              transition={{ duration: 0.15, ease: [0.23, 1, 0.32, 1] }}
-              className="absolute left-0 top-full z-50 mt-2.5 w-52 overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-2xl shadow-black/15"
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'spring', damping: 32, stiffness: 320 }}
+              className="fixed inset-x-0 bottom-0 z-50 max-h-[82vh] overflow-y-auto overscroll-contain rounded-t-3xl border-t border-charcoal-100 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl shadow-black/25 xl:absolute xl:inset-x-auto xl:bottom-auto xl:left-0 xl:top-full xl:mt-2.5 xl:max-h-none xl:w-52 xl:overflow-hidden xl:rounded-2xl xl:border xl:pb-0 xl:shadow-black/15"
             >
+              <div className="flex justify-center pt-2.5 xl:hidden">
+                <span className="h-1 w-10 rounded-full bg-charcoal-200" />
+              </div>
+
+              {/* Mobile/tablet header */}
+              <div className="flex items-center justify-between px-4 pb-1 pt-3 xl:hidden">
+                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-charcoal-900">Sort &amp; Filter</p>
+                <button type="button" onClick={() => setSortOpen(false)} aria-label="Close" className="rounded-full p-1 text-charcoal-400 hover:bg-charcoal-50">
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              {/* Sort (always) */}
               <div className="p-1.5">
                 <p className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Sort by</p>
                 {SORT_OPTIONS.map(opt => (
                   <button
                     key={opt.value}
-                    onClick={() => { onChange({ ...filters, sortBy: opt.value }); setSortOpen(false) }}
+                    onClick={() => { onChange({ ...filters, sortBy: opt.value }) }}
                     className={cn(
                       'flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[11.5px] transition-colors',
                       filters.sortBy === opt.value
@@ -396,7 +440,99 @@ function FilterBar({
                   </button>
                 ))}
               </div>
+
+              {/* ── All filters — mobile/tablet only ── */}
+              <div className="space-y-5 border-t border-charcoal-100 px-4 py-4 xl:hidden">
+                {/* Scent */}
+                {fragranceFamilies.length > 0 && (
+                  <div>
+                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Scent</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {fragranceFamilies.map(f => {
+                        const active = filters.fragranceFamily?.map(normalise).includes(normalise(f))
+                        return (
+                          <button key={f} type="button" onClick={() => toggle('fragranceFamily', f)}
+                            className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
+                              active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
+                            {f}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Inspired by */}
+                {brandTags.length > 0 && (
+                  <div>
+                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Inspired by</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {brandTags.map(brand => {
+                        const active = filters.inspiredBy?.map(normalise).includes(normalise(brand))
+                        return (
+                          <button key={brand} type="button" onClick={() => toggle('inspiredBy', brand)}
+                            className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
+                              active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
+                            {brand}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Intensity */}
+                {intensities.length > 0 && (
+                  <div>
+                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Intensity</p>
+                    <div className="flex flex-wrap gap-1.5">
+                      {intensities.map(level => {
+                        const active = filters.intensity?.map(normalise).includes(normalise(level))
+                        return (
+                          <button key={level} type="button" onClick={() => toggle('intensity', level)}
+                            className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
+                              active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
+                            {level}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Price */}
+                <div>
+                  <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Price</p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {[{ label: 'Any Price', range: [0, 10000] as [number, number] }, ...PRICE_PRESETS].map(p => {
+                      const active = filters.priceRange[0] === p.range[0] && filters.priceRange[1] === p.range[1]
+                      return (
+                        <button key={p.label} type="button" onClick={() => onChange({ ...filters, priceRange: p.range })}
+                          className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
+                            active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
+                          {p.label}
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2 pt-1">
+                  {totalActive > 0 && (
+                    <button type="button" onClick={onClearAll}
+                      className="flex-1 rounded-full border border-charcoal-300 py-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-charcoal-700">
+                      Clear all
+                    </button>
+                  )}
+                  <button type="button" onClick={() => setSortOpen(false)}
+                    className="flex-1 rounded-full bg-charcoal-950 py-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-white">
+                    Show results
+                  </button>
+                </div>
+              </div>
             </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
@@ -410,8 +546,8 @@ function FilterBar({
         <span className="truncate">Search scents, brands…</span>
       </button>
 
-      {/* Pills */}
-      <div className="flex flex-wrap items-center gap-1.5 sm:ml-auto">
+      {/* Pills — desktop only (mobile/tablet use the Sort & Filter bottom sheet) */}
+      <div className="hidden flex-wrap items-center gap-1.5 xl:flex sm:ml-auto">
 
         {/* Scent family — dynamic from products */}
         {fragranceFamilies.length > 0 && (
@@ -655,7 +791,7 @@ function EditorialCard({ collection, locale }: { collection: Collection; locale:
 
 // ─── Main Client Component ────────────────────────────────────────────────────
 
-export function ProductsPageClient({ products, categories, collections }: ProductsPageClientProps) {
+export function ProductsPageClient({ products, categories, collections, hideCategoryStrip = false }: ProductsPageClientProps) {
   const searchParams = useSearchParams()
   const locale = useLocale()
   const { openSearch } = useUIStore()
@@ -710,22 +846,24 @@ export function ProductsPageClient({ products, categories, collections }: Produc
       transition={{ duration: 0.35 }}
       className="min-h-screen bg-white pt-[72px]"
     >
-      {/* ── Category Tiles ── */}
-      <div className="bg-[#EDE8E0] px-4 pb-4 pt-6 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-[1400px]">
-          <p className="mb-2.5 text-[8px] font-bold uppercase tracking-[0.35em] text-charcoal-500">Browse by category</p>
-          <CategoryTiles
-            categories={categories}
-            collections={collections}
-            filters={filters}
-            locale={locale}
-            onChange={handleFilterChange}
-          />
+      {/* ── Category Tiles (built-in; hidden when CMS Products Page adds its own) ── */}
+      {!hideCategoryStrip && (
+        <div className="bg-[#EDE8E0] px-4 pb-4 pt-6 sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-[1400px]">
+            <p className="mb-2.5 text-[8px] font-bold uppercase tracking-[0.35em] text-charcoal-500">Browse by category</p>
+            <CategoryTiles
+              categories={categories}
+              collections={collections}
+              filters={filters}
+              locale={locale}
+              onChange={handleFilterChange}
+            />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ── Filter Bar — sticky ── */}
-      <div className="sticky top-[72px] z-20 border-b border-charcoal-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 shadow-sm sm:px-6 lg:px-8 overflow-visible">
+      <div className="sticky top-[72px] z-20 border-b border-charcoal-100 bg-white px-4 py-2.5 shadow-sm sm:px-6 lg:px-8 overflow-visible">
         <div className="mx-auto max-w-[1400px]">
           <FilterBar
             filters={filters}

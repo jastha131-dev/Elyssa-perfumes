@@ -54,6 +54,8 @@ import { author } from './author'
 import { giftCardPage } from './giftCardPage'
 import { giftCardOrder } from './giftCardOrder'
 import { productsPage } from './productsPage'
+import { productReview } from './productReview'
+import { productQuestion } from './productQuestion'
 
 export const schemaTypes: SchemaTypeDefinition[] = [
   // ── Shared object types ────────────────────────────────────────
@@ -106,6 +108,8 @@ export const schemaTypes: SchemaTypeDefinition[] = [
   testimonial,
   faqItem,
   contactPage,
+  productReview,
+  productQuestion,
   user,
   address,
   order,

@@ -19,6 +19,13 @@ export default async function ProductsPage() {
     getProductsPage(),
   ])
 
+  // If the CMS Products Page has its own category strip above the grid,
+  // hide the built-in static one so admin fully controls it.
+  const hasCmsCategoryStrip = (pageData?.sectionsAbove ?? []).some(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (s: any) => s?._type === 'browseCategoriesSection' || s?._type === 'categoryTilesSection'
+  )
+
   return (
     <>
       {pageData?.sectionsAbove && pageData.sectionsAbove.length > 0 && (
@@ -36,7 +43,7 @@ export default async function ProductsPage() {
           </div>
         }
       >
-        <ProductsPageClient products={products} categories={categories} collections={collections} />
+        <ProductsPageClient products={products} categories={categories} collections={collections} hideCategoryStrip={hasCmsCategoryStrip} />
       </Suspense>
       {pageData?.sectionsBelow && pageData.sectionsBelow.length > 0 && (
         <PageBuilder sections={pageData.sectionsBelow} />

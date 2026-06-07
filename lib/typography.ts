@@ -48,6 +48,18 @@ export const FONT_PAIRINGS: Record<string, {
     bodyFont: "'DM Sans', system-ui, sans-serif",
     googleFontsUrl: 'family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500;600;700',
   },
+  'parisian-chic': {
+    displayFont: "'Marcellus', Georgia, serif",
+    headlineFont: "'Jost', system-ui, sans-serif",
+    bodyFont: "'Jost', system-ui, sans-serif",
+    googleFontsUrl: 'family=Marcellus&family=Jost:wght@300;400;500;600;700',
+  },
+  'soft-luxe': {
+    displayFont: "'Tenor Sans', system-ui, sans-serif",
+    headlineFont: "'Manrope', system-ui, sans-serif",
+    bodyFont: "'Manrope', system-ui, sans-serif",
+    googleFontsUrl: 'family=Tenor+Sans&family=Manrope:wght@300;400;500;600;700;800',
+  },
 }
 
 // ─── Color Palettes ───────────────────────────────────────────────────────────

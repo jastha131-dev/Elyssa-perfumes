@@ -45,11 +45,12 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const selectedVol = volumes[selectedVolIdx]
   const displayPrice = selectedVol?.price ?? product.price
 
-  const reviews = product.reviews ?? []
-  const reviewCount = reviews.length
-  const avgRating = reviewCount > 0
-    ? reviews.reduce((s, r) => s + r.rating, 0) / reviewCount
-    : 0
+  // Real-time rating: combines manually-curated reviews + submitted review docs
+  // (reviewCount / reviewSum come aggregated from GROQ; fall back to the local array)
+  const manual = product.reviews ?? []
+  const reviewCount = product.reviewCount ?? manual.length
+  const reviewSum = product.reviewSum ?? manual.reduce((s, r) => s + r.rating, 0)
+  const avgRating = reviewCount > 0 ? reviewSum / reviewCount : 0
 
   const discount =
     product.compareAtPrice && product.compareAtPrice > product.price
@@ -311,6 +312,17 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             </span>
           )}
         </div>
+
+        {/* Inspired by — small, mobile-friendly */}
+        {product.fragranceFamily && (
+          <p
+            className="mt-0.5 font-body text-[10px] leading-tight text-charcoal-400 sm:text-[11px]"
+            style={{ textAlign: 'var(--card-text-align, left)' as React.CSSProperties['textAlign'] }}
+          >
+            {isAr ? 'مستوحى من' : 'Inspired by'}{' '}
+            <span className="font-semibold capitalize text-charcoal-600">{product.fragranceFamily}</span>
+          </p>
+        )}
 
         {/* CTA — no icon, price | label */}
         <motion.button

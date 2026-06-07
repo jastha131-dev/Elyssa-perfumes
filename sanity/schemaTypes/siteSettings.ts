@@ -21,6 +21,8 @@ const FONT_PAIRINGS = [
   { title: 'Clean Minimalist — EB Garamond + Montserrat + Poppins', value: 'clean-minimalist' },
   { title: 'Bold Statement — Libre Baskerville + Bebas Neue + Nunito Sans', value: 'bold-statement' },
   { title: 'Contemporary — Fraunces + DM Sans + DM Sans', value: 'contemporary' },
+  { title: '✨ Parisian Chic — Marcellus + Jost', value: 'parisian-chic' },
+  { title: '✨ Soft Luxe — Tenor Sans + Manrope', value: 'soft-luxe' },
 ]
 
 export const siteSettings = defineType({
@@ -30,11 +32,45 @@ export const siteSettings = defineType({
   groups: [
     { name: 'colors', title: '🎨 Color Palette', default: true },
     { name: 'typography', title: '✍️ Typography' },
+    { name: 'header', title: '🧭 Header Layout' },
     { name: 'collection', title: '📦 Collection Page' },
     { name: 'pdp', title: '🛍️ Product Detail Page' },
     { name: 'currency', title: '💰 Currency' },
   ],
   fields: [
+    // Logo
+    defineField({ name: 'logo', title: 'Logo Image', type: 'image', options: { hotspot: true }, description: 'Header logo. Leave blank to use the text logo below.', fields: [{ name: 'alt', type: 'string', title: 'Alt Text' }] }),
+    defineField({ name: 'logoText_en', title: 'Logo Text (English)', type: 'string', initialValue: 'LUXE', description: 'Used when no logo image is set.', validation: (R) => R.max(20) }),
+    defineField({ name: 'logoText_ar', title: 'شعار النص (Arabic)', type: 'string', validation: (R) => R.max(20) }),
+    defineField({ name: 'logoSubtext_en', title: 'Logo Subtext (English)', type: 'string', initialValue: 'PARFUM', validation: (R) => R.max(24) }),
+    defineField({ name: 'logoSubtext_ar', title: 'الشعار الفرعي (Arabic)', type: 'string', validation: (R) => R.max(24) }),
+    // Header Layout — desktop item order (drag to reorder, left → right)
+    defineField({
+      name: 'desktopHeaderOrder',
+      title: 'Desktop Header Order (left → right)',
+      type: 'array',
+      group: 'header',
+      description: 'Drag to reorder the header items on desktop. Add "⟷ Flexible Gap" between items to push them apart. (Mobile/tablet uses the burger menu and is not affected.)',
+      of: [
+        defineArrayMember({
+          type: 'string',
+          options: {
+            list: [
+              { title: 'Logo', value: 'logo' },
+              { title: 'Menu (nav links)', value: 'nav' },
+              { title: 'Language switch', value: 'language' },
+              { title: 'Currency switch', value: 'currency' },
+              { title: 'Account', value: 'account' },
+              { title: 'Search', value: 'search' },
+              { title: 'Wishlist', value: 'wishlist' },
+              { title: 'Cart', value: 'cart' },
+              { title: '⟷ Flexible Gap', value: 'spacer' },
+            ],
+          },
+        }),
+      ],
+      initialValue: ['logo', 'spacer', 'nav', 'spacer', 'language', 'currency', 'account', 'search', 'wishlist', 'cart'],
+    }),
     // Color Palette
     defineField({
       name: 'colorPalette',

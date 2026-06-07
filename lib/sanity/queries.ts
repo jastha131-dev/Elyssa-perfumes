@@ -60,6 +60,11 @@ const productFragment = `
   stock,
   featured,
   bestSeller,
+  badgeColor,
+  badgeText_en,
+  badgeText_ar,
+  hideThumbnails,
+  hideReviews,
   "new": new,
   tags,
   seoTitle_en,
@@ -109,7 +114,9 @@ const productFragment = `
     review_ar,
     date,
     verified
-  }
+  },
+  "reviewCount": count(coalesce(reviews, [])) + count(*[_type == "productReview" && references(^._id) && approved == true]),
+  "reviewSum": coalesce(math::sum(reviews[].rating), 0) + coalesce(math::sum(*[_type == "productReview" && references(^._id) && approved == true].rating), 0)
 `
 
 // ─── Product Queries ──────────────────────────────────────────────────────────
@@ -592,6 +599,15 @@ export const getMenuPromoQuery = `
     badge_en, badge_ar, label_en, label_ar, headline_en, headline_ar,
     subtext_en, subtext_ar, ctaLabel_en, ctaLabel_ar, ctaLink,
     "imageUrl": image.asset->url, "imageAlt": image.alt
+  }
+`
+
+export const getSiteLogoQuery = `
+  *[_type == "siteSettings"][0] {
+    "logoUrl": logo.asset->url,
+    "logoAlt": logo.alt,
+    logoText_en, logoText_ar, logoSubtext_en, logoSubtext_ar,
+    desktopHeaderOrder
   }
 `
 
