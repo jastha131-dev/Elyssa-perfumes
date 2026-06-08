@@ -21,6 +21,8 @@ export interface ProductsPageClientProps {
   collections: Collection[]
   /** When the CMS Products Page renders its own category strip, hide the built-in one. */
   hideCategoryStrip?: boolean
+  /** Add top padding to clear the fixed header. Disabled when CMS sections render above (they carry the offset). */
+  headerInset?: boolean
 }
 
 export interface FilterState {
@@ -791,7 +793,7 @@ function EditorialCard({ collection, locale }: { collection: Collection; locale:
 
 // ─── Main Client Component ────────────────────────────────────────────────────
 
-export function ProductsPageClient({ products, categories, collections, hideCategoryStrip = false }: ProductsPageClientProps) {
+export function ProductsPageClient({ products, categories, collections, hideCategoryStrip = false, headerInset = true }: ProductsPageClientProps) {
   const searchParams = useSearchParams()
   const locale = useLocale()
   const { openSearch } = useUIStore()
@@ -820,6 +822,21 @@ export function ProductsPageClient({ products, categories, collections, hideCate
     sortBy: searchParams.get('sort') ?? 'featured',
   }))
 
+  // Re-apply filters when the URL query changes via navigation (megamenu / category
+  // strip links land on /products?category=… while the page is already mounted, so the
+  // useState initializer above does NOT re-run — this keeps the grid in sync with the URL).
+  const queryString = searchParams.toString()
+  useEffect(() => {
+    setFilters({
+      ...DEFAULT_FILTER_STATE,
+      category: searchParams.get('category') ?? undefined,
+      flag: searchParams.get('filter') ?? undefined,
+      fragranceFamily: searchParams.get('family') ? [searchParams.get('family')!] : undefined,
+      sortBy: searchParams.get('sort') ?? 'featured',
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryString])
+
   const processedProducts = useMemo(() => applyFiltersAndSort(products, filters), [products, filters])
 
   const handleFilterChange = useCallback((newFilters: FilterState) => {
@@ -844,7 +861,7 @@ export function ProductsPageClient({ products, categories, collections, hideCate
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.35 }}
-      className="min-h-screen bg-white pt-[72px]"
+      className={cn('min-h-screen bg-white', headerInset && 'pt-[72px]')}
     >
       {/* ── Category Tiles (built-in; hidden when CMS Products Page adds its own) ── */}
       {!hideCategoryStrip && (

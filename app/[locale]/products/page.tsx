@@ -26,10 +26,15 @@ export default async function ProductsPage() {
     (s: any) => s?._type === 'browseCategoriesSection' || s?._type === 'categoryTilesSection'
   )
 
+  const hasSectionsAbove = (pageData?.sectionsAbove?.length ?? 0) > 0
+
   return (
     <>
-      {pageData?.sectionsAbove && pageData.sectionsAbove.length > 0 && (
-        <PageBuilder sections={pageData.sectionsAbove} />
+      {hasSectionsAbove && (
+        // Carry the fixed-header offset here so the first section isn't hidden behind the header.
+        <div className="pt-[72px]">
+          <PageBuilder sections={pageData!.sectionsAbove!} />
+        </div>
       )}
       <Suspense
         fallback={
@@ -43,7 +48,7 @@ export default async function ProductsPage() {
           </div>
         }
       >
-        <ProductsPageClient products={products} categories={categories} collections={collections} hideCategoryStrip={hasCmsCategoryStrip} />
+        <ProductsPageClient products={products} categories={categories} collections={collections} hideCategoryStrip={hasCmsCategoryStrip} headerInset={!hasSectionsAbove} />
       </Suspense>
       {pageData?.sectionsBelow && pageData.sectionsBelow.length > 0 && (
         <PageBuilder sections={pageData.sectionsBelow} />
