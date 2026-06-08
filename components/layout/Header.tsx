@@ -172,7 +172,7 @@ export default function Header({ categories, collections = [], navPages = [], na
         </div>
 
         {/* ── Mobile / tablet bar ── */}
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-1 sm:px-6 lg:hidden">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:hidden">
           <div className="flex items-center gap-2">
             <motion.button
               ref={hamburgerRef}
@@ -201,7 +201,7 @@ export default function Header({ categories, collections = [], navPages = [], na
             <IconButton href={`/${locale}/account`} label="My Account">
               <User className="h-5 w-5" />
             </IconButton>
-            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount} badgeSide="left">
+            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount}>
               <Heart className="h-5 w-5" />
             </IconButton>
             <IconButton onClick={() => openCart()} label={`Open cart (${cartCount} items)`} badge={cartCount}>
@@ -211,7 +211,7 @@ export default function Header({ categories, collections = [], navPages = [], na
         </div>
 
         {/* ── Desktop bar (admin-ordered, left → right) ── */}
-        <div className="mx-auto hidden max-w-7xl items-center gap-x-3 px-4 py-1 sm:px-6 lg:flex lg:px-8">
+        <div className="mx-auto hidden max-w-7xl items-center gap-x-3 px-4 py-3 sm:px-6 lg:flex lg:px-8">
           {headerOrder.map((tok, i) => (tok === 'spacer' ? <div key={`sp-${i}`} className="flex-1" style={{ order: i }} /> : null))}
           <div style={{ order: orderOf('logo') }}>{logoEl}</div>
 
@@ -571,7 +571,7 @@ export default function Header({ categories, collections = [], navPages = [], na
             </IconButton>
           </div>
           <div style={{ order: orderOf('wishlist') }}>
-            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount} badgeSide="left">
+            <IconButton href={`/${locale}/wishlist`} label={`Wishlist (${wishlistCount} items)`} badge={wishlistCount}>
               <Heart className="h-5 w-5" />
             </IconButton>
           </div>
@@ -916,7 +916,7 @@ interface IconButtonProps {
 
 function IconButton({ children, label, badge, onClick, href, badgeSide = 'right' }: IconButtonProps) {
   const baseClass = cn(
-    'relative rounded-full p-2 transition-colors duration-200',
+    'relative inline-flex items-center justify-center rounded-full p-2 transition-colors duration-200',
     'text-charcoal-600 hover:bg-stone-100 hover:text-charcoal-900'
   )
 
@@ -927,8 +927,8 @@ function IconButton({ children, label, badge, onClick, href, badgeSide = 'right'
         initial={{ scale: 0.6, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className={cn(
-          'absolute -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-camel-500 text-[10px] font-semibold text-white',
-          badgeSide === 'left' ? '-left-0.5' : '-right-0.5'
+          'pointer-events-none absolute top-1 flex h-[16px] w-[16px] items-center justify-center rounded-full bg-camel-500 text-[9px] font-bold leading-none text-white ring-2 ring-white',
+          badgeSide === 'left' ? '-left-1' : '-right-1'
         )}
       >
         {badge > 99 ? '99+' : badge}
