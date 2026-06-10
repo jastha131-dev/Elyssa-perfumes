@@ -1,10 +1,10 @@
 import { defineField, defineArrayMember, defineType } from 'sanity'
 
 const COLOR_PALETTES = [
-  { title: '🟠 Ginger & Parchment — Electric Ginger + Azure Mist (Active)', value: 'ginger-parchment' },
-  { title: '🟡 Classic Gold — Warm gold on cream (Original)', value: 'classic-gold' },
-  { title: '🌹 Midnight Rose — Deep rose on soft pink', value: 'midnight-rose' },
-  { title: '🌿 Forest Sage — Natural green on off-white', value: 'forest-sage' },
+  { title: '🟠 Ginger & Parchment — Electric Ginger + Azure Mist', value: 'ginger-parchment' },
+  { title: '🟡 Classic Gold — Warm gold on cream',                  value: 'classic-gold'     },
+  { title: '🌹 Midnight Rose — Deep rose on soft pink',             value: 'midnight-rose'    },
+  { title: '🌿 Forest Sage — Natural green on off-white',           value: 'forest-sage'      },
 ]
 
 const CARD_STYLES = [
@@ -71,15 +71,50 @@ export const siteSettings = defineType({
       ],
       initialValue: ['logo', 'spacer', 'nav', 'spacer', 'language', 'currency', 'account', 'search', 'wishlist', 'cart'],
     }),
-    // Color Palette
+    // Color mode toggle
     defineField({
-      name: 'colorPalette',
-      title: 'Color Palette',
+      name: 'colorMode',
+      title: 'Color Mode',
       type: 'string',
       group: 'colors',
-      description: 'Choose a color theme for the entire site. Changes take effect within 5 minutes.',
+      description: 'Use a preset palette or define your own colors.',
+      options: {
+        list: [
+          { title: '🎨 Choose from preset palettes', value: 'preset' },
+          { title: '✏️ Custom — pick any color',      value: 'custom' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'preset',
+    }),
+    // Preset palettes (visible when colorMode = preset)
+    defineField({
+      name: 'colorPalette',
+      title: 'Preset Palette',
+      type: 'string',
+      group: 'colors',
+      description: 'Choose a curated color theme for the entire site.',
       options: { list: COLOR_PALETTES, layout: 'radio' },
       initialValue: 'ginger-parchment',
+      hidden: ({ document }) => (document?.colorMode as string) === 'custom',
+    }),
+    // Custom color pickers (visible when colorMode = custom)
+    defineField({
+      name: 'customColors',
+      title: 'Custom Colors',
+      type: 'object',
+      group: 'colors',
+      description: 'Pick any color for each role.',
+      hidden: ({ document }) => (document?.colorMode as string) !== 'custom',
+      fields: [
+        defineField({ name: 'accent',      title: 'Primary Accent — buttons, links, highlights', type: 'color', options: { disableAlpha: true } }),
+        defineField({ name: 'accentDark',  title: 'Accent Dark — hover / pressed states',        type: 'color', options: { disableAlpha: true } }),
+        defineField({ name: 'accentLight', title: 'Accent Light — subtle backgrounds, fills',    type: 'color', options: { disableAlpha: true } }),
+        defineField({ name: 'dark',        title: 'Text / Dark — main body text',                type: 'color', options: { disableAlpha: true } }),
+        defineField({ name: 'bg',          title: 'Page Background',                             type: 'color', options: { disableAlpha: true } }),
+        defineField({ name: 'bgSoft',      title: 'Soft Background — cards, sections',           type: 'color', options: { disableAlpha: true } }),
+        defineField({ name: 'secondary',   title: 'Secondary Accent — badges, tags',             type: 'color', options: { disableAlpha: true } }),
+      ],
     }),
     // Typography
     defineField({
@@ -93,19 +128,55 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'baseFontSize',
-      title: 'Base Font Size',
+      title: 'Base Font Size — Desktop (≥1024px)',
       type: 'string',
       group: 'typography',
-      description: 'Controls overall text scale. All sizes (headings, body, labels) scale proportionally.',
+      description: 'Controls overall text scale on desktop. All sizes scale proportionally.',
       options: {
         list: [
           { title: 'Small (14px) — compact, dense', value: '14' },
-          { title: 'Default (16px) — standard', value: '16' },
-          { title: 'Large (18px) — spacious, accessible', value: '18' },
+          { title: 'Default (16px) — standard',     value: '16' },
+          { title: 'Large (18px) — spacious',        value: '18' },
+          { title: 'XL (20px) — extra spacious',     value: '20' },
         ],
         layout: 'radio',
       },
       initialValue: '16',
+    }),
+    defineField({
+      name: 'tabletFontSize',
+      title: 'Base Font Size — Tablet (768–1023px)',
+      type: 'string',
+      group: 'typography',
+      description: 'Overrides the base font size on tablet screens. Leave unset to inherit desktop value.',
+      options: {
+        list: [
+          { title: 'Same as desktop (default)', value: 'inherit' },
+          { title: 'Small (13px)',               value: '13' },
+          { title: 'Default (15px)',              value: '15' },
+          { title: 'Large (17px)',                value: '17' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'inherit',
+    }),
+    defineField({
+      name: 'mobileFontSize',
+      title: 'Base Font Size — Mobile (<768px)',
+      type: 'string',
+      group: 'typography',
+      description: 'Overrides the base font size on mobile screens.',
+      options: {
+        list: [
+          { title: 'XS (12px) — very compact',    value: '12' },
+          { title: 'Small (13px) — compact',       value: '13' },
+          { title: 'Default (14px)',                value: '14' },
+          { title: 'Medium (15px)',                 value: '15' },
+          { title: 'Large (16px) — same as desktop', value: '16' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '14',
     }),
     defineField({
       name: 'headingLetterSpacing',
@@ -284,7 +355,7 @@ export const siteSettings = defineType({
     }),
     defineField({
       name: 'collectionColumns',
-      title: 'Collection Grid Columns',
+      title: 'Collection Grid Columns — Desktop',
       type: 'string',
       group: 'collection',
       description: 'Number of product columns on desktop (collection & search pages).',
@@ -297,6 +368,21 @@ export const siteSettings = defineType({
         layout: 'radio',
       },
       initialValue: '4',
+    }),
+    defineField({
+      name: 'mobileCardColumns',
+      title: 'Collection Grid Columns — Mobile',
+      type: 'string',
+      group: 'collection',
+      description: 'Number of product columns on mobile screens (<768px).',
+      options: {
+        list: [
+          { title: '1 column — large cards', value: '1' },
+          { title: '2 columns (default)',     value: '2' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: '2',
     }),
     defineField({
       name: 'pdpTextSize',

@@ -9,8 +9,8 @@ import { Search, X, Clock, ArrowRight, TrendingUp } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
-import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { Product } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 const TRENDING_SEARCHES = ['Oud', 'Rose', 'Amber', 'Citrus', 'Vetiver', 'Jasmine']
 const STORAGE_KEY = 'luxe-recent-searches'
@@ -43,7 +43,6 @@ export default function SearchOverlay() {
   const { isSearchOpen, closeSearch } = useUIStore()
   const t = useTranslations('search')
   const locale = useLocale()
-  const formatPrice = useCurrencyStore((s) => s.format)
 
   const [query, setQuery] = useState('')
   const [recentSearches, setRecentSearches] = useState<string[]>([])
@@ -267,9 +266,7 @@ export default function SearchOverlay() {
                                     </div>
 
                                     {/* Price */}
-                                    <span className="flex-shrink-0 text-sm font-medium text-charcoal-700">
-                                      {formatPrice(product.volume?.[0]?.price ?? product.price)}
-                                    </span>
+                                    <PriceText amount={product.volume?.[0]?.price ?? product.price} className="flex-shrink-0 text-sm font-medium text-charcoal-700" />
                                   </Link>
                                 </li>
                               ))}

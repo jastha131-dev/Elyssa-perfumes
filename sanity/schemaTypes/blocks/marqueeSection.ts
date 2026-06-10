@@ -12,7 +12,6 @@ export const marqueeSection = defineType({
       title: 'Marquee Text (English)',
       type: 'string',
       description: 'Text that scrolls. Separate items with  •  (bullet).',
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'text_ar',
@@ -26,7 +25,6 @@ export const marqueeSection = defineType({
       type: 'number',
       description: 'Duration of one full scroll. Lower = faster.',
       initialValue: 30,
-      validation: (Rule) => Rule.min(5).max(120),
     }),
     defineField({
       name: 'theme',

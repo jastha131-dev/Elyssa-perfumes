@@ -33,6 +33,7 @@ import type { PromoBannerData } from '@/components/product/PromoBanner'
 import ReviewsQa from '@/components/product/ReviewsQa'
 import type { ReviewItem, QuestionItem } from '@/components/product/ReviewsQa'
 import type { Product, VolumeOption, ProductReview } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -241,9 +242,7 @@ function PairingSection({ products }: { products: Product[] }) {
               </div>
 
               {/* Price */}
-              <p className="flex-shrink-0 font-body text-sm font-medium text-charcoal-800">
-                {formatPrice(price)}
-              </p>
+              <PriceText amount={price} className="flex-shrink-0 font-body text-sm font-medium text-charcoal-800" />
             </Link>
           )
         })}
@@ -341,9 +340,7 @@ function FrequentlyBoughtTogether({
                   <p className="mt-2 font-display text-xs font-light text-charcoal-800 leading-snug truncate group-hover:text-gold-600 transition-colors">
                     {name}
                   </p>
-                  <p className="mt-0.5 font-body text-xs font-medium text-charcoal-700">
-                    {formatPrice(price)}
-                  </p>
+                  <PriceText amount={price} className="mt-0.5 font-body text-xs font-medium text-charcoal-700" />
                 </Link>
               </div>
               {idx < allProducts.length - 1 && (
@@ -362,9 +359,7 @@ function FrequentlyBoughtTogether({
           <p className="font-body text-xs text-charcoal-400 uppercase tracking-[0.18em]">
             {isAr ? 'المجموع' : 'Combined Price'}
           </p>
-          <p className="font-display text-2xl font-light text-charcoal-900">
-            {formatPrice(combinedPrice)}
-          </p>
+          <PriceText amount={combinedPrice} className="font-display text-2xl font-light text-charcoal-900" />
         </div>
         <motion.button
           type="button"
@@ -545,7 +540,7 @@ function StickyBar({
             {productName}
           </p>
           <p className="font-body text-[11px] text-charcoal-400">
-            {selectedVolume.ml}ml &middot; {formatPrice(selectedVolume.price)}
+            {selectedVolume.ml}ml &middot; <PriceText amount={selectedVolume.price} />
           </p>
         </div>
 
@@ -646,9 +641,7 @@ function RecentlyViewed({ excludeId }: { excludeId: string }) {
                   <h3 className="font-display text-sm font-light text-charcoal-900 transition-colors group-hover:text-gold-600 leading-snug">
                     {rvName}
                   </h3>
-                  <p className="mt-1 font-body text-sm font-medium text-charcoal-800">
-                    {formatPrice(displayPrice)}
-                  </p>
+                  <PriceText amount={displayPrice} className="mt-1 font-body text-sm font-medium text-charcoal-800" />
                 </div>
               </Link>
             </motion.div>
@@ -898,14 +891,10 @@ export function ProductDetailClient({
 
             {/* Price */}
             <div className="mt-6 flex items-end gap-3 flex-wrap">
-              <span className="font-display text-4xl font-light text-charcoal-900">
-                {formatPrice(displayPrice)}
-              </span>
+              <PriceText amount={displayPrice} className="font-display text-4xl font-light text-charcoal-900" />
               {product.compareAtPrice && product.compareAtPrice > displayPrice && (
                 <>
-                  <span className="font-body text-base text-charcoal-400 line-through mb-1">
-                    {formatPrice(product.compareAtPrice)}
-                  </span>
+                  <PriceText amount={product.compareAtPrice} className="font-body text-base text-charcoal-400 line-through mb-1" />
                   {discount > 0 && (
                     <span className="mb-1 bg-red-500 px-2 py-0.5 font-body text-[11px] font-semibold text-white">
                       Save {discount}%
@@ -920,7 +909,7 @@ export function ProductDetailClient({
 
             {/* Volume selector */}
             {volumes.length > 0 && (
-              <div className="mt-6">
+              <div className="mt-3">
                 <p className="mb-3 font-body text-[10px] uppercase tracking-[0.22em] text-charcoal-500">
                   {isAr ? 'الحجم' : 'Size'}
                 </p>
@@ -948,7 +937,7 @@ export function ProductDetailClient({
             )}
 
             {/* Quantity + CTA — single inline row */}
-            <div className="mt-6 flex items-stretch gap-2">
+            <div className="mt-4 flex items-stretch gap-2">
               {/* Stepper */}
               <div className="inline-flex flex-shrink-0 items-center rounded-full border border-charcoal-200">
                 <button type="button" onClick={() => setQuantity((q) => Math.max(1, q - 1))} disabled={quantity <= 1} className="flex h-11 w-9 items-center justify-center text-charcoal-500 transition-colors hover:bg-charcoal-50 hover:text-charcoal-900 disabled:opacity-30 disabled:cursor-not-allowed" aria-label="Decrease quantity"><Minus className="h-3.5 w-3.5" /></button>
@@ -972,7 +961,7 @@ export function ProductDetailClient({
                   <>{isAr ? 'تمت الإضافة ✓' : 'Added ✓'}</>
                 ) : (
                   <>
-                    <span>{formatPrice(displayPrice)}</span>
+                    <PriceText amount={displayPrice} />
                     <span className="opacity-50">|</span>
                     <span>{isAr ? 'أضف إلى السلة' : 'Add to Cart'}</span>
                   </>

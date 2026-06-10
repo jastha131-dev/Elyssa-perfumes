@@ -14,6 +14,7 @@ import { useCartDrawerStore } from '@/lib/store/cart-drawer-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import { useRecentlyViewedStore } from '@/lib/store/recently-viewed-store'
 import type { Product } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 interface ProductCardProps {
   product: Product
@@ -25,6 +26,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [imgIdx, setImgIdx] = useState(0)
   const [addedToCart, setAddedToCart] = useState(false)
   const [selectedVolIdx, setSelectedVolIdx] = useState(0)
+  const [volOffset, setVolOffset] = useState(0)
 
   const t = useTranslations('product')
   const locale = useLocale()
@@ -279,39 +281,37 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
 
         {/* Volume selector */}
         {volumes.length > 1 && (
-          <div className="flex flex-wrap gap-1.5 mt-0.5" style={{ justifyContent: 'var(--card-price-justify, flex-start)' }}>
-            {volumes.map((vol, i) => (
+          <div className="flex items-center gap-1.5 mt-0.5" style={{ justifyContent: 'var(--card-price-justify, flex-start)' }}>
+            {volumes.slice(volOffset, volOffset + 2).map((vol, i) => {
+              const idx = volOffset + i
+              return (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedVolIdx(idx) }}
+                  className={cn(
+                    'px-2.5 py-1 text-[10px] font-medium border transition-all duration-150',
+                    idx === selectedVolIdx
+                      ? 'border-charcoal-800 text-charcoal-900 bg-white'
+                      : 'border-charcoal-200 text-charcoal-400 bg-white hover:border-charcoal-500'
+                  )}
+                >
+                  {vol.ml}ml
+                </button>
+              )
+            })}
+            {volumes.length > 2 && (
               <button
-                key={i}
                 type="button"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedVolIdx(i) }}
-                className={cn(
-                  'px-2.5 py-1 text-[10px] font-medium border transition-all duration-150',
-                  i === selectedVolIdx
-                    ? 'border-charcoal-800 text-charcoal-900 bg-white'
-                    : 'border-charcoal-200 text-charcoal-400 bg-white hover:border-charcoal-500'
-                )}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setVolOffset((o) => o + 2 >= volumes.length ? 0 : o + 1) }}
+                className="w-7 h-7 flex items-center justify-center border border-charcoal-200 text-charcoal-400 hover:border-charcoal-500 transition-all duration-150"
+                aria-label="More sizes"
               >
-                {vol.ml}ml
+                <ChevronRight size={11} strokeWidth={2} />
               </button>
-            ))}
+            )}
           </div>
         )}
-
-        {/* Price */}
-        <div className="flex items-baseline gap-2 mt-0.5" style={{ justifyContent: 'var(--card-price-justify, flex-start)' }}>
-          <span
-            className="font-body font-semibold text-charcoal-900"
-            style={{ fontSize: 'var(--card-price-size, 14px)' }}
-          >
-            {formatPrice(displayPrice)}
-          </span>
-          {product.compareAtPrice && product.compareAtPrice > product.price && (
-            <span className="text-xs text-charcoal-400 line-through">
-              {formatPrice(product.compareAtPrice)}
-            </span>
-          )}
-        </div>
 
         {/* Inspired by — small, mobile-friendly */}
         {product.fragranceFamily && (
@@ -324,15 +324,15 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           </p>
         )}
 
-        {/* CTA — no icon, price | label */}
+        {/* CTA */}
         <motion.button
           type="button"
           onClick={handleAddToCart}
           whileTap={{ scale: 0.97 }}
           className={cn(
-            'mt-auto pt-3 w-full rounded-full py-2.5 sm:py-3',
-            'font-body font-bold uppercase transition-all duration-300',
-            'text-[10px] tracking-[0.08em] sm:text-xs sm:tracking-[0.16em]',
+            'mt-auto w-full rounded-full px-3 py-2.5 sm:py-3',
+            'font-body font-semibold uppercase tracking-tight sm:tracking-[0.14em] transition-all duration-300',
+            'text-[10px] sm:text-[11px]',
             addedToCart
               ? 'bg-charcoal-800 text-white'
               : 'bg-camel-500 text-white hover:bg-camel-600'
@@ -341,7 +341,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
         >
           {addedToCart
             ? (isAr ? 'تمت الإضافة ✓' : 'Added ✓')
-            : `${formatPrice(displayPrice)} | ${isAr ? 'أضف للسلة' : 'Add to Cart'}`}
+            : <span className="inline-flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap"><PriceText amount={displayPrice} symbolSize={9} /><span className="opacity-50">|</span>{isAr ? 'أضف للسلة' : 'Add to Cart'}</span>}
         </motion.button>
       </div>
     </motion.article>

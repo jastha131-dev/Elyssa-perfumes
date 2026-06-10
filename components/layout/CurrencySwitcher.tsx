@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronDown } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCurrencyStore } from '@/lib/store/currency-store'
+import { DirhamSymbol } from '@/components/ui/DirhamSymbol'
 
 interface CurrencySwitcherProps {
   align?: 'left' | 'right'
@@ -36,7 +37,7 @@ export default function CurrencySwitcher({ align = 'right' }: CurrencySwitcherPr
         )}
         aria-label="Switch currency"
       >
-        {selected}
+        {selected === 'AED' ? <DirhamSymbol size={13} /> : selected}
         <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }}>
           <ChevronDown className="h-3 w-3" />
         </motion.span>
@@ -68,7 +69,9 @@ export default function CurrencySwitcher({ align = 'right' }: CurrencySwitcherPr
                 )}
               >
                 <span>{c.code}</span>
-                <span className="text-charcoal-400 text-xs">{c.symbol}</span>
+                <span className="text-charcoal-400 text-xs">
+                  {c.code === 'AED' ? <DirhamSymbol size={13} /> : c.symbol}
+                </span>
               </button>
             ))}
           </motion.div>

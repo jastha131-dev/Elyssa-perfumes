@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Package, Truck, Tag } from 'lucide-react'
 import { useTranslations, useLocale } from 'next-intl'
 import { cn, formatPrice } from '@/lib/utils'
+import { PriceText } from '@/components/ui/PriceText'
 import type { CartItem } from '@/lib/types'
 
 interface OrderSummaryProps {
@@ -104,9 +105,7 @@ export default function OrderSummary({
                     )}
                   </p>
                 </div>
-                <p className="flex-shrink-0 text-sm font-semibold text-charcoal-900 tabular-nums">
-                  {formatPrice(lineTotal)}
-                </p>
+                <PriceText amount={lineTotal} className="flex-shrink-0 text-sm font-semibold text-charcoal-900 tabular-nums" />
               </div>
             </motion.div>
           )
@@ -118,9 +117,7 @@ export default function OrderSummary({
         {/* Subtotal */}
         <div className="flex items-center justify-between text-sm">
           <span className="text-charcoal-500">{tc('subtotal')}</span>
-          <span className="font-medium text-charcoal-900 tabular-nums">
-            {formatPrice(subtotal)}
-          </span>
+          <PriceText amount={subtotal} className="font-medium text-charcoal-900 tabular-nums" />
         </div>
 
         {/* Shipping */}
@@ -132,9 +129,7 @@ export default function OrderSummary({
           {shippingCost === 0 ? (
             <span className="font-medium text-green-600">{tc('free')}</span>
           ) : (
-            <span className="font-medium text-charcoal-900 tabular-nums">
-              {formatPrice(shippingCost)}
-            </span>
+            <PriceText amount={shippingCost} className="font-medium text-charcoal-900 tabular-nums" />
           )}
         </div>
 
@@ -164,9 +159,7 @@ export default function OrderSummary({
         {/* Tax */}
         <div className="flex items-center justify-between text-sm">
           <span className="text-charcoal-500">{t('estimatedTax', { rate: TAX_RATE * 100 })}</span>
-          <span className="font-medium text-charcoal-900 tabular-nums">
-            {formatPrice(taxAmount)}
-          </span>
+          <PriceText amount={taxAmount} className="font-medium text-charcoal-900 tabular-nums" />
         </div>
 
         {/* Divider */}
@@ -175,9 +168,7 @@ export default function OrderSummary({
             <span className="font-display text-base font-semibold text-charcoal-900">
               {t('estimatedTotal')}
             </span>
-            <span className="font-display text-lg font-bold text-charcoal-900 tabular-nums">
-              {formatPrice(total)}
-            </span>
+            <PriceText amount={total} className="font-display text-lg font-bold text-charcoal-900 tabular-nums" />
           </div>
           <p className="mt-1 text-right text-[11px] text-charcoal-400">
             {t('finalTotal')}

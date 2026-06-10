@@ -9,13 +9,11 @@ export const ctaButton = defineType({
       name: 'label_en',
       title: 'Button Label (English)',
       type: 'string',
-      validation: (Rule) => Rule.required().max(40),
     }),
     defineField({
       name: 'label_ar',
       title: 'التصنيف (Arabic)',
       type: 'string',
-      validation: (Rule) => Rule.max(40),
     }),
     defineField({
       name: 'link',

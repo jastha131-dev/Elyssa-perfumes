@@ -59,7 +59,7 @@ export function PromoBanner({ data }: { data: PromoBannerData }) {
   ]
 
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-camel-50 border border-camel-100 px-3 py-3 my-5">
+    <div className="flex items-center gap-3 rounded-xl bg-camel-50 border border-camel-100 px-3 py-3 my-3">
 
       {/* Gift image */}
       {data.imageUrl && (

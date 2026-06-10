@@ -99,6 +99,16 @@ function CategoryCard({ name, slug, imageUrl, gradient, tagline }: CardData) {
   )
 }
 
+const SECTION_BG: Record<string, string> = {
+  white:        'bg-white',
+  cream:        'bg-[var(--cream)]',
+  'cream-soft': 'bg-[var(--stone)]',
+  'accent-light': 'bg-[var(--camel-light)]',
+  accent:       'bg-[var(--camel)]',
+  dark:         'bg-[var(--charcoal)]',
+  black:        'bg-black',
+}
+
 export default function Categories({ data }: CategoriesProps) {
   const t = useTranslations('home')
   const locale = useLocale()
@@ -108,6 +118,12 @@ export default function Categories({ data }: CategoriesProps) {
 
   const headingRef = useRef<HTMLDivElement>(null)
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
+
+  const bgKey = data?.theme?.bgColor
+  const sectionBg = (bgKey && bgKey !== 'default') ? (SECTION_BG[bgKey] ?? 'bg-white') : 'bg-white'
+  const isDark = bgKey === 'dark' || bgKey === 'black' || bgKey === 'accent'
+  const headingColor = isDark ? 'text-white' : 'text-ink-900'
+  const subColor = isDark ? 'text-white/60' : 'text-camel-500'
 
   // Build display items: use ALL real Sanity categories, or return null if none
   if (!categories || categories.length === 0) return null
@@ -145,7 +161,7 @@ export default function Categories({ data }: CategoriesProps) {
       : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
 
   return (
-    <section className="bg-white py-20 md:py-28">
+    <section className={cn(sectionBg, 'py-20 md:py-28')}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Heading */}
         <motion.div
@@ -155,10 +171,10 @@ export default function Categories({ data }: CategoriesProps) {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-14"
         >
-          <p className="mb-3 font-body text-xs uppercase tracking-widest text-camel-500">
+          <p className={cn('mb-3 font-body text-xs uppercase tracking-widest', subColor)}>
             {t('exploreBy')}
           </p>
-          <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
+          <h2 className={cn('font-headline font-bold uppercase text-4xl md:text-5xl', headingColor)}>
             {title}
           </h2>
           <div className="mt-5 h-px w-16 bg-camel-500/50" />

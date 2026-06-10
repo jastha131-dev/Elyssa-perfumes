@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart-store'
+import { PriceText } from '@/components/ui/PriceText'
 import type { Product, FeaturedProductsSectionBlock } from '@/lib/types'
 
 const LOCAL_PRODUCT_IMAGES = [
@@ -106,13 +107,9 @@ function FeaturedCard({ product, onQuickAdd, justAdded, index }: FeaturedCardPro
             {productName}
           </h3>
           <div className="flex items-center gap-2">
-            <span className="font-body text-sm font-medium text-ink-800">
-              ${displayPrice.toFixed(2)}
-            </span>
+            <PriceText amount={displayPrice} className="font-body text-sm font-medium text-ink-800" symbolSize={12} />
             {product.compareAtPrice && product.compareAtPrice > displayPrice && (
-              <span className="font-body text-sm text-ink-400 line-through">
-                ${product.compareAtPrice.toFixed(2)}
-              </span>
+              <PriceText amount={product.compareAtPrice} className="font-body text-sm text-ink-400 line-through" symbolSize={12} />
             )}
           </div>
         </div>

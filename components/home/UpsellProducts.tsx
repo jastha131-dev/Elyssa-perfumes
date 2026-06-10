@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { useLocale } from 'next-intl'
-import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { Product, UpsellSectionBlock } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 const LOCAL_IMAGES = [
   '/images/products/default-product.jpeg',
@@ -30,7 +30,6 @@ interface Props { data: UpsellSectionBlock }
 
 export default function UpsellProducts({ data }: Props) {
   const locale = useLocale()
-  const formatPrice = useCurrencyStore((s) => s.format)
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
 
@@ -87,7 +86,7 @@ export default function UpsellProducts({ data }: Props) {
                     <h3 className="font-display text-base font-light text-ink-900 transition-colors group-hover:text-camel-600">
                       {name}
                     </h3>
-                    <p className="mt-1 font-body text-sm font-medium text-ink-900">{formatPrice(price)}</p>
+                    <PriceText amount={price} className="mt-1 font-body text-sm font-medium text-ink-900" />
                   </div>
                 </Link>
               </motion.div>

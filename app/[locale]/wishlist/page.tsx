@@ -18,8 +18,8 @@ import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import { cn } from '@/lib/utils'
-import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { WishlistItem } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 const gridVariants = {
   hidden: {},
@@ -88,7 +88,6 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
   const { product } = wishlistItem
   const { removeItem } = useWishlistStore()
   const { addItem } = useCartStore()
-  const formatPrice = useCurrencyStore((s) => s.format)
   const [addedToCart, setAddedToCart] = useState(false)
   const t = useTranslations('wishlist')
   const tp = useTranslations('product')
@@ -191,13 +190,9 @@ function WishlistCard({ wishlistItem }: { wishlistItem: WishlistItem }) {
           </Link>
 
           <div className="mt-1.5 flex items-center gap-2">
-            <span className="font-body text-sm font-semibold text-charcoal-900">
-              {formatPrice(displayPrice)}
-            </span>
+            <PriceText amount={displayPrice} className="font-body text-sm font-semibold text-charcoal-900" />
             {product.compareAtPrice && product.compareAtPrice > displayPrice && (
-              <span className="font-body text-xs text-charcoal-400 line-through">
-                {formatPrice(product.compareAtPrice)}
-              </span>
+              <PriceText amount={product.compareAtPrice} className="font-body text-xs text-charcoal-400 line-through" />
             )}
           </div>
 

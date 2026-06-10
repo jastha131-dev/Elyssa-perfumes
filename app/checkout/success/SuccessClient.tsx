@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import { Mail, Truck, ShoppingBag, ExternalLink, Package } from 'lucide-react'
 import { useCartStore } from '@/lib/store/cart-store'
 import { Button } from '@/components/ui/Button'
-import { formatPrice } from '@/lib/utils'
+import { PriceText } from '@/components/ui/PriceText'
 
 interface SuccessClientProps {
   orderNumber: string | null
@@ -207,9 +207,7 @@ export default function SuccessClient({
                   <p className="font-body text-[11px] uppercase tracking-[0.2em] text-charcoal-400">
                     Total Paid
                   </p>
-                  <p className="mt-0.5 font-display text-lg font-bold text-charcoal-900 tabular-nums">
-                    {formatPrice(amountTotal, currency)}
-                  </p>
+                  <PriceText amount={amountTotal} className="mt-0.5 font-display text-lg font-bold text-charcoal-900 tabular-nums" />
                 </div>
               )}
             </div>

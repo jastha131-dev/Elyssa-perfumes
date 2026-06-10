@@ -10,6 +10,7 @@ import { usePromotionsStore } from '@/lib/store/promotions-store'
 import CartItem from '@/components/cart/CartItem'
 import { cn } from '@/lib/utils'
 import { useCurrencyStore } from '@/lib/store/currency-store'
+import { PriceText } from '@/components/ui/PriceText'
 
 interface CartDrawerProps {
   isOpen: boolean
@@ -160,7 +161,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     {(hasBaseFreeShipping || freeShip) ? (
                       <span className="font-semibold text-green-700">Free shipping unlocked!</span>
                     ) : (
-                      <>Add <span className="font-semibold text-charcoal-900">{formatPrice(amountToFreeShipping)}</span> more for free shipping</>
+                      <>Add <PriceText amount={amountToFreeShipping} className="font-semibold text-charcoal-900" /> more for free shipping</>
                     )}
                   </p>
                 </div>
@@ -291,17 +292,17 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                   <div className="space-y-1.5">
                     <div className="flex items-center justify-between">
                       <span className="font-body text-sm text-charcoal-500">{t('subtotal')}</span>
-                      <span className="font-body text-sm text-charcoal-700">{formatPrice(subtotal)}</span>
+                      <PriceText amount={subtotal} className="font-body text-sm text-charcoal-700" />
                     </div>
                     {discount > 0 && (
                       <div className="flex items-center justify-between text-green-600">
                         <span className="font-body text-sm">Discount</span>
-                        <span className="font-body text-sm font-medium">− {formatPrice(discount)}</span>
+                        <span className="font-body text-sm font-medium">− <PriceText amount={discount} /></span>
                       </div>
                     )}
                     <div className="flex items-center justify-between border-t border-charcoal-100 pt-2 mt-2">
                       <span className="font-body text-sm font-semibold text-charcoal-900">Total</span>
-                      <span className="font-display text-base font-semibold text-charcoal-900">{formatPrice(total)}</span>
+                      <PriceText amount={total} className="font-display text-base font-semibold text-charcoal-900" />
                     </div>
                   </div>
 

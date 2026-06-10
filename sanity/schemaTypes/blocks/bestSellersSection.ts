@@ -7,15 +7,14 @@ export const bestSellersSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string' }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string' }),
     defineField({
       name: 'products',
       title: 'Products',
       type: 'array',
       description: 'Select products to feature as best sellers.',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
-      validation: (Rule) => Rule.required().min(1).max(12).unique(),
     }),
     defineField({
       name: 'theme',

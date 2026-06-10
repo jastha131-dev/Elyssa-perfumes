@@ -65,7 +65,7 @@ export default function Hero({ data }: HeroProps) {
       <section
         ref={sectionRef}
         className="relative w-full overflow-hidden bg-stone-100"
-        style={{ height: '100vh', minHeight: '640px' }}
+        style={{ height: '100vh', minHeight: '640px', paddingTop: 'var(--header-h, 72px)' }}
       >
         {/* Background with parallax (oversized so it stays centered/covered) */}
         <motion.div className="absolute inset-x-0 -top-[10%] z-0 h-[120%]" style={{ y: bgY }}>
@@ -135,7 +135,7 @@ export default function Hero({ data }: HeroProps) {
 
   // ── Split layout (default) ────────────────────────────────────────────────
   return (
-    <section ref={sectionRef} className="relative w-full overflow-hidden bg-stone-100">
+    <section ref={sectionRef} className="relative w-full overflow-hidden bg-stone-100" style={{ paddingTop: 'var(--header-h, 72px)' }}>
       <div className={cn(
         'flex min-h-[640px] flex-col lg:min-h-[700px] lg:flex-row',
         isAr ? 'rtl:flex-row-reverse' : ''

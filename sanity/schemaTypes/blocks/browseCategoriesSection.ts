@@ -7,15 +7,14 @@ export const browseCategoriesSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title_en', title: 'Strip Label (English)', type: 'string', description: 'Small label above tiles. e.g. "Browse by category"', initialValue: 'Browse by category', validation: (Rule) => Rule.max(60) }),
-    defineField({ name: 'title_ar', title: 'التسمية (Arabic)', type: 'string', validation: (Rule) => Rule.max(60) }),
+    defineField({ name: 'title_en', title: 'Strip Label (English)', type: 'string', description: 'Small label above tiles. e.g. "Browse by category"', initialValue: 'Browse by category' }),
+    defineField({ name: 'title_ar', title: 'التسمية (Arabic)', type: 'string' }),
     defineField({
       name: 'categories',
       title: 'Categories',
       type: 'array',
       description: 'Select categories to show as tiles.',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'category' }] })],
-      validation: (Rule) => Rule.max(10).unique(),
     }),
     defineField({
       name: 'collections',
@@ -23,7 +22,6 @@ export const browseCategoriesSection = defineType({
       type: 'array',
       description: 'Select collections to show as tiles (shown after categories).',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'collection' }] })],
-      validation: (Rule) => Rule.max(10).unique(),
     }),
     defineField({ name: 'showAllTile', title: 'Show "All Perfumes" tile', type: 'boolean', initialValue: true, description: 'Adds a dark "All Perfumes" tile at the start.' }),
     defineField({

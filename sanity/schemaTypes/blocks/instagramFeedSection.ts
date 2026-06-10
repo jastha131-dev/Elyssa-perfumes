@@ -7,8 +7,8 @@ export const instagramFeedSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string' }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string' }),
     defineField({ name: 'handle', title: 'Instagram Handle', type: 'string', description: 'Display only, e.g. @luxeparfum' }),
     defineField({
       name: 'photos',
@@ -18,15 +18,14 @@ export const instagramFeedSection = defineType({
         defineArrayMember({
           type: 'object',
           fields: [
-            defineField({ name: 'image', title: 'Photo', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' })], validation: (Rule) => Rule.required() }),
-            defineField({ name: 'caption_en', title: 'Caption (English)', type: 'string', validation: (Rule) => Rule.max(200) }),
-            defineField({ name: 'caption_ar', title: 'التعليق (Arabic)', type: 'string', validation: (Rule) => Rule.max(200) }),
+            defineField({ name: 'image', title: 'Photo', type: 'image', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' })] }),
+            defineField({ name: 'caption_en', title: 'Caption (English)', type: 'string' }),
+            defineField({ name: 'caption_ar', title: 'التعليق (Arabic)', type: 'string' }),
             defineField({ name: 'link', title: 'Link URL', type: 'url' }),
           ],
           preview: { select: { media: 'image', title: 'caption_en' } },
         }),
       ],
-      validation: (Rule) => Rule.max(12),
     }),
     defineField({
       name: 'columns',

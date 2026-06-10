@@ -9,6 +9,7 @@ import { useCartStore } from '@/lib/store/cart-store'
 import { usePromotionsStore } from '@/lib/store/promotions-store'
 import CartItem from '@/components/cart/CartItem'
 import { cn, formatPrice } from '@/lib/utils'
+import { PriceText } from '@/components/ui/PriceText'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import type { Promotion } from '@/lib/types'
 
@@ -263,9 +264,7 @@ function OrderSummary({
       <div className="space-y-3">
         <div className="flex items-center justify-between">
           <span className="font-body text-sm text-charcoal-500">{t('subtotal')}</span>
-          <span className="font-body text-sm font-medium text-charcoal-900">
-            {formatPrice(subtotal)}
-          </span>
+          <PriceText amount={subtotal} className="font-body text-sm font-medium text-charcoal-900" />
         </div>
 
         {discountAmount !== undefined && discountAmount > 0 && (
@@ -274,14 +273,14 @@ function OrderSummary({
               <Tag className="h-3 w-3" />
               {discountLabel ?? 'Discount'}
             </span>
-            <span className="font-body text-sm font-medium">-{formatPrice(discountAmount)}</span>
+            <span className="font-body text-sm font-medium">-<PriceText amount={discountAmount} /></span>
           </div>
         )}
 
         <div className="flex items-center justify-between">
           <span className="font-body text-sm text-charcoal-500">{t('shipping')}</span>
           <span className={cn('font-body text-sm font-medium', shipping === 0 ? 'text-green-600' : 'text-charcoal-900')}>
-            {shipping === 0 ? t('free') : formatPrice(shipping)}
+            {shipping === 0 ? t('free') : <PriceText amount={shipping} />}
           </span>
         </div>
 
@@ -295,14 +294,14 @@ function OrderSummary({
           <span className="font-body text-sm text-charcoal-500">
             {t('tax')} <span className="text-charcoal-400">(est. {TAX_RATE * 100}%)</span>
           </span>
-          <span className="font-body text-sm font-medium text-charcoal-900">{formatPrice(tax)}</span>
+          <PriceText amount={tax} className="font-body text-sm font-medium text-charcoal-900" />
         </div>
 
         <div className="my-1 border-t border-charcoal-100" />
 
         <div className="flex items-center justify-between">
           <span className="font-display text-base font-semibold text-charcoal-900">{t('total')}</span>
-          <span className="font-display text-lg font-semibold text-charcoal-900">{formatPrice(total)}</span>
+          <PriceText amount={total} className="font-display text-lg font-semibold text-charcoal-900" />
         </div>
       </div>
 
@@ -492,9 +491,7 @@ export default function CartPageClient({
                   </Link>
                   <span className="font-body text-sm text-charcoal-500">
                     {t('subtotal')}:{' '}
-                    <span className="font-semibold text-charcoal-900">
-                      {formatPrice(subtotal)}
-                    </span>
+                    <PriceText amount={subtotal} className="font-semibold text-charcoal-900" />
                   </span>
                 </div>
               </motion.div>

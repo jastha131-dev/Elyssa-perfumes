@@ -2,6 +2,7 @@ import { defineConfig } from 'sanity'
 import { structureTool } from 'sanity/structure'
 import { presentationTool } from 'sanity/presentation'
 import { assist } from '@sanity/assist'
+import { colorInput } from '@sanity/color-input'
 import { schemaTypes } from './sanity/schemaTypes'
 import { StudioLogo } from './sanity/components/StudioLogo'
 import { StudioLayout } from './sanity/components/StudioLayout'
@@ -16,6 +17,7 @@ export default defineConfig({
   basePath: '/studio',
   plugins: [
     structureTool(),
+    colorInput(),
     assist(),
     presentationTool({
       previewUrl: {

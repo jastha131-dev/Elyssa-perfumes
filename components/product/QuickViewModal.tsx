@@ -12,6 +12,7 @@ import { useWishlistStore } from "@/lib/store/wishlist-store";
 import { cn } from "@/lib/utils";
 import { useCurrencyStore } from "@/lib/store/currency-store";
 import type { Product, VolumeOption } from "@/lib/types";
+import { PriceText } from "@/components/ui/PriceText";
 
 interface QuickViewModalProps {
   product: Product | null;
@@ -324,14 +325,10 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
 
                   {/* Price */}
                   <div className="flex items-baseline gap-3">
-                    <span className="font-display text-2xl font-medium text-charcoal-900">
-                      {formatPrice(price)}
-                    </span>
+                    <PriceText amount={price} className="font-display text-2xl font-medium text-charcoal-900" />
                     {product.compareAtPrice && product.compareAtPrice > price && (
                       <>
-                        <span className="text-sm text-charcoal-400 line-through">
-                          {formatPrice(product.compareAtPrice)}
-                        </span>
+                        <PriceText amount={product.compareAtPrice} className="text-sm text-charcoal-400 line-through" />
                         <span className="rounded-sm bg-red-50 px-1.5 py-0.5 text-[11px] font-medium text-red-600">
                           {t('save', { percent: discount })}
                         </span>
@@ -358,12 +355,10 @@ export default function QuickViewModal({ product, isOpen, onClose }: QuickViewMo
                             )}
                           >
                             {vol.ml}ml
-                            <span className={cn(
+                            <PriceText amount={vol.price} className={cn(
                               "block text-[10px] mt-0.5",
                               selectedVolume?.ml === vol.ml ? "text-gold-500" : "text-charcoal-400"
-                            )}>
-                              {formatPrice(vol.price)}
-                            </span>
+                            )} />
                           </button>
                         ))}
                       </div>

@@ -32,7 +32,7 @@ export default async function ProductsPage() {
     <>
       {hasSectionsAbove && (
         // Carry the fixed-header offset here so the first section isn't hidden behind the header.
-        <div className="pt-[72px]">
+        <div style={{ paddingTop: 'var(--header-h, 72px)' }}>
           <PageBuilder sections={pageData!.sectionsAbove!} />
         </div>
       )}

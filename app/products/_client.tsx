@@ -861,7 +861,8 @@ export function ProductsPageClient({ products, categories, collections, hideCate
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.35 }}
-      className={cn('min-h-screen bg-white', headerInset && 'pt-[72px]')}
+      className="min-h-screen bg-white"
+      style={headerInset ? { paddingTop: 'var(--header-h, 72px)' } : undefined}
     >
       {/* ── Category Tiles (built-in; hidden when CMS Products Page adds its own) ── */}
       {!hideCategoryStrip && (
@@ -880,7 +881,7 @@ export function ProductsPageClient({ products, categories, collections, hideCate
       )}
 
       {/* ── Filter Bar — sticky ── */}
-      <div className="sticky top-[72px] z-20 border-b border-charcoal-100 bg-white px-4 py-2.5 shadow-sm sm:px-6 lg:px-8 overflow-visible">
+      <div className="sticky z-20 border-b border-charcoal-100 bg-white px-4 py-2.5 shadow-sm sm:px-6 lg:px-8 overflow-visible" style={{ top: 'var(--header-h, 72px)' }}>
         <div className="mx-auto max-w-[1400px]">
           <FilterBar
             filters={filters}

@@ -105,7 +105,12 @@ body {
   background-clip: text;
 }
 
-/* Collection grid — columns driven by --collection-cols CSS var */
+/* Collection grid — columns driven by CSS vars */
+@media (max-width: 767px) {
+  .collection-grid {
+    grid-template-columns: repeat(var(--mobile-collection-cols, 2), minmax(0, 1fr)) !important;
+  }
+}
 @media (min-width: 1024px) {
   .collection-grid {
     grid-template-columns: repeat(var(--collection-cols, 4), minmax(0, 1fr)) !important;

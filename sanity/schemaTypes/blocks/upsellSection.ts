@@ -7,16 +7,15 @@ export const upsellSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'subtitle_en', title: 'Subtitle (English)', type: 'string', validation: (Rule) => Rule.max(160) }),
-    defineField({ name: 'subtitle_ar', title: 'العنوان الفرعي (Arabic)', type: 'string', validation: (Rule) => Rule.max(160) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string' }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string' }),
+    defineField({ name: 'subtitle_en', title: 'Subtitle (English)', type: 'string' }),
+    defineField({ name: 'subtitle_ar', title: 'العنوان الفرعي (Arabic)', type: 'string' }),
     defineField({
       name: 'products',
       title: 'Products',
       type: 'array',
       of: [defineArrayMember({ type: 'reference', to: [{ type: 'product' }] })],
-      validation: (Rule) => Rule.required().min(1).max(8).unique(),
     }),
     defineField({
       name: 'layout',

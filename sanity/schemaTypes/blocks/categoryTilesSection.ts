@@ -7,8 +7,8 @@ export const categoryTilesSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', description: 'Optional label shown above tiles (e.g. "Browse by category")', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', description: 'Optional label shown above tiles (e.g. "Browse by category")' }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string' }),
     defineField({
       name: 'tiles',
       title: 'Tiles',
@@ -17,8 +17,8 @@ export const categoryTilesSection = defineType({
         defineArrayMember({
           type: 'object',
           fields: [
-            defineField({ name: 'label_en', title: 'Label (English)', type: 'string', validation: (Rule) => Rule.required().max(40) }),
-            defineField({ name: 'label_ar', title: 'التسمية (Arabic)', type: 'string', validation: (Rule) => Rule.max(40) }),
+            defineField({ name: 'label_en', title: 'Label (English)', type: 'string' }),
+            defineField({ name: 'label_ar', title: 'التسمية (Arabic)', type: 'string' }),
             defineField({
               name: 'image',
               title: 'Background Image',
@@ -33,7 +33,6 @@ export const categoryTilesSection = defineType({
           },
         }),
       ],
-      validation: (Rule) => Rule.max(12),
     }),
     defineField({
       name: 'bgColor',

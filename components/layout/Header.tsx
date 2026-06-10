@@ -12,9 +12,9 @@ import { useCartStore } from '@/lib/store/cart-store'
 import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useUIStore } from '@/lib/store/ui-store'
 import { cn } from '@/lib/utils'
-import type { Category, NavPage, NavItem, MenuPromo, SiteLogo, Collection } from '@/lib/types'
+import type { Category, NavPage, NavItem, MenuPromo, SiteLogo, Collection, AnnouncementBar as AnnouncementBarType } from '@/lib/types'
 import LanguageSwitcher from './LanguageSwitcher'
-import CurrencySwitcher from './CurrencySwitcher'
+import AnnouncementBarComponent from './AnnouncementBar'
 
 const FALLBACK_CATEGORIES = [
   { _id: 'men', name_en: 'Men', name_ar: 'رجالي', slug: 'men' },
@@ -39,9 +39,10 @@ interface HeaderProps {
   navItems?: NavItem[]
   menuPromo?: MenuPromo | null
   siteLogo?: SiteLogo | null
+  announcementBar?: AnnouncementBarType | null
 }
 
-export default function Header({ categories, collections = [], navPages = [], navItems = [], menuPromo = null, siteLogo = null }: HeaderProps) {
+export default function Header({ categories, collections = [], navPages = [], navItems = [], menuPromo = null, siteLogo = null, announcementBar = null }: HeaderProps) {
   const pathname = usePathname()
   const t = useTranslations('nav')
   const locale = useLocale()
@@ -107,11 +108,14 @@ export default function Header({ categories, collections = [], navPages = [], na
 
   useEffect(() => {
     if (!headerRef.current) return
-    const ro = new ResizeObserver(() => {
-      if (headerRef.current) setHeaderHeight(headerRef.current.offsetHeight)
-    })
+    const update = () => {
+      const h = headerRef.current!.offsetHeight
+      setHeaderHeight(h)
+      document.documentElement.style.setProperty('--header-h', `${h}px`)
+    }
+    const ro = new ResizeObserver(update)
     ro.observe(headerRef.current)
-    setHeaderHeight(headerRef.current.offsetHeight)
+    update()
     return () => ro.disconnect()
   }, [])
 
@@ -160,16 +164,7 @@ export default function Header({ categories, collections = [], navPages = [], na
   return (
     <>
       <header ref={headerRef} className="fixed left-0 right-0 top-0 z-40 bg-white shadow-sm border-b border-stone-200">
-        {/* Announcement bar */}
-        <div className="bg-camel-500 text-center py-1">
-          <p className="font-body text-[11px] text-white tracking-[0.2em]">
-            {t('announcementText')}
-            <span className="mx-3 text-white/50">·</span>
-            <Link href={`/${locale}/products`} className="text-white underline underline-offset-2 hover:text-stone-100 transition-colors">
-              {t('exploreNow')}
-            </Link>
-          </p>
-        </div>
+        {announcementBar && <AnnouncementBarComponent data={announcementBar} />}
 
         {/* ── Mobile / tablet bar ── */}
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:hidden">
@@ -557,9 +552,6 @@ export default function Header({ categories, collections = [], navPages = [], na
           <div style={{ order: orderOf('language') }} className="flex items-center">
             <LanguageSwitcher />
           </div>
-          <div style={{ order: orderOf('currency') }} className="flex items-center">
-            <CurrencySwitcher />
-          </div>
           <div style={{ order: orderOf('account') }}>
             <IconButton href={`/${locale}/account`} label="My Account">
               <User className="h-5 w-5" />
@@ -892,7 +884,6 @@ export default function Header({ categories, collections = [], navPages = [], na
 
                 <div className="pt-2 flex items-center gap-3">
                   <LanguageSwitcher />
-                  <CurrencySwitcher align="left" />
                 </div>
               </motion.div>
             </nav>

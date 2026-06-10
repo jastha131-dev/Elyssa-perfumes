@@ -5,78 +5,128 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useLocale } from 'next-intl'
-import { Sparkles, ArrowRight, ArrowLeft, RotateCcw, ExternalLink } from 'lucide-react'
+import { Sparkles, ArrowRight, ArrowLeft, RotateCcw, ExternalLink, Check } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { Product } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 // ─── Quiz data ────────────────────────────────────────────────────────────────
 
 interface Step {
   id: string
   question: string
+  subtitle?: string
   emoji: string
+  multiSelect?: boolean
+  maxSelect?: number
   options: { label: string; value: string; desc?: string; emoji?: string }[]
 }
 
 const STEPS: Step[] = [
   {
     id: 'recipient',
-    question: 'Who is this fragrance for?',
+    question: 'Who are you shopping for?',
     emoji: '🎁',
     options: [
-      { label: 'Myself', value: 'myself', desc: 'I\'m treating myself', emoji: '✨' },
-      { label: 'A Gift', value: 'gift', desc: 'For someone special', emoji: '💝' },
+      { label: "Men's Fragrances", value: 'men', emoji: '🧔' },
+      { label: "Women's Fragrances", value: 'women', emoji: '👩' },
+      { label: 'Unisex Fragrances', value: 'unisex', emoji: '✨' },
+      { label: 'Gift for Someone Else', value: 'gift', desc: 'We\'ll find a great match', emoji: '🎀' },
     ],
   },
   {
-    id: 'vibe',
-    question: 'What\'s the vibe you\'re after?',
-    emoji: '🌸',
+    id: 'age',
+    question: 'What is your age range?',
+    emoji: '🎂',
     options: [
-      { label: 'Fresh & Citrus', value: 'Fresh & Citrus', desc: 'Light, energising, clean', emoji: '🍋' },
-      { label: 'Warm & Oriental', value: 'Warm & Oriental', desc: 'Rich, exotic, sensual', emoji: '🌙' },
-      { label: 'Bold & Woody', value: 'Bold & Woody', desc: 'Deep, smoky, confident', emoji: '🌲' },
-      { label: 'Light & Floral', value: 'Light & Floral', desc: 'Romantic, feminine, soft', emoji: '🌹' },
+      { label: 'Under 20', value: 'under20', emoji: '🌱' },
+      { label: '20–29', value: '20-29', emoji: '⚡' },
+      { label: '30–39', value: '30-39', emoji: '🔥' },
+      { label: '40–49', value: '40-49', emoji: '🏆' },
+      { label: '50+', value: '50+', emoji: '👑' },
     ],
   },
   {
     id: 'occasion',
-    question: 'When will you wear it most?',
+    question: 'When will you wear this fragrance most often?',
     emoji: '📅',
     options: [
-      { label: 'Every Day', value: 'Daily', desc: 'Casual, effortless', emoji: '☀️' },
-      { label: 'At Work', value: 'Work', desc: 'Professional, subtle', emoji: '💼' },
-      { label: 'Evenings Out', value: 'Evening', desc: 'Social, memorable', emoji: '🌃' },
+      { label: 'Daily / Office', value: 'Daily', desc: 'Professional, subtle', emoji: '💼' },
+      { label: 'Casual Everyday Wear', value: 'Casual', desc: 'Effortless, versatile', emoji: '☀️' },
+      { label: 'Date Night', value: 'Evening', desc: 'Seductive, memorable', emoji: '🌃' },
       { label: 'Special Occasions', value: 'Special', desc: 'Rare, unforgettable', emoji: '🥂' },
+      { label: 'Parties & Nightlife', value: 'Party', desc: 'Bold, crowd-stopping', emoji: '🎉' },
+      { label: 'Gym / Sports', value: 'Sports', desc: 'Fresh, energising', emoji: '🏋️' },
+    ],
+  },
+  {
+    id: 'scentFamily',
+    question: 'Which scent family do you usually prefer?',
+    subtitle: 'Choose up to 3',
+    emoji: '🌸',
+    multiSelect: true,
+    maxSelect: 3,
+    options: [
+      { label: 'Fresh', value: 'Fresh', emoji: '🌿' },
+      { label: 'Citrus', value: 'Citrus', emoji: '🍋' },
+      { label: 'Aquatic', value: 'Aquatic', emoji: '💧' },
+      { label: 'Woody', value: 'Woody', emoji: '🌲' },
+      { label: 'Spicy', value: 'Spicy', emoji: '🌶️' },
+      { label: 'Floral', value: 'Floral', emoji: '🌹' },
+      { label: 'Sweet', value: 'Sweet', emoji: '🍯' },
+      { label: 'Amber', value: 'Amber', emoji: '🟡' },
+      { label: 'Leather', value: 'Leather', emoji: '🤎' },
+      { label: 'Smoky', value: 'Smoky', emoji: '💨' },
     ],
   },
   {
     id: 'intensity',
-    question: 'How bold do you like it?',
+    question: 'How strong do you like your fragrance?',
     emoji: '🔥',
     options: [
-      { label: 'Light Whisper', value: 'Light', desc: 'Subtle, close to skin', emoji: '🌿' },
-      { label: 'Moderate Trail', value: 'Moderate', desc: 'Noticed but not overpowering', emoji: '🌬️' },
-      { label: 'Strong Presence', value: 'Strong', desc: 'Fills the room', emoji: '🦁' },
-      { label: 'Intense Signature', value: 'Intense', desc: 'Unforgettable sillage', emoji: '👑' },
+      { label: 'Light & Subtle', value: 'Light', desc: 'Close to skin', emoji: '🌿' },
+      { label: 'Moderate & Balanced', value: 'Moderate', desc: 'Noticed but not overpowering', emoji: '🌬️' },
+      { label: 'Strong & Noticeable', value: 'Strong', desc: 'Fills the room', emoji: '🦁' },
+      { label: 'Very Strong / Beast Mode', value: 'Intense', desc: 'Unforgettable sillage', emoji: '👑' },
     ],
   },
   {
-    id: 'budget',
-    question: 'What\'s your budget?',
-    emoji: '💰',
+    id: 'likedFragrances',
+    question: 'Which fragrances do you already like?',
+    emoji: '💎',
     options: [
-      { label: 'Under AED 100', value: 'Under AED 100', desc: 'Great value finds', emoji: '💎' },
-      { label: 'AED 100 – 200', value: 'AED 100-200', desc: 'Premium picks', emoji: '✨' },
-      { label: 'AED 200+', value: 'AED 200+', desc: 'Luxury without limits', emoji: '👑' },
+      { label: 'Dior Sauvage', value: 'sauvage', desc: 'Fresh woody spicy', emoji: '🔵' },
+      { label: 'Bleu de Chanel', value: 'bleu', desc: 'Aromatic woody', emoji: '🌊' },
+      { label: 'Creed Aventus', value: 'aventus', desc: 'Fruity woody musky', emoji: '👔' },
+      { label: 'Baccarat Rouge 540', value: 'br540', desc: 'Floral woody amber', emoji: '🌹' },
+      { label: 'YSL Y', value: 'ysl-y', desc: 'Fresh apple woody', emoji: '🍏' },
+      { label: 'Acqua di Gio', value: 'acqua', desc: 'Aquatic citrus', emoji: '💧' },
+      { label: 'Black Opium', value: 'black-opium', desc: 'Sweet floral vanilla', emoji: '☕' },
+      { label: 'Libre', value: 'libre', desc: 'Floral lavender vanilla', emoji: '🌸' },
+      { label: 'Good Girl', value: 'good-girl', desc: 'Floral tonka', emoji: '👠' },
+      { label: 'None / Not Sure', value: 'none', desc: 'Help me discover', emoji: '🤷' },
+    ],
+  },
+  {
+    id: 'priority',
+    question: 'What is most important to you in a fragrance?',
+    emoji: '⭐',
+    options: [
+      { label: 'Long Lasting', value: 'longevity', desc: 'Wears all day', emoji: '⏳' },
+      { label: 'Strong Projection', value: 'projection', desc: 'People notice it', emoji: '📡' },
+      { label: 'Compliments', value: 'compliments', desc: 'Others love it', emoji: '💬' },
+      { label: 'Smelling Unique', value: 'unique', desc: 'Stands out from the crowd', emoji: '🦋' },
+      { label: 'Luxury Smell', value: 'luxury', desc: 'Rich and prestigious', emoji: '💍' },
+      { label: 'Best Value', value: 'value', desc: 'Quality for the price', emoji: '💰' },
+      { label: 'Safe Everyday Fragrance', value: 'everyday', desc: 'Works in any situation', emoji: '✅' },
     ],
   },
 ]
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Answers = Record<string, string>
+type AnswerValue = string | string[]
+type Answers = Record<string, AnswerValue>
 type Status = 'intro' | 'quiz' | 'loading' | 'results' | 'error'
 
 interface Recommendation {
@@ -107,17 +157,17 @@ function ProgressBar({ step, total }: { step: number; total: number }) {
 // ─── Option card ──────────────────────────────────────────────────────────────
 
 function OptionCard({
-  label, desc, emoji, selected, onClick,
+  label, desc, emoji, selected, onClick, multiSelect,
 }: {
   label: string; desc?: string; emoji?: string
-  selected: boolean; onClick: () => void
+  selected: boolean; onClick: () => void; multiSelect?: boolean
 }) {
   return (
     <motion.button
       type="button"
       onClick={onClick}
-      whileHover={{ y: -3 }}
-      whileTap={{ scale: 0.96 }}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.97 }}
       transition={{ type: 'spring', stiffness: 400, damping: 24 }}
       className={cn(
         'group relative flex w-full items-center gap-4 overflow-hidden rounded-2xl border-2 px-5 py-4 text-left transition-colors duration-200',
@@ -126,12 +176,11 @@ function OptionCard({
           : 'border-charcoal-100 bg-white hover:border-[#C8A96E]/50 hover:shadow-lg hover:shadow-[#C8A96E]/10'
       )}
     >
-      {/* gold light sweep on hover */}
       <span className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-[#C8A96E]/10 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full" />
 
       {emoji && (
         <span className={cn(
-          'relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl text-xl transition-all duration-200 group-hover:scale-110',
+          'relative flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl text-xl transition-all duration-200',
           selected ? 'bg-[#C8A96E]/20 scale-110' : 'bg-charcoal-50 group-hover:bg-[#C8A96E]/10'
         )}>
           {emoji}
@@ -139,14 +188,12 @@ function OptionCard({
       )}
       <div className="relative flex-1 min-w-0">
         <p className={cn(
-          'font-medium text-[14px] leading-snug transition-colors',
+          'font-medium text-[13.5px] leading-snug transition-colors',
           selected ? 'text-charcoal-950' : 'text-charcoal-800 group-hover:text-charcoal-950'
         )}>
           {label}
         </p>
-        {desc && (
-          <p className="mt-0.5 text-[11.5px] text-charcoal-400">{desc}</p>
-        )}
+        {desc && <p className="mt-0.5 text-[11px] text-charcoal-400">{desc}</p>}
       </div>
 
       <AnimatePresence>
@@ -156,9 +203,12 @@ function OptionCard({
             animate={{ scale: 1, rotate: 0, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             transition={{ type: 'spring', stiffness: 520, damping: 20 }}
-            className="relative flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-[#C8A96E] shadow-sm shadow-[#C8A96E]/40"
+            className={cn(
+              'relative flex h-5 w-5 flex-shrink-0 items-center justify-center shadow-sm shadow-[#C8A96E]/40',
+              multiSelect ? 'rounded-md bg-[#C8A96E]' : 'rounded-full bg-[#C8A96E]'
+            )}
           >
-            <span className="text-[10px] font-bold text-white">✓</span>
+            <Check className="h-3 w-3 text-white" strokeWidth={3} />
           </motion.span>
         )}
       </AnimatePresence>
@@ -170,10 +220,8 @@ function OptionCard({
 
 function AiThinking() {
   const dots = ['Analysing your preferences', 'Consulting our perfumers', 'Matching your sillage', 'Curating your selections']
-
   return (
     <div className="flex flex-col items-center gap-8 py-16">
-      {/* Animated orb */}
       <div className="relative">
         <motion.div
           animate={{ scale: [1, 1.15, 1], opacity: [0.6, 1, 0.6] }}
@@ -188,27 +236,14 @@ function AiThinking() {
           <Sparkles className="h-8 w-8 text-[#C8A96E]" />
         </motion.div>
       </div>
-
       <div className="text-center space-y-2">
         <h3 className="font-display text-xl font-light text-charcoal-900">Finding your perfect scent</h3>
         <p className="text-sm text-charcoal-400">Our AI is consulting master perfumers…</p>
       </div>
-
-      {/* Cycling status messages */}
       <div className="flex flex-col gap-2 w-full max-w-xs">
         {dots.map((text, i) => (
-          <motion.div
-            key={text}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: i * 0.7, duration: 0.4 }}
-            className="flex items-center gap-2.5"
-          >
-            <motion.div
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.4 }}
-              className="h-1.5 w-1.5 rounded-full bg-[#C8A96E]"
-            />
+          <motion.div key={text} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.7, duration: 0.4 }} className="flex items-center gap-2.5">
+            <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.4 }} className="h-1.5 w-1.5 rounded-full bg-[#C8A96E]" />
             <span className="text-[12px] text-charcoal-500">{text}</span>
           </motion.div>
         ))}
@@ -222,8 +257,6 @@ function AiThinking() {
 function ResultCard({ rec, locale, rank }: { rec: Recommendation; locale: string; rank: number }) {
   const p = rec.product
   if (!p) return null
-
-  const formatPrice = useCurrencyStore((s) => s.format)
   const name = locale === 'ar' ? p.name_ar : p.name_en
   const image = p.images?.[0]?.url
   const price = p.volume?.[0]?.price ?? p.price
@@ -235,65 +268,37 @@ function ResultCard({ rec, locale, rank }: { rec: Recommendation; locale: string
       transition={{ delay: rank * 0.15, duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       className="group relative overflow-hidden rounded-2xl border border-charcoal-100 bg-white shadow-sm hover:shadow-xl hover:shadow-black/8 transition-all duration-300"
     >
-      {/* Rank badge */}
       <div className="absolute top-3.5 left-3.5 z-10">
-        <span className={cn(
-          'flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold',
-          rank === 0 ? 'bg-[#C8A96E] text-white' : 'bg-charcoal-100 text-charcoal-600'
-        )}>
+        <span className={cn('flex h-7 w-7 items-center justify-center rounded-full text-[11px] font-bold', rank === 0 ? 'bg-[#C8A96E] text-white' : 'bg-charcoal-100 text-charcoal-600')}>
           #{rank + 1}
         </span>
       </div>
-
-      {/* Best Match label */}
       {rank === 0 && (
         <div className="absolute top-3.5 right-3.5 z-10">
-          <span className="rounded-full bg-[#C8A96E]/15 border border-[#C8A96E]/30 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#C8A96E]">
-            Best Match
-          </span>
+          <span className="rounded-full bg-[#C8A96E]/15 border border-[#C8A96E]/30 px-2.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.2em] text-[#C8A96E]">Best Match</span>
         </div>
       )}
-
-      {/* Product image */}
       <div className="relative aspect-[4/3] overflow-hidden bg-cream-100">
         {image ? (
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover transition-transform duration-700 group-hover:scale-105"
-          />
+          <Image src={image} alt={name} fill className="object-cover transition-transform duration-700 group-hover:scale-105" />
         ) : (
           <div className="flex h-full items-center justify-center bg-gradient-to-br from-charcoal-50 to-charcoal-100">
-            <span className="font-display text-5xl italic text-charcoal-200">
-              {name.split(' ').map(w => w[0]).join('').slice(0, 2)}
-            </span>
+            <span className="font-display text-5xl italic text-charcoal-200">{name.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}</span>
           </div>
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
       </div>
-
-      {/* Info */}
       <div className="p-4">
-        <p className="mb-1 text-[8.5px] font-bold uppercase tracking-[0.2em] text-charcoal-400">
-          {p.fragranceFamily} · {p.intensity}
-        </p>
+        <p className="mb-1 text-[8.5px] font-bold uppercase tracking-[0.2em] text-charcoal-400">{p.fragranceFamily} · {p.intensity}</p>
         <h3 className="font-display text-lg font-light text-charcoal-950 leading-snug">{name}</h3>
-
-        {/* AI reason */}
         <div className="mt-2.5 flex gap-2">
           <Sparkles className="h-3 w-3 flex-shrink-0 text-[#C8A96E] mt-0.5" />
           <p className="text-[11.5px] italic text-charcoal-500 leading-relaxed">{rec.reason}</p>
         </div>
-
         <div className="mt-3.5 flex items-center justify-between">
-          <span className="font-medium text-charcoal-900">{formatPrice(price)}</span>
-          <Link
-            href={`/${locale}/products/${p.slug}`}
-            className="inline-flex items-center gap-1.5 rounded-full bg-charcoal-950 px-4 py-2 text-[10.5px] font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#C8A96E]"
-          >
-            View Scent
-            <ArrowRight className="h-2.5 w-2.5" />
+          <PriceText amount={price} className="font-medium text-charcoal-900" />
+          <Link href={`/${locale}/products/${p.slug}`} className="inline-flex items-center gap-1.5 rounded-full bg-charcoal-950 px-4 py-2 text-[10.5px] font-bold uppercase tracking-[0.15em] text-white transition-colors hover:bg-[#C8A96E]">
+            View Scent <ArrowRight className="h-2.5 w-2.5" />
           </Link>
         </div>
       </div>
@@ -301,64 +306,105 @@ function ResultCard({ rec, locale, rank }: { rec: Recommendation; locale: string
   )
 }
 
-// ─── Local scent-matching (no AI — scores products from your DB) ───────────────
+// ─── Scoring ──────────────────────────────────────────────────────────────────
 
-const VIBE_FAMILY: Record<string, string[]> = {
-  'Fresh & Citrus': ['Citrus', 'Fresh', 'Aquatic'],
-  'Warm & Oriental': ['Oriental', 'Gourmand'],
-  'Bold & Woody': ['Woody'],
-  'Light & Floral': ['Floral'],
+const LIKED_TO_FAMILIES: Record<string, string[]> = {
+  sauvage: ['Fresh', 'Woody', 'Spicy'],
+  bleu: ['Woody', 'Citrus', 'Fresh'],
+  aventus: ['Woody', 'Fresh', 'Citrus'],
+  br540: ['Floral', 'Woody', 'Amber'],
+  'ysl-y': ['Fresh', 'Woody', 'Citrus'],
+  acqua: ['Aquatic', 'Citrus', 'Fresh'],
+  'black-opium': ['Sweet', 'Floral', 'Woody'],
+  libre: ['Floral', 'Sweet', 'Amber'],
+  'good-girl': ['Floral', 'Sweet', 'Woody'],
+  none: [],
 }
-const INTENSITY_ORDER = ['Light', 'Moderate', 'Strong', 'Intense']
+
 const OCCASION_TAGS: Record<string, string[]> = {
-  Daily: ['daily', 'everyday', 'fresh', 'summer', 'light', 'citrus'],
-  Work: ['fresh', 'light', 'everyday', 'citrus', 'clean'],
-  Evening: ['evening', 'oud', 'luxury', 'oriental', 'dark', 'rose'],
-  Special: ['luxury', 'iconic', 'oud', 'evening', 'amber'],
+  Daily:   ['daily', 'everyday', 'fresh', 'office', 'work', 'citrus', 'clean'],
+  Casual:  ['casual', 'everyday', 'fresh', 'citrus', 'summer'],
+  Evening: ['evening', 'date', 'oud', 'luxury', 'oriental', 'dark', 'rose', 'night'],
+  Special: ['luxury', 'iconic', 'oud', 'evening', 'amber', 'special'],
+  Party:   ['party', 'night', 'bold', 'clubbing', 'loud', 'projection'],
+  Sports:  ['fresh', 'citrus', 'aquatic', 'sport', 'gym', 'clean'],
+}
+
+const INTENSITY_ORDER = ['Light', 'Moderate', 'Strong', 'Intense']
+
+const PRIORITY_FIELD: Record<string, { field: keyof Product; value: string }[]> = {
+  longevity:  [{ field: 'longevity', value: 'Very Long' }, { field: 'longevity', value: 'Long' }],
+  projection: [{ field: 'sillage', value: 'Enormous' }, { field: 'sillage', value: 'Strong' }],
+  luxury:     [],
+  everyday:   [],
+  unique:     [],
+  compliments:[],
+  value:      [],
 }
 
 function scoreProduct(p: Product, a: Answers): number {
   let s = 0
-  // Vibe → fragrance family (strongest signal)
-  const fams = VIBE_FAMILY[a.vibe] ?? []
-  if (p.fragranceFamily && fams.includes(p.fragranceFamily)) s += 45
-  // Intensity match (closer = more points)
+
+  // Q4: scent family (multi-select) — strongest signal
+  const selectedFamilies = (a.scentFamily as string[]) ?? []
+  if (selectedFamilies.length > 0 && p.fragranceFamily) {
+    if (selectedFamilies.includes(p.fragranceFamily)) s += 45
+    else if (selectedFamilies.some(f => p.fragranceFamily!.toLowerCase().includes(f.toLowerCase()))) s += 20
+  }
+
+  // Q5: intensity
   if (p.intensity && a.intensity) {
-    const d = Math.abs(INTENSITY_ORDER.indexOf(p.intensity) - INTENSITY_ORDER.indexOf(a.intensity))
+    const d = Math.abs(INTENSITY_ORDER.indexOf(p.intensity) - INTENSITY_ORDER.indexOf(a.intensity as string))
     s += d === 0 ? 30 : d === 1 ? 16 : d === 2 ? 6 : 0
   }
-  // Occasion → tags
-  const otags = OCCASION_TAGS[a.occasion] ?? []
-  const matches = (p.tags ?? []).filter((t) => otags.includes(t.toLowerCase())).length
-  s += Math.min(matches * 8, 24)
-  // Budget → price (USD prices; soft preference)
-  const price = p.volume?.[0]?.price ?? p.price ?? 0
-  if (a.budget === 'Under AED 100') s += price <= 180 ? 15 : price <= 240 ? 6 : 0
-  else if (a.budget === 'AED 100-200') s += price >= 150 && price <= 300 ? 15 : 6
-  else if (a.budget === 'AED 200+') s += price >= 250 ? 15 : 6
+
+  // Q3: occasion → tags
+  const otags = OCCASION_TAGS[a.occasion as string] ?? []
+  const tagMatches = (p.tags ?? []).filter(t => otags.includes(t.toLowerCase())).length
+  s += Math.min(tagMatches * 8, 24)
+
+  // Q6: liked fragrances → infer preferred families
+  const likedFams = LIKED_TO_FAMILIES[a.likedFragrances as string] ?? []
+  if (likedFams.length && p.fragranceFamily && likedFams.includes(p.fragranceFamily)) s += 15
+
+  // Q7: priority
+  const priorityChecks = PRIORITY_FIELD[a.priority as string] ?? []
+  for (const { field, value } of priorityChecks) {
+    if ((p as Record<string, unknown>)[field] === value) { s += 12; break }
+  }
+  if (a.priority === 'luxury' && p.featured) s += 12
+  if (a.priority === 'everyday' && p.intensity && ['Light', 'Moderate'].includes(p.intensity)) s += 12
+
+  // Q1: recipient
+  const recipient = a.recipient as string
+  if (recipient !== 'gift') {
+    const tags = (p.tags ?? []).map(t => t.toLowerCase())
+    if (recipient === 'men' && (tags.includes('men') || tags.includes('masculine'))) s += 10
+    if (recipient === 'women' && (tags.includes('women') || tags.includes('feminine'))) s += 10
+    if (recipient === 'unisex' && tags.includes('unisex')) s += 10
+  }
+
   // Tie-breakers
   if (p.featured) s += 2
-  if (p.bestSeller) s += 2
+  if (p.bestSeller) s += 3
   return s
 }
-
-const FAM_AR: Record<string, string> = { Woody: 'خشبي', Floral: 'زهري', Citrus: 'حمضي', Oriental: 'شرقي', Fresh: 'منعش', Aquatic: 'مائي', Gourmand: 'حلواني' }
-const INT_AR: Record<string, string> = { Light: 'خفيف', Moderate: 'معتدل', Strong: 'قوي', Intense: 'كثيف' }
-const OCC_AR: Record<string, string> = { Daily: 'للاستخدام اليومي', Work: 'للعمل', Evening: 'للسهرات', Special: 'للمناسبات الخاصة' }
-const OCC_EN: Record<string, string> = { Daily: 'everyday wear', Work: 'the workplace', Evening: 'evenings out', Special: 'special occasions' }
 
 function buildReason(p: Product, a: Answers, locale: string): string {
   const fam = p.fragranceFamily ?? ''
   const intensity = p.intensity ?? ''
-  if (locale === 'ar') {
-    return `عطر ${FAM_AR[fam] ?? ''} بأثر ${INT_AR[intensity] ?? ''} — اختيار مثالي ${OCC_AR[a.occasion] ?? ''}.`.replace(/\s+/g, ' ').trim()
+  const occasion = a.occasion as string
+  const occasionLabel: Record<string, string> = {
+    Daily: 'daily wear', Casual: 'casual occasions', Evening: 'date nights',
+    Special: 'special occasions', Party: 'parties', Sports: 'active days',
   }
-  return `A ${fam.toLowerCase()} scent with a ${intensity.toLowerCase()} trail — a perfect match for ${OCC_EN[a.occasion] ?? 'any occasion'}.`
+  if (locale === 'ar') return `عطر ${fam} بأثر ${intensity} — مناسب تماماً لـ${occasionLabel[occasion] ?? 'كل مناسبة'}.`
+  return `A ${fam.toLowerCase()} scent with ${intensity.toLowerCase()} projection — perfect for ${occasionLabel[occasion] ?? 'any occasion'}.`
 }
 
 function recommendProducts(products: Product[], a: Answers, locale: string): Recommendation[] {
   return [...products]
-    .map((p) => ({ p, score: scoreProduct(p, a) }))
+    .map(p => ({ p, score: scoreProduct(p, a) }))
     .sort((x, y) => y.score - x.score)
     .slice(0, 3)
     .map(({ p }) => ({ id: p._id, slug: p.slug, reason: buildReason(p, a, locale), product: p }))
@@ -378,25 +424,37 @@ export function QuizClient({ products }: { products: Product[] }) {
   const step = STEPS[currentStep]
 
   const handleSelect = useCallback((value: string) => {
-    setAnswers(prev => ({ ...prev, [step.id]: value }))
-  }, [step.id])
+    if (step.multiSelect) {
+      setAnswers(prev => {
+        const current = (prev[step.id] as string[]) ?? []
+        const max = step.maxSelect ?? 99
+        if (current.includes(value)) return { ...prev, [step.id]: current.filter(v => v !== value) }
+        if (current.length >= max) return prev
+        return { ...prev, [step.id]: [...current, value] }
+      })
+    } else {
+      setAnswers(prev => ({ ...prev, [step.id]: value }))
+    }
+  }, [step])
+
+  const isSelected = useCallback((value: string) => {
+    if (step.multiSelect) return ((answers[step.id] as string[]) ?? []).includes(value)
+    return answers[step.id] === value
+  }, [answers, step])
+
+  const canProceed = step.multiSelect
+    ? ((answers[step.id] as string[]) ?? []).length > 0
+    : !!answers[step.id]
 
   const handleNext = useCallback(async () => {
     if (currentStep < STEPS.length - 1) {
       setCurrentStep(s => s + 1)
     } else {
-      // Submit — local scoring (no AI), picks top matches from your products
       setStatus('loading')
       const recs = recommendProducts(products, answers, locale)
-      // brief delay so the curation animation plays
       setTimeout(() => {
-        if (recs.length) {
-          setRecommendations(recs)
-          setStatus('results')
-        } else {
-          setError('No fragrances available right now. Please try again.')
-          setStatus('error')
-        }
+        if (recs.length) { setRecommendations(recs); setStatus('results') }
+        else { setError('No fragrances available right now. Please try again.'); setStatus('error') }
       }, 900)
     }
   }, [currentStep, answers, products, locale])
@@ -407,65 +465,32 @@ export function QuizClient({ products }: { products: Product[] }) {
   }, [currentStep])
 
   const restart = useCallback(() => {
-    setStatus('intro')
-    setCurrentStep(0)
-    setAnswers({})
-    setRecommendations([])
-    setError('')
+    setStatus('intro'); setCurrentStep(0); setAnswers({}); setRecommendations([]); setError('')
   }, [])
 
-  const canProceed = !!answers[step?.id]
-
-  // ── Intro screen ────────────────────────────────────────────────────────────
+  // ── Intro screen ─────────────────────────────────────────────────────────────
   if (status === 'intro') {
     return (
       <div className="min-h-screen bg-charcoal-950 pt-[72px] flex flex-col">
-        {/* Hero */}
         <div className="flex flex-1 flex-col items-center justify-center px-4 py-20 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}
-          >
-            {/* Icon orb */}
+          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] }}>
             <div className="mx-auto mb-8 flex h-20 w-20 items-center justify-center rounded-full border border-[#C8A96E]/30 bg-[#C8A96E]/10">
               <Sparkles className="h-8 w-8 text-[#C8A96E]" />
             </div>
-
-            <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.45em] text-[#C8A96E]">
-              AI-Powered · 5 Questions
-            </p>
+            <p className="mb-3 text-[9px] font-bold uppercase tracking-[0.45em] text-[#C8A96E]">AI-Powered · 7 Questions</p>
             <h1 className="mb-5 font-display text-4xl font-light text-white md:text-5xl lg:text-6xl">
-              Find Your<br />
-              <em className="italic text-[#C8A96E]">Perfect Scent</em>
+              Find Your<br /><em className="italic text-[#C8A96E]">Perfect Scent</em>
             </h1>
             <p className="mx-auto mb-10 max-w-md text-base font-light leading-relaxed text-charcoal-300">
-              Answer 5 quick questions and our AI will match you with fragrances perfectly tailored to your personality, lifestyle, and taste.
+              Answer 7 quick questions and our AI will match you with fragrances perfectly tailored to your personality, lifestyle, and taste.
             </p>
-
-            <motion.button
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              onClick={() => setStatus('quiz')}
-              className="inline-flex items-center gap-3 bg-[#C8A96E] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-charcoal-950 transition-colors hover:bg-[#B8965E]"
-            >
-              Start the Quiz
-              <ArrowRight className="h-4 w-4" />
+            <motion.button whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.97 }} onClick={() => setStatus('quiz')}
+              className="inline-flex items-center gap-3 bg-[#C8A96E] px-10 py-4 text-[11px] font-bold uppercase tracking-[0.25em] text-charcoal-950 transition-colors hover:bg-[#B8965E]">
+              Start the Quiz <ArrowRight className="h-4 w-4" />
             </motion.button>
           </motion.div>
-
-          {/* Stats */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4, duration: 0.6 }}
-            className="mt-16 flex items-center gap-10"
-          >
-            {[
-              { value: '9+', label: 'Fragrances' },
-              { value: '5', label: 'Questions' },
-              { value: 'AI', label: 'Powered' },
-            ].map(({ value, label }) => (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.6 }} className="mt-16 flex items-center gap-10">
+            {[{ value: '9+', label: 'Fragrances' }, { value: '7', label: 'Questions' }, { value: 'AI', label: 'Powered' }].map(({ value, label }) => (
               <div key={label} className="text-center">
                 <p className="font-display text-2xl font-light text-[#C8A96E]">{value}</p>
                 <p className="mt-0.5 text-[9px] uppercase tracking-[0.3em] text-charcoal-500">{label}</p>
@@ -477,82 +502,53 @@ export function QuizClient({ products }: { products: Product[] }) {
     )
   }
 
-  // ── Loading screen ───────────────────────────────────────────────────────────
+  // ── Loading ───────────────────────────────────────────────────────────────────
   if (status === 'loading') {
     return (
       <div className="min-h-screen bg-white pt-[72px] flex items-center justify-center px-4">
-        <div className="w-full max-w-sm">
-          <AiThinking />
-        </div>
+        <div className="w-full max-w-sm"><AiThinking /></div>
       </div>
     )
   }
 
-  // ── Error screen ─────────────────────────────────────────────────────────────
+  // ── Error ─────────────────────────────────────────────────────────────────────
   if (status === 'error') {
     return (
       <div className="min-h-screen bg-white pt-[72px] flex flex-col items-center justify-center gap-6 px-4 text-center">
         <p className="text-5xl">😔</p>
         <h2 className="font-display text-2xl font-light text-charcoal-800">Something went wrong</h2>
         <p className="text-sm text-charcoal-400 max-w-xs">{error}</p>
-        <button
-          onClick={restart}
-          className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal-950 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-charcoal-950 hover:bg-charcoal-950 hover:text-white transition-all"
-        >
-          <RotateCcw className="h-3.5 w-3.5" />
-          Try Again
+        <button onClick={restart} className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal-950 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.2em] text-charcoal-950 hover:bg-charcoal-950 hover:text-white transition-all">
+          <RotateCcw className="h-3.5 w-3.5" /> Try Again
         </button>
       </div>
     )
   }
 
-  // ── Results screen ───────────────────────────────────────────────────────────
+  // ── Results ───────────────────────────────────────────────────────────────────
   if (status === 'results') {
     return (
       <div className="min-h-screen bg-[#FAFAF9] pt-[72px]">
-        {/* Results hero */}
         <div className="bg-charcoal-950 px-4 py-12 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
+          <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#C8A96E]/20 border border-[#C8A96E]/30">
               <Sparkles className="h-5 w-5 text-[#C8A96E]" />
             </div>
             <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.4em] text-[#C8A96E]">Your Matches</p>
-            <h2 className="font-display text-3xl font-light text-white">
-              We found your perfect scents
-            </h2>
-            <p className="mt-3 text-sm text-charcoal-400">
-              Curated by AI · Based on your personal profile
-            </p>
+            <h2 className="font-display text-3xl font-light text-white">We found your perfect scents</h2>
+            <p className="mt-3 text-sm text-charcoal-400">Curated by AI · Based on your personal profile</p>
           </motion.div>
         </div>
-
-        {/* Results grid */}
         <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {recommendations.map((rec, i) => (
-              <ResultCard key={rec.id + i} rec={rec} locale={locale} rank={i} />
-            ))}
+            {recommendations.map((rec, i) => <ResultCard key={rec.id + i} rec={rec} locale={locale} rank={i} />)}
           </div>
-
-          {/* Actions */}
           <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
-            <button
-              onClick={restart}
-              className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal-200 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-charcoal-600 hover:border-charcoal-900 hover:text-charcoal-900 transition-all"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              Retake Quiz
+            <button onClick={restart} className="inline-flex items-center gap-2 rounded-full border-2 border-charcoal-200 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-charcoal-600 hover:border-charcoal-900 hover:text-charcoal-900 transition-all">
+              <RotateCcw className="h-3.5 w-3.5" /> Retake Quiz
             </button>
-            <Link
-              href={`/${locale}/products`}
-              className="inline-flex items-center gap-2 rounded-full bg-charcoal-950 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-[#C8A96E] transition-colors"
-            >
-              <ExternalLink className="h-3.5 w-3.5" />
-              View All Fragrances
+            <Link href={`/${locale}/products`} className="inline-flex items-center gap-2 rounded-full bg-charcoal-950 px-8 py-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white hover:bg-[#C8A96E] transition-colors">
+              <ExternalLink className="h-3.5 w-3.5" /> View All Fragrances
             </Link>
           </div>
         </div>
@@ -560,7 +556,9 @@ export function QuizClient({ products }: { products: Product[] }) {
     )
   }
 
-  // ── Quiz screen ──────────────────────────────────────────────────────────────
+  // ── Quiz screen ───────────────────────────────────────────────────────────────
+  const selectedMulti = (answers[step.id] as string[]) ?? []
+
   return (
     <div className="min-h-screen bg-white pt-[72px]">
       {/* Top bar */}
@@ -570,12 +568,7 @@ export function QuizClient({ products }: { products: Product[] }) {
             <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-charcoal-400">
               Step {currentStep + 1} of {STEPS.length}
             </p>
-            <button
-              onClick={restart}
-              className="text-[10px] text-charcoal-400 underline underline-offset-2 hover:text-charcoal-700 transition-colors"
-            >
-              Restart
-            </button>
+            <button onClick={restart} className="text-[10px] text-charcoal-400 underline underline-offset-2 hover:text-charcoal-700 transition-colors">Restart</button>
           </div>
           <ProgressBar step={currentStep} total={STEPS.length} />
         </div>
@@ -591,22 +584,32 @@ export function QuizClient({ products }: { products: Product[] }) {
             exit={{ opacity: 0, x: -24 }}
             transition={{ duration: 0.28, ease: [0.25, 0.46, 0.45, 0.94] }}
           >
-            <div className="mb-8">
+            <div className="mb-7">
               <p className="mb-3 text-3xl">{step.emoji}</p>
-              <h2 className="font-display text-2xl font-light text-charcoal-950 md:text-3xl">
-                {step.question}
-              </h2>
+              <h2 className="font-display text-2xl font-light text-charcoal-950 md:text-3xl">{step.question}</h2>
+              {step.subtitle && (
+                <p className="mt-1.5 text-[12px] font-medium text-charcoal-400 uppercase tracking-[0.2em]">
+                  {step.subtitle}
+                  {step.multiSelect && selectedMulti.length > 0 && (
+                    <span className="ml-2 text-[#C8A96E]">{selectedMulti.length}/{step.maxSelect}</span>
+                  )}
+                </p>
+              )}
             </div>
 
-            <div className="flex flex-col gap-3">
+            <div className={cn(
+              'flex flex-col gap-2.5',
+              step.multiSelect && 'grid grid-cols-2 sm:grid-cols-2'
+            )}>
               {step.options.map(opt => (
                 <OptionCard
                   key={opt.value}
                   label={opt.label}
                   desc={opt.desc}
                   emoji={opt.emoji}
-                  selected={answers[step.id] === opt.value}
+                  selected={isSelected(opt.value)}
                   onClick={() => handleSelect(opt.value)}
+                  multiSelect={step.multiSelect}
                 />
               ))}
             </div>
@@ -615,14 +618,9 @@ export function QuizClient({ products }: { products: Product[] }) {
 
         {/* Navigation */}
         <div className="mt-8 flex items-center justify-between">
-          <button
-            onClick={handleBack}
-            className="flex items-center gap-2 text-[11px] font-medium text-charcoal-400 hover:text-charcoal-800 transition-colors"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Back
+          <button onClick={handleBack} className="flex items-center gap-2 text-[11px] font-medium text-charcoal-400 hover:text-charcoal-800 transition-colors">
+            <ArrowLeft className="h-3.5 w-3.5" /> Back
           </button>
-
           <motion.button
             onClick={handleNext}
             disabled={!canProceed}
@@ -638,15 +636,9 @@ export function QuizClient({ products }: { products: Product[] }) {
             )}
           >
             {currentStep === STEPS.length - 1 ? (
-              <>
-                <Sparkles className="h-3.5 w-3.5" />
-                Get My Recommendations
-              </>
+              <><Sparkles className="h-3.5 w-3.5" /> Get My Recommendations</>
             ) : (
-              <>
-                Continue
-                <ArrowRight className="h-3.5 w-3.5" />
-              </>
+              <>Continue <ArrowRight className="h-3.5 w-3.5" /></>
             )}
           </motion.button>
         </div>

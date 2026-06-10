@@ -7,17 +7,16 @@ export const newArrivalsSection = defineType({
   type: 'object',
   fields: [
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
-    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string', validation: (Rule) => Rule.max(80) }),
-    defineField({ name: 'subtitle_en', title: 'Subtitle (English)', type: 'string', validation: (Rule) => Rule.max(160) }),
-    defineField({ name: 'subtitle_ar', title: 'العنوان الفرعي (Arabic)', type: 'string', validation: (Rule) => Rule.max(160) }),
+    defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string' }),
+    defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string' }),
+    defineField({ name: 'subtitle_en', title: 'Subtitle (English)', type: 'string' }),
+    defineField({ name: 'subtitle_ar', title: 'العنوان الفرعي (Arabic)', type: 'string' }),
     defineField({
       name: 'limit',
       title: 'Max Products',
       type: 'number',
       description: 'Maximum number of new products to show (up to 12).',
       initialValue: 8,
-      validation: (Rule) => Rule.min(4).max(12),
     }),
     defineField({
       name: 'layout',

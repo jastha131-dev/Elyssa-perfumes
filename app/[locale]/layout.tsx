@@ -8,7 +8,6 @@ import Providers from '@/components/layout/Providers'
 import { ConditionalLayout } from '@/components/layout/ConditionalLayout'
 import VisualEditingWrapper from '@/components/VisualEditingWrapper'
 import { getAllCategories, getCollections, getNavPages, getNavConfig, getAnnouncementBar, getMenuPromo, getSiteLogo } from '@/lib/sanity/fetch'
-import AnnouncementBar from '@/components/layout/AnnouncementBar'
 
 const locales = ['en', 'ar']
 
@@ -43,10 +42,9 @@ export default async function LocaleLayout({
   return (
     <NextIntlClientProvider messages={messages}>
       <Providers>
-        {announcementBar && <AnnouncementBar data={announcementBar} />}
         <ConditionalLayout
           key="layout"
-          header={<Header categories={categories} collections={collections} navPages={navPages} navItems={navItems} menuPromo={menuPromo} siteLogo={siteLogo} />}
+          header={<Header categories={categories} collections={collections} navPages={navPages} navItems={navItems} menuPromo={menuPromo} siteLogo={siteLogo} announcementBar={announcementBar} />}
           footer={<Footer />}
         >
           {children}

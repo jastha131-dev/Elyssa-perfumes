@@ -11,27 +11,23 @@ export const heroSection = defineType({
       name: 'headline_en',
       title: 'Headline (English)',
       type: 'string',
-      validation: (Rule) => Rule.required().max(100),
     }),
     defineField({
       name: 'headline_ar',
       title: 'العنوان (Arabic)',
       type: 'string',
-      validation: (Rule) => Rule.max(100),
     }),
     defineField({
       name: 'subheadline_en',
       title: 'Subheadline (English)',
       type: 'text',
       rows: 3,
-      validation: (Rule) => Rule.max(250),
     }),
     defineField({
       name: 'subheadline_ar',
       title: 'العنوان الفرعي (Arabic)',
       type: 'text',
       rows: 3,
-      validation: (Rule) => Rule.max(250),
     }),
     defineField({
       name: 'bgImage',
@@ -39,7 +35,6 @@ export const heroSection = defineType({
       type: 'image',
       options: { hotspot: true },
       fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' })],
-      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'mobileImage',
@@ -63,26 +58,22 @@ export const heroSection = defineType({
       title: 'Promo Badge (English)',
       type: 'string',
       description: 'e.g. "50% OFF" — leave blank to hide badge',
-      validation: (Rule) => Rule.max(30),
     }),
     defineField({
       name: 'badge_ar',
       title: 'شارة العرض (Arabic)',
       type: 'string',
-      validation: (Rule) => Rule.max(30),
     }),
     defineField({
       name: 'badgeSub_en',
       title: 'Badge Sub-text (English)',
       type: 'string',
       description: 'e.g. "LIMITED TIME OFFER"',
-      validation: (Rule) => Rule.max(50),
     }),
     defineField({
       name: 'badgeSub_ar',
       title: 'نص فرعي للشارة (Arabic)',
       type: 'string',
-      validation: (Rule) => Rule.max(50),
     }),
     defineField({ name: 'cta', title: 'CTA Button', type: 'ctaButton' }),
     defineField({
@@ -94,14 +85,13 @@ export const heroSection = defineType({
         defineArrayMember({
           type: 'object',
           fields: [
-            defineField({ name: 'value', title: 'Value', type: 'string', description: 'e.g. "100%" or "50+"', validation: (Rule) => Rule.required().max(20) }),
-            defineField({ name: 'label_en', title: 'Label (English)', type: 'string', description: 'e.g. "Authentic"', validation: (Rule) => Rule.required().max(40) }),
-            defineField({ name: 'label_ar', title: 'التصنيف (Arabic)', type: 'string', validation: (Rule) => Rule.max(40) }),
+            defineField({ name: 'value', title: 'Value', type: 'string', description: 'e.g. "100%" or "50+"' }),
+            defineField({ name: 'label_en', title: 'Label (English)', type: 'string', description: 'e.g. "Authentic"' }),
+            defineField({ name: 'label_ar', title: 'التصنيف (Arabic)', type: 'string' }),
           ],
           preview: { select: { title: 'value', subtitle: 'label_en' } },
         }),
       ],
-      validation: (Rule) => Rule.max(3),
     }),
     defineField({
       name: 'headlineSize',

@@ -7,6 +7,7 @@ import { X, Plus, Minus } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCurrencyStore } from '@/lib/store/currency-store'
 import type { CartItem as CartItemType } from '@/lib/types'
+import { PriceText } from '@/components/ui/PriceText'
 
 interface CartItemProps {
   item: CartItemType
@@ -142,17 +143,13 @@ export default function CartItem({
 
           {/* Line total */}
           <div className="text-right">
-            <p
-              className={cn(
+            <PriceText amount={lineTotal} className={cn(
                 'font-display font-semibold text-charcoal-900 tabular-nums',
                 isLarge ? 'text-base' : 'text-sm'
-              )}
-            >
-              {formatPrice(lineTotal)}
-            </p>
+              )} />
             {quantity > 1 && (
               <p className="text-xs text-charcoal-400">
-                {formatPrice(selectedVolume.price)} {t('each')}
+                <PriceText amount={selectedVolume.price} /> {t('each')}
               </p>
             )}
           </div>

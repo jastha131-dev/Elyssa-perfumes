@@ -802,6 +802,8 @@ export const getSiteSettingsQuery = `
   *[_type == "siteSettings"][0] {
     fontPairing,
     baseFontSize,
+    tabletFontSize,
+    mobileFontSize,
     headingLetterSpacing,
     bodyLineHeight,
     headingWeight,
@@ -815,6 +817,7 @@ export const getSiteSettingsQuery = `
     cardImageRatio,
     cardFontSize,
     collectionColumns,
+    mobileCardColumns,
     pdpTextSize,
     "promoBanner": promoBanner {
       isEnabled,
@@ -824,7 +827,17 @@ export const getSiteSettingsQuery = `
       countdownEndDate,
       minOrderAmount
     },
+    colorMode,
     colorPalette,
+    "customColors": customColors {
+      "accent": accent.hex,
+      "accentDark": accentDark.hex,
+      "accentLight": accentLight.hex,
+      "dark": dark.hex,
+      "bg": bg.hex,
+      "bgSoft": bgSoft.hex,
+      "secondary": secondary.hex
+    },
     defaultCurrency,
     "currencies": currencies[isEnabled == true]{
       code,

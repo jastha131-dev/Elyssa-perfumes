@@ -17,55 +17,73 @@ interface CurrencyState {
   convert: (usdAmount: number) => number
 }
 
-function detectLocaleCurrency(): string {
-  if (typeof navigator === 'undefined') return 'USD'
-  const lang = navigator.language || ''
-  if (lang.includes('AE') || lang.includes('ar-AE')) return 'AED'
-  if (lang.includes('IN') || lang.includes('hi')) return 'INR'
+function buildFormat(currencies: CurrencyConfig[], selected: string) {
+  return (usdAmount: number): string => {
+    const cur = currencies.find((c) => c.code === selected) ?? { code: 'USD', symbol: '$', rate: 1, position: 'before' as const }
+    const converted = usdAmount * cur.rate
+    const decimals = cur.code === 'INR' ? 0 : 2
+    const formatted = converted.toLocaleString('en', {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals,
+    })
+    const sep = cur.symbol.length > 1 ? ' ' : ''
+    return cur.position === 'after'
+      ? `${formatted}${sep}${cur.symbol}`
+      : `${cur.symbol}${sep}${formatted}`
+  }
+}
+
+function buildConvert(currencies: CurrencyConfig[], selected: string) {
+  return (usdAmount: number): number => {
+    const cur = currencies.find((c) => c.code === selected)
+    return cur ? usdAmount * cur.rate : usdAmount
+  }
+}
+
+function getStoredCurrency(): string {
+  if (typeof window === 'undefined') return 'USD'
+  try {
+    const v = sessionStorage.getItem('luxe-detected-currency')
+    if (v) return v
+  } catch { /* ignore */ }
   return 'USD'
 }
 
+const DEFAULT_CURRENCIES: CurrencyConfig[] = [
+  { code: 'USD', symbol: '$', rate: 1, position: 'before' },
+  { code: 'AED', symbol: 'AED', rate: 3.67, position: 'before' },
+  { code: 'INR', symbol: '₹', rate: 83.5, position: 'before' },
+]
+
 export const useCurrencyStore = create<CurrencyState>()(
   persist(
-    (set, get) => ({
-      selected: 'USD',
-      currencies: [
-        { code: 'USD', symbol: '$', rate: 1, position: 'before' },
-        { code: 'AED', symbol: 'AED', rate: 3.67, position: 'after' },
-        { code: 'INR', symbol: '₹', rate: 83.5, position: 'before' },
-      ],
+    (set) => {
+      const initialSelected = getStoredCurrency()
+      const initialCurrencies = DEFAULT_CURRENCIES
+      return {
+        selected: initialSelected,
+        currencies: initialCurrencies,
+        format: buildFormat(initialCurrencies, initialSelected),
+        convert: buildConvert(initialCurrencies, initialSelected),
 
-      setSelected: (code) => set({ selected: code }),
+        setSelected: (code) =>
+          set((state) => ({
+            selected: code,
+            format: buildFormat(state.currencies, code),
+            convert: buildConvert(state.currencies, code),
+          })),
 
-      setCurrencies: (currencies) => set({ currencies }),
-
-      convert: (usdAmount) => {
-        const { selected, currencies } = get()
-        const cur = currencies.find((c) => c.code === selected)
-        if (!cur) return usdAmount
-        return usdAmount * cur.rate
-      },
-
-      format: (usdAmount) => {
-        const { selected, currencies } = get()
-        const cur = currencies.find((c) => c.code === selected) ?? { code: 'USD', symbol: '$', rate: 1, position: 'before' as const }
-        const converted = usdAmount * cur.rate
-        const decimals = cur.code === 'INR' ? 0 : cur.code === 'AED' ? 2 : 2
-        const formatted = converted.toLocaleString('en', {
-          minimumFractionDigits: decimals,
-          maximumFractionDigits: decimals,
-        })
-        return cur.position === 'after'
-          ? `${formatted} ${cur.symbol}`
-          : `${cur.symbol}${formatted}`
-      },
-    }),
+        setCurrencies: (currencies) =>
+          set((state) => ({
+            currencies,
+            format: buildFormat(currencies, state.selected),
+            convert: buildConvert(currencies, state.selected),
+          })),
+      }
+    },
     {
-      name: 'luxe-currency',
-      partialize: (s) => ({ selected: s.selected }),
+      name: 'luxe-currency-v2',
+      partialize: (s) => ({ currencies: s.currencies }),
     }
   )
 )
-
-// Re-export detectLocaleCurrency for use in CurrencyProvider
-export { detectLocaleCurrency }

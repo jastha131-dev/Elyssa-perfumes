@@ -65,55 +65,32 @@ export const FONT_PAIRINGS: Record<string, {
 // ─── Color Palettes ───────────────────────────────────────────────────────────
 
 export const COLOR_PALETTES: Record<string, {
-  accent: string      // primary CTA / accent (replaces gold/camel-500)
-  accentDark: string  // darker accent (camel-600)
-  accentLight: string // light accent bg (camel-50)
-  dark: string        // main dark / text (charcoal-900 / ink-900)
-  bg: string          // page background (stone-100)
-  bgSoft: string      // softer background (cream-50)
-  secondary: string   // secondary accent
+  accent: string; accentDark: string; accentLight: string
+  dark: string; bg: string; bgSoft: string; secondary: string
 }> = {
-  'ginger-parchment': {
-    accent:      '#E9631A',
-    accentDark:  '#C25015',
-    accentLight: '#FEF3EC',
-    dark:        '#323232',
-    bg:          '#F4F4EE',
-    bgSoft:      '#EBEBDF',
-    secondary:   '#A9C2E0',
-  },
-  'classic-gold': {
-    accent:      '#B08040',
-    accentDark:  '#9A6E32',
-    accentLight: '#FAF4EC',
-    dark:        '#1A1A1A',
-    bg:          '#F7F0E6',
-    bgSoft:      '#FDFAF7',
-    secondary:   '#D4A96A',
-  },
-  'midnight-rose': {
-    accent:      '#C0476A',
-    accentDark:  '#9B3556',
-    accentLight: '#FCEEF3',
-    dark:        '#1E1E2E',
-    bg:          '#F5F0F5',
-    bgSoft:      '#FAF7FA',
-    secondary:   '#8E9BCC',
-  },
-  'forest-sage': {
-    accent:      '#4A7C59',
-    accentDark:  '#3A6146',
-    accentLight: '#EEF5F1',
-    dark:        '#1E2A22',
-    bg:          '#F2F5F2',
-    bgSoft:      '#F8FAF8',
-    secondary:   '#A3C4A8',
-  },
+  'ginger-parchment': { accent: '#E9631A', accentDark: '#C25015', accentLight: '#FEF3EC', dark: '#323232', bg: '#F4F4EE', bgSoft: '#EBEBDF', secondary: '#A9C2E0' },
+  'classic-gold':     { accent: '#B08040', accentDark: '#9A6E32', accentLight: '#FAF4EC', dark: '#1A1A1A', bg: '#F7F0E6', bgSoft: '#FDFAF7', secondary: '#D4A96A' },
+  'midnight-rose':    { accent: '#C0476A', accentDark: '#9B3556', accentLight: '#FCEEF3', dark: '#1E1E2E', bg: '#F5F0F5', bgSoft: '#FAF7FA', secondary: '#8E9BCC' },
+  'forest-sage':      { accent: '#4A7C59', accentDark: '#3A6146', accentLight: '#EEF5F1', dark: '#1E2A22', bg: '#F2F5F2', bgSoft: '#F8FAF8', secondary: '#A3C4A8' },
 }
 
-export function buildColorCss(colorPalette: string | null | undefined): string {
-  const key = colorPalette ?? 'ginger-parchment'
-  const p = COLOR_PALETTES[key] ?? COLOR_PALETTES['ginger-parchment']
+export function buildColorCss(settings: Pick<SiteTypographySettings, 'colorMode' | 'colorPalette' | 'customColors'> | null | undefined): string {
+  let p: typeof COLOR_PALETTES[string]
+  if (settings?.colorMode === 'custom' && settings.customColors) {
+    const c = settings.customColors
+    const fallback = COLOR_PALETTES['ginger-parchment']
+    p = {
+      accent:      c.accent      ?? fallback.accent,
+      accentDark:  c.accentDark  ?? fallback.accentDark,
+      accentLight: c.accentLight ?? fallback.accentLight,
+      dark:        c.dark        ?? fallback.dark,
+      bg:          c.bg          ?? fallback.bg,
+      bgSoft:      c.bgSoft      ?? fallback.bgSoft,
+      secondary:   c.secondary   ?? fallback.secondary,
+    }
+  } else {
+    p = COLOR_PALETTES[settings?.colorPalette ?? 'ginger-parchment'] ?? COLOR_PALETTES['ginger-parchment']
+  }
   return `
     :root {
       --gold: ${p.accent};
@@ -132,6 +109,8 @@ export function buildColorCss(colorPalette: string | null | undefined): string {
 export interface SiteTypographySettings {
   fontPairing?: string
   baseFontSize?: string
+  tabletFontSize?: string
+  mobileFontSize?: string
   headingLetterSpacing?: string
   bodyLineHeight?: string
   headingWeight?: string
@@ -145,6 +124,7 @@ export interface SiteTypographySettings {
   cardImageRatio?: string
   cardFontSize?: string
   collectionColumns?: string
+  mobileCardColumns?: string
   pdpTextSize?: string
   promoBanner?: {
     isEnabled?: boolean
@@ -156,7 +136,17 @@ export interface SiteTypographySettings {
     countdownEndDate?: string
     minOrderAmount?: number
   }
-  colorPalette?: string
+  colorMode?: string | null
+  colorPalette?: string | null
+  customColors?: {
+    accent?: string | null
+    accentDark?: string | null
+    accentLight?: string | null
+    dark?: string | null
+    bg?: string | null
+    bgSoft?: string | null
+    secondary?: string | null
+  } | null
   defaultCurrency?: string
   currencies?: Array<{
     code: string
@@ -179,7 +169,7 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
   const headingSpacing = settings?.headingLetterSpacing ?? '0'
   const lineHeight = settings?.bodyLineHeight ?? '1.6'
   const headingWeight = settings?.headingWeight ?? '400'
-  const colorCss = buildColorCss(settings?.colorPalette)
+  const colorCss = buildColorCss(settings)
 
   const cardStyle = settings?.cardStyle ?? 'clean'
   const CARD_VARS: Record<string, { radius: string; borderW: string; borderC: string; bg: string; infoX: string; infoT: string; infoB: string }> = {
@@ -211,6 +201,14 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
   const fs = fontSizeMap[settings?.cardFontSize ?? 'md'] ?? fontSizeMap['md']
 
   const cols = settings?.collectionColumns ?? '4'
+  const mobileCols = settings?.mobileCardColumns ?? '2'
+
+  const tabletSize = settings?.tabletFontSize
+  const mobileSize = settings?.mobileFontSize ?? '14'
+
+  const tabletCss = (tabletSize && tabletSize !== 'inherit')
+    ? `@media (min-width: 768px) and (max-width: 1023px) { html { font-size: ${tabletSize}px; } }`
+    : ''
 
   return `
     ${colorCss}
@@ -241,10 +239,13 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
       --card-cat-size: ${fs.cat};
       --card-price-size: ${fs.price};
       --collection-cols: ${cols};
+      --mobile-collection-cols: ${mobileCols};
       --pdp-desc-size: ${{ sm: '13px', md: '15px', lg: '17px' }[settings?.pdpTextSize ?? 'md'] ?? '15px'};
       --pdp-body-size: ${{ sm: '12px', md: '14px', lg: '16px' }[settings?.pdpTextSize ?? 'md'] ?? '14px'};
     }
     html { font-size: ${fontSize}px; }
+    @media (max-width: 767px) { html { font-size: ${mobileSize}px; } }
+    ${tabletCss}
     body { line-height: var(--body-line-height); }
     .font-display { font-weight: var(--heading-weight); }
   `.replace(/\n\s+/g, ' ').trim()
