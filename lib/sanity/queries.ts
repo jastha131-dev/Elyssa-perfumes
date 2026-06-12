@@ -613,6 +613,22 @@ export const getSiteLogoQuery = `
   }
 `
 
+export const getPopupSettingsQuery = `
+  *[_type == "siteSettings"][0] {
+    "popup": {
+      "isEnabled": coalesce(popup.isEnabled, false),
+      "imageUrl": popup.image.asset->url,
+      "headline_en": popup.headline_en,
+      "headline_ar": popup.headline_ar,
+      "subtext_en": popup.subtext_en,
+      "subtext_ar": popup.subtext_ar,
+      "ctaLabel_en": coalesce(popup.ctaLabel_en, "continue"),
+      "ctaLabel_ar": coalesce(popup.ctaLabel_ar, "متابعة"),
+      "delaySeconds": coalesce(popup.delaySeconds, 2)
+    }
+  }.popup
+`
+
 export const getAnnouncementBarQuery = `
   *[_type == "announcementBar"][0] {
     _id,
