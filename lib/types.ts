@@ -1024,3 +1024,17 @@ export interface GiftCardOrder {
   message?: string
   createdAt?: string
 }
+
+// ─── Popup Settings ───────────────────────────────────────────────────────────
+
+export interface PopupSettings {
+  isEnabled: boolean
+  imageUrl: string | null
+  headline_en: string | null
+  headline_ar: string | null
+  subtext_en: string | null
+  subtext_ar: string | null
+  ctaLabel_en: string | null
+  ctaLabel_ar: string | null
+  delaySeconds: number
+}
