@@ -1,4 +1,4 @@
-import { defineType, defineField } from 'sanity'
+import { defineType, defineField, defineArrayMember } from 'sanity'
 
 const _contactPage = defineType({
   name: 'contactPage',
@@ -16,6 +16,30 @@ const _contactPage = defineType({
     defineField({ name: 'address_ar', title: 'Address (AR)', type: 'text' }),
     defineField({ name: 'instagramUrl', title: 'Instagram URL', type: 'url' }),
     defineField({ name: 'whatsappNumber', title: 'WhatsApp Number', type: 'string' }),
+    defineField({
+      name: 'overlayOpacity',
+      title: 'Hero Overlay Darkness (0–100)',
+      type: 'number',
+      description: 'Controls how dark the hero background overlay is. Lower = more visible image. Default: 55',
+      initialValue: 55,
+      validation: (R) => R.min(0).max(100),
+    }),
+    defineField({
+      name: 'openingHours',
+      title: 'Opening Hours',
+      type: 'array',
+      description: 'Rows shown in the "Operating Hours" card on the contact page.',
+      of: [
+        defineArrayMember({
+          type: 'object',
+          fields: [
+            defineField({ name: 'day', title: 'Day / Range', type: 'string' }),
+            defineField({ name: 'hours', title: 'Hours', type: 'string' }),
+          ],
+          preview: { select: { title: 'day', subtitle: 'hours' } },
+        }),
+      ],
+    }),
   ],
   preview: { prepare: () => ({ title: 'Contact Page' }) },
 })

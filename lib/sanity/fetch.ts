@@ -336,6 +336,6 @@ export async function getSiteSettings(): Promise<SiteTypographySettings | null> 
 
 export async function getPromoBanner(): Promise<SiteTypographySettings['promoBanner'] | null> {
   if (!isSanityConfigured) return null
-  const query = `*[_type == "siteSettings"][0].promoBanner { isEnabled, headline_en, headline_ar, subtitle_en, subtitle_ar, "imageUrl": image.asset->url, countdownEndDate, minOrderAmount }`
+  const query = `*[_type == "siteSettings"][0].promoBanner { isEnabled, showTopStrip, showCountdownCard, topStripBg, topStripBgCustom, topStripTextColor, headline_en, headline_ar, subtitle_en, subtitle_ar, "imageUrl": image.asset->url, countdownEndDate, minOrderAmount }`
   return client.fetch(query, {}, { next: { revalidate: 60 } })
 }

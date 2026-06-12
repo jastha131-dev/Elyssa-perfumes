@@ -582,7 +582,9 @@ export const getContactPageQuery = `
   *[_type == "contactPage"][0] {
     _id, heading_en, heading_ar, subtext_en, subtext_ar,
     email, phone, address_en, address_ar, instagramUrl, whatsappNumber,
-    "heroImageUrl": heroImage.asset->url, "heroImageAlt": heroImage.alt
+    "heroImageUrl": heroImage.asset->url, "heroImageAlt": heroImage.alt,
+    overlayOpacity,
+    openingHours
   }
 `
 
@@ -733,6 +735,7 @@ export const getAboutPageQuery = `
     heroSubline_en, heroSubline_ar,
     heroEyebrow_en, heroEyebrow_ar,
     "heroBgImageUrl": heroBgImage.asset->url,
+    overlayOpacity,
     stats,
     philosophyHeadline_en, philosophyHeadline_ar,
     philosophyBody_en, philosophyBody_ar,

@@ -64,6 +64,13 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
   const phone = data?.phone ?? '+971 4 000 0000'
   const whatsapp = data?.whatsappNumber
   const instagram = data?.instagramUrl
+  const openingHours = (data as any)?.openingHours?.length
+    ? (data as any).openingHours
+    : [
+        { day: 'Monday – Saturday', hours: '9:00 AM – 6:00 PM' },
+        { day: 'Sunday', hours: 'Closed' },
+        { day: 'Time zone', hours: 'GST (UTC+4)' },
+      ]
 
   // ─── Form state ───────────────────────────────────────────────────────────
 
@@ -117,17 +124,21 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
   // ─── Render ───────────────────────────────────────────────────────────────
 
   return (
-    <div className={cn('pt-[72px]', isAr && 'rtl')}>
+    <div className={isAr ? 'rtl' : undefined} style={{ paddingTop: 'var(--header-h, 72px)' }}>
 
       {/* ═══════════════════════ DARK HERO ═══════════════════════ */}
       <section className="relative overflow-hidden bg-charcoal-950 pb-28 pt-24">
-        {/* Hero background image (dynamic, from Studio) */}
-        {data?.heroImageUrl && (
-          <>
-            <Image src={data.heroImageUrl} alt={data.heroImageAlt ?? heading} fill priority className="object-cover object-center opacity-30" />
-            <div className="absolute inset-0 bg-gradient-to-b from-charcoal-950/70 via-charcoal-950/60 to-charcoal-950/90" />
-          </>
-        )}
+        {/* Hero background — upload image in Studio → Contact Page for best results */}
+        <Image
+          src={data?.heroImageUrl || '/images/categories/I1.webp'}
+          alt={data?.heroImageAlt ?? heading}
+          fill priority
+          className="object-cover object-center opacity-50"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to bottom, rgba(10,6,2,0.55) 0%, rgba(10,6,2,0.22) 45%, rgba(10,6,2,0.72) 100%)' }}
+        />
         {/* Gold ambient glow */}
         <div
           aria-hidden
@@ -505,11 +516,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                   </p>
                 </div>
                 <div className="space-y-2.5">
-                  {[
-                    { day: 'Monday – Saturday', hours: '9:00 AM – 6:00 PM' },
-                    { day: 'Sunday', hours: 'Closed' },
-                    { day: 'Time zone', hours: 'GST (UTC+4)' },
-                  ].map(({ day, hours }) => (
+                  {openingHours.map(({ day, hours }: { day: string; hours: string }) => (
                     <div key={day} className="flex items-start justify-between gap-4">
                       <span className="text-xs font-light text-charcoal-500">{day}</span>
                       <span className="text-xs font-medium text-charcoal-900">{hours}</span>

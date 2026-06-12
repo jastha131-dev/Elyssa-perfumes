@@ -6,6 +6,11 @@ import { useLocale } from 'next-intl'
 
 export interface PromoBannerData {
   isEnabled?: boolean
+  showTopStrip?: boolean
+  showCountdownCard?: boolean
+  topStripBg?: string
+  topStripBgCustom?: string
+  topStripTextColor?: string
   headline_en?: string
   headline_ar?: string
   subtitle_en?: string
@@ -46,7 +51,9 @@ export function PromoBanner({ data }: { data: PromoBannerData }) {
   const isAr    = locale === 'ar'
   const { days, hours, mins, secs, expired } = useCountdown(data.countdownEndDate)
 
-  if (!data.isEnabled || expired) return null
+  if (!data.isEnabled) return null
+  if (data.showCountdownCard === false) return null
+  if (expired) return null
 
   const headline = isAr ? data.headline_ar : data.headline_en
   const subtitle  = isAr ? data.subtitle_ar  : data.subtitle_en

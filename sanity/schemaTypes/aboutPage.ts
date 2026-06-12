@@ -17,6 +17,15 @@ export const aboutPage = defineType({
     defineField({ name: 'heroSubline_en', title: 'Hero Subline (English)', type: 'text', rows: 2, group: 'hero', validation: (Rule) => Rule.max(300) }),
     defineField({ name: 'heroSubline_ar', title: 'العنوان الفرعي (Arabic)', type: 'text', rows: 2, group: 'hero', validation: (Rule) => Rule.max(300) }),
     defineField({ name: 'heroBgImage', title: 'Hero Background Image', type: 'image', group: 'hero', options: { hotspot: true }, fields: [defineField({ name: 'alt', type: 'string', title: 'Alt Text' })] }),
+    defineField({
+      name: 'overlayOpacity',
+      title: 'Hero Overlay Darkness (0–100)',
+      type: 'number',
+      description: 'Controls how dark the hero background overlay is. Lower = more visible image. Default: 55',
+      initialValue: 55,
+      group: 'hero',
+      validation: (R) => R.min(0).max(100),
+    }),
     defineField({ name: 'heroEyebrow_en', title: 'Hero Eyebrow (English)', type: 'string', group: 'hero', initialValue: 'Our Story', validation: (Rule) => Rule.max(60) }),
     defineField({ name: 'heroEyebrow_ar', title: 'النص العلوي (Arabic)', type: 'string', group: 'hero', validation: (Rule) => Rule.max(60) }),
 

@@ -1,4 +1,6 @@
-import React from 'react'
+'use client'
+
+import React, { useLayoutEffect, useRef, useState } from 'react'
 import Hero from '@/components/home/Hero'
 import TrustBar from '@/components/home/TrustBar'
 import FeaturedProducts from '@/components/home/FeaturedProducts'
@@ -27,7 +29,6 @@ import UpsellProducts from '@/components/home/UpsellProducts'
 import CategoryTilesSection from '@/components/home/CategoryTilesSection'
 import BrowseCategories from '@/components/home/BrowseCategories'
 import QuizPromo from '@/components/home/QuizPromo'
-import { cn } from '@/lib/utils'
 import type { HomePageSection } from '@/lib/types'
 
 const BG_MAP: Record<string, string> = {
@@ -93,6 +94,29 @@ const blockMap: Record<string, React.ComponentType<{ data: any }>> = {
   quizPromoSection: QuizPromo,
 }
 
+function ThemedSection({
+  Block, data, wrapStyle, cornerRadius,
+}: {
+  Block: React.ComponentType<{ data: any }>
+  data: any
+  wrapStyle: React.CSSProperties
+  cornerRadius?: string
+}) {
+  const [visible, setVisible] = useState(true)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useLayoutEffect(() => {
+    if (ref.current && !ref.current.firstChild) setVisible(false)
+  }, [])
+
+  if (!visible) return null
+  return (
+    <div ref={ref} style={wrapStyle} className={cornerRadius && cornerRadius !== 'none' ? 'overflow-hidden' : undefined}>
+      <Block data={data} />
+    </div>
+  )
+}
+
 interface PageBuilderProps {
   sections?: HomePageSection[]
 }
@@ -124,9 +148,7 @@ export default function PageBuilder({ sections }: PageBuilderProps) {
           }
 
           return (
-            <div key={s._key} style={wrapStyle} className={cn(theme.cornerRadius && theme.cornerRadius !== 'none' && 'overflow-hidden')}>
-              <Block data={s as any} />
-            </div>
+            <ThemedSection key={s._key} Block={Block} data={s as any} wrapStyle={wrapStyle} cornerRadius={theme.cornerRadius} />
           )
         })}
     </>

@@ -757,18 +757,24 @@ export function ProductDetailClient({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="min-h-screen bg-white pt-16"
+      className="min-h-screen bg-white"
+      style={{ paddingTop: 'var(--header-h, 72px)' }}
     >
       {/* ── Top promo strip (JUST LANDED) ───────────────────────────────── */}
-      {promoBanner?.isEnabled && (
-        <div className="bg-camel-400 px-4 py-2 text-center">
-          <p className="font-headline text-[11px] font-bold uppercase tracking-[0.12em] text-charcoal-900">
+      {promoBanner?.isEnabled && promoBanner?.showTopStrip !== false && (() => {
+        const BG_MAP: Record<string, string> = { camel: '#D4A96A', black: '#1a1a1a', white: '#ffffff', gold: '#C9A84C', rose: '#C0476A' }
+        const stripBg = promoBanner.topStripBg === 'custom' ? (promoBanner.topStripBgCustom || '#D4A96A') : BG_MAP[promoBanner.topStripBg || 'camel'] || '#D4A96A'
+        const stripText = promoBanner.topStripTextColor === 'white' ? '#ffffff' : promoBanner.topStripTextColor === 'gold' ? '#C9A84C' : '#1a1a1a'
+        return (
+        <div className="px-4 py-2 text-center" style={{ backgroundColor: stripBg }}>
+          <p className="font-headline text-[11px] font-bold uppercase tracking-[0.12em]" style={{ color: stripText }}>
             {isAr ? 'وصل حديثاً' : 'Just Landed'}
             {' · '}
             {(isAr ? promoBanner.headline_ar : promoBanner.headline_en) || (isAr ? 'هديتنا الأكثر تميّزاً' : 'Our Most Exclusive Gift')}
           </p>
         </div>
-      )}
+        )
+      })()}
 
       {/* ── Sticky Add-to-Cart Bar ───────────────────────────────────────── */}
       <AnimatePresence>

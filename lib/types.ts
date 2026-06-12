@@ -841,6 +841,8 @@ export interface ContactPageData {
   whatsappNumber?: string
   heroImageUrl?: string
   heroImageAlt?: string
+  overlayOpacity?: number
+  openingHours?: Array<{ day: string; hours: string }>
 }
 
 export interface NavItem {
@@ -863,6 +865,7 @@ export interface AboutPageData {
   heroEyebrow_en?: string
   heroEyebrow_ar?: string
   heroBgImageUrl?: string
+  overlayOpacity?: number
   stats?: Array<{ value: string; label_en: string; label_ar?: string }>
   philosophyHeadline_en?: string
   philosophyHeadline_ar?: string

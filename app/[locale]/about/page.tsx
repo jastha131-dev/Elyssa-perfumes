@@ -59,10 +59,20 @@ export default async function AboutPage({
     <div className="min-h-screen bg-cream-50">
 
       {/* Hero */}
-      <section className="relative overflow-hidden bg-charcoal-950 pb-24 pt-40">
-        {data?.heroBgImageUrl && (
-          <Image src={data.heroBgImageUrl} alt={heroHeadline} fill className="object-cover opacity-20" />
-        )}
+      <section
+        className="relative overflow-hidden bg-charcoal-950 pb-24"
+        style={{ paddingTop: 'calc(var(--header-h, 72px) + 4rem)' }}
+      >
+        <Image
+          src={data?.heroBgImageUrl || '/images/categories/I1.webp'}
+          alt={heroHeadline}
+          fill
+          className="object-cover opacity-45"
+        />
+        <div
+          className="absolute inset-0"
+          style={{ background: 'linear-gradient(to bottom, rgba(10,6,2,0.6) 0%, rgba(10,6,2,0.25) 45%, rgba(10,6,2,0.75) 100%)' }}
+        />
         <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500/5 blur-3xl" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <p className="mb-4 text-[10px] font-semibold uppercase tracking-[0.45em] text-gold-500">{heroEyebrow}</p>
