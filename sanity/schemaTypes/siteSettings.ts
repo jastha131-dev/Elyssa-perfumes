@@ -36,6 +36,7 @@ export const siteSettings = defineType({
     { name: 'collection', title: '📦 Collection Page' },
     { name: 'pdp', title: '🛍️ Product Detail Page' },
     { name: 'currency', title: '💰 Currency' },
+    { name: 'popup', title: '🎁 Welcome Popup' },
   ],
   fields: [
     // Logo
@@ -506,6 +507,31 @@ export const siteSettings = defineType({
         ],
       },
       initialValue: 'USD',
+    }),
+    defineField({
+      name: 'popup',
+      title: 'Welcome Popup',
+      type: 'object',
+      group: 'popup',
+      description: 'Newsletter signup popup shown to first-time visitors.',
+      fields: [
+        defineField({ name: 'isEnabled', title: 'Enable Popup', type: 'boolean', initialValue: false }),
+        defineField({ name: 'image', title: 'Left Panel Image', type: 'image', options: { hotspot: true }, description: 'Product/brand image shown on the left side of the popup.' }),
+        defineField({ name: 'headline_en', title: 'Headline (English)', type: 'string', description: 'e.g. SIGN UP AND GET 20% OFF', validation: (R) => R.max(60) }),
+        defineField({ name: 'headline_ar', title: 'العنوان (Arabic)', type: 'string', validation: (R) => R.max(60) }),
+        defineField({ name: 'subtext_en', title: 'Subtext (English)', type: 'string', description: 'e.g. Enjoy an instant discount, exclusive deals, exciting new products, and more', validation: (R) => R.max(120) }),
+        defineField({ name: 'subtext_ar', title: 'النص الفرعي (Arabic)', type: 'string', validation: (R) => R.max(120) }),
+        defineField({ name: 'ctaLabel_en', title: 'Button Label (English)', type: 'string', initialValue: 'continue', validation: (R) => R.max(30) }),
+        defineField({ name: 'ctaLabel_ar', title: 'نص الزر (Arabic)', type: 'string', initialValue: 'متابعة', validation: (R) => R.max(30) }),
+        defineField({
+          name: 'delaySeconds',
+          title: 'Delay Before Showing (seconds)',
+          type: 'number',
+          initialValue: 2,
+          description: 'How many seconds after page load before popup appears. 0 = immediate.',
+          validation: (R) => R.min(0).max(10).integer(),
+        }),
+      ],
     }),
   ],
   preview: {
