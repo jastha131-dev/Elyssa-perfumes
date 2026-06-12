@@ -871,8 +871,24 @@ export interface AboutPageData {
   philosophyHeadline_ar?: string
   philosophyBody_en?: PortableTextBlock[]
   philosophyBody_ar?: PortableTextBlock[]
+  storyImageUrl?: string
   pillars?: Array<{ number: string; title_en: string; title_ar?: string; body_en: string; body_ar?: string }>
   timeline?: Array<{ year: string; event_en: string; event_ar?: string }>
+  foundersHeadline_en?: string
+  foundersHeadline_ar?: string
+  foundersName?: string
+  foundersRole_en?: string
+  foundersRole_ar?: string
+  foundersStory_en?: string
+  foundersStory_ar?: string
+  foundersImageUrl?: string
+  behindBottleHeadline_en?: string
+  behindBottleHeadline_ar?: string
+  behindBottleImages?: Array<{ imageUrl: string; imageAlt?: string; caption_en?: string; caption_ar?: string }>
+  closingTitle_en?: string
+  closingTitle_ar?: string
+  closingStatement_en?: string
+  closingStatement_ar?: string
   ctaHeadline_en?: string
   ctaHeadline_ar?: string
   ctaBody_en?: string
