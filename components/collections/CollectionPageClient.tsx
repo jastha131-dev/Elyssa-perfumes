@@ -101,7 +101,7 @@ function smartSearchMatch(p: Product, query: string): boolean {
   const name = (p.name_en ?? '').toLowerCase()
   const family = (p.fragranceFamily ?? '').toLowerCase()
   const tags = (p.tags ?? []).map(t => t.toLowerCase())
-  const desc = ((p as Record<string, unknown>).description_en as string ?? '').toLowerCase()
+  const desc = ((p as unknown as Record<string, unknown>).description_en as string ?? '').toLowerCase()
 
   if (name.includes(q) || family.includes(q)) return true
   if (tags.some(t => t.includes(q))) return true

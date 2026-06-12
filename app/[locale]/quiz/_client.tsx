@@ -370,7 +370,7 @@ function scoreProduct(p: Product, a: Answers): number {
   // Q7: priority
   const priorityChecks = PRIORITY_FIELD[a.priority as string] ?? []
   for (const { field, value } of priorityChecks) {
-    if ((p as Record<string, unknown>)[field] === value) { s += 12; break }
+    if ((p as unknown as Record<string, unknown>)[field] === value) { s += 12; break }
   }
   if (a.priority === 'luxury' && p.featured) s += 12
   if (a.priority === 'everyday' && p.intensity && ['Light', 'Moderate'].includes(p.intensity)) s += 12
