@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { toast } from 'sonner'
 import Image from 'next/image'
 import { useLocale } from 'next-intl'
 import { useSession } from 'next-auth/react'
@@ -52,6 +53,15 @@ export default function NewsletterPopup({ settings }: NewsletterPopupProps) {
     return () => clearTimeout(timer)
   }, [settings, session, sessionStatus])
 
+  useEffect(() => {
+    if (!visible) return
+    function onKey(e: KeyboardEvent) {
+      if (e.key === 'Escape') handleDismiss()
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [visible])
+
   function handleDismiss() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ dismissedAt: Date.now() }))
@@ -77,6 +87,7 @@ export default function NewsletterPopup({ settings }: NewsletterPopupProps) {
       })
       if (!res.ok) throw new Error('Failed')
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ subscribed: true }))
+      toast.success(isAr ? 'شكراً! تم تسجيلك بنجاح.' : 'You\'re in! Welcome to the family.')
       setVisible(false)
     } catch {
       setError(isAr ? 'حدث خطأ. يرجى المحاولة مجدداً.' : 'Something went wrong. Please try again.')
@@ -114,6 +125,9 @@ export default function NewsletterPopup({ settings }: NewsletterPopupProps) {
             className="fixed inset-0 z-50 flex items-center justify-center p-4 pointer-events-none"
           >
             <div
+              role="dialog"
+              aria-modal="true"
+              aria-label={headline || 'Newsletter signup'}
               className="relative flex w-full max-w-[580px] overflow-hidden rounded-lg bg-white shadow-2xl pointer-events-auto"
               onClick={(e) => e.stopPropagation()}
             >

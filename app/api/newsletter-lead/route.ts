@@ -11,13 +11,24 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Valid email is required' }, { status: 400 })
     }
 
+    // Validate optional string fields
+    if (phone !== undefined && typeof phone !== 'string') {
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+    }
+    if (nationality !== undefined && typeof nationality !== 'string') {
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+    }
+    if (dateOfBirth !== undefined && typeof dateOfBirth !== 'string') {
+      return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
+    }
+
     await writeClient.create({
       _type: 'newsletterLead',
       email: email.trim().toLowerCase(),
-      phone: phone?.trim() || undefined,
-      nationality: nationality?.trim() || undefined,
-      dateOfBirth: dateOfBirth || undefined,
-      locale: locale || 'en',
+      phone: typeof phone === 'string' && phone.trim() ? '+971' + phone.trim() : undefined,
+      nationality: typeof nationality === 'string' ? nationality.trim() || undefined : undefined,
+      dateOfBirth: typeof dateOfBirth === 'string' ? dateOfBirth || undefined : undefined,
+      locale: typeof locale === 'string' ? locale || 'en' : 'en',
     })
 
     return NextResponse.json({ success: true })
