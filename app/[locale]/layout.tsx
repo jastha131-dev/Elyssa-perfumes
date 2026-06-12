@@ -7,7 +7,7 @@ import Footer from '@/components/layout/Footer'
 import Providers from '@/components/layout/Providers'
 import { ConditionalLayout } from '@/components/layout/ConditionalLayout'
 import VisualEditingWrapper from '@/components/VisualEditingWrapper'
-import { getAllCategories, getCollections, getNavPages, getNavConfig, getAnnouncementBar, getMenuPromo, getSiteLogo } from '@/lib/sanity/fetch'
+import { getAllCategories, getCollections, getNavPages, getNavConfig, getAnnouncementBar, getMenuPromo, getSiteLogo, getPopupSettings } from '@/lib/sanity/fetch'
 
 const locales = ['en', 'ar']
 
@@ -27,7 +27,7 @@ export default async function LocaleLayout({
   if (!locales.includes(locale)) notFound()
 
   const messages = await getMessages()
-  const [categories, collections, navPages, navItems, announcementBar, menuPromo, siteLogo] = await Promise.all([
+  const [categories, collections, navPages, navItems, announcementBar, menuPromo, siteLogo, popupSettings] = await Promise.all([
     getAllCategories(),
     getCollections(),
     getNavPages(),
@@ -35,13 +35,14 @@ export default async function LocaleLayout({
     getAnnouncementBar(),
     getMenuPromo(),
     getSiteLogo(),
+    getPopupSettings(),
   ])
 
   const { isEnabled: isDraftMode } = await draftMode()
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <Providers>
+      <Providers popupSettings={popupSettings}>
         <ConditionalLayout
           key="layout"
           header={<Header categories={categories} collections={collections} navPages={navPages} navItems={navItems} menuPromo={menuPromo} siteLogo={siteLogo} announcementBar={announcementBar} />}

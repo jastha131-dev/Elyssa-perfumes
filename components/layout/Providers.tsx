@@ -5,14 +5,17 @@ import { Toaster } from 'sonner'
 import CartDrawer from '@/components/cart/CartDrawer'
 import SearchOverlay from '@/components/layout/SearchOverlay'
 import { QuickViewListener } from '@/components/product/QuickViewModal'
+import NewsletterPopup from '@/components/layout/NewsletterPopup'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useCartDrawerStore } from '@/lib/store/cart-drawer-store'
+import type { PopupSettings } from '@/lib/types'
 
 interface ProvidersProps {
   children: React.ReactNode
+  popupSettings?: PopupSettings | null
 }
 
-function GlobalOverlays() {
+function GlobalOverlays({ popupSettings }: { popupSettings?: PopupSettings | null }) {
   const { isOpen: cartStoreOpen, closeCart: closeCartStore } = useCartStore()
   const { isOpen: drawerStoreOpen, closeCart: closeDrawerStore } = useCartDrawerStore()
 
@@ -27,15 +30,16 @@ function GlobalOverlays() {
       <CartDrawer isOpen={isOpen} onClose={handleClose} />
       <SearchOverlay />
       <QuickViewListener />
+      <NewsletterPopup settings={popupSettings ?? null} />
     </>
   )
 }
 
-export default function Providers({ children }: ProvidersProps) {
+export default function Providers({ children, popupSettings }: ProvidersProps) {
   return (
     <SessionProvider>
       {children}
-      <GlobalOverlays />
+      <GlobalOverlays popupSettings={popupSettings} />
       <Toaster
         position="bottom-right"
         theme="light"
