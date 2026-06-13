@@ -25,6 +25,19 @@ const _contactPage = defineType({
       validation: (R) => R.min(0).max(100),
     }),
     defineField({
+      name: 'showMap',
+      title: 'Show Map Section',
+      type: 'boolean',
+      initialValue: true,
+      description: 'Toggle the map section visible/hidden on the contact page.',
+    }),
+    defineField({
+      name: 'mapEmbedUrl',
+      title: 'Map Embed URL',
+      type: 'url',
+      description: 'OpenStreetMap embed URL. Leave blank to use the default Dubai DIFC location.',
+    }),
+    defineField({
       name: 'openingHours',
       title: 'Opening Hours',
       type: 'array',

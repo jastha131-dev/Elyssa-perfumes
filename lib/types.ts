@@ -843,6 +843,8 @@ export interface ContactPageData {
   heroImageAlt?: string
   overlayOpacity?: number
   openingHours?: Array<{ day: string; hours: string }>
+  showMap?: boolean
+  mapEmbedUrl?: string
 }
 
 export interface NavItem {

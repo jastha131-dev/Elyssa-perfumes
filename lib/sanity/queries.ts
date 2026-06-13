@@ -583,8 +583,8 @@ export const getContactPageQuery = `
     _id, heading_en, heading_ar, subtext_en, subtext_ar,
     email, phone, address_en, address_ar, instagramUrl, whatsappNumber,
     "heroImageUrl": heroImage.asset->url, "heroImageAlt": heroImage.alt,
-    overlayOpacity,
-    openingHours
+    overlayOpacity, openingHours,
+    showMap, mapEmbedUrl
   }
 `
 
