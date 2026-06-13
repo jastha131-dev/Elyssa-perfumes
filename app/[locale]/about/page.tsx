@@ -129,43 +129,47 @@ export default async function AboutPage({
 
       {/* ── 1. HERO ──────────────────────────────────────────────── */}
       <section
-        className="relative flex min-h-[90vh] flex-col justify-end overflow-hidden bg-charcoal-950"
+        className="bg-stone-50"
         style={{ paddingTop: 'var(--header-h, 72px)' }}
       >
-        <Image
-          src={data?.heroBgImageUrl || '/images/categories/I1.webp'}
-          alt={heroHeadline}
-          fill
-          className="object-cover"
-          priority
-        />
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `linear-gradient(to bottom, rgba(10,6,2,${overlayOpacity}) 0%, rgba(10,6,2,${overlayOpacity * 0.5}) 40%, rgba(10,6,2,${Math.min(overlayOpacity + 0.2, 1)}) 100%)`,
-          }}
-        />
-        {/* Decorative orb */}
-        <div className="pointer-events-none absolute right-0 top-0 h-[700px] w-[700px] translate-x-1/3 -translate-y-1/3 rounded-full bg-gold-500/6 blur-3xl" />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-stretch lg:grid-cols-2">
 
-        <div className="relative mx-auto w-full max-w-7xl px-4 pb-20 sm:px-6 lg:px-8">
-          <p className="mb-5 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.45em] text-gold-500">
-            <span className="h-px w-8 bg-gold-500" />
-            {heroEyebrow}
-          </p>
-          <h1 className="max-w-3xl font-display text-4xl font-light leading-[1.1] text-cream-100 sm:text-5xl md:text-6xl lg:text-7xl">
-            {heroHeadline}
-          </h1>
-          {heroSubline && (
-            <p className="mt-8 max-w-xl text-base font-light leading-relaxed text-cream-300/85">
-              {heroSubline}
-            </p>
-          )}
-          <div className="mt-14 flex items-center gap-6">
-            <div className="h-px w-16 bg-gold-500/50" />
-            <span className="text-[10px] uppercase tracking-[0.4em] text-gold-500/50">
-              Est. 2005 · Dubai
-            </span>
+            {/* Left — text */}
+            <div className="flex flex-col justify-center py-16 lg:pr-16">
+              <p className="mb-4 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.45em] text-camel-500">
+                <span className="h-px w-8 bg-camel-500/60" />
+                {heroEyebrow}
+              </p>
+              <h1 className="max-w-xl font-display text-4xl font-light leading-[1.1] text-charcoal-900 sm:text-5xl lg:text-6xl">
+                {heroHeadline}
+              </h1>
+              {heroSubline && (
+                <p className="mt-6 max-w-md text-sm font-light leading-relaxed text-charcoal-500">
+                  {heroSubline}
+                </p>
+              )}
+              <div className="mt-10 flex items-center gap-4">
+                <div className="h-px w-10 bg-camel-500/50" />
+                <span className="text-[9px] uppercase tracking-[0.4em] text-camel-500/50">
+                  Est. 2005 · Dubai
+                </span>
+              </div>
+            </div>
+
+            {/* Right — hero image */}
+            <div className="relative hidden min-h-[480px] lg:block">
+              <Image
+                src={data?.heroBgImageUrl || '/images/categories/I1.webp'}
+                alt={heroHeadline}
+                fill
+                className="object-cover object-center"
+                priority
+                sizes="50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-stone-50/50 via-transparent to-transparent" />
+            </div>
+
           </div>
         </div>
       </section>
@@ -262,18 +266,18 @@ export default async function AboutPage({
       </section>
 
       {/* ── 4. TIMELINE ──────────────────────────────────────────── */}
-      <section className="bg-charcoal-950 px-4 py-24 sm:px-6 lg:px-8">
+      <section className="bg-stone-100 px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
-          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.45em] text-gold-500/60">
+          <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.45em] text-camel-500/70">
             Milestones
           </p>
-          <h2 className="mb-16 font-display text-3xl font-light text-cream-100 md:text-4xl">
+          <h2 className="mb-16 font-display text-3xl font-light text-charcoal-900 md:text-4xl">
             How We Got Here
           </h2>
 
           <div className="relative">
             {/* Vertical line */}
-            <div className="absolute left-[68px] top-0 h-full w-px bg-gradient-to-b from-gold-500/40 via-gold-500/20 to-transparent lg:left-[80px]" />
+            <div className="absolute left-[68px] top-0 h-full w-px bg-gradient-to-b from-camel-400/50 via-camel-300/30 to-transparent lg:left-[80px]" />
 
             {timeline.map((item, i) => (
               <div
@@ -282,14 +286,14 @@ export default async function AboutPage({
               >
                 <div className="relative z-10 w-14 shrink-0 lg:w-20">
                   <div className="relative flex items-start pt-0.5">
-                    <span className="relative z-10 bg-charcoal-950 pr-3 font-display text-sm font-light text-gold-400">
+                    <span className="relative z-10 bg-stone-100 pr-3 font-display text-sm font-medium text-camel-600">
                       {item.year}
                     </span>
-                    <div className="absolute right-0 top-[9px] h-2.5 w-2.5 -translate-y-1/2 rounded-full border-2 border-gold-500 bg-charcoal-950" />
+                    <div className="absolute right-0 top-[9px] h-2.5 w-2.5 -translate-y-1/2 rounded-full border-2 border-camel-400 bg-stone-100" />
                   </div>
                 </div>
                 <div className="pt-0.5">
-                  <p className="text-sm font-light leading-relaxed text-cream-300/75">
+                  <p className="text-sm font-light leading-relaxed text-charcoal-600">
                     {isAr
                       ? (item as { event_ar?: string; event_en: string }).event_ar || item.event_en
                       : item.event_en}
@@ -436,23 +440,23 @@ export default async function AboutPage({
       )}
 
       {/* ── 8. CLOSING STATEMENT ─────────────────────────────────── */}
-      <section className="bg-charcoal-900 px-4 py-28 sm:px-6 lg:px-8">
+      <section className="bg-stone-50 px-4 py-28 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           {/* Decorative top */}
           <div className="mb-10 flex flex-col items-center gap-2">
-            <div className="h-px w-20 bg-gold-500/50" />
-            <div className="h-1.5 w-1.5 rounded-full bg-gold-500/50" />
-            <div className="h-px w-8 bg-gold-500/30" />
+            <div className="h-px w-20 bg-camel-400/50" />
+            <div className="h-1.5 w-1.5 rounded-full bg-camel-400/50" />
+            <div className="h-px w-8 bg-camel-400/30" />
           </div>
 
-          <p className="mb-5 text-[9px] font-semibold uppercase tracking-[0.45em] text-gold-500/50">
+          <p className="mb-5 text-[9px] font-semibold uppercase tracking-[0.45em] text-camel-500/60">
             Est. 2005 · Dubai
           </p>
-          <h2 className="mb-6 font-display text-3xl font-light italic text-cream-100 md:text-4xl lg:text-5xl">
+          <h2 className="mb-6 font-display text-3xl font-light italic text-charcoal-900 md:text-4xl lg:text-5xl">
             &ldquo;{closingTitle}&rdquo;
           </h2>
           {closingStatement && (
-            <p className="mb-12 text-sm font-light leading-relaxed text-cream-300/70">
+            <p className="mb-12 text-sm font-light leading-relaxed text-charcoal-500">
               {closingStatement}
             </p>
           )}
@@ -460,14 +464,14 @@ export default async function AboutPage({
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
             <Link
               href={data?.ctaPrimary?.link ?? '/products'}
-              className="inline-block bg-gold-500 px-10 py-3.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-charcoal-950 transition-colors hover:bg-gold-400"
+              className="inline-block rounded-lg bg-camel-600 px-10 py-3.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-white shadow-sm transition-all hover:bg-camel-700 hover:shadow-md"
             >
               {(isAr ? data?.ctaPrimary?.label_ar : data?.ctaPrimary?.label_en) ??
                 'Explore Collection'}
             </Link>
             <Link
               href={data?.ctaSecondary?.link ?? '/contact'}
-              className="inline-block border border-white/20 px-10 py-3.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-cream-200 transition-colors hover:border-gold-500/50 hover:text-gold-400"
+              className="inline-block rounded-lg border border-stone-300 px-10 py-3.5 text-[11px] font-semibold uppercase tracking-[0.25em] text-charcoal-700 transition-all hover:border-camel-400 hover:text-camel-600"
             >
               {(isAr ? data?.ctaSecondary?.label_ar : data?.ctaSecondary?.label_en) ?? 'Contact Us'}
             </Link>
