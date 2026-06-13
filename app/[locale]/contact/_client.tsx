@@ -71,6 +71,8 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
         { day: 'Sunday', hours: 'Closed' },
         { day: 'Time zone', hours: 'GST (UTC+4)' },
       ]
+  const showMap = (data as any)?.showMap !== false
+  const mapEmbedUrl = (data as any)?.mapEmbedUrl || 'https://www.openstreetmap.org/export/embed.html?bbox=55.2720%2C25.2020%2C55.3020%2C25.2180&layer=mapnik&marker=25.2097%2C55.2870'
 
   // ─── Form state ───────────────────────────────────────────────────────────
 
@@ -126,152 +128,149 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
   return (
     <div className={isAr ? 'rtl' : undefined} style={{ paddingTop: 'var(--header-h, 72px)' }}>
 
-      {/* ═══════════════════════ DARK HERO ═══════════════════════ */}
-      <section className="relative overflow-hidden bg-charcoal-950 pb-28 pt-24">
-        {/* Hero background — upload image in Studio → Contact Page for best results */}
-        <Image
-          src={data?.heroImageUrl || '/images/categories/I1.webp'}
-          alt={data?.heroImageAlt ?? heading}
-          fill priority
-          className="object-cover object-center opacity-50"
-        />
-        <div
-          className="absolute inset-0"
-          style={{ background: 'linear-gradient(to bottom, rgba(10,6,2,0.55) 0%, rgba(10,6,2,0.22) 45%, rgba(10,6,2,0.72) 100%)' }}
-        />
-        {/* Gold ambient glow */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 overflow-hidden"
-        >
-          <div className="absolute -top-1/4 left-1/2 h-[700px] w-[900px] -translate-x-1/2 rounded-full bg-gold-500/[0.04] blur-[120px]" />
-        </div>
+      {/* ═══════════════════════ LIGHT HERO ═══════════════════════ */}
+      <section className="bg-stone-50 pt-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid items-stretch lg:grid-cols-2">
 
-        {/* Decorative top rule */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold-500/30 to-transparent" />
+            {/* Left — text + contact cards */}
+            <div className="flex flex-col justify-center py-16 lg:pr-16">
 
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              {/* Eyebrow */}
+              <motion.p
+                variants={fadeIn}
+                initial="hidden"
+                animate="visible"
+                custom={0}
+                className="mb-4 text-[10px] font-semibold uppercase tracking-[0.45em] text-camel-500"
+              >
+                Contact
+              </motion.p>
 
-          {/* Eyebrow */}
-          <motion.p
-            variants={fadeIn}
-            initial="hidden"
-            animate="visible"
-            custom={0}
-            className="mb-4 text-[10px] font-semibold uppercase tracking-[0.45em] text-gold-500"
-          >
-            Contact
-          </motion.p>
+              {/* Heading */}
+              <motion.h1
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                custom={0.08}
+                className="max-w-lg font-display text-5xl font-light leading-tight text-charcoal-900 md:text-6xl"
+              >
+                {heading}
+              </motion.h1>
 
-          {/* Heading */}
-          <motion.h1
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={0.08}
-            className="max-w-2xl font-display text-5xl font-light leading-tight text-cream-100 md:text-7xl"
-          >
-            {heading}
-          </motion.h1>
+              {/* Subtext */}
+              <motion.p
+                variants={fadeUp}
+                initial="hidden"
+                animate="visible"
+                custom={0.18}
+                className="mt-6 max-w-md text-sm font-light leading-relaxed text-charcoal-500"
+              >
+                {subtext}
+              </motion.p>
 
-          {/* Subtext */}
-          <motion.p
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            custom={0.18}
-            className="mt-8 max-w-lg text-sm font-light leading-relaxed text-cream-300/80"
-          >
-            {subtext}
-          </motion.p>
+              {/* Decorative divider */}
+              <motion.div
+                variants={fadeIn}
+                initial="hidden"
+                animate="visible"
+                custom={0.26}
+                className="mt-10 flex items-center gap-4"
+              >
+                <div className="h-px w-10 bg-camel-500/50" />
+                <span className="text-[9px] uppercase tracking-[0.4em] text-camel-500/50">
+                  Luxe Parfum · Est. 2010
+                </span>
+              </motion.div>
 
-          {/* Decorative divider */}
-          <motion.div
-            variants={fadeIn}
-            initial="hidden"
-            animate="visible"
-            custom={0.28}
-            className="mt-14 flex items-center gap-5"
-          >
-            <div className="h-px w-14 bg-gold-500/60" />
-            <span className="text-[9px] uppercase tracking-[0.4em] text-gold-500/50">
-              Luxe Parfum · Est. 2010
-            </span>
-          </motion.div>
+              {/* Contact cards */}
+              <div className="mt-10 grid gap-3 sm:grid-cols-3">
 
-          {/* ── Contact info cards ── */}
-          <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {/* Email */}
-            <motion.a
-              href={`mailto:${email}`}
-              variants={fadeUp}
+                {/* Email */}
+                <motion.a
+                  href={`mailto:${email}`}
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="visible"
+                  custom={0.32}
+                  className="group flex items-start gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 shadow-sm transition-all duration-300 hover:border-camel-200 hover:shadow-md"
+                >
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-camel-50 transition-colors duration-300 group-hover:bg-camel-100">
+                    <Mail className="h-4 w-4 text-camel-500" />
+                  </div>
+                  <div>
+                    <p className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.3em] text-charcoal-400">Email</p>
+                    <p className="text-xs font-light text-charcoal-700 transition-colors duration-300 group-hover:text-camel-600">
+                      {email}
+                    </p>
+                  </div>
+                </motion.a>
+
+                {/* Phone */}
+                <motion.a
+                  href={`tel:${phone.replace(/\s/g, '')}`}
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="visible"
+                  custom={0.4}
+                  className="group flex items-start gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 shadow-sm transition-all duration-300 hover:border-camel-200 hover:shadow-md"
+                >
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-camel-50 transition-colors duration-300 group-hover:bg-camel-100">
+                    <Phone className="h-4 w-4 text-camel-500" />
+                  </div>
+                  <div>
+                    <p className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.3em] text-charcoal-400">Phone</p>
+                    <p className="text-xs font-light text-charcoal-700 transition-colors duration-300 group-hover:text-camel-600">
+                      {phone}
+                    </p>
+                  </div>
+                </motion.a>
+
+                {/* WhatsApp */}
+                <motion.a
+                  href={whatsapp ? `https://wa.me/${whatsapp.replace(/\D/g, '')}` : 'https://wa.me/971400000000'}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variants={fadeUp}
+                  initial="hidden"
+                  animate="visible"
+                  custom={0.48}
+                  className="group flex items-start gap-3 rounded-xl border border-stone-200 bg-white px-4 py-4 shadow-sm transition-all duration-300 hover:border-camel-200 hover:shadow-md"
+                >
+                  <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-camel-50 transition-colors duration-300 group-hover:bg-camel-100">
+                    <MessageCircle className="h-4 w-4 text-camel-500" />
+                  </div>
+                  <div>
+                    <p className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.3em] text-charcoal-400">WhatsApp</p>
+                    <p className="text-xs font-light text-charcoal-700 transition-colors duration-300 group-hover:text-camel-600">
+                      Message us directly
+                    </p>
+                  </div>
+                </motion.a>
+
+              </div>
+            </div>
+
+            {/* Right — hero image */}
+            <motion.div
+              variants={fadeIn}
               initial="hidden"
               animate="visible"
-              custom={0.32}
-              className="group flex items-start gap-4 rounded-none border border-white/8 bg-charcoal-900/60 px-6 py-6 transition-colors duration-300 hover:border-gold-500/30 hover:bg-charcoal-900"
+              custom={0.1}
+              className="relative hidden min-h-[480px] lg:block"
             >
-              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center border border-gold-500/20 bg-gold-500/5 transition-colors duration-300 group-hover:border-gold-500/40">
-                <Mail className="h-4 w-4 text-gold-500" />
-              </div>
-              <div>
-                <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-charcoal-400">
-                  Email
-                </p>
-                <p className="text-sm font-light text-cream-100 transition-colors duration-300 group-hover:text-gold-400">
-                  {email}
-                </p>
-              </div>
-            </motion.a>
+              <Image
+                src={data?.heroImageUrl || '/images/categories/I1.webp'}
+                alt={data?.heroImageAlt ?? heading}
+                fill
+                priority
+                className="object-cover object-center"
+                sizes="50vw"
+              />
+              {/* Subtle left-edge fade so text column doesn't clash */}
+              <div className="absolute inset-0 bg-gradient-to-r from-stone-50/50 via-transparent to-transparent" />
+            </motion.div>
 
-            {/* Phone */}
-            <motion.a
-              href={`tel:${phone.replace(/\s/g, '')}`}
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              custom={0.4}
-              className="group flex items-start gap-4 rounded-none border border-white/8 bg-charcoal-900/60 px-6 py-6 transition-colors duration-300 hover:border-gold-500/30 hover:bg-charcoal-900"
-            >
-              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center border border-gold-500/20 bg-gold-500/5 transition-colors duration-300 group-hover:border-gold-500/40">
-                <Phone className="h-4 w-4 text-gold-500" />
-              </div>
-              <div>
-                <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-charcoal-400">
-                  Phone
-                </p>
-                <p className="text-sm font-light text-cream-100 transition-colors duration-300 group-hover:text-gold-400">
-                  {phone}
-                </p>
-              </div>
-            </motion.a>
-
-            {/* WhatsApp */}
-            <motion.a
-              href={
-                whatsapp
-                  ? `https://wa.me/${whatsapp.replace(/\D/g, '')}`
-                  : 'https://wa.me/971400000000'
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-              variants={fadeUp}
-              initial="hidden"
-              animate="visible"
-              custom={0.48}
-              className="group flex items-start gap-4 rounded-none border border-white/8 bg-charcoal-900/60 px-6 py-6 transition-colors duration-300 hover:border-gold-500/30 hover:bg-charcoal-900"
-            >
-              <div className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center border border-gold-500/20 bg-gold-500/5 transition-colors duration-300 group-hover:border-gold-500/40">
-                <MessageCircle className="h-4 w-4 text-gold-500" />
-              </div>
-              <div>
-                <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.35em] text-charcoal-400">
-                  WhatsApp
-                </p>
-                <p className="text-sm font-light text-cream-100 transition-colors duration-300 group-hover:text-gold-400">
-                  Message us directly
-                </p>
-              </div>
-            </motion.a>
           </div>
         </div>
       </section>
@@ -437,7 +436,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                   <button
                     type="submit"
                     disabled={status === 'sending' || status === 'sent'}
-                    className="inline-flex items-center gap-3 bg-charcoal-950 px-10 py-3.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:bg-camel-600 disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-3 rounded-lg bg-camel-600 px-10 py-3.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:bg-camel-700 disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {status === 'sending' ? (
                       <>
@@ -487,7 +486,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-80px' }}
                 custom={0.1}
-                className="border border-charcoal-100 bg-charcoal-50 px-7 py-8"
+                className="rounded-xl border border-stone-200 bg-stone-50 px-7 py-8"
               >
                 <div className="mb-5 flex items-center gap-3">
                   <MapPin className="h-4 w-4 text-gold-500" />
@@ -507,7 +506,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                 whileInView="visible"
                 viewport={{ once: true, margin: '-80px' }}
                 custom={0.18}
-                className="border border-charcoal-100 bg-charcoal-50 px-7 py-8"
+                className="rounded-xl border border-stone-200 bg-stone-50 px-7 py-8"
               >
                 <div className="mb-5 flex items-center gap-3">
                   <Clock className="h-4 w-4 text-gold-500" />
@@ -543,7 +542,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                       href={instagram ?? 'https://instagram.com/luxeparfum'}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="group inline-flex items-center gap-3 border border-charcoal-200 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700 transition-all duration-300 hover:border-charcoal-900 hover:text-charcoal-900"
+                      className="group inline-flex items-center gap-3 rounded-lg border border-stone-200 bg-white px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700 shadow-sm transition-all duration-300 hover:border-camel-300 hover:text-camel-600 hover:shadow-md"
                     >
                       {/* Instagram icon */}
                       <svg className="h-3.5 w-3.5 transition-colors duration-300 group-hover:text-gold-500" fill="none" stroke="currentColor" strokeWidth={1.5} viewBox="0 0 24 24" aria-hidden>
@@ -564,7 +563,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                     }
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group inline-flex items-center gap-3 border border-charcoal-200 px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700 transition-all duration-300 hover:border-charcoal-900 hover:text-charcoal-900"
+                    className="group inline-flex items-center gap-3 rounded-lg border border-stone-200 bg-white px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700 shadow-sm transition-all duration-300 hover:border-camel-300 hover:text-camel-600 hover:shadow-md"
                   >
                     <MessageCircle className="h-3.5 w-3.5 transition-colors duration-300 group-hover:text-gold-500" />
                     WhatsApp
@@ -591,72 +590,48 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
       </section>
 
       {/* ═══════════════════════ MAP ═══════════════════════ */}
-      <section className="relative h-[480px] w-full overflow-hidden bg-charcoal-950">
-        {/* Label overlay — top-left */}
-        <motion.div
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
-          custom={0}
-          className="absolute left-6 top-6 z-10 border border-gold-500/30 bg-charcoal-950/90 px-5 py-4 backdrop-blur-sm sm:left-10 sm:top-10"
-        >
-          <p className="mb-0.5 text-[8px] font-bold uppercase tracking-[0.45em] text-gold-500">
-            Find Us
-          </p>
-          <p className="text-sm font-light text-cream-100">Dubai International Financial Centre</p>
-          <p className="text-[11px] font-light text-cream-300/60">Dubai, United Arab Emirates</p>
-        </motion.div>
+      {showMap && (
+        <section className="relative h-[420px] w-full overflow-hidden border-t border-stone-200">
 
-        {/* Map iframe */}
-        <iframe
-          title="Luxe Parfum location"
-          src="https://www.openstreetmap.org/export/embed.html?bbox=55.2720%2C25.2020%2C55.3020%2C25.2180&layer=mapnik&marker=25.2097%2C55.2870"
-          className="h-full w-full border-0"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          aria-label="Map showing Luxe Parfum office in Dubai International Financial Centre"
-        />
+          {/* Location label — top-left */}
+          <motion.div
+            variants={fadeUp}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            custom={0}
+            className="absolute left-6 top-6 z-10 rounded-xl border border-stone-200 bg-white px-5 py-4 shadow-md sm:left-10 sm:top-10"
+          >
+            <p className="mb-0.5 text-[8px] font-bold uppercase tracking-[0.45em] text-camel-500">
+              Find Us
+            </p>
+            <p className="text-sm font-light text-charcoal-900">Dubai International Financial Centre</p>
+            <p className="text-[11px] font-light text-charcoal-500">Dubai, United Arab Emirates</p>
+          </motion.div>
 
-        {/* Gradient vignette edges */}
-        <div className="pointer-events-none absolute inset-0">
-          <div className="absolute inset-x-0 top-0 h-10 bg-gradient-to-b from-charcoal-950/30 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-charcoal-950/30 to-transparent" />
-        </div>
+          {/* Map iframe */}
+          <iframe
+            title="Luxe Parfum location"
+            src={mapEmbedUrl}
+            className="h-full w-full border-0"
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+            aria-label="Map showing Luxe Parfum office location"
+          />
 
-        {/* Directions link — bottom-right */}
-        <a
-          href="https://www.openstreetmap.org/?mlat=25.2097&mlon=55.2870#map=16/25.2097/55.2870"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="absolute bottom-6 right-6 z-10 flex items-center gap-2 border border-gold-500/40 bg-charcoal-950/90 px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-gold-400 backdrop-blur-sm transition-colors duration-200 hover:border-gold-400 hover:text-gold-300 sm:bottom-10 sm:right-10"
-        >
-          <MapPin className="h-3 w-3" />
-          Get Directions
-        </a>
-      </section>
+          {/* Directions link — bottom-right */}
+          <a
+            href="https://www.openstreetmap.org/?mlat=25.2097&mlon=55.2870#map=16/25.2097/55.2870"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="absolute bottom-6 right-6 z-10 flex items-center gap-2 rounded-lg border border-stone-200 bg-white px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-camel-600 shadow-md transition-colors duration-200 hover:border-camel-300 hover:text-camel-700 sm:bottom-10 sm:right-10"
+          >
+            <MapPin className="h-3 w-3" />
+            Get Directions
+          </a>
 
-      {/* ═══════════════════════ BOTTOM STRIP ═══════════════════════ */}
-      <section className="border-t border-charcoal-100 bg-charcoal-950 px-4 py-16 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.4em] text-gold-500/60">
-                Luxe Parfum
-              </p>
-              <p className="text-sm font-light text-cream-300/60">
-                The art of fragrance, delivered.
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="h-px w-8 bg-gold-500/40" />
-              <span className="text-[9px] uppercase tracking-[0.35em] text-gold-500/40">
-                Dubai · UAE
-              </span>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      )}
 
     </div>
   )
