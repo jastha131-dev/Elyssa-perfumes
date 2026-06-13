@@ -24,6 +24,9 @@ const _contactPage = defineType({
       initialValue: 55,
       validation: (R) => R.min(0).max(100),
     }),
+    defineField({ name: 'showContactForm', title: 'Show Contact Form', type: 'boolean', initialValue: true, description: 'Toggle the contact form visible/hidden.' }),
+    defineField({ name: 'showOpeningHours', title: 'Show Opening Hours Card', type: 'boolean', initialValue: true }),
+    defineField({ name: 'showSocialLinks', title: 'Show Social Links Card', type: 'boolean', initialValue: true }),
     defineField({
       name: 'showMap',
       title: 'Show Map Section',

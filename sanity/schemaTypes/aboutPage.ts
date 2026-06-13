@@ -56,6 +56,7 @@ export const aboutPage = defineType({
     defineField({ name: 'heroEyebrow_ar', title: 'النص العلوي (Arabic)', type: 'string', group: 'hero', validation: (Rule) => Rule.max(60) }),
 
     // ── Stats Bar ────────────────────────────────────────────────
+    defineField({ name: 'showStats', title: 'Show Stats Strip', type: 'boolean', group: 'story', initialValue: true }),
     defineField({
       name: 'stats',
       title: 'Stats Bar',
@@ -94,6 +95,7 @@ export const aboutPage = defineType({
     }),
 
     // ── Our Story ────────────────────────────────────────────────
+    defineField({ name: 'showStory', title: 'Show Our Story Section', type: 'boolean', group: 'story', initialValue: true }),
     defineField({
       name: 'philosophyHeadline_en',
       title: 'Our Story Headline (English)',
@@ -123,6 +125,7 @@ export const aboutPage = defineType({
     }),
 
     // ── Timeline ─────────────────────────────────────────────────
+    defineField({ name: 'showTimeline', title: 'Show Timeline / Milestones', type: 'boolean', group: 'story', initialValue: true }),
     defineField({
       name: 'timeline',
       title: 'Timeline / Milestones',
@@ -143,6 +146,7 @@ export const aboutPage = defineType({
     }),
 
     // ── Why Trust Us (Pillars) ───────────────────────────────────
+    defineField({ name: 'showPillars', title: 'Show Why Trust Us Section', type: 'boolean', group: 'trust', initialValue: true }),
     defineField({
       name: 'pillars',
       title: 'Why Trust Us — Cards',
@@ -166,6 +170,7 @@ export const aboutPage = defineType({
     }),
 
     // ── Founders ─────────────────────────────────────────────────
+    defineField({ name: 'showFounders', title: 'Show Founders Section', type: 'boolean', group: 'founders', initialValue: true }),
     defineField({ name: 'foundersHeadline_en', title: 'Founders Section Headline (English)', type: 'string', group: 'founders', initialValue: 'Meet The Founders', validation: (Rule) => Rule.max(100) }),
     defineField({ name: 'foundersHeadline_ar', title: 'عنوان قسم المؤسسين (Arabic)', type: 'string', group: 'founders', validation: (Rule) => Rule.max(100) }),
     defineField({ name: 'foundersName', title: 'Founders Names', type: 'string', group: 'founders', initialValue: 'Satish & Suresh', validation: (Rule) => Rule.max(100) }),
@@ -184,6 +189,7 @@ export const aboutPage = defineType({
     }),
 
     // ── Behind The Bottle ────────────────────────────────────────
+    defineField({ name: 'showBehindBottle', title: 'Show Behind The Bottle Section', type: 'boolean', group: 'gallery', initialValue: true }),
     defineField({ name: 'behindBottleHeadline_en', title: '"Behind The Bottle" Section Headline (English)', type: 'string', group: 'gallery', initialValue: 'Behind The Bottle', validation: (Rule) => Rule.max(100) }),
     defineField({ name: 'behindBottleHeadline_ar', title: 'عنوان قسم الصور (Arabic)', type: 'string', group: 'gallery', validation: (Rule) => Rule.max(100) }),
     defineField({
@@ -207,6 +213,7 @@ export const aboutPage = defineType({
     }),
 
     // ── Closing Statement ────────────────────────────────────────
+    defineField({ name: 'showClosing', title: 'Show Closing Statement Section', type: 'boolean', group: 'closing', initialValue: true }),
     defineField({ name: 'closingTitle_en', title: 'Closing Quote Title (English)', type: 'string', group: 'closing', initialValue: 'Every Fragrance Has A Story', validation: (Rule) => Rule.max(100) }),
     defineField({ name: 'closingTitle_ar', title: 'عنوان الاقتباس الختامي (Arabic)', type: 'string', group: 'closing', validation: (Rule) => Rule.max(100) }),
     defineField({

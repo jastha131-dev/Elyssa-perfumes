@@ -584,7 +584,7 @@ export const getContactPageQuery = `
     email, phone, address_en, address_ar, instagramUrl, whatsappNumber,
     "heroImageUrl": heroImage.asset->url, "heroImageAlt": heroImage.alt,
     overlayOpacity, openingHours,
-    showMap, mapEmbedUrl
+    showContactForm, showOpeningHours, showSocialLinks, showMap, mapEmbedUrl
   }
 `
 
@@ -774,6 +774,7 @@ export const getAboutPageQuery = `
     ctaBody_en, ctaBody_ar,
     ctaPrimary, ctaSecondary,
     statsStripColor,
+    showStats, showStory, showTimeline, showPillars, showFounders, showBehindBottle, showClosing,
     seoTitle_en, seoTitle_ar,
     seoDescription_en, seoDescription_ar,
     "sections": sections[] {

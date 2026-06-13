@@ -843,6 +843,9 @@ export interface ContactPageData {
   heroImageAlt?: string
   overlayOpacity?: number
   openingHours?: Array<{ day: string; hours: string }>
+  showContactForm?: boolean
+  showOpeningHours?: boolean
+  showSocialLinks?: boolean
   showMap?: boolean
   mapEmbedUrl?: string
 }
@@ -903,6 +906,13 @@ export interface AboutPageData {
   seoDescription_ar?: string
   sections?: HomePageSection[]
   statsStripColor?: string
+  showStats?: boolean
+  showStory?: boolean
+  showTimeline?: boolean
+  showPillars?: boolean
+  showFounders?: boolean
+  showBehindBottle?: boolean
+  showClosing?: boolean
 }
 
 // ─── Auth / Account Types ─────────────────────────────────────────────────────

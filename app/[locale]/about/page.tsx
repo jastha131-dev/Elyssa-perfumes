@@ -111,12 +111,14 @@ export default async function AboutPage({
     (isAr ? data?.behindBottleHeadline_ar : data?.behindBottleHeadline_en) ?? 'Behind The Bottle'
   const behindBottleImages = data?.behindBottleImages ?? []
 
-  // Founders
-  const showFounders = !!(
-    data?.foundersStory_en ||
-    data?.foundersStory_ar ||
-    data?.foundersImageUrl
-  )
+  // Section visibility toggles (default true when not set)
+  const showStats      = data?.showStats      !== false
+  const showStory      = data?.showStory      !== false
+  const showTimeline   = data?.showTimeline   !== false
+  const showPillars    = data?.showPillars    !== false
+  const showFounders   = data?.showFounders   !== false
+  const showBehindBottle = data?.showBehindBottle !== false
+  const showClosing    = data?.showClosing    !== false
   const foundersHeadline =
     (isAr ? data?.foundersHeadline_ar : data?.foundersHeadline_en) ?? 'Meet The Founders'
   const foundersName = data?.foundersName ?? 'Satish & Suresh'
@@ -182,7 +184,7 @@ export default async function AboutPage({
       </section>
 
       {/* ── 2. STATS STRIP ───────────────────────────────────────── */}
-      <section className={statsStripBg}>
+      {showStats && <section className={statsStripBg}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className={`grid ${stats.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4'}`}>
             {stats.map((stat, i) => (
@@ -201,10 +203,10 @@ export default async function AboutPage({
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── 3. OUR STORY ─────────────────────────────────────────── */}
-      <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
+      {showStory && <section className="mx-auto max-w-7xl px-4 py-24 sm:px-6 lg:px-8">
         <div className="grid items-center gap-16 lg:grid-cols-2 lg:gap-28">
           {/* Text */}
           <div>
@@ -274,10 +276,10 @@ export default async function AboutPage({
             <div className="pointer-events-none absolute -bottom-5 -right-5 h-full w-full border border-gold-500/20" />
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── 4. TIMELINE ──────────────────────────────────────────── */}
-      <section className="bg-stone-100 px-4 py-24 sm:px-6 lg:px-8">
+      {showTimeline && <section className="bg-stone-100 px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl">
           <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.45em] text-camel-500/70">
             Milestones
@@ -314,10 +316,10 @@ export default async function AboutPage({
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── 5. WHY TRUST US ──────────────────────────────────────── */}
-      <section className="bg-cream-50 px-4 py-24 sm:px-6 lg:px-8">
+      {showPillars && <section className="bg-cream-50 px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-7xl">
           <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.45em] text-gold-500/70">
             Our Promise
@@ -351,10 +353,10 @@ export default async function AboutPage({
             ))}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── 6. BEHIND THE BOTTLE ─────────────────────────────────── */}
-      {behindBottleImages.length > 0 && (
+      {showBehindBottle && behindBottleImages.length > 0 && (
         <section className="bg-white px-4 py-24 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-7xl">
             <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.45em] text-gold-500/70">
@@ -451,7 +453,7 @@ export default async function AboutPage({
       )}
 
       {/* ── 8. CLOSING STATEMENT ─────────────────────────────────── */}
-      <section className="bg-stone-50 px-4 py-28 sm:px-6 lg:px-8">
+      {showClosing && <section className="bg-stone-50 px-4 py-28 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
           {/* Decorative top */}
           <div className="mb-10 flex flex-col items-center gap-2">
@@ -488,7 +490,7 @@ export default async function AboutPage({
             </Link>
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* ── EXTRA PAGEBUILDER SECTIONS (Reviews, etc.) ───────────── */}
       {data?.sections && data.sections.length > 0 && (

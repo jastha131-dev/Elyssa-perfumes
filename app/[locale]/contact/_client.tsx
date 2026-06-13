@@ -71,7 +71,10 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
         { day: 'Sunday', hours: 'Closed' },
         { day: 'Time zone', hours: 'GST (UTC+4)' },
       ]
-  const showMap = (data as any)?.showMap !== false
+  const showContactForm  = data?.showContactForm  !== false
+  const showOpeningHours = data?.showOpeningHours !== false
+  const showSocialLinks  = data?.showSocialLinks  !== false
+  const showMap = data?.showMap !== false
   const mapEmbedUrl = (data as any)?.mapEmbedUrl || 'https://www.openstreetmap.org/export/embed.html?bbox=55.2720%2C25.2020%2C55.3020%2C25.2180&layer=mapnik&marker=25.2097%2C55.2870'
 
   // ─── Form state ───────────────────────────────────────────────────────────
@@ -129,7 +132,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
     <div className={isAr ? 'rtl' : undefined} style={{ paddingTop: 'var(--header-h, 72px)' }}>
 
       {/* ═══════════════════════ LIGHT HERO ═══════════════════════ */}
-      <section className="bg-stone-50 pt-24">
+      <section className="bg-stone-50">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-stretch lg:grid-cols-2">
 
@@ -278,10 +281,10 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
       {/* ═══════════════════════ MAIN SECTION ═══════════════════════ */}
       <section className="bg-white">
         <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-          <div className="grid gap-16 lg:grid-cols-[1fr_380px] lg:gap-24">
+          <div className={`grid gap-16 lg:gap-24 ${showContactForm ? 'lg:grid-cols-[1fr_380px]' : 'lg:grid-cols-[380px]'}`}>
 
             {/* ── LEFT: Contact form ── */}
-            <motion.div
+            {showContactForm && <motion.div
               variants={fadeUp}
               initial="hidden"
               whileInView="visible"
@@ -474,7 +477,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                   </p>
                 </div>
               </form>
-            </motion.div>
+            </motion.div>}
 
             {/* ── RIGHT: Info sidebar ── */}
             <div className="space-y-10">
@@ -500,7 +503,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
               </motion.div>
 
               {/* Operating hours */}
-              <motion.div
+              {showOpeningHours && <motion.div
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
@@ -522,10 +525,10 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                     </div>
                   ))}
                 </div>
-              </motion.div>
+              </motion.div>}
 
               {/* Social links */}
-              <motion.div
+              {showSocialLinks && <motion.div
                 variants={fadeUp}
                 initial="hidden"
                 whileInView="visible"
@@ -569,7 +572,7 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                     WhatsApp
                   </a>
                 </div>
-              </motion.div>
+              </motion.div>}
 
               {/* Gold accent note */}
               <motion.div
