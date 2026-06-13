@@ -79,7 +79,9 @@
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add components/layout/NewsletterPopup.tsx)",
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test commit -m \"feat\\(ui\\): add NewsletterPopup component\")",
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add app/api/newsletter-lead/route.ts components/layout/NewsletterPopup.tsx)",
-      "Bash(git *)"
+      "Bash(git *)",
+      "Bash(curl -s http://localhost:3002)",
+      "Bash(npm view *)"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/.npm-global/lib/node_modules/.vercel-j0PtFGzq",
