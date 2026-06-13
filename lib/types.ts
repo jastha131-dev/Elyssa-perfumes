@@ -902,6 +902,7 @@ export interface AboutPageData {
   seoDescription_en?: string
   seoDescription_ar?: string
   sections?: HomePageSection[]
+  statsStripColor?: string
 }
 
 // ─── Auth / Account Types ─────────────────────────────────────────────────────

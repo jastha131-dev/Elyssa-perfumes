@@ -773,6 +773,7 @@ export const getAboutPageQuery = `
     ctaHeadline_en, ctaHeadline_ar,
     ctaBody_en, ctaBody_ar,
     ctaPrimary, ctaSecondary,
+    statsStripColor,
     seoTitle_en, seoTitle_ar,
     seoDescription_en, seoDescription_ar,
     "sections": sections[] {

@@ -75,6 +75,23 @@ export const aboutPage = defineType({
       ],
       validation: (Rule) => Rule.max(6),
     }),
+    defineField({
+      name: 'statsStripColor',
+      title: 'Stats Strip Background',
+      type: 'string',
+      group: 'story',
+      description: 'Background colour of the stats bar below the hero.',
+      initialValue: 'camel',
+      options: {
+        list: [
+          { title: 'Amber / Camel (default)', value: 'camel' },
+          { title: 'Warm Cream', value: 'cream' },
+          { title: 'Charcoal Dark', value: 'charcoal' },
+          { title: 'White', value: 'white' },
+        ],
+        layout: 'radio',
+      },
+    }),
 
     // ── Our Story ────────────────────────────────────────────────
     defineField({

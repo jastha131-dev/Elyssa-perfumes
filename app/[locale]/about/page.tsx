@@ -42,6 +42,15 @@ export default async function AboutPage({
   const heroEyebrow = (isAr ? data?.heroEyebrow_ar : data?.heroEyebrow_en) ?? 'Our Story'
   const overlayOpacity = (data?.overlayOpacity ?? 55) / 100
 
+  // Stats strip
+  const statsColorKey = data?.statsStripColor ?? 'camel'
+  const statsStripBg = { camel: 'bg-camel-600', cream: 'bg-stone-100', charcoal: 'bg-charcoal-800', white: 'bg-white' }[statsColorKey] ?? 'bg-camel-600'
+  const statsIsDark = statsColorKey === 'camel' || statsColorKey === 'charcoal'
+  const statsNumColor = statsIsDark ? 'text-white' : 'text-charcoal-900'
+  const statsLabelColor = statsIsDark ? 'text-white/70' : 'text-charcoal-500'
+  const statsDividerColor = statsIsDark ? 'bg-white/20' : 'bg-charcoal-200'
+  const statsRuleColor = statsIsDark ? 'bg-white/40' : 'bg-camel-400/50'
+
   // Stats
   const stats = data?.stats ?? [
     { value: '20+', label_en: 'Years Experience', label_ar: 'سنة خبرة' },
@@ -132,66 +141,60 @@ export default async function AboutPage({
         className="bg-stone-50"
         style={{ paddingTop: 'var(--header-h, 72px)' }}
       >
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid items-stretch lg:grid-cols-2">
+        <div className="grid lg:grid-cols-2" style={{ minHeight: 'calc(80vh - var(--header-h, 72px))' }}>
 
-            {/* Left — text */}
-            <div className="flex flex-col justify-center py-16 lg:pr-16">
-              <p className="mb-4 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.45em] text-camel-500">
-                <span className="h-px w-8 bg-camel-500/60" />
-                {heroEyebrow}
+          {/* Left — text pinned to bottom */}
+          <div className="mx-auto flex w-full max-w-2xl flex-col justify-end px-8 pb-16 pt-12 lg:px-12 lg:pb-20">
+            <p className="mb-5 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.45em] text-camel-500">
+              <span className="h-px w-8 bg-camel-500/60" />
+              {heroEyebrow}
+            </p>
+            <h1 className="font-display text-5xl font-light leading-[1.05] text-charcoal-900 sm:text-6xl lg:text-7xl">
+              {heroHeadline}
+            </h1>
+            {heroSubline && (
+              <p className="mt-7 max-w-md text-sm font-light leading-relaxed text-charcoal-500">
+                {heroSubline}
               </p>
-              <h1 className="max-w-xl font-display text-4xl font-light leading-[1.1] text-charcoal-900 sm:text-5xl lg:text-6xl">
-                {heroHeadline}
-              </h1>
-              {heroSubline && (
-                <p className="mt-6 max-w-md text-sm font-light leading-relaxed text-charcoal-500">
-                  {heroSubline}
-                </p>
-              )}
-              <div className="mt-10 flex items-center gap-4">
-                <div className="h-px w-10 bg-camel-500/50" />
-                <span className="text-[9px] uppercase tracking-[0.4em] text-camel-500/50">
-                  Est. 2005 · Dubai
-                </span>
-              </div>
+            )}
+            <div className="mt-12 flex items-center gap-4">
+              <div className="h-px w-10 bg-camel-500/50" />
+              <span className="text-[9px] uppercase tracking-[0.4em] text-camel-500/50">
+                Est. 2005 · Dubai
+              </span>
             </div>
-
-            {/* Right — hero image */}
-            <div className="relative hidden min-h-[480px] lg:block">
-              <Image
-                src={data?.heroBgImageUrl || '/images/categories/I1.webp'}
-                alt={heroHeadline}
-                fill
-                className="object-cover object-center"
-                priority
-                sizes="50vw"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-stone-50/50 via-transparent to-transparent" />
-            </div>
-
           </div>
+
+          {/* Right — hero image full height */}
+          <div className="relative min-h-[320px] lg:min-h-0">
+            <Image
+              src={data?.heroBgImageUrl || '/images/categories/I1.webp'}
+              alt={heroHeadline}
+              fill
+              className="object-cover object-center"
+              priority
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-stone-50/40 via-transparent to-transparent lg:from-stone-50/30" />
+          </div>
+
         </div>
       </section>
 
       {/* ── 2. STATS STRIP ───────────────────────────────────────── */}
-      <section className="bg-camel-600">
+      <section className={statsStripBg}>
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className={`grid ${stats.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4'}`}>
             {stats.map((stat, i) => (
-              <div
-                key={i}
-                className="group relative flex flex-col items-center py-10 text-center"
-              >
-                {/* Vertical divider between items */}
+              <div key={i} className="relative flex flex-col items-center py-10 text-center">
                 {i > 0 && (
-                  <div className="absolute inset-y-6 left-0 w-px bg-white/20" />
+                  <div className={`absolute inset-y-6 left-0 w-px ${statsDividerColor}`} />
                 )}
-                <p className="font-display text-4xl font-light tracking-tight text-white md:text-5xl">
+                <p className={`font-display text-4xl font-light tracking-tight md:text-5xl ${statsNumColor}`}>
                   {stat.value}
                 </p>
-                <div className="mt-2 h-px w-6 bg-white/40" />
-                <p className="mt-2 text-[9px] font-semibold uppercase tracking-[0.35em] text-white/70">
+                <div className={`mt-2 h-px w-6 ${statsRuleColor}`} />
+                <p className={`mt-2 text-[9px] font-semibold uppercase tracking-[0.35em] ${statsLabelColor}`}>
                   {isAr ? stat.label_ar || stat.label_en : stat.label_en}
                 </p>
               </div>
