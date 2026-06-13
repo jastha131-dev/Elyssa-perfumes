@@ -175,15 +175,23 @@ export default async function AboutPage({
       </section>
 
       {/* ── 2. STATS STRIP ───────────────────────────────────────── */}
-      <section className="border-b border-charcoal-100 bg-white shadow-sm">
+      <section className="bg-camel-600">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className={`grid divide-charcoal-100 ${stats.length === 5 ? 'grid-cols-2 divide-y sm:grid-cols-5 sm:divide-x sm:divide-y-0' : 'grid-cols-2 divide-y sm:grid-cols-4 sm:divide-x sm:divide-y-0'}`}>
+          <div className={`grid ${stats.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4'}`}>
             {stats.map((stat, i) => (
-              <div key={i} className="flex flex-col items-center py-8 text-center">
-                <p className="font-display text-3xl font-light tracking-tight text-charcoal-900 md:text-4xl">
+              <div
+                key={i}
+                className="group relative flex flex-col items-center py-10 text-center"
+              >
+                {/* Vertical divider between items */}
+                {i > 0 && (
+                  <div className="absolute inset-y-6 left-0 w-px bg-white/20" />
+                )}
+                <p className="font-display text-4xl font-light tracking-tight text-white md:text-5xl">
                   {stat.value}
                 </p>
-                <p className="mt-1.5 text-[10px] font-medium uppercase tracking-[0.3em] text-charcoal-400">
+                <div className="mt-2 h-px w-6 bg-white/40" />
+                <p className="mt-2 text-[9px] font-semibold uppercase tracking-[0.35em] text-white/70">
                   {isAr ? stat.label_ar || stat.label_en : stat.label_en}
                 </p>
               </div>
