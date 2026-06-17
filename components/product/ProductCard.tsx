@@ -27,7 +27,6 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [imgIdx, setImgIdx] = useState(0)
   const [addedToCart, setAddedToCart] = useState(false)
   const [selectedVolIdx, setSelectedVolIdx] = useState(0)
-  const [volOffset, setVolOffset] = useState(0)
 
   const t = useTranslations('product')
   const locale = useLocale()
@@ -281,37 +280,24 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
           )}
         </div>
 
-        {/* Volume selector */}
+        {/* Volume selector — horizontally scrollable when sizes overflow */}
         {volumes.length > 1 && (
-          <div className="flex items-center gap-1.5 mt-0.5" style={{ justifyContent: 'var(--card-price-justify, flex-start)' }}>
-            {volumes.slice(volOffset, volOffset + 2).map((vol, i) => {
-              const idx = volOffset + i
-              return (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedVolIdx(idx) }}
-                  className={cn(
-                    'px-3 py-1.5 text-[11px] sm:px-2.5 sm:py-1 sm:text-[10px] font-medium border transition-all duration-150',
-                    idx === selectedVolIdx
-                      ? 'border-charcoal-800 text-charcoal-900 bg-white'
-                      : 'border-charcoal-200 text-charcoal-400 bg-white hover:border-charcoal-500'
-                  )}
-                >
-                  {vol.ml}ml
-                </button>
-              )
-            })}
-            {volumes.length > 2 && (
+          <div className="flex items-center gap-1.5 mt-0.5 overflow-x-auto scrollbar-hide" style={{ justifyContent: volumes.length > 2 ? 'flex-start' : 'var(--card-price-justify, flex-start)' }}>
+            {volumes.map((vol, idx) => (
               <button
+                key={idx}
                 type="button"
-                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setVolOffset((o) => o + 2 >= volumes.length ? 0 : o + 1) }}
-                className="w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center border border-charcoal-200 text-charcoal-400 hover:border-charcoal-500 transition-all duration-150"
-                aria-label="More sizes"
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedVolIdx(idx) }}
+                className={cn(
+                  'flex-shrink-0 px-3 py-1.5 text-[11px] sm:px-2.5 sm:py-1 sm:text-[10px] font-medium border transition-all duration-150',
+                  idx === selectedVolIdx
+                    ? 'border-charcoal-800 text-charcoal-900 bg-white'
+                    : 'border-charcoal-200 text-charcoal-400 bg-white hover:border-charcoal-500'
+                )}
               >
-                <ChevronRight size={11} strokeWidth={2} />
+                {vol.ml}ml
               </button>
-            )}
+            ))}
           </div>
         )}
 
