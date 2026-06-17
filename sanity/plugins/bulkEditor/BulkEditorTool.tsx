@@ -1,5 +1,5 @@
 // sanity/plugins/bulkEditor/BulkEditorTool.tsx
-import React, { useState, useMemo, useCallback } from 'react'
+import React, { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import { useProducts } from './useProducts'
 import { useBulkMutate } from './useBulkMutate'
 import { FilterBar, type FilterState } from './FilterBar'
@@ -38,6 +38,21 @@ export function BulkEditorTool() {
   const [selected, setSelected] = useState<Set<string>>(new Set())
   const [toast, setToast] = useState<{ msg: string; ok: boolean } | null>(null)
 
+  // Fix 4: store toast timer ref so it can be cleared on unmount
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  // Fix 4: cancel pending toast timer on unmount to avoid setState on unmounted component
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+    }
+  }, [])
+
+  // Fix 3: clear selection whenever filters change so hidden products aren't mutated invisibly
+  useEffect(() => {
+    setSelected(new Set())
+  }, [filters])
+
   const filtered = useMemo(() => applyFilters(products, filters), [products, filters])
 
   const handleToggle = useCallback((id: string) => {
@@ -74,7 +89,9 @@ export function BulkEditorTool() {
     setToast({ msg, ok })
     setSelected(new Set())
     await refetch()
-    setTimeout(() => setToast(null), 4000)
+    // Fix 4: cancel any previous timer before setting a new one
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current)
+    toastTimerRef.current = setTimeout(() => setToast(null), 4000)
   }, [products, selected, apply, refetch])
 
   if (loading) {

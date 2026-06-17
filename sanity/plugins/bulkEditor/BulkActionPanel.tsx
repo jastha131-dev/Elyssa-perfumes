@@ -113,7 +113,8 @@ export function BulkActionPanel({ selectedCount, loading, onApply }: BulkActionP
       ops.priceMode = priceMode
       ops.priceValue = parseFloat(priceValue)
     }
-    if (compareAtMarkup !== '') ops.compareAtMarkupPct = parseFloat(compareAtMarkup)
+    // Fix 2: only include compareAtMarkupPct if clearSale is NOT checked (mutual exclusion)
+    if (!clearSale && compareAtMarkup !== '') ops.compareAtMarkupPct = parseFloat(compareAtMarkup)
     if (clearSale) ops.clearSale = true
 
     if (flagNew !== null) ops.new = flagNew
@@ -170,7 +171,8 @@ export function BulkActionPanel({ selectedCount, loading, onApply }: BulkActionP
               placeholder="e.g. 20"
               value={compareAtMarkup}
               onChange={e => setCompareAtMarkup(e.target.value)}
-              style={{ ...inputStyle, width: 80 }}
+              disabled={clearSale}
+              style={{ ...inputStyle, width: 80, opacity: clearSale ? 0.4 : 1 }}
             />
           </div>
           <label style={{ fontSize: 12, display: 'flex', alignItems: 'center', gap: 5, cursor: 'pointer' }}>
