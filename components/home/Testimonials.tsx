@@ -104,7 +104,7 @@ export default function Testimonials({ data }: TestimonialsProps = {}) {
             </p>
             <div className="h-px w-8 bg-stone-300" />
           </div>
-          <h2 className="font-headline text-4xl uppercase text-ink-900 md:text-5xl">
+          <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight" style={{ fontSize: 'var(--section-heading)' }}>
             {title}
           </h2>
           <div className="mx-auto mt-5 h-px w-16 bg-stone-300" />

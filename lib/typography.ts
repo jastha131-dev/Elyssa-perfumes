@@ -154,6 +154,12 @@ export interface SiteTypographySettings {
     rate: number
     position?: 'before' | 'after'
   }>
+  addToCartText_en?: string
+  addToCartText_ar?: string
+  addToCartBgColor?: string
+  addToCartTextColor?: string
+  sectionHeadingSize?: 'sm' | 'md' | 'lg'
+  sectionBodySize?: 'sm' | 'md' | 'lg'
 }
 
 export function buildGoogleFontsUrl(pairingKey: string): string {
@@ -203,6 +209,20 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
   const cols = settings?.collectionColumns ?? '4'
   const mobileCols = settings?.mobileCardColumns ?? '2'
 
+  const atcBg = !settings?.addToCartBgColor || settings.addToCartBgColor === 'theme'
+    ? 'var(--camel)'
+    : settings.addToCartBgColor
+  const atcText = settings?.addToCartTextColor ?? '#000000'
+
+  const shMap: Record<string, { mobile: string; desktop: string }> = {
+    sm: { mobile: '1.875rem', desktop: '2.25rem' },
+    md: { mobile: '2.25rem', desktop: '3rem' },
+    lg: { mobile: '3rem',    desktop: '3.75rem' },
+  }
+  const sbMap: Record<string, string> = { sm: '0.8125rem', md: '0.875rem', lg: '1rem' }
+  const sh = shMap[settings?.sectionHeadingSize ?? 'md'] ?? shMap.md
+  const sb = sbMap[settings?.sectionBodySize ?? 'md'] ?? sbMap.md
+
   const tabletSize = settings?.tabletFontSize
   const mobileSize = settings?.mobileFontSize ?? '14'
 
@@ -240,6 +260,10 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
       --card-price-size: ${fs.price};
       --collection-cols: ${cols};
       --mobile-collection-cols: ${mobileCols};
+      --atc-bg: ${atcBg};
+      --atc-text: ${atcText};
+      --section-heading: ${sh.mobile};
+      --section-body: ${sb};
       --pdp-desc-size: ${{ sm: '13px', md: '15px', lg: '17px' }[settings?.pdpTextSize ?? 'md'] ?? '15px'};
       --pdp-body-size: ${{ sm: '12px', md: '14px', lg: '16px' }[settings?.pdpTextSize ?? 'md'] ?? '14px'};
     }
@@ -248,5 +272,6 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
     ${tabletCss}
     body { line-height: var(--body-line-height); }
     .font-display { font-weight: var(--heading-weight); }
+    @media (min-width: 768px) { :root { --section-heading: ${sh.desktop}; } }
   `.replace(/\n\s+/g, ' ').trim()
 }

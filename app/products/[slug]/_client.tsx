@@ -34,6 +34,7 @@ import ReviewsQa from '@/components/product/ReviewsQa'
 import type { ReviewItem, QuestionItem } from '@/components/product/ReviewsQa'
 import type { Product, VolumeOption, ProductReview } from '@/lib/types'
 import { PriceText } from '@/components/ui/PriceText'
+import { useSiteConfig } from '@/lib/hooks/useSiteConfig'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -692,6 +693,7 @@ export function ProductDetailClient({
   const { openCart } = useCartDrawerStore()
   const { toggleWishlist, isInWishlist } = useWishlistStore()
   const { addProduct: addToRecentlyViewed } = useRecentlyViewedStore()
+  const siteConfig = useSiteConfig()
 
   // Volume state — default to first volume option
   const volumes = product.volume ?? []
@@ -700,6 +702,7 @@ export function ProductDetailClient({
   )
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [showPaymentModal, setShowPaymentModal] = useState(false)
 
   // Sticky bar visibility
   const [stickyVisible, setStickyVisible] = useState(false)
@@ -824,15 +827,30 @@ export function ProductDetailClient({
           {/* ── Right — Product Details ───────────────────────────────────── */}
           <div className="mt-10 lg:mt-0 flex flex-col">
 
-            {/* Top badge bar */}
-            {(product.new || product.bestSeller || product.badgeText_en) && (
-              <span className={cn(
-                'mb-3 self-start py-1.5 pl-3 pr-7 font-body text-[9px] font-bold uppercase tracking-[0.22em] text-white [clip-path:polygon(0_0,100%_0,calc(100%-9px)_50%,100%_100%,0_100%)]',
-                { gold: 'bg-camel-500', black: 'bg-charcoal-900', red: 'bg-red-500', green: 'bg-green-600', blue: 'bg-blue-600', pink: 'bg-pink-500' }[product.badgeColor || 'gold'] || 'bg-camel-500'
-              )}>
-                {(isAr ? product.badgeText_ar : product.badgeText_en) || (product.new ? (isAr ? 'جديد · إصدار محدود' : 'New & Limited Edition') : (isAr ? 'الأكثر مبيعاً' : 'Best Seller'))}
-              </span>
-            )}
+            {/* Top badge + wishlist row */}
+            <div className="flex items-start justify-between mb-2">
+              {(product.new || product.bestSeller || product.badgeText_en) ? (
+                <span className={cn(
+                  'py-1.5 pl-3 pr-7 font-body text-[9px] font-medium uppercase tracking-[0.22em] text-white [clip-path:polygon(0_0,100%_0,calc(100%-9px)_50%,100%_100%,0_100%)]',
+                  { gold: 'bg-camel-500', black: 'bg-charcoal-900', red: 'bg-red-500', green: 'bg-green-600', blue: 'bg-blue-600', pink: 'bg-pink-500' }[product.badgeColor || 'gold'] || 'bg-camel-500'
+                )}>
+                  {(isAr ? product.badgeText_ar : product.badgeText_en) || (product.new ? (isAr ? 'جديد · إصدار محدود' : 'New & Limited Edition') : (isAr ? 'الأكثر مبيعاً' : 'Best Seller'))}
+                </span>
+              ) : <div />}
+              <motion.button
+                type="button"
+                onClick={handleWishlist}
+                whileTap={{ scale: 0.92 }}
+                className={cn(
+                  'flex flex-shrink-0 items-center justify-center p-0.5 transition-colors duration-200',
+                  wishlisted ? 'text-camel-500' : 'text-charcoal-300 hover:text-charcoal-600'
+                )}
+                aria-label={wishlisted ? `Remove ${productName} from wishlist` : `Add ${productName} to wishlist`}
+                aria-pressed={wishlisted}
+              >
+                <Heart className="h-[18px] w-[18px]" strokeWidth={1.5} fill={wishlisted ? 'currentColor' : 'none'} />
+              </motion.button>
+            </div>
 
             {/* Category + status row */}
             <div className="flex items-center gap-3 flex-wrap mb-4">
@@ -860,7 +878,7 @@ export function ProductDetailClient({
             </div>
 
             {/* Product name */}
-            <h1 className="font-display text-4xl font-light text-charcoal-900 leading-[1.1] tracking-tight md:text-5xl">
+            <h1 className="font-display text-3xl font-extrabold text-charcoal-900 leading-[1.1] tracking-tight md:text-4xl">
               {productName}
             </h1>
             <p className="mt-2 font-body text-xs tracking-[0.22em] uppercase text-charcoal-400">
@@ -897,7 +915,7 @@ export function ProductDetailClient({
 
             {/* Price */}
             <div className="mt-6 flex items-end gap-3 flex-wrap">
-              <PriceText amount={displayPrice} className="font-display text-4xl font-light text-charcoal-900" />
+              <PriceText amount={displayPrice} className="font-display text-3xl font-semibold text-charcoal-900" />
               {product.compareAtPrice && product.compareAtPrice > displayPrice && (
                 <>
                   <PriceText amount={product.compareAtPrice} className="font-body text-base text-charcoal-400 line-through mb-1" />
@@ -960,8 +978,9 @@ export function ProductDetailClient({
                   'flex flex-1 items-center justify-center gap-2.5',
                   'h-13 rounded-full py-4 px-6 font-body text-sm font-semibold uppercase tracking-[0.16em]',
                   'transition-all duration-300',
-                  addedToCart ? 'bg-charcoal-700 text-white' : 'bg-camel-500 text-white hover:bg-camel-600'
+                  addedToCart ? 'bg-charcoal-700 text-white' : 'hover:opacity-90'
                 )}
+                style={addedToCart ? undefined : { backgroundColor: 'var(--atc-bg, #C8A96E)', color: 'var(--atc-text, #000000)' }}
               >
                 {addedToCart ? (
                   <>{isAr ? 'تمت الإضافة ✓' : 'Added ✓'}</>
@@ -969,23 +988,9 @@ export function ProductDetailClient({
                   <>
                     <PriceText amount={displayPrice} />
                     <span className="opacity-50">|</span>
-                    <span>{isAr ? 'أضف إلى السلة' : 'Add to Cart'}</span>
+                    <span>{isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en}</span>
                   </>
                 )}
-              </motion.button>
-              {/* Wishlist */}
-              <motion.button
-                type="button"
-                onClick={handleWishlist}
-                whileTap={{ scale: 0.92 }}
-                className={cn(
-                  'flex h-13 w-14 flex-shrink-0 items-center justify-center border-2 transition-all duration-200',
-                  wishlisted ? 'border-gold-500 bg-gold-50 text-gold-600' : 'border-charcoal-200 text-charcoal-400 hover:border-charcoal-400 hover:text-charcoal-700'
-                )}
-                aria-label={wishlisted ? `Remove ${productName} from wishlist` : `Add ${productName} to wishlist`}
-                aria-pressed={wishlisted}
-              >
-                <Heart className="h-5 w-5" fill={wishlisted ? 'currentColor' : 'none'} />
               </motion.button>
             </div>
 
@@ -997,7 +1002,13 @@ export function ProductDetailClient({
                 <span className="flex h-6 items-center rounded-md border border-charcoal-200 bg-white px-2 font-body text-[10px] font-semibold text-charcoal-800">G Pay</span>
                 <span className="flex h-6 items-center rounded-md bg-[#003087] px-2 font-body text-[10px] font-bold italic text-white">PayPal</span>
                 <span className="flex h-6 w-6 items-center justify-center rounded-md bg-[#00D632] font-body text-[13px] font-bold text-white">$</span>
-                <span className="flex h-5 w-5 items-center justify-center rounded-full border border-charcoal-300 font-body text-[9px] text-charcoal-400">i</span>
+                <button
+                  onClick={() => setShowPaymentModal(true)}
+                  aria-label="View payment options"
+                  className="flex h-5 w-5 items-center justify-center rounded-full border border-charcoal-300 font-body text-[9px] text-charcoal-400 transition-colors hover:border-charcoal-500 hover:text-charcoal-600 focus:outline-none"
+                >
+                  i
+                </button>
               </div>
             </div>
 
@@ -1147,6 +1158,112 @@ export function ProductDetailClient({
 
       {/* Bottom padding on mobile to prevent content hidden behind sticky bar */}
       <div className="h-20 lg:hidden" aria-hidden="true" />
+
+      {/* Payment Options Modal */}
+      <AnimatePresence>
+        {showPaymentModal && (
+          <>
+            <motion.div
+              key="payment-modal-backdrop"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25 }}
+              className="fixed inset-0 z-50 bg-charcoal-900/50 backdrop-blur-sm"
+              onClick={() => setShowPaymentModal(false)}
+              aria-hidden="true"
+            />
+            <motion.div
+              key="payment-modal"
+              initial={{ opacity: 0, scale: 0.96, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.96, y: 12 }}
+              transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Payment options at checkout"
+              className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-sm -translate-y-1/2 rounded-2xl bg-white p-6 shadow-2xl"
+            >
+              {/* Header */}
+              <div className="mb-5 flex items-start justify-between">
+                <h2 className="font-display text-base font-semibold uppercase tracking-[0.15em] text-charcoal-900">
+                  Payment Options at Checkout
+                </h2>
+                <button
+                  onClick={() => setShowPaymentModal(false)}
+                  aria-label="Close"
+                  className="ml-3 flex-shrink-0 rounded-full p-1 text-charcoal-400 transition-colors hover:bg-charcoal-100 hover:text-charcoal-700 focus:outline-none"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {/* Section: Express & Digital Wallets */}
+              <div className="mb-4">
+                <p className="mb-2.5 font-body text-[10px] uppercase tracking-[0.2em] text-charcoal-400">Express &amp; Digital Wallets</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="flex h-8 items-center rounded-lg bg-black px-3 font-body text-[11px] font-semibold text-white">
+                    Apple Pay
+                  </span>
+                  <span className="flex h-8 items-center rounded-lg border border-charcoal-200 bg-white px-3 font-body text-[11px] font-semibold text-charcoal-800">
+                    G Pay
+                  </span>
+                  <span className="flex h-8 items-center rounded-lg bg-[#003087] px-3 font-body text-[11px] font-bold italic text-white">
+                    PayPal
+                  </span>
+                  <span className="flex h-8 items-center rounded-lg bg-[#00D632] px-3 font-body text-[11px] font-bold text-white">
+                    Cash App
+                  </span>
+                </div>
+              </div>
+
+              <div className="mb-4 h-px bg-charcoal-100" />
+
+              {/* Section: Shop Now Pay Later */}
+              <div className="mb-4">
+                <p className="mb-2.5 font-body text-[10px] uppercase tracking-[0.2em] text-charcoal-400">Shop Now, Pay Later</p>
+                <div className="flex flex-wrap gap-2">
+                  <span className="flex h-8 items-center rounded-lg bg-[#FFB3C7] px-3 font-body text-[11px] font-bold text-[#17120E]">
+                    Klarna
+                  </span>
+                  <span className="flex h-8 items-center rounded-lg bg-[#B2FCE4] px-3 font-body text-[11px] font-bold text-[#000]">
+                    Afterpay
+                  </span>
+                  <span className="flex h-8 items-center rounded-lg border border-charcoal-200 bg-white px-3 font-body text-[11px] font-semibold text-charcoal-800">
+                    Affirm
+                  </span>
+                </div>
+                <p className="mt-2 font-body text-[10px] text-charcoal-400">Split into 4 interest-free installments at checkout.</p>
+              </div>
+
+              <div className="mb-4 h-px bg-charcoal-100" />
+
+              {/* Section: Card */}
+              <div>
+                <p className="mb-2.5 font-body text-[10px] uppercase tracking-[0.2em] text-charcoal-400">Pay with Credit or Debit Card</p>
+                <div className="flex flex-wrap gap-2">
+                  {[
+                    { label: 'VISA', bg: '#1A1F71', color: '#fff' },
+                    { label: 'MC', bg: '#EB001B', color: '#fff' },
+                    { label: 'AMEX', bg: '#007BC1', color: '#fff' },
+                  ].map(({ label, bg, color }) => (
+                    <span
+                      key={label}
+                      className="flex h-8 items-center rounded-lg px-3 font-body text-[11px] font-bold tracking-wide"
+                      style={{ background: bg, color }}
+                    >
+                      {label}
+                    </span>
+                  ))}
+                </div>
+                <p className="mt-2 font-body text-[10px] text-charcoal-400">All major cards accepted. Payments are encrypted and secure.</p>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </motion.div>
   )
 }

@@ -174,7 +174,7 @@ export default function Categories({ data }: CategoriesProps) {
           <p className={cn('mb-3 font-body text-xs uppercase tracking-widest', subColor)}>
             {t('exploreBy')}
           </p>
-          <h2 className={cn('font-headline font-bold uppercase text-4xl md:text-5xl', headingColor)}>
+          <h2 className={cn('font-headline font-bold uppercase leading-tight', headingColor)} style={{ fontSize: 'var(--section-heading)' }}>
             {title}
           </h2>
           <div className="mt-5 h-px w-16 bg-camel-500/50" />

@@ -121,7 +121,7 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
             <p className="mb-4 font-body text-xs uppercase tracking-[0.35em] text-camel-500">
               {t('exclusiveAccess')}
             </p>
-            <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight text-3xl md:text-4xl">
+            <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight" style={{ fontSize: 'var(--section-heading)' }}>
               {headline}
             </h2>
             <div className="mt-8 h-px w-16 bg-camel-400/40" />
@@ -152,7 +152,7 @@ export default function Newsletter({ data }: NewsletterProps = {}) {
           >
             <motion.p
               variants={itemVariants}
-              className="mb-3 font-body text-sm font-light leading-relaxed text-ink-500"
+              className="mb-3 font-body font-light leading-relaxed text-ink-500" style={{ fontSize: 'var(--section-body)' }}
             >
               {subtext}
             </motion.p>

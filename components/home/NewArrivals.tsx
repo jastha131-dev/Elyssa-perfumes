@@ -58,8 +58,8 @@ export default function NewArrivals({ data }: Props) {
           className="mb-12 text-center"
         >
           <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">Just In</p>
-          <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">{title}</h2>
-          {subtitle && <p className="mt-3 font-body text-sm text-ink-400">{subtitle}</p>}
+          <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight" style={{ fontSize: 'var(--section-heading)' }}>{title}</h2>
+          {subtitle && <p className="mt-3 font-body text-ink-400" style={{ fontSize: 'var(--section-body)' }}>{subtitle}</p>}
           <div className="mx-auto mt-4 h-px w-16 bg-camel-500/50" />
         </motion.div>
 

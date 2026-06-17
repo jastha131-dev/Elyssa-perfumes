@@ -157,7 +157,7 @@ export default function BrandStory({ data }: BrandStoryProps) {
             variants={fadeUpVariants}
             initial="hidden"
             animate={isTextInView ? 'visible' : 'hidden'}
-            className="relative z-10 mt-8 max-w-sm font-body text-base leading-relaxed text-charcoal-500"
+            className="relative z-10 mt-8 max-w-sm font-body leading-relaxed text-charcoal-500" style={{ fontSize: 'var(--section-body)' }}
           >
             Inspired by the greats. Crafted for you. Our collection echoes the world&apos;s finest maisons at a fraction of the price.
           </motion.p>

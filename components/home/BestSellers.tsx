@@ -12,6 +12,7 @@ import { useWishlistStore } from '@/lib/store/wishlist-store'
 import { useCartStore } from '@/lib/store/cart-store'
 import { useCartDrawerStore } from '@/lib/store/cart-drawer-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
+import { useSiteConfig } from '@/lib/hooks/useSiteConfig'
 import type { Product, BestSellersSectionBlock } from '@/lib/types'
 import { PriceText } from '@/components/ui/PriceText'
 
@@ -75,6 +76,7 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
   const { addItem: addToCart } = useCartStore()
   const { openCart } = useCartDrawerStore()
   const hydrated = useHydrated()
+  const siteConfig = useSiteConfig()
   const isWishlisted = hydrated && isInWishlist(product._id)
   const [imgIdx, setImgIdx] = useState(0)
   const [addedToCart, setAddedToCart] = useState(false)
@@ -292,13 +294,14 @@ function BestSellerCard({ product, index }: BestSellerCardProps) {
             'mt-auto w-full rounded-full px-3 py-2.5 sm:py-3',
             'font-body font-semibold uppercase tracking-tight sm:tracking-[0.14em] transition-all duration-300',
             'text-[10px] sm:text-[11px]',
-            addedToCart ? 'bg-charcoal-800 text-white' : 'bg-camel-500 text-white hover:bg-camel-600'
+            addedToCart ? 'bg-charcoal-800 text-white' : 'hover:opacity-90'
           )}
+          style={addedToCart ? undefined : { backgroundColor: 'var(--atc-bg, #C8A96E)', color: 'var(--atc-text, #000000)' }}
           aria-label={`Add ${productName} to cart`}
         >
           {addedToCart
             ? (isAr ? 'تمت الإضافة ✓' : 'Added ✓')
-            : <span className="inline-flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap"><PriceText amount={displayPrice} symbolSize={9} /><span className="opacity-50">|</span>{isAr ? 'أضف للسلة' : 'Add to Cart'}</span>}
+            : <span className="inline-flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap"><PriceText amount={displayPrice} symbolSize={9} /><span className="opacity-50">|</span>{isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en}</span>}
         </motion.button>
       </div>
     </motion.div>
@@ -340,7 +343,7 @@ export default function BestSellers({ data }: BestSellersProps) {
           <p className="mb-2 font-body text-xs uppercase tracking-widest text-camel-500">
             Top Picks
           </p>
-          <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
+          <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight" style={{ fontSize: 'var(--section-heading)' }}>
             {title}
           </h2>
           <div className="mt-4 h-px w-16 bg-camel-500/50" />

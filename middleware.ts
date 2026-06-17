@@ -11,6 +11,7 @@ const { auth } = NextAuth(authConfig)
 const intlMiddleware = createMiddleware({
   locales: LOCALES,
   defaultLocale: DEFAULT_LOCALE,
+  localeDetection: false,
 })
 
 const PROTECTED_PATTERNS = [

@@ -48,10 +48,10 @@ const DESIGNER_SEARCH_MAP: Record<string, string[]> = {
 const AED_RATE = 3.67
 const PRICE_PRESETS = [
   { label: 'Any Price', range: [0, 99999] as [number, number] },
-  { label: 'Under AED 500', range: [0, Math.round(500 / AED_RATE)] as [number, number] },
-  { label: 'AED 500 – 999', range: [Math.round(500 / AED_RATE), Math.round(999 / AED_RATE)] as [number, number] },
-  { label: 'AED 1,000 – 1,499', range: [Math.round(1000 / AED_RATE), Math.round(1499 / AED_RATE)] as [number, number] },
-  { label: 'AED 1,500+', range: [Math.round(1500 / AED_RATE), 99999] as [number, number] },
+  { label: 'Under AED 50', range: [0, Math.round(50 / AED_RATE)] as [number, number] },
+  { label: 'AED 50 – 99', range: [Math.round(50 / AED_RATE), Math.round(99 / AED_RATE)] as [number, number] },
+  { label: 'AED 100 – 149', range: [Math.round(100 / AED_RATE), Math.round(149 / AED_RATE)] as [number, number] },
+  { label: 'AED 150+', range: [Math.round(150 / AED_RATE), 99999] as [number, number] },
 ]
 
 const GENDER_OPTIONS = [
@@ -370,8 +370,10 @@ export default function CollectionPageClient({ collection, products }: Props) {
       </div>
 
       {/* Sticky filter bar */}
-      <div className="sticky top-[72px] z-20 border-b border-stone-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 sm:px-6 lg:px-8 overflow-visible">
-        <div className="mx-auto max-w-7xl flex items-center gap-2.5 overflow-x-auto" style={{ scrollbarWidth: 'none' }}>
+      <div className="sticky top-[72px] z-20 border-b border-stone-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 sm:px-6 lg:px-8 overflow-hidden">
+        <div className="relative">
+        <div className="mx-auto max-w-7xl flex items-center gap-2.5 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+
 
           {/* Sort & Filter */}
           <div ref={sortRef} className="relative flex-shrink-0">
@@ -496,6 +498,9 @@ export default function CollectionPageClient({ collection, products }: Props) {
               Clear all
             </button>
           )}
+        </div>
+        {/* Right fade hint — signals more pills to scroll to */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-10 bg-gradient-to-l from-white/95 to-transparent" aria-hidden="true" />
         </div>
       </div>
 

@@ -7,6 +7,7 @@ import { motion, useInView } from 'framer-motion'
 import { useLocale } from 'next-intl'
 import { cn } from '@/lib/utils'
 import { useCartStore } from '@/lib/store/cart-store'
+import { useSiteConfig } from '@/lib/hooks/useSiteConfig'
 import { PriceText } from '@/components/ui/PriceText'
 import type { Product, ComparisonTableSectionBlock } from '@/lib/types'
 
@@ -27,6 +28,8 @@ export default function ComparisonTable({ data }: Props) {
   const ref = useRef<HTMLElement>(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const { addItem } = useCartStore()
+  const siteConfig = useSiteConfig()
+  const isAr = locale === 'ar'
 
   const products: Product[] = (data?.products ?? []) as Product[]
   const title = locale === 'ar' ? data?.title_ar : data?.title_en
@@ -56,7 +59,7 @@ export default function ComparisonTable({ data }: Props) {
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             className="mb-14 text-center"
           >
-            <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">{title}</h2>
+            <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight" style={{ fontSize: 'var(--section-heading)' }}>{title}</h2>
             <div className="mx-auto mt-4 h-px w-16 bg-camel-500/50" />
           </motion.div>
         )}
@@ -129,12 +132,10 @@ export default function ComparisonTable({ data }: Props) {
                       <button
                         type="button"
                         onClick={() => addItem(p, 1, vol)}
-                        className={cn(
-                          'w-full px-5 py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-colors duration-300 group-hover:bg-white group-hover:text-camel-600',
-                          isHi ? 'bg-camel-500 text-white' : 'border border-stone-300 text-ink-700'
-                        )}
+                        className="w-full px-5 py-3 font-body text-xs font-semibold uppercase tracking-[0.15em] transition-all duration-300 hover:opacity-90"
+                        style={{ backgroundColor: 'var(--atc-bg, #C8A96E)', color: 'var(--atc-text, #000000)' }}
                       >
-                        Add to Cart
+                        {isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en}
                       </button>
                     ) : (
                       <span className="block text-center font-body text-xs text-ink-400 transition-colors duration-300 group-hover:text-white/70">

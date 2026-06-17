@@ -153,9 +153,11 @@ export default function Header({ categories, collections = [], navPages = [], na
           <span className="font-display text-base font-bold tracking-[0.18em] uppercase leading-none text-charcoal-900">
             {(isAr ? siteLogo?.logoText_ar || siteLogo?.logoText_en : siteLogo?.logoText_en) || 'LUXE'}
           </span>
-          <span className="font-display text-[9px] font-medium tracking-[0.35em] uppercase text-camel-500">
-            {(isAr ? siteLogo?.logoSubtext_ar || siteLogo?.logoSubtext_en : siteLogo?.logoSubtext_en) || 'PARFUM'}
-          </span>
+          {(isAr ? siteLogo?.logoSubtext_ar || siteLogo?.logoSubtext_en : siteLogo?.logoSubtext_en) && (
+            <span className="font-display text-[9px] font-medium tracking-[0.35em] uppercase text-camel-500">
+              {isAr ? siteLogo?.logoSubtext_ar || siteLogo?.logoSubtext_en : siteLogo?.logoSubtext_en}
+            </span>
+          )}
         </span>
       )}
     </Link>
@@ -240,9 +242,9 @@ export default function Header({ categories, collections = [], navPages = [], na
               <AnimatePresence>
                 {collectionsHovered && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8 }}
+                    initial={{ opacity: 0, y: -8 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: 8 }}
+                    exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.18, ease: 'easeOut' }}
                     className="fixed left-0 right-0 flex justify-center"
                     style={{ top: headerHeight }}
@@ -508,20 +510,25 @@ export default function Header({ categories, collections = [], navPages = [], na
             {highlightLinks.map((item) => {
               const fullHref = `/${locale}${item.href}`
               const label = locale === 'ar' ? (item.label_ar || item.label_en) : item.label_en
+              const isActive = pathname === fullHref
               return (
-                <Link
-                  key={item._key ?? item.href}
-                  href={fullHref}
-                  className={cn(
-                    'flex items-center gap-1.5 rounded-sm border px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-200',
-                    pathname === fullHref
-                      ? 'border-camel-500 bg-camel-500 text-white'
-                      : 'border-camel-500 bg-camel-50 text-camel-600 hover:bg-camel-500 hover:text-white'
-                  )}
-                >
-                  <Sparkles className="h-3 w-3" />
-                  {label}
-                </Link>
+                <div key={item._key ?? item.href} className="relative rounded-sm p-[2px] overflow-hidden">
+                  {/* Spinning rainbow gradient border */}
+                  <div
+                    className="absolute inset-0 scale-[2.5] animate-[spin_3s_linear_infinite]"
+                    style={{ background: 'conic-gradient(from 0deg, #ef4444, #f97316, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7, #ec4899, #ef4444)' }}
+                  />
+                  <Link
+                    href={fullHref}
+                    className={cn(
+                      'relative z-10 flex items-center gap-1.5 rounded-[2px] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-200',
+                      isActive ? 'bg-camel-400 text-white' : 'bg-white text-camel-600 hover:bg-black/[0.06]'
+                    )}
+                  >
+                    <Sparkles className="h-3 w-3" />
+                    {label}
+                  </Link>
+                </div>
               )
             })}
 
@@ -671,23 +678,23 @@ export default function Header({ categories, collections = [], navPages = [], na
                         </Link>
 
                         {/* Shop by Category */}
-                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
+                        <p className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.4em] text-camel-500">
                           {t('shopByCategory')}
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
                           {(categories.length > 0 ? categories : FALLBACK_CATEGORIES).map((cat) => {
                             const catName = locale === 'ar' ? (cat as Category).name_ar : (cat as Category).name_en
                             const imgUrl = (cat as Category).image?.asset?._ref
-                              ? urlFor((cat as Category).image).width(80).height(80).url()
+                              ? urlFor((cat as Category).image).width(112).height(112).url()
                               : null
                             const subs = (cat as Category).subcategories ?? []
                             return (
                               <li key={cat._id}>
                                 <Link
                                   href={`/${locale}/products?category=${cat.slug}`}
-                                  className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
+                                  className="group/item flex items-center gap-3 border-l-2 rtl:border-l-0 rtl:border-r-2 border-transparent py-2.5 pl-1 rtl:pl-0 rtl:pr-1 transition-all duration-200 hover:border-camel-500 hover:pl-2 rtl:hover:pl-0 rtl:hover:pr-2"
                                 >
-                                  <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden bg-stone-100">
+                                  <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden bg-stone-100">
                                     {imgUrl ? (
                                       <Image
                                         src={imgUrl}
@@ -700,10 +707,10 @@ export default function Header({ categories, collections = [], navPages = [], na
                                     )}
                                   </div>
                                   <div>
-                                    <span className="block text-sm font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
+                                    <span className="block text-base font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
                                       {catName}
                                     </span>
-                                    <span className="block text-[9px] text-charcoal-400">{t('shopArrow')}</span>
+                                    <span className="block text-[11px] text-charcoal-400">{t('shopArrow')}</span>
                                   </div>
                                 </Link>
                                 {subs.length > 0 && (
@@ -729,7 +736,7 @@ export default function Header({ categories, collections = [], navPages = [], na
 
                         {/* Discover */}
                         <div className="mx-4 mb-3 h-px bg-stone-100" />
-                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
+                        <p className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.4em] text-camel-500">
                           {t('discover')}
                         </p>
                         <ul className="mb-4 space-y-0.5 px-4">
@@ -743,12 +750,12 @@ export default function Header({ categories, collections = [], navPages = [], na
                             { href: `/${locale}/contact`,                     icon: Mail,       label: t('contact'),      sub: t('getInTouch'),         badge: null },
                           ].map(({ href, icon: Icon, label, sub, badge }) => (
                             <li key={href}>
-                              <Link href={href} className="group/item flex items-center gap-3 py-2 transition-colors">
-                                <span className="flex h-8 w-8 shrink-0 items-center justify-center border border-stone-200 bg-stone-50 text-camel-500 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:text-camel-600">
-                                  <Icon className="h-3.5 w-3.5" />
+                              <Link href={href} className="group/item flex items-center gap-3 py-2.5 transition-colors">
+                                <span className="flex h-10 w-10 shrink-0 items-center justify-center border border-stone-200 bg-stone-50 text-camel-500 transition-colors duration-200 group-hover/item:border-camel-500/40 group-hover/item:text-camel-600">
+                                  <Icon className="h-4 w-4" />
                                 </span>
                                 <div>
-                                  <span className="flex items-center gap-1.5 text-[13px] font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
+                                  <span className="flex items-center gap-1.5 text-sm font-light tracking-wide text-charcoal-700 transition-colors group-hover/item:text-charcoal-900">
                                     {label}
                                     {badge && (
                                       <span className="rounded-full bg-camel-500 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white">
@@ -756,7 +763,7 @@ export default function Header({ categories, collections = [], navPages = [], na
                                       </span>
                                     )}
                                   </span>
-                                  <span className="block text-[10px] tracking-wide text-charcoal-400">{sub}</span>
+                                  <span className="block text-[11px] tracking-wide text-charcoal-400">{sub}</span>
                                 </div>
                               </Link>
                             </li>
@@ -765,7 +772,7 @@ export default function Header({ categories, collections = [], navPages = [], na
 
                         {/* Fragrance Family */}
                         <div className="mx-4 mb-3 h-px bg-stone-100" />
-                        <p className="mb-2 px-4 text-[8px] font-bold uppercase tracking-[0.4em] text-camel-500">
+                        <p className="mb-2 px-4 text-[10px] font-bold uppercase tracking-[0.4em] text-camel-500">
                           {t('fragranceFamily')}
                         </p>
                         <div className="mb-4 flex flex-wrap gap-1.5 px-4">
@@ -855,17 +862,22 @@ export default function Header({ categories, collections = [], navPages = [], na
                   const fullHref = `/${locale}${item.href}`
                   const label = locale === 'ar' ? (item.label_ar || item.label_en) : item.label_en
                   return (
-                    <Link
-                      key={item._key ?? item.href}
-                      href={fullHref}
-                      className="flex items-center justify-between border border-camel-500 bg-camel-50 px-4 py-3 transition-all hover:bg-camel-500 hover:text-white group"
-                    >
-                      <div className="flex items-center gap-2">
-                        <Sparkles className="h-4 w-4 text-camel-500 group-hover:text-white transition-colors" />
-                        <span className="text-sm font-medium tracking-wide text-camel-600 group-hover:text-white transition-colors">{label}</span>
-                      </div>
-                      <span className="rounded-full bg-camel-500 group-hover:bg-white group-hover:text-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white transition-colors">AI</span>
-                    </Link>
+                    <div key={item._key ?? item.href} className="relative rounded-sm p-[2px] overflow-hidden">
+                      <div
+                        className="absolute inset-0 scale-[2.5] animate-[spin_3s_linear_infinite]"
+                        style={{ background: 'conic-gradient(from 0deg, #ef4444, #f97316, #eab308, #22c55e, #06b6d4, #3b82f6, #a855f7, #ec4899, #ef4444)' }}
+                      />
+                      <Link
+                        href={fullHref}
+                        className="relative z-10 flex items-center justify-between bg-white px-4 py-3 rounded-[2px] transition-all hover:bg-black/[0.06] group"
+                      >
+                        <div className="flex items-center gap-2">
+                          <Sparkles className="h-4 w-4 text-camel-500 transition-colors" />
+                          <span className="text-sm font-medium tracking-wide text-camel-600 transition-colors">{label}</span>
+                        </div>
+                        <span className="rounded-full bg-camel-500 px-2 py-0.5 text-[8px] font-bold uppercase tracking-wider text-white transition-colors">AI</span>
+                      </Link>
+                    </div>
                   )
                 })}
 

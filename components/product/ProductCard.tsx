@@ -13,6 +13,7 @@ import { useCartStore } from '@/lib/store/cart-store'
 import { useCartDrawerStore } from '@/lib/store/cart-drawer-store'
 import { useHydrated } from '@/lib/hooks/use-hydrated'
 import { useRecentlyViewedStore } from '@/lib/store/recently-viewed-store'
+import { useSiteConfig } from '@/lib/hooks/useSiteConfig'
 import type { Product } from '@/lib/types'
 import { PriceText } from '@/components/ui/PriceText'
 
@@ -38,6 +39,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
   const { openCart } = useCartDrawerStore()
   const { addProduct } = useRecentlyViewedStore()
   const hydrated = useHydrated()
+  const siteConfig = useSiteConfig()
 
   const isWishlisted = hydrated && isInWishlist(product._id)
   const images = product.images ?? []
@@ -290,7 +292,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
                   type="button"
                   onClick={(e) => { e.preventDefault(); e.stopPropagation(); setSelectedVolIdx(idx) }}
                   className={cn(
-                    'px-2.5 py-1 text-[10px] font-medium border transition-all duration-150',
+                    'px-3 py-1.5 text-[11px] sm:px-2.5 sm:py-1 sm:text-[10px] font-medium border transition-all duration-150',
                     idx === selectedVolIdx
                       ? 'border-charcoal-800 text-charcoal-900 bg-white'
                       : 'border-charcoal-200 text-charcoal-400 bg-white hover:border-charcoal-500'
@@ -304,7 +306,7 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
               <button
                 type="button"
                 onClick={(e) => { e.preventDefault(); e.stopPropagation(); setVolOffset((o) => o + 2 >= volumes.length ? 0 : o + 1) }}
-                className="w-7 h-7 flex items-center justify-center border border-charcoal-200 text-charcoal-400 hover:border-charcoal-500 transition-all duration-150"
+                className="w-8 h-8 sm:w-7 sm:h-7 flex items-center justify-center border border-charcoal-200 text-charcoal-400 hover:border-charcoal-500 transition-all duration-150"
                 aria-label="More sizes"
               >
                 <ChevronRight size={11} strokeWidth={2} />
@@ -333,15 +335,14 @@ export function ProductCard({ product, priority = false }: ProductCardProps) {
             'mt-auto w-full rounded-full px-3 py-2.5 sm:py-3',
             'font-body font-semibold uppercase tracking-tight sm:tracking-[0.14em] transition-all duration-300',
             'text-[10px] sm:text-[11px]',
-            addedToCart
-              ? 'bg-charcoal-800 text-white'
-              : 'bg-camel-500 text-white hover:bg-camel-600'
+            addedToCart ? 'bg-charcoal-800 text-white' : 'hover:opacity-90'
           )}
+          style={addedToCart ? undefined : { backgroundColor: 'var(--atc-bg, #C8A96E)', color: 'var(--atc-text, #000000)' }}
           aria-label={`Add ${name} to cart`}
         >
           {addedToCart
             ? (isAr ? 'تمت الإضافة ✓' : 'Added ✓')
-            : <span className="inline-flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap"><PriceText amount={displayPrice} symbolSize={9} /><span className="opacity-50">|</span>{isAr ? 'أضف للسلة' : 'Add to Cart'}</span>}
+            : <span className="inline-flex items-center justify-center gap-0.5 sm:gap-1.5 whitespace-nowrap"><PriceText amount={displayPrice} symbolSize={9} /><span className="opacity-50">|</span>{isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en}</span>}
         </motion.button>
       </div>
     </motion.article>

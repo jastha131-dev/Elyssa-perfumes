@@ -855,6 +855,11 @@ export const getSiteSettingsQuery = `
     pdpTextSize,
     "promoBanner": promoBanner {
       isEnabled,
+      showTopStrip,
+      showCountdownCard,
+      topStripBg,
+      topStripBgCustom,
+      topStripTextColor,
       headline_en, headline_ar,
       subtitle_en, subtitle_ar,
       "imageUrl": image.asset->url,
@@ -878,7 +883,13 @@ export const getSiteSettingsQuery = `
       symbol,
       rate,
       position
-    }
+    },
+    addToCartText_en,
+    addToCartText_ar,
+    addToCartBgColor,
+    addToCartTextColor,
+    sectionHeadingSize,
+    sectionBodySize
   }
 `
 

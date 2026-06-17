@@ -116,6 +116,10 @@ export default async function RootLayout({
 
   const fontsUrl = buildGoogleFontsUrl(settings?.fontPairing ?? "satoshi");
   const typographyCss = buildTypographyCss(settings);
+  const siteConfigJson = JSON.stringify({
+    atcLabel_en: settings?.addToCartText_en || 'Buy Now',
+    atcLabel_ar: settings?.addToCartText_ar || 'اشتري الآن',
+  });
 
   return (
     <html
@@ -133,6 +137,7 @@ export default async function RootLayout({
           </>
         )}
         <style dangerouslySetInnerHTML={{ __html: typographyCss }} />
+        <script id="__site-config" type="application/json" dangerouslySetInnerHTML={{ __html: siteConfigJson }} />
       </head>
       <body>
         <CurrencyProvider

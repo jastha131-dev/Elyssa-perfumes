@@ -185,22 +185,30 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-                    className="flex flex-col items-center justify-center py-24 text-center"
+                    className="flex flex-col items-center justify-center py-16 text-center px-4"
                   >
-                    <div className="mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-cream-100">
-                      <ShoppingBag className="h-7 w-7 text-gold-400" strokeWidth={1.2} />
-                    </div>
-                    <p className="font-display text-lg font-light text-charcoal-800">{t('bagEmpty')}</p>
-                    <p className="mt-2 max-w-[220px] font-body text-sm leading-relaxed text-charcoal-400">
-                      {t('bagEmptyDrawerDesc')}
+                    <h3 className="font-display text-2xl font-bold uppercase tracking-wide text-charcoal-900">
+                      Your Cart Is Empty
+                    </h3>
+                    <p className="mt-3 font-body text-sm text-charcoal-500">
+                      Check out these collections.
                     </p>
-                    <Link
-                      href="/products"
-                      onClick={onClose}
-                      className="mt-7 inline-flex items-center rounded-full border border-gold-500 px-7 py-2.5 font-body text-sm font-medium text-gold-600 transition-all duration-200 hover:bg-gold-500 hover:text-white"
-                    >
-                      {t('shopNow')}
-                    </Link>
+                    <div className="mt-8 w-full max-w-xs space-y-3">
+                      {[
+                        { label: 'Best Sellers', href: `/${locale}/products?filter=bestseller` },
+                        { label: 'Limited Edition', href: `/${locale}/products?filter=new` },
+                        { label: 'New Arrivals', href: `/${locale}/products?sort=newest` },
+                      ].map(({ label, href }) => (
+                        <Link
+                          key={label}
+                          href={href}
+                          onClick={onClose}
+                          className="block w-full border border-gold-500 py-4 font-body text-xs font-semibold uppercase tracking-[0.2em] text-gold-600 transition-all duration-200 hover:bg-gold-500 hover:text-white"
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
                   </motion.div>
                 ) : (
                   <motion.ul

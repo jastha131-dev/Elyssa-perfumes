@@ -5,7 +5,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
+import { useLocale } from 'next-intl'
 import { useCartStore } from '@/lib/store/cart-store'
+import { useSiteConfig } from '@/lib/hooks/useSiteConfig'
 import { PriceText } from '@/components/ui/PriceText'
 import type { Product, FeaturedProductsSectionBlock } from '@/lib/types'
 
@@ -63,9 +65,12 @@ interface FeaturedCardProps {
 }
 
 function FeaturedCard({ product, onQuickAdd, justAdded, index }: FeaturedCardProps) {
+  const locale = useLocale()
+  const isAr = locale === 'ar'
+  const siteConfig = useSiteConfig()
   const primaryImage = product.images?.[0]
   const imageUrl = primaryImage?.url || LOCAL_PRODUCT_IMAGES[index % LOCAL_PRODUCT_IMAGES.length]
-  const productName = product.name_en
+  const productName = isAr ? product.name_ar : product.name_en
   const displayPrice = product.volume?.[0]?.price ?? product.price
 
   return (
@@ -119,9 +124,10 @@ function FeaturedCard({ product, onQuickAdd, justAdded, index }: FeaturedCardPro
       <div className="px-1">
         <button
           onClick={(e) => { e.preventDefault(); e.stopPropagation(); onQuickAdd(product) }}
-          className="mt-2 w-full border border-camel-500/40 py-2 font-body text-[10px] font-semibold uppercase tracking-widest text-camel-600 transition-colors duration-200 hover:bg-camel-500/10"
+          className="mt-2 w-full py-2 font-body text-[10px] font-semibold uppercase tracking-widest transition-all duration-200 hover:opacity-90"
+          style={justAdded ? undefined : { backgroundColor: 'var(--atc-bg, #C8A96E)', color: 'var(--atc-text, #000000)' }}
         >
-          {justAdded ? 'Added ✓' : 'Add to Cart'}
+          {justAdded ? (isAr ? 'تمت الإضافة ✓' : 'Added ✓') : (isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en)}
         </button>
       </div>
     </motion.div>
@@ -169,7 +175,7 @@ export default function FeaturedProducts({ data }: FeaturedProductsProps) {
           <p className="mb-3 font-body text-xs uppercase tracking-widest text-camel-500">
             Luxury You Can Afford
           </p>
-          <h2 className="font-headline font-bold uppercase text-ink-900 text-4xl md:text-5xl">
+          <h2 className="font-headline font-bold uppercase text-ink-900 leading-tight" style={{ fontSize: 'var(--section-heading)' }}>
             {data?.title_en ?? 'Signature Inspirations'}
           </h2>
           <div className="mt-5 h-px w-16 bg-camel-500" />

@@ -44,7 +44,9 @@
       "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add app/api/checkout/route.ts)",
       "Bash(npm list *)",
       "Bash(mkdir -p /Users/californiamediadubai/Desktop/test/p1test/app/\\\\[locale\\\\]/admin/_components)",
-      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add \"app/[locale]/admin/\")"
+      "Bash(git -C /Users/californiamediadubai/Desktop/test/p1test add \"app/[locale]/admin/\")",
+      "Bash(node_modules/.bin/tsc --noEmit --skipLibCheck)",
+      "Bash(./node_modules/.bin/tsc --noEmit --skipLibCheck)"
     ],
     "additionalDirectories": [
       "/Users/californiamediadubai/Desktop/test/p1test/app/[locale]/journal",

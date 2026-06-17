@@ -35,6 +35,7 @@ export const siteSettings = defineType({
     { name: 'header', title: '🧭 Header Layout' },
     { name: 'collection', title: '📦 Collection Page' },
     { name: 'pdp', title: '🛍️ Product Detail Page' },
+    { name: 'buttons', title: '🛒 Buttons' },
     { name: 'currency', title: '💰 Currency' },
     { name: 'popup', title: '🎁 Welcome Popup' },
   ],
@@ -229,6 +230,38 @@ export const siteSettings = defineType({
         layout: 'radio',
       },
       initialValue: '400',
+    }),
+    defineField({
+      name: 'sectionHeadingSize',
+      title: 'Section Heading Size',
+      type: 'string',
+      group: 'typography',
+      description: 'Controls h2 heading size across all homepage sections.',
+      initialValue: 'md',
+      options: {
+        list: [
+          { title: 'Small  — 30px / 36px', value: 'sm' },
+          { title: 'Medium — 36px / 48px (default)', value: 'md' },
+          { title: 'Large  — 48px / 60px', value: 'lg' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
+      name: 'sectionBodySize',
+      title: 'Section Body / Description Size',
+      type: 'string',
+      group: 'typography',
+      description: 'Controls description paragraph size across all homepage sections.',
+      initialValue: 'md',
+      options: {
+        list: [
+          { title: 'Small  — 13px', value: 'sm' },
+          { title: 'Medium — 14px (default)', value: 'md' },
+          { title: 'Large  — 16px', value: 'lg' },
+        ],
+        layout: 'radio',
+      },
     }),
     defineField({
       name: 'cardStyle',
@@ -438,6 +471,58 @@ export const siteSettings = defineType({
         defineField({ name: 'countdownEndDate', title: 'Countdown End Date & Time', type: 'datetime', description: 'Banner auto-hides after this date.' }),
         defineField({ name: 'minOrderAmount', title: 'Min Order Amount (display only)', type: 'number', description: 'e.g. 95 → shown in subtitle as reference.' }),
       ],
+    }),
+    // Buttons
+    defineField({
+      name: 'addToCartText_en',
+      title: 'Add to Cart Button Text (English)',
+      type: 'string',
+      group: 'buttons',
+      initialValue: 'Buy Now',
+      description: 'Label shown on the main purchase button.',
+      validation: (R) => R.max(30),
+    }),
+    defineField({
+      name: 'addToCartText_ar',
+      title: 'نص زر الشراء (Arabic)',
+      type: 'string',
+      group: 'buttons',
+      initialValue: 'اشتري الآن',
+      validation: (R) => R.max(30),
+    }),
+    defineField({
+      name: 'addToCartBgColor',
+      title: 'Button Background Color',
+      type: 'string',
+      group: 'buttons',
+      description: 'Background color of the Add to Cart / Buy Now button.',
+      initialValue: 'theme',
+      options: {
+        list: [
+          { title: '🎨 Theme Accent (default)', value: 'theme' },
+          { title: '⬛ Black', value: '#000000' },
+          { title: '⬜ White', value: '#ffffff' },
+          { title: '🟫 Charcoal', value: '#1a1a1a' },
+          { title: '🟠 Camel Gold', value: '#C8A96E' },
+        ],
+        layout: 'radio',
+      },
+    }),
+    defineField({
+      name: 'addToCartTextColor',
+      title: 'Button Text Color',
+      type: 'string',
+      group: 'buttons',
+      description: 'Text color of the Add to Cart / Buy Now button.',
+      initialValue: '#000000',
+      options: {
+        list: [
+          { title: '⬛ Black (default)', value: '#000000' },
+          { title: '⬜ White', value: '#ffffff' },
+          { title: '🟠 Camel Gold', value: '#C8A96E' },
+        ],
+        layout: 'radio',
+      },
     }),
     // Currency
     defineField({

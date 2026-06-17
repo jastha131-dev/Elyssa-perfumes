@@ -30,6 +30,9 @@ export interface FilterState {
   fragranceFamily?: string[]
   inspiredBy?: string[]
   intensity?: string[]
+  gender?: string[]
+  occasion?: string[]
+  performance?: string[]
   flag?: string // 'bestseller' | 'new'
   priceRange: [number, number]
   sortBy: string
@@ -42,10 +45,34 @@ const DEFAULT_FILTER_STATE: FilterState = {
   fragranceFamily: undefined,
   inspiredBy: undefined,
   intensity: undefined,
+  gender: undefined,
+  occasion: undefined,
+  performance: undefined,
   flag: undefined,
   priceRange: [0, 10000],
   sortBy: 'featured',
 }
+
+const GENDER_OPTIONS = [
+  { label: 'Men', value: 'men' },
+  { label: 'Women', value: 'women' },
+  { label: 'Unisex', value: 'unisex' },
+]
+
+const OCCASION_OPTIONS = [
+  { label: 'Everyday', value: 'everyday' },
+  { label: 'Office', value: 'office' },
+  { label: 'Date Night', value: 'date-night' },
+  { label: 'Party', value: 'party' },
+  { label: 'Summer', value: 'summer' },
+  { label: 'Winter', value: 'winter' },
+]
+
+const PERFORMANCE_OPTIONS = [
+  { label: 'Moderate', value: 'Moderate' },
+  { label: 'Long Lasting', value: 'Long' },
+  { label: 'Beast Mode', value: 'Beast Mode' },
+]
 
 const SORT_OPTIONS = [
   { value: 'featured',     label: 'Featured' },
@@ -70,6 +97,19 @@ function applyFiltersAndSort(products: Product[], filters: FilterState): Product
     if (filters.fragranceFamily?.length && !(p.fragranceFamily && filters.fragranceFamily.map(normalise).includes(normalise(p.fragranceFamily)))) return false
     if (filters.inspiredBy?.length && !filters.inspiredBy.some(b => p.tags?.some(t => normalise(t) === normalise(b)))) return false
     if (filters.intensity?.length && !(p.intensity && filters.intensity.map(normalise).includes(normalise(p.intensity)))) return false
+    if (filters.gender?.length && !filters.gender.some(g => p.tags?.some(t => normalise(t) === normalise(g)))) return false
+    if (filters.occasion?.length && !filters.occasion.some(o => p.tags?.some(t => normalise(t) === normalise(o)))) return false
+    if (filters.performance?.length) {
+      const lon = (p.longevity ?? '').toLowerCase()
+      const int_ = (p.intensity ?? '').toLowerCase()
+      const matched = filters.performance.some(perf => {
+        if (perf === 'Beast Mode') return lon.includes('very long') || int_ === 'intense'
+        if (perf === 'Long') return lon.includes('long')
+        if (perf === 'Moderate') return lon.includes('moderate') || int_ === 'moderate'
+        return false
+      })
+      if (!matched) return false
+    }
     if (filters.flag === 'bestseller' && !p.bestSeller) return false
     if (filters.flag === 'new' && !p.new) return false
     const [lo, hi] = filters.priceRange
@@ -291,14 +331,14 @@ function FilterPill({
             />
             {/* Panel: bottom-sheet on mobile, dropdown on desktop */}
             <motion.div
-              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              initial={{ opacity: 0, y: -8, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.96 }}
+              exit={{ opacity: 0, y: -8, scale: 0.96 }}
               transition={{ duration: 0.18, ease: [0.23, 1, 0.32, 1] }}
               className="fixed inset-x-0 bottom-0 z-50 max-h-[72vh] overflow-y-auto overscroll-contain rounded-t-3xl border-t border-charcoal-100 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl shadow-black/25 sm:absolute sm:inset-x-auto sm:bottom-auto sm:left-0 sm:top-full sm:mt-2.5 sm:max-h-none sm:min-w-[220px] sm:overflow-hidden sm:rounded-2xl sm:border sm:pb-0 sm:shadow-black/15"
             >
               {/* Mobile grabber + header */}
-              <div className="sm:hidden">
+              <div className="sticky top-0 z-10 bg-white sm:hidden">
                 <div className="flex justify-center pt-2.5">
                   <span className="h-1 w-10 rounded-full bg-charcoal-200" />
                 </div>
@@ -314,6 +354,66 @@ function FilterPill({
           </>
         )}
       </AnimatePresence>
+    </div>
+  )
+}
+
+// ─── Price Range Slider ───────────────────────────────────────────────────────
+
+const AED_RATE = 3.67
+
+function PriceRangeSlider({ minUSD, maxUSD, value, onChange }: {
+  minUSD: number; maxUSD: number
+  value: [number, number]
+  onChange: (v: [number, number]) => void
+}) {
+  const aedMin = Math.max(0, Math.floor(minUSD * AED_RATE))
+  const aedMax = Math.ceil(maxUSD * AED_RATE) || 500
+  const loAED = Math.round(value[0] * AED_RATE)
+  const hiAED = Math.round(value[1] >= 10000 ? aedMax : value[1] * AED_RATE)
+  const pct = (v: number) => aedMax > aedMin ? ((v - aedMin) / (aedMax - aedMin)) * 100 : 0
+
+  const thumbCls = [
+    'absolute inset-0 h-full w-full cursor-pointer appearance-none bg-transparent pointer-events-none',
+    '[&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none',
+    '[&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full',
+    '[&::-webkit-slider-thumb]:bg-charcoal-950 [&::-webkit-slider-thumb]:shadow-md',
+    '[&::-webkit-slider-thumb]:ring-2 [&::-webkit-slider-thumb]:ring-white',
+    '[&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:rounded-full',
+    '[&::-moz-range-thumb]:bg-charcoal-950 [&::-moz-range-thumb]:border-0',
+  ].join(' ')
+
+  return (
+    <div className="px-5 py-4 w-[260px]">
+      <div className="flex justify-between mb-4">
+        <span className="text-[13px] font-semibold text-charcoal-900">AED {loAED}</span>
+        <span className="text-[13px] font-semibold text-charcoal-900">AED {hiAED}</span>
+      </div>
+      <div className="relative h-1 my-3 mx-3">
+        <div className="absolute inset-0 rounded-full bg-charcoal-100" />
+        <div
+          className="absolute inset-y-0 rounded-full bg-charcoal-950"
+          style={{ left: `${pct(loAED)}%`, right: `${100 - pct(hiAED)}%` }}
+        />
+        <input
+          type="range" min={aedMin} max={aedMax} value={loAED}
+          style={{ zIndex: loAED > (aedMin + aedMax) / 2 ? 5 : 4 }}
+          onChange={e => {
+            const v = Math.min(+e.target.value, hiAED - 1)
+            onChange([Math.round(v / AED_RATE), value[1]])
+          }}
+          className={thumbCls}
+        />
+        <input
+          type="range" min={aedMin} max={aedMax} value={hiAED}
+          style={{ zIndex: loAED > (aedMin + aedMax) / 2 ? 4 : 5 }}
+          onChange={e => {
+            const v = Math.max(+e.target.value, loAED + 1)
+            onChange([value[0], v >= aedMax ? 10000 : Math.round(v / AED_RATE)])
+          }}
+          className={thumbCls}
+        />
+      </div>
     </div>
   )
 }
@@ -341,11 +441,17 @@ function FilterBar({
     filters.fragranceFamily?.length ?? 0,
     filters.inspiredBy?.length ?? 0,
     filters.intensity?.length ?? 0,
+    filters.gender?.length ?? 0,
+    filters.occasion?.length ?? 0,
+    filters.performance?.length ?? 0,
     filters.flag ? 1 : 0,
     (filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000) ? 1 : 0,
   ].reduce((a, b) => a + b, 0)
 
   const [sortOpen, setSortOpen] = useState(false)
+  const [openSections, setOpenSections] = useState<Set<string>>(new Set())
+  const toggleSection = (key: string) =>
+    setOpenSections(prev => { const n = new Set(prev); n.has(key) ? n.delete(key) : n.add(key); return n })
   const sortRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -356,23 +462,11 @@ function FilterBar({
     return () => document.removeEventListener('mousedown', handle)
   }, [sortOpen])
 
-  function toggle<K extends 'fragranceFamily' | 'inspiredBy' | 'intensity'>(key: K, val: string) {
+  function toggle<K extends 'fragranceFamily' | 'inspiredBy' | 'intensity' | 'gender' | 'occasion' | 'performance'>(key: K, val: string) {
     const cur = (filters[key] ?? []) as string[]
     const next = cur.includes(val) ? cur.filter(x => x !== val) : [...cur, val]
     onChange({ ...filters, [key]: next.length ? next : undefined })
   }
-
-  // Dynamic price presets based on actual range
-  const PRICE_PRESETS: { label: string; range: [number, number] }[] = useMemo(() => {
-    const lo = Math.floor(priceMin / 50) * 50
-    const hi = Math.ceil(priceMax / 50) * 50
-    const mid = Math.round((lo + hi) / 2 / 50) * 50
-    return [
-      { label: `Under $${mid}`,    range: [0, mid] as [number, number] },
-      { label: `$${mid} – $${hi}`, range: [mid, hi] as [number, number] },
-      { label: `Over $${hi}`,      range: [hi, 10000] as [number, number] },
-    ]
-  }, [priceMin, priceMax])
 
   return (
     <div className="flex flex-wrap items-center gap-2.5">
@@ -398,38 +492,20 @@ function FilterBar({
         </button>
         <AnimatePresence>
           {sortOpen && (
-            <>
-              <motion.div
-                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                onClick={() => setSortOpen(false)}
-                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1px] xl:hidden"
-              />
             <motion.div
-              initial={{ y: '100%' }}
-              animate={{ y: 0 }}
-              exit={{ y: '100%' }}
-              transition={{ type: 'spring', damping: 32, stiffness: 320 }}
-              className="fixed inset-x-0 bottom-0 z-50 max-h-[82vh] overflow-y-auto overscroll-contain rounded-t-3xl border-t border-charcoal-100 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl shadow-black/25 xl:absolute xl:inset-x-auto xl:bottom-auto xl:left-0 xl:top-full xl:mt-2.5 xl:max-h-none xl:w-52 xl:overflow-hidden xl:rounded-2xl xl:border xl:pb-0 xl:shadow-black/15"
+              initial={{ opacity: 0, y: 8, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.96 }}
+              transition={{ duration: 0.15 }}
+              className="absolute left-0 top-full z-50 mt-2.5 w-64 max-h-[80vh] overflow-y-auto rounded-2xl border border-charcoal-100 bg-white shadow-2xl"
             >
-              <div className="flex justify-center pt-2.5 xl:hidden">
-                <span className="h-1 w-10 rounded-full bg-charcoal-200" />
-              </div>
-
-              {/* Mobile/tablet header */}
-              <div className="flex items-center justify-between px-4 pb-1 pt-3 xl:hidden">
-                <p className="text-[13px] font-bold uppercase tracking-[0.12em] text-charcoal-900">Sort &amp; Filter</p>
-                <button type="button" onClick={() => setSortOpen(false)} aria-label="Close" className="rounded-full p-1 text-charcoal-400 hover:bg-charcoal-50">
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              {/* Sort (always) */}
+              {/* Sort */}
               <div className="p-1.5">
                 <p className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Sort by</p>
                 {SORT_OPTIONS.map(opt => (
                   <button
                     key={opt.value}
-                    onClick={() => { onChange({ ...filters, sortBy: opt.value }) }}
+                    onClick={() => { onChange({ ...filters, sortBy: opt.value }); setSortOpen(false) }}
                     className={cn(
                       'flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[11.5px] transition-colors',
                       filters.sortBy === opt.value
@@ -443,98 +519,283 @@ function FilterBar({
                 ))}
               </div>
 
-              {/* ── All filters — mobile/tablet only ── */}
-              <div className="space-y-5 border-t border-charcoal-100 px-4 py-4 xl:hidden">
-                {/* Scent */}
-                {fragranceFamilies.length > 0 && (
-                  <div>
-                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Scent</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {fragranceFamilies.map(f => {
-                        const active = filters.fragranceFamily?.map(normalise).includes(normalise(f))
-                        return (
-                          <button key={f} type="button" onClick={() => toggle('fragranceFamily', f)}
-                            className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
-                              active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
-                            {f}
-                          </button>
-                        )
-                      })}
+              {/* Filters */}
+              <div className="divide-y divide-charcoal-100 border-t border-charcoal-100">
+
+                {/* Gender */}
+                {(() => {
+                  const open = openSections.has('gender')
+                  const activeCount = filters.gender?.length ?? 0
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('gender')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Gender
+                          {activeCount > 0 && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">{activeCount}</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+                              {GENDER_OPTIONS.map(o => {
+                                const active = filters.gender?.map(normalise).includes(normalise(o.value))
+                                return (
+                                  <button key={o.value} type="button" onClick={() => toggle('gender', o.value)}
+                                    className={cn('rounded-full border px-3 py-1.5 text-[10.5px] font-medium transition-all',
+                                      active ? 'border-camel-500 bg-camel-500 text-white' : 'border-charcoal-200 text-charcoal-600 hover:border-charcoal-400')}>
+                                    {o.label}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </div>
-                )}
+                  )
+                })()}
+
+                {/* Scent */}
+                {fragranceFamilies.length > 0 && (() => {
+                  const open = openSections.has('scent')
+                  const activeCount = filters.fragranceFamily?.length ?? 0
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('scent')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Scent
+                          {activeCount > 0 && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">{activeCount}</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+                              {fragranceFamilies.map(f => {
+                                const active = filters.fragranceFamily?.map(normalise).includes(normalise(f))
+                                return (
+                                  <button key={f} type="button" onClick={() => toggle('fragranceFamily', f)}
+                                    className={cn('rounded-full border px-3 py-1.5 text-[10.5px] font-medium transition-all',
+                                      active ? 'border-camel-500 bg-camel-500 text-white' : 'border-charcoal-200 text-charcoal-600 hover:border-charcoal-400')}>
+                                    {f}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })()}
 
                 {/* Inspired by */}
-                {brandTags.length > 0 && (
-                  <div>
-                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Inspired by</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {brandTags.map(brand => {
-                        const active = filters.inspiredBy?.map(normalise).includes(normalise(brand))
-                        return (
-                          <button key={brand} type="button" onClick={() => toggle('inspiredBy', brand)}
-                            className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
-                              active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
-                            {brand}
-                          </button>
-                        )
-                      })}
+                {brandTags.length > 0 && (() => {
+                  const open = openSections.has('inspired')
+                  const activeCount = filters.inspiredBy?.length ?? 0
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('inspired')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Inspired by
+                          {activeCount > 0 && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">{activeCount}</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <div className="flex flex-wrap gap-1.5 px-4 pb-3">
+                              {brandTags.map(brand => {
+                                const active = filters.inspiredBy?.map(normalise).includes(normalise(brand))
+                                return (
+                                  <button key={brand} type="button" onClick={() => toggle('inspiredBy', brand)}
+                                    className={cn('rounded-full border px-3 py-1.5 text-[10.5px] font-medium transition-all',
+                                      active ? 'border-camel-500 bg-camel-500 text-white' : 'border-charcoal-200 text-charcoal-600 hover:border-charcoal-400')}>
+                                    {brand}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </div>
-                )}
+                  )
+                })()}
+
+                {/* Occasion */}
+                {(() => {
+                  const open = openSections.has('occasion')
+                  const activeCount = filters.occasion?.length ?? 0
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('occasion')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Occasion
+                          {activeCount > 0 && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">{activeCount}</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <div className="p-1 px-2 pb-3">
+                              {OCCASION_OPTIONS.map(o => {
+                                const active = filters.occasion?.map(normalise).includes(normalise(o.value))
+                                return (
+                                  <button key={o.value} type="button" onClick={() => toggle('occasion', o.value)}
+                                    className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors',
+                                      active ? 'bg-camel-500 font-semibold text-white' : 'text-charcoal-700 hover:bg-charcoal-50')}>
+                                    {o.label}
+                                    {active && <span className="text-[10px]">✓</span>}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })()}
 
                 {/* Intensity */}
-                {intensities.length > 0 && (
-                  <div>
-                    <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Intensity</p>
-                    <div className="flex flex-wrap gap-1.5">
-                      {intensities.map(level => {
-                        const active = filters.intensity?.map(normalise).includes(normalise(level))
-                        return (
-                          <button key={level} type="button" onClick={() => toggle('intensity', level)}
-                            className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
-                              active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
-                            {level}
-                          </button>
-                        )
-                      })}
+                {intensities.length > 0 && (() => {
+                  const open = openSections.has('intensity')
+                  const activeCount = filters.intensity?.length ?? 0
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('intensity')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Intensity
+                          {activeCount > 0 && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">{activeCount}</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <div className="p-1 px-2 pb-3">
+                              {intensities.map(level => {
+                                const active = filters.intensity?.map(normalise).includes(normalise(level))
+                                return (
+                                  <button key={level} type="button" onClick={() => toggle('intensity', level)}
+                                    className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors',
+                                      active ? 'bg-camel-500 font-semibold text-white' : 'text-charcoal-700 hover:bg-charcoal-50')}>
+                                    {level}
+                                    {active && <span className="text-[10px]">✓</span>}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                  </div>
-                )}
+                  )
+                })()}
+
+                {/* Performance */}
+                {(() => {
+                  const open = openSections.has('performance')
+                  const activeCount = filters.performance?.length ?? 0
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('performance')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Performance
+                          {activeCount > 0 && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">{activeCount}</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <div className="p-1 px-2 pb-3">
+                              {PERFORMANCE_OPTIONS.map(o => {
+                                const active = filters.performance?.map(normalise).includes(normalise(o.value))
+                                return (
+                                  <button key={o.value} type="button" onClick={() => toggle('performance', o.value)}
+                                    className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors',
+                                      active ? 'bg-camel-500 font-semibold text-white' : 'text-charcoal-700 hover:bg-charcoal-50')}>
+                                    {o.label}
+                                    {active && <span className="text-[10px]">✓</span>}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })()}
 
                 {/* Price */}
-                <div>
-                  <p className="mb-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Price</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {[{ label: 'Any Price', range: [0, 10000] as [number, number] }, ...PRICE_PRESETS].map(p => {
-                      const active = filters.priceRange[0] === p.range[0] && filters.priceRange[1] === p.range[1]
-                      return (
-                        <button key={p.label} type="button" onClick={() => onChange({ ...filters, priceRange: p.range })}
-                          className={cn('rounded-full border px-3 py-1.5 text-[11px] font-medium transition-all',
-                            active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600')}>
-                          {p.label}
-                        </button>
-                      )
-                    })}
-                  </div>
-                </div>
+                {(() => {
+                  const open = openSections.has('price')
+                  const priceActive = filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000
+                  return (
+                    <div>
+                      <button type="button" onClick={() => toggleSection('price')}
+                        className="flex w-full items-center justify-between px-4 py-3">
+                        <span className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-charcoal-700">
+                          Price
+                          {priceActive && <span className="flex h-4 w-4 items-center justify-center rounded-full bg-[#C8A96E] text-[8px] font-bold text-white">1</span>}
+                        </span>
+                        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.18 }} className="flex text-charcoal-400">
+                          <ChevronDown className="h-3.5 w-3.5" />
+                        </motion.span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {open && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.18 }} className="overflow-hidden">
+                            <PriceRangeSlider
+                              minUSD={priceMin} maxUSD={priceMax}
+                              value={filters.priceRange}
+                              onChange={range => onChange({ ...filters, priceRange: range })}
+                            />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })()}
 
-                {/* Actions */}
-                <div className="flex items-center gap-2 pt-1">
-                  {totalActive > 0 && (
-                    <button type="button" onClick={onClearAll}
-                      className="flex-1 rounded-full border border-charcoal-300 py-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-charcoal-700">
-                      Clear all
-                    </button>
-                  )}
-                  <button type="button" onClick={() => setSortOpen(false)}
-                    className="flex-1 rounded-full bg-charcoal-950 py-2.5 text-[11px] font-bold uppercase tracking-[0.1em] text-white">
-                    Show results
+              </div>
+
+              {/* Actions */}
+              {totalActive > 0 && (
+                <div className="px-3 py-3 border-t border-charcoal-100">
+                  <button type="button" onClick={() => { onClearAll(); setSortOpen(false) }}
+                    className="w-full rounded-full border border-charcoal-300 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-charcoal-700 hover:bg-charcoal-50 transition-colors">
+                    Clear all
                   </button>
                 </div>
-              </div>
+              )}
             </motion.div>
-            </>
           )}
         </AnimatePresence>
       </div>
@@ -550,6 +811,25 @@ function FilterBar({
 
       {/* Pills — desktop only (mobile/tablet use the Sort & Filter bottom sheet) */}
       <div className="hidden flex-wrap items-center gap-1.5 xl:flex sm:ml-auto">
+
+        {/* Gender */}
+        <FilterPill label="Gender" activeCount={filters.gender?.length}>
+          <div className="p-3">
+            <p className="mb-2.5 text-[8.5px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Gender</p>
+            <div className="flex flex-wrap gap-1.5">
+              {GENDER_OPTIONS.map(o => {
+                const active = filters.gender?.map(normalise).includes(normalise(o.value))
+                return (
+                  <button key={o.value} onClick={() => toggle('gender', o.value)}
+                    className={cn('rounded-full border px-3 py-1.5 text-[10.5px] font-medium transition-all duration-150',
+                      active ? 'border-charcoal-950 bg-charcoal-950 text-white' : 'border-charcoal-200 text-charcoal-600 hover:border-charcoal-500 hover:bg-charcoal-50')}>
+                    {o.label}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        </FilterPill>
 
         {/* Scent family — dynamic from products */}
         {fragranceFamilies.length > 0 && (
@@ -648,40 +928,53 @@ function FilterBar({
           </FilterPill>
         )}
 
+        {/* Occasion */}
+        <FilterPill label="Occasion" activeCount={filters.occasion?.length}>
+          <div className="p-1.5">
+            <p className="px-3 py-2 text-[8.5px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Occasion</p>
+            {OCCASION_OPTIONS.map(o => {
+              const active = filters.occasion?.map(normalise).includes(normalise(o.value))
+              return (
+                <button key={o.value} onClick={() => toggle('occasion', o.value)}
+                  className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[11.5px] transition-colors',
+                    active ? 'bg-charcoal-950 font-semibold text-white' : 'text-charcoal-700 hover:bg-charcoal-50')}>
+                  {o.label}
+                  {active && <span className="text-[#C8A96E] text-[10px]">✓</span>}
+                </button>
+              )
+            })}
+          </div>
+        </FilterPill>
+
+        {/* Performance */}
+        <FilterPill label="Performance" activeCount={filters.performance?.length}>
+          <div className="p-1.5">
+            <p className="px-3 py-2 text-[8.5px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Longevity</p>
+            {PERFORMANCE_OPTIONS.map(o => {
+              const active = filters.performance?.map(normalise).includes(normalise(o.value))
+              return (
+                <button key={o.value} onClick={() => toggle('performance', o.value)}
+                  className={cn('flex w-full items-center justify-between rounded-xl px-3 py-2 text-left text-[11.5px] transition-colors',
+                    active ? 'bg-charcoal-950 font-semibold text-white' : 'text-charcoal-700 hover:bg-charcoal-50')}>
+                  {o.label}
+                  {active && <span className="text-[#C8A96E] text-[10px]">✓</span>}
+                </button>
+              )
+            })}
+          </div>
+        </FilterPill>
+
         {/* Price */}
         <FilterPill
           icon={<DollarSign className="h-3 w-3" />}
           label="Price"
           activeCount={(filters.priceRange[0] !== 0 || filters.priceRange[1] !== 10000) ? 1 : 0}
         >
-          <div className="p-1.5">
-            <button
-              onClick={() => onChange({ ...filters, priceRange: [0, 10000] })}
-              className={cn(
-                'flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors',
-                filters.priceRange[0] === 0 && filters.priceRange[1] === 10000
-                  ? 'bg-charcoal-950 font-semibold text-white'
-                  : 'text-charcoal-700 hover:bg-charcoal-50'
-              )}
-            >
-              Any Price
-            </button>
-            {PRICE_PRESETS.map(p => {
-              const active = filters.priceRange[0] === p.range[0] && filters.priceRange[1] === p.range[1]
-              return (
-                <button
-                  key={p.label}
-                  onClick={() => onChange({ ...filters, priceRange: p.range })}
-                  className={cn(
-                    'flex w-full items-center justify-between rounded-xl px-3 py-2 text-[11.5px] transition-colors',
-                    active ? 'bg-charcoal-950 font-semibold text-white' : 'text-charcoal-700 hover:bg-charcoal-50'
-                  )}
-                >
-                  {p.label}
-                </button>
-              )
-            })}
-          </div>
+          <PriceRangeSlider
+            minUSD={priceMin} maxUSD={priceMax}
+            value={filters.priceRange}
+            onChange={range => onChange({ ...filters, priceRange: range })}
+          />
         </FilterPill>
 
         {totalActive > 0 && (
@@ -721,6 +1014,15 @@ function ActiveChips({ filters, categories, locale, onChange }: {
   }))
   filters.intensity?.forEach(i => chips.push({
     label: i, onRemove: () => onChange({ ...filters, intensity: filters.intensity?.filter(x => x !== i) })
+  }))
+  filters.gender?.forEach(g => chips.push({
+    label: g, onRemove: () => onChange({ ...filters, gender: filters.gender?.filter(x => x !== g) })
+  }))
+  filters.occasion?.forEach(o => chips.push({
+    label: o, onRemove: () => onChange({ ...filters, occasion: filters.occasion?.filter(x => x !== o) })
+  }))
+  filters.performance?.forEach(p => chips.push({
+    label: p, onRemove: () => onChange({ ...filters, performance: filters.performance?.filter(x => x !== p) })
   }))
   if (filters.flag) chips.push({
     label: filters.flag === 'bestseller' ? 'Best Sellers' : filters.flag === 'new' ? 'New Arrivals' : filters.flag,
@@ -849,6 +1151,7 @@ export function ProductsPageClient({ products, categories, collections, hideCate
 
   const showEditorial = !filters.category && !filters.fragranceFamily?.length
     && !filters.inspiredBy?.length && !filters.intensity?.length && !filters.flag
+    && !filters.gender?.length && !filters.occasion?.length && !filters.performance?.length
     && filters.sortBy === 'featured' && !!collections[0]?.imageUrl
 
   const isAr = locale === 'ar'
@@ -931,7 +1234,7 @@ export function ProductsPageClient({ products, categories, collections, hideCate
 
         <AnimatePresence mode="wait">
           <motion.div
-            key={`${filters.category}-${filters.flag}-${filters.sortBy}-${filters.fragranceFamily?.join()}-${filters.inspiredBy?.join()}-${filters.intensity?.join()}`}
+            key={`${filters.category}-${filters.flag}-${filters.sortBy}-${filters.fragranceFamily?.join()}-${filters.inspiredBy?.join()}-${filters.intensity?.join()}-${filters.gender?.join()}-${filters.occasion?.join()}-${filters.performance?.join()}`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
