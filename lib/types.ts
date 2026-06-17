@@ -869,6 +869,10 @@ export interface AboutPageData {
   heroSubline_ar?: string
   heroEyebrow_en?: string
   heroEyebrow_ar?: string
+  heroLead_en?: string
+  heroLead_ar?: string
+  heroLeadLabel_en?: string
+  heroLeadLabel_ar?: string
   heroBgImageUrl?: string
   overlayOpacity?: number
   stats?: Array<{ value: string; label_en: string; label_ar?: string }>

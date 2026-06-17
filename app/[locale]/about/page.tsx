@@ -40,6 +40,10 @@ export default async function AboutPage({
     (isAr ? data?.heroSubline_ar : data?.heroSubline_en) ??
     'From a 400 sq. ft. perfume shop in 2005 to creating thousands of custom fragrances trusted by customers across Dubai and beyond.'
   const heroEyebrow = (isAr ? data?.heroEyebrow_ar : data?.heroEyebrow_en) ?? 'Our Story'
+  const heroLead =
+    (isAr ? data?.heroLead_ar : data?.heroLead_en) ??
+    'A Dubai house of fragrance, composing scent as a form of memory since 2005.'
+  const heroLeadLabel = (isAr ? data?.heroLeadLabel_ar : data?.heroLeadLabel_en) ?? 'Est. 2005 · Dubai'
   const overlayOpacity = (data?.overlayOpacity ?? 55) / 100
 
   // Stats strip
@@ -143,27 +147,39 @@ export default async function AboutPage({
         className="bg-stone-50"
         style={{ paddingTop: 'var(--header-h, 72px)' }}
       >
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2" style={{ minHeight: 'calc(80vh - var(--header-h, 72px))' }}>
 
-          {/* Left — text pinned to bottom */}
-          <div className="mx-auto flex w-full max-w-2xl flex-col justify-end px-8 pb-16 pt-12 lg:px-12 lg:pb-20">
-            <p className="mb-5 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.45em] text-camel-500">
-              <span className="h-px w-8 bg-camel-500/60" />
-              {heroEyebrow}
-            </p>
-            <h1 className="font-display text-5xl font-light leading-[1.05] text-charcoal-900 sm:text-6xl lg:text-7xl">
-              {heroHeadline}
-            </h1>
-            {heroSubline && (
-              <p className="mt-7 max-w-md text-sm font-light leading-relaxed text-charcoal-500">
-                {heroSubline}
+          {/* Left — headline at top, lead fills lower space */}
+          <div className="flex w-full flex-col justify-between pb-16 pt-14 lg:pb-20 lg:pr-16">
+
+            {/* Top — headline block */}
+            <div>
+              <p className="mb-5 inline-flex items-center gap-3 text-[10px] font-semibold uppercase tracking-[0.45em] text-camel-500">
+                <span className="h-px w-8 bg-camel-500/60" />
+                {heroEyebrow}
               </p>
-            )}
-            <div className="mt-12 flex items-center gap-4">
-              <div className="h-px w-10 bg-camel-500/50" />
-              <span className="text-[9px] uppercase tracking-[0.4em] text-camel-500/50">
-                Est. 2005 · Dubai
-              </span>
+              <h1 className="font-display text-5xl font-light leading-[1.05] text-charcoal-900 sm:text-6xl lg:text-7xl">
+                {heroHeadline}
+              </h1>
+              {heroSubline && (
+                <p className="mt-7 max-w-md text-sm font-light leading-relaxed text-charcoal-500">
+                  {heroSubline}
+                </p>
+              )}
+            </div>
+
+            {/* Bottom — brand lead (CMS-editable) */}
+            <div className="mt-16 max-w-md">
+              <p className="font-display text-2xl font-light leading-snug text-charcoal-300 sm:text-3xl">
+                {heroLead}
+              </p>
+              <div className="mt-8 flex items-center gap-4">
+                <div className="h-px w-10 bg-camel-500/50" />
+                <span className="text-[9px] uppercase tracking-[0.4em] text-camel-500/60">
+                  {heroLeadLabel}
+                </span>
+              </div>
             </div>
           </div>
 
@@ -181,11 +197,12 @@ export default async function AboutPage({
           </div>
 
         </div>
+        </div>
       </section>
 
       {/* ── 2. STATS STRIP ───────────────────────────────────────── */}
-      {showStats && <section className={statsStripBg}>
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      {showStats && <section className="bg-cream-50 px-4 py-12 sm:px-6 lg:px-8">
+        <div className={`mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 ${statsStripBg}`}>
           <div className={`grid ${stats.length === 5 ? 'grid-cols-2 sm:grid-cols-5' : 'grid-cols-2 sm:grid-cols-4'}`}>
             {stats.map((stat, i) => (
               <div key={i} className="relative flex flex-col items-center py-10 text-center">
@@ -251,7 +268,7 @@ export default async function AboutPage({
 
           {/* Image */}
           <div className="relative">
-            <div className="relative aspect-[4/5] overflow-hidden">
+            <div className="relative z-10 aspect-[4/5] overflow-hidden">
               {data?.storyImageUrl ? (
                 <Image
                   src={data.storyImageUrl}
@@ -272,8 +289,8 @@ export default async function AboutPage({
               )}
               <div className="absolute inset-0 ring-1 ring-inset ring-black/10" />
             </div>
-            {/* Gold offset frame */}
-            <div className="pointer-events-none absolute -bottom-5 -right-5 h-full w-full border border-gold-500/20" />
+            {/* Gold offset frame — sits behind the image, peeks out bottom-right */}
+            <div className="pointer-events-none absolute -bottom-3 -right-3 h-full w-full border border-gold-500/25 lg:-bottom-5 lg:-right-5" />
           </div>
         </div>
       </section>}
@@ -403,7 +420,7 @@ export default async function AboutPage({
               {/* Image */}
               {data?.foundersImageUrl && (
                 <div className="relative">
-                  <div className="relative aspect-[3/4] overflow-hidden">
+                  <div className="relative z-10 aspect-[3/4] overflow-hidden">
                     <Image
                       src={data.foundersImageUrl}
                       alt={foundersName}
@@ -413,8 +430,8 @@ export default async function AboutPage({
                     />
                     <div className="absolute inset-0 ring-1 ring-inset ring-black/10" />
                   </div>
-                  {/* Gold offset frame */}
-                  <div className="pointer-events-none absolute -left-5 -top-5 h-full w-full border border-gold-500/20" />
+                  {/* Gold offset frame — sits behind the image, peeks out top-left */}
+                  <div className="pointer-events-none absolute -left-3 -top-3 h-full w-full border border-gold-500/25 lg:-left-5 lg:-top-5" />
                 </div>
               )}
 

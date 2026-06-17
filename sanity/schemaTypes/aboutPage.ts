@@ -54,6 +54,19 @@ export const aboutPage = defineType({
     }),
     defineField({ name: 'heroEyebrow_en', title: 'Hero Eyebrow Label (English)', type: 'string', group: 'hero', initialValue: 'Our Story', validation: (Rule) => Rule.max(60) }),
     defineField({ name: 'heroEyebrow_ar', title: 'النص العلوي (Arabic)', type: 'string', group: 'hero', validation: (Rule) => Rule.max(60) }),
+    defineField({
+      name: 'heroLead_en',
+      title: 'Hero Lead Statement (English)',
+      type: 'text',
+      rows: 2,
+      group: 'hero',
+      description: 'Short supporting statement shown lower in the hero column (fills the empty space).',
+      initialValue: 'A Dubai house of fragrance, composing scent as a form of memory since 2005.',
+      validation: (Rule) => Rule.max(200),
+    }),
+    defineField({ name: 'heroLead_ar', title: 'العبارة التمهيدية (Arabic)', type: 'text', rows: 2, group: 'hero', validation: (Rule) => Rule.max(200) }),
+    defineField({ name: 'heroLeadLabel_en', title: 'Hero Lead Label (English)', type: 'string', group: 'hero', initialValue: 'Est. 2005 · Dubai', validation: (Rule) => Rule.max(60) }),
+    defineField({ name: 'heroLeadLabel_ar', title: 'تسمية العبارة (Arabic)', type: 'string', group: 'hero', validation: (Rule) => Rule.max(60) }),
 
     // ── Stats Bar ────────────────────────────────────────────────
     defineField({ name: 'showStats', title: 'Show Stats Strip', type: 'boolean', group: 'story', initialValue: true }),

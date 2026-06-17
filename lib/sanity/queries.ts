@@ -750,6 +750,8 @@ export const getAboutPageQuery = `
     heroHeadline_en, heroHeadline_ar,
     heroSubline_en, heroSubline_ar,
     heroEyebrow_en, heroEyebrow_ar,
+    heroLead_en, heroLead_ar,
+    heroLeadLabel_en, heroLeadLabel_ar,
     "heroBgImageUrl": heroBgImage.asset->url,
     overlayOpacity,
     stats,
