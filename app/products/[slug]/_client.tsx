@@ -975,8 +975,8 @@ export function ProductDetailClient({
                 onClick={handleAddToCart}
                 whileTap={{ scale: 0.98 }}
                 className={cn(
-                  'flex flex-1 items-center justify-center gap-2.5',
-                  'h-13 rounded-full py-4 px-6 font-body text-sm font-semibold uppercase tracking-[0.16em]',
+                  'flex flex-1 min-w-0 items-center justify-center gap-1.5 overflow-hidden sm:gap-2.5',
+                  'min-h-[52px] rounded-full py-4 px-4 font-body text-[13px] font-semibold uppercase tracking-[0.06em] whitespace-nowrap sm:px-6 sm:text-sm sm:tracking-[0.16em]',
                   'transition-all duration-300',
                   addedToCart ? 'bg-charcoal-700 text-white' : 'hover:opacity-90'
                 )}
@@ -986,9 +986,9 @@ export function ProductDetailClient({
                   <>{isAr ? 'تمت الإضافة ✓' : 'Added ✓'}</>
                 ) : (
                   <>
-                    <PriceText amount={displayPrice} />
+                    <PriceText amount={displayPrice} className="min-w-0 truncate" />
                     <span className="opacity-50">|</span>
-                    <span>{isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en}</span>
+                    <span className="flex-shrink-0">{isAr ? siteConfig.atcLabel_ar : siteConfig.atcLabel_en}</span>
                   </>
                 )}
               </motion.button>
