@@ -878,7 +878,7 @@ export function ProductDetailClient({
             </div>
 
             {/* Product name */}
-            <h1 className="font-display text-3xl font-extrabold text-charcoal-900 leading-[1.1] tracking-tight md:text-4xl">
+            <h1 className="font-display text-[26px] font-black text-charcoal-900 leading-[1.08] tracking-tight md:text-[32px]">
               {productName}
             </h1>
             <p className="mt-2 font-body text-xs tracking-[0.22em] uppercase text-charcoal-400">
@@ -915,7 +915,7 @@ export function ProductDetailClient({
 
             {/* Price */}
             <div className="mt-6 flex items-end gap-3 flex-wrap">
-              <PriceText amount={displayPrice} className="font-display text-3xl font-semibold text-charcoal-900" />
+              <PriceText amount={displayPrice} className="font-display text-[26px] font-extrabold text-charcoal-900" />
               {product.compareAtPrice && product.compareAtPrice > displayPrice && (
                 <>
                   <PriceText amount={product.compareAtPrice} className="font-body text-base text-charcoal-400 line-through mb-1" />
