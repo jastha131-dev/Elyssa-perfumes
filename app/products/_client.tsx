@@ -519,8 +519,8 @@ function FilterBar({
                 ))}
               </div>
 
-              {/* Filters */}
-              <div className="divide-y divide-charcoal-100 border-t border-charcoal-100">
+              {/* Filters — hidden on xl+ since pills handle them there */}
+              <div className="divide-y divide-charcoal-100 border-t border-charcoal-100 xl:hidden">
 
                 {/* Gender */}
                 {(() => {
@@ -786,9 +786,9 @@ function FilterBar({
 
               </div>
 
-              {/* Actions */}
+              {/* Actions — hidden on xl+ since "Clear all" pill link is visible there */}
               {totalActive > 0 && (
-                <div className="px-3 py-3 border-t border-charcoal-100">
+                <div className="xl:hidden px-3 py-3 border-t border-charcoal-100">
                   <button type="button" onClick={() => { onClearAll(); setSortOpen(false) }}
                     className="w-full rounded-full border border-charcoal-300 py-2 text-[11px] font-bold uppercase tracking-[0.1em] text-charcoal-700 hover:bg-charcoal-50 transition-colors">
                     Clear all

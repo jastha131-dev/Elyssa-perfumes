@@ -522,7 +522,7 @@ export default function Header({ categories, collections = [], navPages = [], na
                     href={fullHref}
                     className={cn(
                       'relative z-10 flex items-center gap-1.5 rounded-[2px] px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] transition-all duration-200',
-                      isActive ? 'bg-camel-400 text-white' : 'bg-white text-camel-600 hover:bg-black/[0.06]'
+                      isActive ? 'bg-camel-400 text-white' : 'bg-white text-camel-600 hover:bg-stone-50/70'
                     )}
                   >
                     <Sparkles className="h-3 w-3" />
@@ -869,7 +869,7 @@ export default function Header({ categories, collections = [], navPages = [], na
                       />
                       <Link
                         href={fullHref}
-                        className="relative z-10 flex items-center justify-between bg-white px-4 py-3 rounded-[2px] transition-all hover:bg-black/[0.06] group"
+                        className="relative z-10 flex items-center justify-between bg-white px-4 py-3 rounded-[2px] transition-all hover:bg-stone-50/70 group"
                       >
                         <div className="flex items-center gap-2">
                           <Sparkles className="h-4 w-4 text-camel-500 transition-colors" />

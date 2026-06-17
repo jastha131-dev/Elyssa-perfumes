@@ -370,7 +370,7 @@ export default function CollectionPageClient({ collection, products }: Props) {
       </div>
 
       {/* Sticky filter bar */}
-      <div className="sticky top-[72px] z-20 border-b border-stone-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 sm:px-6 lg:px-8 overflow-hidden">
+      <div className="sticky top-[72px] z-20 border-b border-stone-100 bg-white/95 backdrop-blur-sm px-4 py-2.5 sm:px-6 lg:px-8 overflow-visible">
         <div className="relative">
         <div className="mx-auto max-w-7xl flex items-center gap-2.5 overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
 
