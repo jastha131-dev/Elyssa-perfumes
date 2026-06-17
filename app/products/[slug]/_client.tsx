@@ -1173,6 +1173,7 @@ export function ProductDetailClient({
               onClick={() => setShowPaymentModal(false)}
               aria-hidden="true"
             />
+            <div className="pointer-events-none fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
               key="payment-modal"
               initial={{ opacity: 0, scale: 0.96, y: 12 }}
@@ -1182,7 +1183,7 @@ export function ProductDetailClient({
               role="dialog"
               aria-modal="true"
               aria-label="Payment options at checkout"
-              className="fixed inset-x-4 top-1/2 z-50 mx-auto max-w-sm -translate-y-1/2 rounded-2xl bg-white p-6 shadow-2xl"
+              className="pointer-events-auto w-full max-w-sm rounded-2xl bg-white p-6 shadow-2xl"
             >
               {/* Header */}
               <div className="mb-5 flex items-start justify-between">
@@ -1261,6 +1262,7 @@ export function ProductDetailClient({
                 <p className="mt-2 font-body text-[10px] text-charcoal-400">All major cards accepted. Payments are encrypted and secure.</p>
               </div>
             </motion.div>
+            </div>
           </>
         )}
       </AnimatePresence>
