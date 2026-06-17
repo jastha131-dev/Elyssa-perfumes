@@ -492,13 +492,35 @@ function FilterBar({
         </button>
         <AnimatePresence>
           {sortOpen && (
-            <motion.div
-              initial={{ opacity: 0, y: 8, scale: 0.96 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 8, scale: 0.96 }}
-              transition={{ duration: 0.15 }}
-              className="absolute left-0 top-full z-50 mt-2.5 w-64 max-h-[80vh] overflow-y-auto rounded-2xl border border-charcoal-100 bg-white shadow-2xl"
-            >
+            <>
+              {/* Mobile backdrop */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSortOpen(false)}
+                className="fixed inset-0 z-40 bg-black/40 backdrop-blur-[1px] sm:hidden"
+              />
+              {/* Panel: bottom-sheet drawer on mobile, dropdown on desktop */}
+              <motion.div
+                initial={{ opacity: 0, y: 16, scale: 0.98 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 16, scale: 0.98 }}
+                transition={{ duration: 0.2, ease: [0.23, 1, 0.32, 1] }}
+                className="fixed inset-x-0 bottom-0 z-50 max-h-[85vh] overflow-y-auto overscroll-contain rounded-t-3xl border-t border-charcoal-100 bg-white pb-[max(1rem,env(safe-area-inset-bottom))] shadow-2xl shadow-black/25 sm:absolute sm:inset-x-auto sm:bottom-auto sm:left-0 sm:top-full sm:mt-2.5 sm:w-64 sm:max-h-[80vh] sm:rounded-2xl sm:border sm:pb-0 sm:shadow-black/15"
+              >
+              {/* Mobile grabber + header */}
+              <div className="sticky top-0 z-10 bg-white sm:hidden">
+                <div className="flex justify-center pt-2.5">
+                  <span className="h-1 w-10 rounded-full bg-charcoal-200" />
+                </div>
+                <div className="flex items-center justify-between border-b border-charcoal-100 px-4 pb-2 pt-2.5">
+                  <span className="text-[13px] font-semibold text-charcoal-900">Sort &amp; Filter</span>
+                  <button type="button" onClick={() => setSortOpen(false)} aria-label="Close" className="rounded-full p-1 text-charcoal-400 hover:bg-charcoal-50">
+                    <X className="h-5 w-5" />
+                  </button>
+                </div>
+              </div>
               {/* Sort */}
               <div className="p-1.5">
                 <p className="px-3 py-2 text-[9px] font-bold uppercase tracking-[0.3em] text-charcoal-400">Sort by</p>
@@ -795,7 +817,8 @@ function FilterBar({
                   </button>
                 </div>
               )}
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </div>
