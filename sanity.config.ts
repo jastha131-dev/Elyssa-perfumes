@@ -8,6 +8,7 @@ import { StudioLogo } from './sanity/components/StudioLogo'
 import { StudioLayout } from './sanity/components/StudioLayout'
 import { translateToArabicAction } from './sanity/actions/translateToArabic'
 import { aiFillAction } from './sanity/actions/aiFill'
+import { bulkEditorPlugin } from './sanity/plugins/bulkEditor'
 
 export default defineConfig({
   name: 'default',
@@ -27,6 +28,7 @@ export default defineConfig({
         },
       },
     }),
+    bulkEditorPlugin(),
   ],
   schema: { types: schemaTypes },
   document: {
