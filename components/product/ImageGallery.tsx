@@ -96,8 +96,8 @@ export function ImageGallery({ images, hideThumbnails }: ImageGalleryProps) {
       <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:gap-3">
         {/* Large image */}
         <div
-          className="relative aspect-[3/4] overflow-hidden bg-cream-100 cursor-zoom-in group select-none flex-1"
-          style={{ touchAction: 'pan-y' }}
+          className="relative overflow-hidden bg-cream-100 cursor-zoom-in group select-none flex-1"
+          style={{ aspectRatio: 'var(--pdp-img-ratio, 3/4)', touchAction: 'pan-y' }}
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
           onClick={() => openLightbox(activeIndex)}
@@ -278,7 +278,8 @@ export function ImageGallery({ images, hideThumbnails }: ImageGalleryProps) {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.92, opacity: 0 }}
               transition={{ duration: 0.3, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative w-full max-w-2xl mx-4 aspect-[3/4]"
+              className="relative w-full max-w-2xl mx-4"
+              style={{ aspectRatio: 'var(--pdp-img-ratio, 3/4)' }}
               onClick={(e) => e.stopPropagation()}
             >
               <AnimatePresence mode="wait" initial={false}>

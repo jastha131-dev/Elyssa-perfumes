@@ -9,7 +9,8 @@ export const instagramFeedSection = defineType({
     defineField({ name: 'isVisible', title: 'Visible', type: 'boolean', initialValue: true }),
     defineField({ name: 'title_en', title: 'Section Title (English)', type: 'string' }),
     defineField({ name: 'title_ar', title: 'العنوان (Arabic)', type: 'string' }),
-    defineField({ name: 'handle', title: 'Instagram Handle', type: 'string', description: 'Display only, e.g. @luxeparfum' }),
+    defineField({ name: 'handle', title: 'Instagram Handle', type: 'string', description: 'Display label shown in the header, e.g. @luxeparfum' }),
+    defineField({ name: 'profileUrl', title: 'Instagram Profile URL', type: 'url', description: 'Full link that opens when a visitor clicks any photo, e.g. https://instagram.com/luxeparfum' }),
     defineField({
       name: 'photos',
       title: 'Photos',

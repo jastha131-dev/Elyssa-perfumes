@@ -120,7 +120,7 @@ export default function Categories({ data }: CategoriesProps) {
   const isHeadingInView = useInView(headingRef, { once: true, margin: '-80px' })
 
   const bgKey = data?.theme?.bgColor
-  const sectionBg = (bgKey && bgKey !== 'default') ? (SECTION_BG[bgKey] ?? 'bg-white') : 'bg-white'
+  const sectionBg = (bgKey && bgKey !== 'default') ? (SECTION_BG[bgKey] ?? 'bg-stone-50') : 'bg-stone-50'
   const isDark = bgKey === 'dark' || bgKey === 'black' || bgKey === 'accent'
   const headingColor = isDark ? 'text-white' : 'text-ink-900'
   const subColor = isDark ? 'text-white/60' : 'text-camel-500'
@@ -161,7 +161,7 @@ export default function Categories({ data }: CategoriesProps) {
       : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
 
   return (
-    <section className={cn(sectionBg, 'py-20 md:py-28')}>
+    <section className={cn(sectionBg, 'pt-6 pb-12 md:pb-16')}>
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         {/* Heading */}
         <motion.div
@@ -169,7 +169,7 @@ export default function Categories({ data }: CategoriesProps) {
           initial={{ opacity: 0, y: 24 }}
           animate={isHeadingInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-14"
+          className="mb-8"
         >
           <p className={cn('mb-3 font-body text-xs uppercase tracking-widest', subColor)}>
             {t('exploreBy')}

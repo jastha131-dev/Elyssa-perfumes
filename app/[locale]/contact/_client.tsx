@@ -201,9 +201,9 @@ export function ContactClient({ data }: { data: ContactPageData | null }) {
                   <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-camel-50 transition-colors duration-300 group-hover:bg-camel-100">
                     <Mail className="h-4 w-4 text-camel-500" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="mb-0.5 text-[9px] font-semibold uppercase tracking-[0.3em] text-charcoal-400">Email</p>
-                    <p className="text-xs font-light text-charcoal-700 transition-colors duration-300 group-hover:text-camel-600">
+                    <p className="break-all text-xs font-light text-charcoal-700 transition-colors duration-300 group-hover:text-camel-600">
                       {email}
                     </p>
                   </div>

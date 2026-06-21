@@ -814,7 +814,7 @@ export function ProductDetailClient({
             {safeImages.length > 0 ? (
               <ImageGallery images={safeImages} hideThumbnails={product.hideThumbnails} />
             ) : (
-              <div className="aspect-[3/4] w-full bg-gradient-to-br from-cream-100 to-cream-200 flex flex-col items-center justify-center gap-4">
+              <div className="w-full bg-gradient-to-br from-cream-100 to-cream-200 flex flex-col items-center justify-center gap-4" style={{ aspectRatio: 'var(--pdp-img-ratio, 3/4)' }}>
                 <div className="h-px w-16 bg-gold-300/50" />
                 <span className="font-display text-8xl font-light italic text-charcoal-200 select-none">
                   {productName.split(' ').map((w: string) => w[0]).join('').slice(0, 2)}

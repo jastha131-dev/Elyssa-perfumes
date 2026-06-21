@@ -51,7 +51,7 @@ export default function InstagramFeed({ data }: Props) {
           <div>
             {data?.handle && (
               <a
-                href={`https://instagram.com/${data.handle.replace(/^@/, '')}`}
+                href={data.profileUrl ?? `https://instagram.com/${data.handle.replace(/^@/, '')}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mb-1 inline-flex items-center gap-1.5 font-body text-xs uppercase tracking-widest text-camel-500 transition-colors hover:text-camel-600"
@@ -100,13 +100,13 @@ export default function InstagramFeed({ data }: Props) {
                     </p>
                   </div>
                 )}
-                {photo.link && (
+                {(photo.link || data.profileUrl) && (
                   <a
-                    href={photo.link}
+                    href={photo.link || data.profileUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="absolute inset-0"
-                    aria-label={caption ?? 'View post'}
+                    aria-label={caption ?? 'View on Instagram'}
                   />
                 )}
               </motion.div>

@@ -510,6 +510,7 @@ export interface InstagramFeedSectionBlock {
   title_en?: string
   title_ar?: string
   handle?: string
+  profileUrl?: string
   photos?: InstagramPhoto[]
   columns?: 3 | 4 | 6
   cta?: CtaButton

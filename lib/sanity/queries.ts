@@ -854,6 +854,7 @@ export const getSiteSettingsQuery = `
     cardFontSize,
     collectionColumns,
     mobileCardColumns,
+    pdpImageRatio,
     pdpTextSize,
     "promoBanner": promoBanner {
       isEnabled,

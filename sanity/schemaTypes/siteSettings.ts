@@ -419,6 +419,22 @@ export const siteSettings = defineType({
       initialValue: '2',
     }),
     defineField({
+      name: 'pdpImageRatio',
+      title: 'Product Image Aspect Ratio',
+      type: 'string',
+      group: 'pdp',
+      description: 'Shape of the main product image on the product detail page.',
+      options: {
+        list: [
+          { title: 'Portrait 3:4 (default)', value: 'portrait' },
+          { title: 'Square 1:1', value: 'square' },
+          { title: 'Wide 4:3', value: 'wide' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'portrait',
+    }),
+    defineField({
       name: 'pdpTextSize',
       title: 'Description / Body Text Size',
       type: 'string',

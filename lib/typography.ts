@@ -125,6 +125,7 @@ export interface SiteTypographySettings {
   cardFontSize?: string
   collectionColumns?: string
   mobileCardColumns?: string
+  pdpImageRatio?: string
   pdpTextSize?: string
   promoBanner?: {
     isEnabled?: boolean
@@ -264,6 +265,7 @@ export function buildTypographyCss(settings: SiteTypographySettings | null): str
       --atc-text: ${atcText};
       --section-heading: ${sh.mobile};
       --section-body: ${sb};
+      --pdp-img-ratio: ${{ portrait: '3/4', square: '1/1', wide: '4/3' }[settings?.pdpImageRatio ?? 'portrait'] ?? '3/4'};
       --pdp-desc-size: ${{ sm: '13px', md: '15px', lg: '17px' }[settings?.pdpTextSize ?? 'md'] ?? '15px'};
       --pdp-body-size: ${{ sm: '12px', md: '14px', lg: '16px' }[settings?.pdpTextSize ?? 'md'] ?? '14px'};
     }
