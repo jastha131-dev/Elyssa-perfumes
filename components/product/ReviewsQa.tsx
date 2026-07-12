@@ -81,7 +81,7 @@ export default function ReviewsQa({ productId, productName, initialReviews, init
 
   return (
     <section className="border-t border-charcoal-100 bg-white py-14">
-      <div className="mx-auto max-w-5xl px-4 sm:px-6">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-10">
         <h2 className="mb-6 text-center font-display text-xl font-semibold uppercase tracking-[0.12em] text-charcoal-900 sm:text-2xl">
           {productName} {t('Reviews', 'التقييمات')}
         </h2>
